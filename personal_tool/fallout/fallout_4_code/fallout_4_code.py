@@ -121,3 +121,8 @@ class Fallout4Code(ToolBase):
         """生成指令"""
         command = f"player.additem {item_code} %d"
         return command if item_quantity is None else command % int(item_quantity)
+
+
+if __name__ == '__main__':
+    fallout_4_code = Fallout4Code()
+    fallout_4_code.main()
