@@ -34,7 +34,7 @@ class SqliteConnect:
             self.cursor.close()  # 关闭游标
             self.cursor = None
         if self.connect is not None:
-            self.connect.close()  # g关闭连接
+            self.connect.close()  # 关闭连接
             self.connect = None
 
     def _sqlite_connect(self):
