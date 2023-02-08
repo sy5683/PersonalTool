@@ -20,7 +20,7 @@ class SqliteConnect:
         # noinspection PyBroadException
         try:
             self.cursor.execute(sql)  # 执行sql
-            self.connect.commit()  # 提交事务
+            self.connect.commit()  # 提交事务，只有运行了这句话，sql操作才会生效
         except Exception:
             logging.warning(traceback.format_exc())
             self.connect.rollback()  # 回滚操作
@@ -39,5 +39,5 @@ class SqliteConnect:
 
     def _sqlite_connect(self):
         if self.connect is None:
-            self.connect = sqlite3.connect(str(self.sqlite_path))  # 数据库连接
-            self.cursor = self.connect.cursor()  # 游标
+            self.connect = sqlite3.connect(str(self.sqlite_path))  # 连接sqlite_path数据库
+            self.cursor = self.connect.cursor()  # 得到一个可以执行SQL语句的游标对象
