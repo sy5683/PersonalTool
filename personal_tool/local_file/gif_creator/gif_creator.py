@@ -66,3 +66,8 @@ class GifCreator(ToolBase):
         """生成gif"""
         gif_path = os.path.join(self.save_dir_path, f"temp_gif_{str(uuid.uuid4())}.gif")
         return imageio.mimsave(gif_path, gifs, 'GIF', duration=self.duration)
+
+
+if __name__ == '__main__':
+    gif_creator = GifCreator(CreatorMode.rotate)
+    gif_creator.main()
