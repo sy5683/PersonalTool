@@ -12,6 +12,7 @@ class OperationExit(Exception):
 
 
 class Fallout4Code(ToolBase):
+    """辐射4代码"""
 
     def __init__(self):
         self.sqlite_connect = SqliteUtil.get_sqlite_connect(sqlite_name)
