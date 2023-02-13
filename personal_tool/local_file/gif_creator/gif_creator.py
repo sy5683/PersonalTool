@@ -1,4 +1,3 @@
-import logging
 import os.path
 import tempfile
 import tkinter
@@ -26,7 +25,6 @@ class GifCreator(ToolBase):
 
     def main(self, function=None, **kwargs):
         if self.image_paths:
-            logging.info("开始生成gif..")
             if function:
                 function(self, **kwargs)
             # 打开结果文件夹
