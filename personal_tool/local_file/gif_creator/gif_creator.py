@@ -3,7 +3,6 @@ import os.path
 import tempfile
 import tkinter
 import uuid
-from enum import Enum
 from tkinter import filedialog
 from typing import List
 
@@ -16,31 +15,24 @@ from numpy import fabs, sin, cos, radians
 from personal_tool.base.tool_base import ToolBase
 
 
-class CreatorMode(Enum):
-    """生成模式"""
-    rotate = "旋转"
-
-
 class GifCreator(ToolBase):
     """gif生成器"""
 
-    def __init__(self, creator_mode: CreatorMode, duration: float = 0.1):
-        self.creator_mode = creator_mode
+    def __init__(self, duration: float = 0.1):
         self.duration = duration
-        self.image_paths: List[str] = []
-        self.save_dir_path = tempfile.mkdtemp()
         tkinter.Tk().withdraw()  # 隐藏tk窗口
-
-    def main(self, rotate_angle: int = 1):
         self.image_paths = filedialog.askopenfilenames()
+        self.save_dir_path = tempfile.mkdtemp()
+
+    def main(self, function=None, **kwargs):
         if self.image_paths:
             logging.info("开始生成gif..")
-            if self.creator_mode == CreatorMode.rotate:
-                self._make_rotate_gif(rotate_angle)
+            if function:
+                function(self, **kwargs)
             # 打开结果文件夹
             win32api.ShellExecute(0, "open", self.save_dir_path, "", "", 1)
 
-    def _make_rotate_gif(self, angle: int):
+    def make_rotate_gif(self, angle: int):
         """生成旋转的gif"""
         for image_path in self.image_paths:
             image = cv2.imread(image_path)
@@ -64,5 +56,5 @@ class GifCreator(ToolBase):
 
 
 if __name__ == '__main__':
-    gif_creator = GifCreator(CreatorMode.rotate)
-    gif_creator.main()
+    gif_creator = GifCreator()
+    gif_creator.main(GifCreator.make_rotate_gif, angle=2)
