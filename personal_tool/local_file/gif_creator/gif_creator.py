@@ -32,18 +32,13 @@ class GifCreator(ToolBase):
         tkinter.Tk().withdraw()  # 隐藏tk窗口
 
     def main(self, rotate_angle: int = 1):
-        self._add_image_path()
+        self.image_paths = filedialog.askopenfilenames()
         if self.image_paths:
             logging.info("开始生成gif..")
             if self.creator_mode == CreatorMode.rotate:
                 self._make_rotate_gif(rotate_angle)
             # 打开结果文件夹
             win32api.ShellExecute(0, "open", self.save_dir_path, "", "", 1)
-
-    def _add_image_path(self):
-        """添加图片"""
-        image_path = filedialog.askopenfilename()
-        self.image_paths.append(image_path)
 
     def _make_rotate_gif(self, angle: int):
         """生成旋转的gif"""
