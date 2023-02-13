@@ -24,21 +24,24 @@ class FileNameFormat(ToolBase):
 
     def manga_format(self, suffix: str = None, start_number: int = None):
         """格式化漫画"""
-        for file_name in sorted(os.listdir(self.directory_path)):
-            file_stem, file_suffix = os.path.splitext(file_name)
+        for manga_name in sorted(os.listdir(self.directory_path)):
+            manga_stem, manga_suffix = os.path.splitext(manga_name)
             # 1) 更改文件名
-            if start_number:
-                file_stem = str(start_number).zfill(3)
+            if start_number is not None:
+                manga_stem = f"temp_{str(start_number).zfill(3)}"
+                start_number += 1
             # 2) 更改文件后缀
             if suffix:
-                file_suffix = suffix if suffix.startswith(".") else f".{suffix}"
+                manga_suffix = suffix if suffix.startswith(".") else f".{suffix}"
             else:
-                if re.search(r"\.webp$", file_suffix):
-                    file_suffix = ".jpg"
+                if re.search(r"\.webp$", manga_suffix):
+                    manga_suffix = ".jpg"
             # 3) 重命名文件
-            new_file_name = f"{file_stem}{file_suffix}"
-            if file_name != new_file_name:
-                self._rename(file_name, new_file_name)
+            new_manga_name = f"{manga_stem}{manga_suffix}"
+            if manga_name != new_manga_name:
+                self._rename(manga_name, new_manga_name)
+        for manga_name in sorted(os.listdir(self.directory_path)):
+            self._rename(manga_name, re.sub(r"^temp_", "", manga_name))
 
     def _rename(self, file_name_from: str, file_name_to: str):
         """文件重命名"""
@@ -52,4 +55,4 @@ class FileNameFormat(ToolBase):
 
 if __name__ == '__main__':
     file_name_format = FileNameFormat()
-    file_name_format.main(FileNameFormat.manga_format)
+    file_name_format.main(FileNameFormat.manga_format, start_number=1)
