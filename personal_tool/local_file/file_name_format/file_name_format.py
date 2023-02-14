@@ -24,7 +24,8 @@ class FileNameFormat(ToolBase):
 
     def manga_format(self, suffix: str = None, start_number: int = None):
         """格式化漫画"""
-        for manga_name in sorted(os.listdir(self.directory_path)):
+        manga_names = sorted(os.listdir(self.directory_path), key=lambda x: int(re.sub(r'\D+', '', x)))
+        for manga_name in manga_names:
             manga_stem, manga_suffix = os.path.splitext(manga_name)
             # 1) 更改文件名
             if start_number is not None:
