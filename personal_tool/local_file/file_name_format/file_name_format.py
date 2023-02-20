@@ -6,7 +6,7 @@ from tkinter import filedialog
 
 import win32api
 
-from personal_tool.base.tool_base import ToolBase
+from base.tool_base import ToolBase
 
 
 class FileNameFormat(ToolBase):

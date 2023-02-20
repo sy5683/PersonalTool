@@ -11,7 +11,7 @@ import win32api
 from cv2 import warpAffine
 from numpy import fabs, sin, cos, radians
 
-from personal_tool.base.tool_base import ToolBase
+from base.tool_base import ToolBase
 
 
 class GifCreator(ToolBase):
