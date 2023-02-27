@@ -10,6 +10,3 @@ class EventCreatorTestCase(unittest.TestCase):
 
     def test_main(self):
         self.event_creator.main()
-
-    def test_get_all_roles(self):
-        self.event_creator._get_all_roles()
