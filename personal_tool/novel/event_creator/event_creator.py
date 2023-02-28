@@ -21,6 +21,9 @@ class EventCreator(ToolBase):
         for key_role in event.key_roles:
             if key_role.name not in [role.name for role in roles]:
                 roles.append(key_role)
+
+        # 输出
+        print(event)
         print(roles)
 
 
