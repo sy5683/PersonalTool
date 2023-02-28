@@ -8,6 +8,8 @@ class EventCreator(ToolBase):
     def main(self):
         all_roles = EntityFeature.get_all_roles()
         print(all_roles)
+        all_events = EntityFeature.get_all_events()
+        print(all_events)
 
 
 if __name__ == '__main__':

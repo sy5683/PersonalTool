@@ -9,13 +9,13 @@ class Role(metaclass=ABCMeta):
         self.name = None
 
         # 设置角色信息
-        self.set_role()
-        self.__check_role()
+        self.set_role_info()
+        self.__check_role_inifo()
 
     @abstractmethod
-    def set_role(self):
+    def set_role_info(self):
         """设置角色信息"""
 
-    def __check_role(self):
+    def __check_role_inifo(self):
         """校验角色信息"""
         assert self.name is not None, f"角色【{self.__class__.__name__}】名称未设置"
