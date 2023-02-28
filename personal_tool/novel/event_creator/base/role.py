@@ -18,4 +18,4 @@ class Role(metaclass=ABCMeta):
 
     def __check_role_inifo(self):
         """校验角色信息"""
-        assert self.name is not None, f"角色【{self.__class__.__name__}】名称未设置"
+        assert self.name, f"角色类【{self.__class__.__name__}】名称未设置"
