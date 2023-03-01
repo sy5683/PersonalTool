@@ -7,7 +7,12 @@ from personal_tool.novel.event_creator.feture.entity_feature import EntityFeatur
 class EventCreator(ToolBase):
     """事件生成器"""
 
+    def __init__(self):
+        # 导入所有实例，因为只有导入了才能使用__subclasses__方法获取继承了父类的所有子类
+        EntityFeature.import_entities()
+
     def main(self):
+        """"""
         # 获取随机未发生事件
         all_events = EntityFeature.get_all_events()
         undone_events = [event for event in all_events if not event.is_done]
@@ -23,8 +28,8 @@ class EventCreator(ToolBase):
                 roles.append(key_role)
 
         # 输出
-        print(event)
-        print(roles)
+        print(f"发生事件：{event.name}")
+        print("参与角色：\n\t%s" % "\n\t".join([role.name for role in roles]))
 
 
 if __name__ == '__main__':
