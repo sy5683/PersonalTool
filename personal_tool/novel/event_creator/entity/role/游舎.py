@@ -5,4 +5,4 @@ class YouShe(Role):
 
     def set_role_info(self):
         self.name = "游舎"
-        self.status = "勇者"
+        self.persona = "勇者"

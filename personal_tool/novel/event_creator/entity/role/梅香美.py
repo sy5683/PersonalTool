@@ -5,4 +5,4 @@ class MeiXiangMei(Role):
 
     def set_role_info(self):
         self.name = "梅香美"
-        self.status = "女神"
+        self.persona = "女神"

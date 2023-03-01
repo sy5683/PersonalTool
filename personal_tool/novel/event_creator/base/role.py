@@ -7,8 +7,8 @@ class Role(metaclass=ABCMeta):
 
     def __init__(self):
         # 角色基本信息
-        self.name = None
-        self.status = None
+        self.name = None  # 名称
+        self.persona = None  # 人设
 
         # 设置角色信息
         self.set_role_info()
@@ -21,5 +21,5 @@ class Role(metaclass=ABCMeta):
     def __check_role_inifo(self):
         """校验角色信息"""
         assert self.name, f"角色类【{self.__class__.__name__}】名称未设置"
-        if not self.status:
-            logging.warning(f"角色【{self.name}】身份未设置或待定")
+        if not self.persona:
+            logging.warning(f"角色【{self.name}】人设未设置或待定")
