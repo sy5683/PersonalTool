@@ -8,6 +8,7 @@ class Role(metaclass=ABCMeta):
     def __init__(self):
         # 角色基本信息
         self.name = None  # 名称
+        self.age = None  # 年龄
         self.persona = None  # 人设
 
         # 设置角色信息
