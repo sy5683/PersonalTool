@@ -29,16 +29,12 @@ class EntityFeature:
     def get_all_roles(cls):
         """获取所有角色"""
         if cls._all_roles is None:
-            cls._all_roles = []
-            for role in Role.__subclasses__():
-                cls._all_roles.append(role())
+            cls._all_roles = [role() for role in Role.__subclasses__()]
         return cls._all_roles
 
     @classmethod
     def get_all_events(cls):
         """获取所有事件"""
         if cls._all_events is None:
-            cls._all_events = []
-            for event in Event.__subclasses__():
-                cls._all_events.append(event())
+            cls._all_events = [event() for event in Event.__subclasses__()]
         return cls._all_events

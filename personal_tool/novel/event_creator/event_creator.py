@@ -12,7 +12,6 @@ class EventCreator(ToolBase):
         EntityFeature.import_entities()
 
     def main(self):
-        """"""
         # 获取随机未发生事件
         all_events = EntityFeature.get_all_events()
         undone_events = [event for event in all_events if not event.is_done]
