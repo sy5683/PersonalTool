@@ -6,11 +6,15 @@ class ExperienceBase(metaclass=ABCMeta):
 
     def __init__(self):
         self.from_date, self.to_date = self.get_date_range()  # 开始时间 和 结束时间
-        self.profile = None  # 简介
+        self.profile = self.get_profile()  # 简介
 
     @abstractmethod
     def get_date_range(self) -> Tuple[str, str]:
         """获取开始时间与结束时间"""
+
+    @abstractmethod
+    def get_profile(self) -> str:
+        """获取简介"""
 
 
 class WorkExperience(ExperienceBase):
