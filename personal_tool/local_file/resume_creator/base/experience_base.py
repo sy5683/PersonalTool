@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from typing import Tuple
+from typing import List, Tuple
 
 
 class ExperienceBase(metaclass=ABCMeta):
@@ -33,7 +33,16 @@ class ProjectExperience(ExperienceBase):
     def __init__(self):
         self.project_name = self.get_project_name()  # 项目名称
         super().__init__()
+        self.project_details = self.get_project_details()  # 项目明细
 
     @abstractmethod
     def get_project_name(self) -> str:
         """获取项目名称"""
+
+    @abstractmethod
+    def get_technologies(self) -> List[str]:
+        """获取开发技术"""
+
+    @abstractmethod
+    def get_project_details(self) -> tuple:
+        """获取项目明细"""
