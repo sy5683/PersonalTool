@@ -24,5 +24,5 @@ class FileNameFormat(ToolBase):
 
 if __name__ == '__main__':
     file_name_format = FileNameFormat()
-    file_name_format.main(FormatFeature.anime_format)
-    # file_name_format.main(FormatFeature.manga_format, start_number=1)
+    # file_name_format.main(FormatFeature.anime_format)
+    file_name_format.main(FormatFeature.manga_format, start_number=1)

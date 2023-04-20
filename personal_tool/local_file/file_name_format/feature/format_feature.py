@@ -33,7 +33,7 @@ class FormatFeature:
     def manga_format(cls, suffix: str = None, start_number: int = None):
         """格式化漫画"""
         directory_path = PathCache.get_directory_path()
-        for manga_path in sorted(cls._sorted_glob(directory_path)):
+        for manga_path in cls._sorted_glob(directory_path):
             # 1) 更改文件名，因为会有文件名已存在的情况，因此这里生成新文件名时需要添加temp防止重复
             manga_stem = manga_path.stem if start_number is None else f"temp_{str(start_number).zfill(3)}"
             start_number += 1
