@@ -3,8 +3,8 @@ import re
 import traceback
 
 from base.tool_base import ToolBase
-from personal_tool.fallout.fallout_4_code.config.fallout_4_code_config import sqlite_name, table_name
-from personal_tool.fallout.fallout_4_code.util.sqlite_util.sqlite_util import SqliteUtil
+from config.fallout_4_code_config import sqlite_name, table_name
+from util.sqlite_util.sqlite_util import SqliteUtil
 
 
 class OperationExit(Exception):
