@@ -4,7 +4,7 @@ from typing import Union
 from dateutil.relativedelta import relativedelta
 
 
-class DateFeature:
+class DateUtil:
 
     @staticmethod
     def get_year_between_dates(from_date: Union[datetime.datetime, datetime.date],
