@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from ...base.experience_base import ProjectExperience
+from personal_tool.local_file.resume_creator.entity.base.experience_base import ProjectExperience
 
 
 class Project001(ProjectExperience):

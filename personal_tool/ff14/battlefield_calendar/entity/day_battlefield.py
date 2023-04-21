@@ -1,7 +1,7 @@
 import datetime
 from typing import Union
 
-from .battlefield_type import BattlefieldType
+from personal_tool.ff14.battlefield_calendar.entity.battlefield_type import BattlefieldType
 
 
 class DayBattlefield:

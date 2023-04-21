@@ -1,4 +1,4 @@
-from .entity.sqlite_connect import SqliteConnect
+from personal_tool.fallout.fallout_4_code.util.sqlite_util.entity.sqlite_connect import SqliteConnect
 
 
 class SqliteUtil:
