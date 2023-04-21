@@ -1,4 +1,4 @@
-from personal_tool.novel.event_creator.base.role import Role
+from ...base.role import Role
 
 
 class MeiXiangMei(Role):

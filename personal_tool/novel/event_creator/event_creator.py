@@ -1,7 +1,7 @@
 import random
 
 from base.tool_base import ToolBase
-from personal_tool.novel.event_creator.feture.entity_feature import EntityFeature
+from feture.entity_feature import EntityFeature
 
 
 class EventCreator(ToolBase):

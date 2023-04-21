@@ -1,5 +1,5 @@
-from personal_tool.novel.event_creator.base.event import Event
-from personal_tool.novel.event_creator.entity.role.纱鸠晴栖 import ShaJiuQingXi
+from ...base.event import Event
+from ...entity.role.纱鸠晴栖 import ShaJiuQingXi
 
 
 class WenQuanShanZhuangBianTaiChuMoShiJian(Event):

@@ -1,8 +1,8 @@
 import win32api
 
 from base.tool_base import ToolBase
-from personal_tool.local_file.file_name_format.cache.path_cache import PathCache
-from personal_tool.local_file.file_name_format.feature.format_feature import FormatFeature
+from cache.path_cache import PathCache
+from feature.format_feature import FormatFeature
 
 
 class FileNameFormat(ToolBase):
