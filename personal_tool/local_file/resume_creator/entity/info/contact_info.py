@@ -4,6 +4,7 @@ from personal_tool.local_file.resume_creator.entity.base.info_base import InfoBa
 class ContactInfo(InfoBase):
 
     def __init__(self):
+        super().__init__("联系方式")
         self.phone = "13677365683"
         self.email_address = "1079272233@qq.com"
 

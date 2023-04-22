@@ -20,8 +20,12 @@ class ResumeCreator(ToolBase):
         ImportUtil.import_module(Path(__file__).parent.joinpath("entity"))
 
     def main(self):
+        # 1) 添加标题
         WordFeature.add_title(self.document)
+        # 2) 添加信息
         WordFeature.add_info(self.document)
+        # 3) 添加项目经验
+        WordFeature.add_project_experience(self.document)
 
         self.document.save(self.resume_path)
         # Win32Util.open_file(self.save_path)

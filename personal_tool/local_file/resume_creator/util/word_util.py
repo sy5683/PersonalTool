@@ -27,6 +27,7 @@ class WordUtil:
     def set_font_size(run: Run, font_size: int):
         """设置字体大小"""
         run.font.size = Pt(font_size)  # 设置字体时必须要使用Pt方法对其处理为预设的字体
+
     @staticmethod
     def set_font_type(run: Run, font_type: str):
         """设置字体类型"""
@@ -37,3 +38,8 @@ class WordUtil:
     def set_paragraph_alignment(paragraph: Paragraph, alignment: WD_PARAGRAPH_ALIGNMENT):
         """设置段落居中"""
         paragraph.paragraph_format.alignment = alignment
+
+    @staticmethod
+    def set_paragraph_indent(paragraph: Paragraph, indent_size: int):
+        """设置段落开头缩进"""
+        paragraph.paragraph_format.first_line_indent = Pt(indent_size)
