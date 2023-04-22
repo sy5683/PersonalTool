@@ -1,10 +1,29 @@
-"""RPA机器人脚本 | 2020.08-
-项目介绍：主要是开发RPA机器人的运行脚本，实现客户所需要的各个需求。
-开发工具：Python、PyCharm、selenium、win32等各种python相关库
-开发技术： selenium
-负责内容：
-o	银行回单补扫：解析pdf内容与数据库中数据做对比，将正确的pdf截图并上传。
-o	银行对账：下载明细账excel并对其进行解析整理，与用户提供的银行流水数据做对比。
-o	主数据维护：通过图形匹配定位的方法，与鼠标操作点击，对公司的主数据客户端进行操作。
-o	中台取数、资金上收、公文打印等各种对网页进行操作的脚本。
-"""
+from typing import List, Tuple
+
+from personal_tool.local_file.resume_creator.entity.base.experience_base import ProjectExperience
+
+
+class Project004(ProjectExperience):
+
+    def get_project_name(self) -> str:
+        """获取项目名称"""
+        return "RPA机器人脚本开发"
+
+    def get_date_range(self) -> Tuple[str, str]:
+        """获取开始时间与结束时间"""
+        return "2020-08", ""
+
+    def get_profile(self) -> str:
+        """获取简介"""
+        return "根据财务的各种需求，定制开发场景脚本，通过机器人客户端运行，实现客户需要的各种功能，包括但不限于接口页面取数、页面填报、pdf回单解析、excel与word生成等……"
+
+    def get_technologies(self) -> List[str]:
+        """获取开发技术"""
+        return ["Selenium", "win32", "其他各种python相关库"]
+
+    def get_project_details(self) -> tuple:
+        """获取项目明细"""
+        return "至今项目中的场景已有30多个，由我开发的场景有20余个，其分别是:", \
+            "【银行回单补扫】解析银行回单pdf，将关键数据与数据库中数据进行对比，然后将匹配的回单截取并上传至影像系统。", \
+            "【银行对账】解析客户提供的银行流水excel，与公司系统中下载的明细账excel进行对比，将匹配情况与差异情况生成比对结果，并根据业务需求生成余额调节表。", \
+            "【主数据维护】通过图形匹配定位的方法，模拟键盘鼠标操作，对公司的客户端进行操作，实现填报发布等指定操作。"
