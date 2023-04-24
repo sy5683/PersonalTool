@@ -10,4 +10,4 @@ class IntentionInfo(InfoBase):
 
     def to_text(self) -> str:
         """转换为文本"""
-        return f"求职岗位: {self.job_position}\t到岗时间: {self.in_position_time}"
+        return f"求职岗位: {self.job_position}\n\t\t到岗时间: {self.in_position_time}"

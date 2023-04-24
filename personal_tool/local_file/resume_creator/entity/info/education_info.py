@@ -13,4 +13,4 @@ class EducationInfo(InfoBase):
 
     def to_text(self) -> str:
         """转换为文本"""
-        return f"教育背景: {self.school_name}({self.from_date}-{self.to_date})\n\t\t{self.major}专业"
+        return f"教育背景: {self.school_name}({self.from_date}-{self.to_date})\n\t\t专业: {self.major}"
