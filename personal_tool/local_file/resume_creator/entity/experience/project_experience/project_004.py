@@ -11,7 +11,7 @@ class Project004(ProjectExperience):
 
     def get_date_range(self) -> Tuple[str, str]:
         """获取开始时间与结束时间"""
-        return "2020年08月", "-"
+        return "2020年08月", "至今"
 
     def get_profile(self) -> str:
         """获取简介"""

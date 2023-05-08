@@ -28,7 +28,7 @@ class WorkExperience(ExperienceBase):
         """获取公司名称"""
 
     @abstractmethod
-    def get_post(self) -> str:
+    def get_job_position(self) -> str:
         """获取职位"""
 
 

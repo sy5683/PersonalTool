@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod
+from typing import List
 
 
 class InfoBase(metaclass=ABCMeta):
@@ -7,5 +8,5 @@ class InfoBase(metaclass=ABCMeta):
         self.info_name = info_name
 
     @abstractmethod
-    def to_text(self) -> str:
+    def to_contexts(self) -> List[str]:
         """转换为文本"""

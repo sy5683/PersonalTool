@@ -18,6 +18,6 @@ class Work001(WorkExperience):
         return "在该公司主要负责python的相关开发。" \
                "主要负责的项目有OCR识别与图像处理的支持工作、选择题与判断题识别订制开发，app与小程序的自动化脚本开发，以及自动化测试脚本开发。"
 
-    def get_post(self) -> str:
+    def get_job_position(self) -> str:
         """获取职位"""
         return "Python开发工程师"

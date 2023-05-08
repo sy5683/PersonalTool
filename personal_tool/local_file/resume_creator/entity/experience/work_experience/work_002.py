@@ -18,6 +18,6 @@ class Work002(WorkExperience):
         return "在该公司主要负责的项目是RPA机器人，本人主要负责的部分是所有脚本的开发实现工作。" \
                "近三年时间，在该公司接触过林林总总近三十个场景，开发过各种情况的场景，其中使用的python库五花八门。"
 
-    def get_post(self) -> str:
+    def get_job_position(self) -> str:
         """获取职位"""
         return "Python开发工程师"
