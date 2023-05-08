@@ -1,12 +1,9 @@
-from typing import Tuple, Union
+from typing import Tuple
 
-import docx
-from docx.document import Document
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from docx.oxml.ns import qn
 from docx.shared import Pt
 from docx.shared import RGBColor
-from docx.table import _Cell, Table
 from docx.text.paragraph import Paragraph
 from docx.text.run import Run
 
@@ -43,3 +40,13 @@ class WordUtil:
     def set_paragraph_indent(paragraph: Paragraph, indent_size: int):
         """设置段落开头缩进"""
         paragraph.paragraph_format.first_line_indent = Pt(indent_size)
+
+    @staticmethod
+    def set_paragraph_space_after(paragraph: Paragraph, indent_size: int):
+        """设置段落结尾行距"""
+        paragraph.paragraph_format.space_after = Pt(indent_size)
+
+    @staticmethod
+    def set_paragraph_space_before(paragraph: Paragraph, indent_size: int):
+        """设置段落开始行距"""
+        paragraph.paragraph_format.space_before = Pt(indent_size)

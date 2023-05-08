@@ -24,7 +24,9 @@ class ResumeCreator(ToolBase):
         WordFeature.add_title(self.document)
         # 2) 添加信息
         WordFeature.add_info(self.document)
-        # 3) 添加项目经验
+        # 3) 添加工作经验
+        WordFeature.add_work_experience(self.document)
+        # 4) 添加项目经验
         WordFeature.add_project_experience(self.document)
 
         self.document.save(self.resume_path)

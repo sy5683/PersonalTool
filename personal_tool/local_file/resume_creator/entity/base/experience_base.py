@@ -24,8 +24,12 @@ class WorkExperience(ExperienceBase):
         super().__init__()
 
     @abstractmethod
-    def get_company_name(self):
+    def get_company_name(self) -> str:
         """获取公司名称"""
+
+    @abstractmethod
+    def get_post(self) -> str:
+        """获取职位"""
 
 
 class ProjectExperience(ExperienceBase):
