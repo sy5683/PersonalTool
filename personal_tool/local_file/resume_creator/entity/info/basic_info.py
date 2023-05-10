@@ -9,9 +9,9 @@ class BasicInfo(InfoBase):
 
     def __init__(self):
         super().__init__("基本信息")
-        self.name = "解劲松"
-        self.birthday = datetime.date(1997, 12, 5)
-        self.age = abs(DateUtil.get_year_between_dates(self.birthday, datetime.datetime.now()))
+        self.name = "解劲松"  # 姓名
+        self.birthday = datetime.date(1997, 12, 5)  # 生日
+        self.age = abs(DateUtil.get_year_between_dates(self.birthday, datetime.datetime.now()))  # 年龄
 
     def to_contexts(self) -> List[str]:
         """转换为文本"""
