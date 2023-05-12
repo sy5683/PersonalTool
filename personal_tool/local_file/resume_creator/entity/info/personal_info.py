@@ -17,5 +17,4 @@ class PersonalInfo(InfoBase):
 
     def to_contexts(self) -> List[str]:
         """转换为文本"""
-
         return ["个人技能: "] + [f"\t· {skill}" for skill in self.skills] + [f"个人介绍: {self.profile}"]
