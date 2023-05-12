@@ -42,15 +42,18 @@ class WordFeature:
         # 1) 添加标题
         cls._add_heading_1(document, "工作经验")
         # 2) 添加段落
-        for work_experience_class in WorkExperience.__subclasses__():
+        for work_experience_class in WorkExperience.__subclasses__()[::-1]:
             work_experience = work_experience_class()
             # 2.1) 添加公司名称
             company_name = work_experience.get_company_name()
             date_range = work_experience.get_date_range()
             cls._add_heading_2(document, company_name, date_range)
             # 2.2) 添加工作描述
-            cls._add_paragraph(document, 20, f"职位: {work_experience.get_job_position()}")
             cls._add_paragraph(document, 20, work_experience.get_profile())
+            cls._add_paragraph(document, 20, f"职位: {work_experience.get_job_position()}")
+            cls._add_paragraph(document, 20, "工作内容: ")
+            for work_detail in work_experience.get_work_details():
+                cls._add_paragraph(document, 30, work_detail)
 
     @classmethod
     def add_project_experience(cls, document: Document):
@@ -58,7 +61,7 @@ class WordFeature:
         # 1) 添加标题
         cls._add_heading_1(document, "项目经验")
         # 2) 添加段落
-        for project_experience_class in ProjectExperience.__subclasses__():
+        for project_experience_class in ProjectExperience.__subclasses__()[::-1]:
             project_experience = project_experience_class()
             # 2.1) 添加项目名称
             project_name = project_experience.get_project_name()
@@ -67,7 +70,7 @@ class WordFeature:
             # 2.2) 添加项目描述
             cls._add_paragraph(document, 20, project_experience.get_profile())
             cls._add_paragraph(document, 20, "开发技术: %s" % "、".join(project_experience.get_technologies()))
-            cls._add_paragraph(document, 20, f"项目内容: ")
+            cls._add_paragraph(document, 20, "项目内容: ")
             for project_detail in project_experience.get_project_details():
                 cls._add_paragraph(document, 30, project_detail)
 

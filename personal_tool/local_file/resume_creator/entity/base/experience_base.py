@@ -31,6 +31,10 @@ class WorkExperience(ExperienceBase):
     def get_job_position(self) -> str:
         """获取职位"""
 
+    @abstractmethod
+    def get_work_details(self) -> tuple:
+        """获取工作明细"""
+
 
 class ProjectExperience(ExperienceBase):
 
