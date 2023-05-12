@@ -44,6 +44,10 @@ class ProjectExperience(ExperienceBase):
         """获取项目名称"""
 
     @abstractmethod
+    def get_work_character(self) -> str:
+        """获取工作角色"""
+
+    @abstractmethod
     def get_technologies(self) -> List[str]:
         """获取开发技术"""
 

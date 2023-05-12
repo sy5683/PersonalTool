@@ -9,6 +9,10 @@ class Project004(ProjectExperience):
         """获取项目名称"""
         return "RPA机器人脚本开发"
 
+    def get_work_character(self) -> str:
+        """获取工作角色"""
+        return "Python开发工程师"
+
     def get_date_range(self) -> Tuple[str, str]:
         """获取开始时间与结束时间"""
         return "2020年08月", "至今"

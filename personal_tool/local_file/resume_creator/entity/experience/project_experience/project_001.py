@@ -9,6 +9,10 @@ class Project001(ProjectExperience):
         """获取项目名称"""
         return "阅卷系统的图像处理相关支持"
 
+    def get_work_character(self) -> str:
+        """获取工作角色"""
+        return "Python开发工程师"
+
     def get_date_range(self) -> Tuple[str, str]:
         """获取开始时间与结束时间"""
         return "2019年09月", "2019年12月"

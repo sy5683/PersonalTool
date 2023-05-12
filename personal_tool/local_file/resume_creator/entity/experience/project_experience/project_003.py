@@ -7,7 +7,11 @@ class Project003(ProjectExperience):
 
     def get_project_name(self) -> str:
         """获取项目名称"""
-        return "接口检测脚本"
+        return "接口检测脚本开发"
+
+    def get_work_character(self) -> str:
+        """获取工作角色"""
+        return "Python开发工程师"
 
     def get_date_range(self) -> Tuple[str, str]:
         """获取开始时间与结束时间"""

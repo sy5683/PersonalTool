@@ -9,13 +9,17 @@ class Project002(ProjectExperience):
         """获取项目名称"""
         return "APP与小程序的自动化测试"
 
+    def get_work_character(self) -> str:
+        """获取工作角色"""
+        return "自动化开发测试工程师"
+
     def get_date_range(self) -> Tuple[str, str]:
         """获取开始时间与结束时间"""
         return "2019年12月", "2020年06月"
 
     def get_profile(self) -> str:
         """获取简介"""
-        return "为了保证公司App的稳定性，提升测试效率，定制公司APP与小程序专门的自动化测试脚本。" \
+        return "为了保证公司App的稳定性，提升测试效率，定制公司APP与微信小程序专门的自动化测试脚本。" \
                "保证每天对程序进行测试，并将相应结果报告发送至部门邮箱。"
 
     def get_technologies(self) -> List[str]:
