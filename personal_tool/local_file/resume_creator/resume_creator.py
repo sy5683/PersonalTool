@@ -30,7 +30,6 @@ class ResumeCreator(ToolBase):
         WordFeature.add_project_experience(self.document)
 
         self.document.save(self.resume_path)
-        # Win32Util.open_file(self.save_path)
         Win32Util.open_file(self.resume_path)
 
 
