@@ -2,8 +2,8 @@ import logging
 from abc import ABCMeta, abstractmethod
 
 
-class Role(metaclass=ABCMeta):
-    """角色"""
+class RoleBase(metaclass=ABCMeta):
+    """角色基类"""
 
     def __init__(self):
         # 角色基本信息
@@ -13,13 +13,13 @@ class Role(metaclass=ABCMeta):
 
         # 设置角色信息
         self.set_role_info()
-        self.__check_role_inifo()
+        self.__check_role_info()
 
     @abstractmethod
     def set_role_info(self):
         """设置角色信息"""
 
-    def __check_role_inifo(self):
+    def __check_role_info(self):
         """校验角色信息"""
         assert self.name, f"角色类【{self.__class__.__name__}】名称未设置"
         if not self.persona:

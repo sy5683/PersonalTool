@@ -1,7 +1,7 @@
-from personal_tool.novel.event_creator.base.role import Role
+from ..base.role_base import RoleBase
 
 
-class DianSi(Role):
+class DianSi(RoleBase):
 
     def set_role_info(self):
         """设置角色信息"""

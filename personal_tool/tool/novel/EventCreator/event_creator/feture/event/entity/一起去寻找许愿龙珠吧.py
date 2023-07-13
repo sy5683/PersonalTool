@@ -1,8 +1,8 @@
-from personal_tool.novel.event_creator.base.event import Event
-from personal_tool.novel.event_creator.entity.role.东方灵 import DongFangLing
+from ..base.event_base import EventBase
+from ...role.entity.东方灵 import DongFangLing
 
 
-class YiQiQuXunZhaoXuYuanLongZhu(Event):
+class YiQiQuXunZhaoXuYuanLongZhu(EventBase):
 
     def set_event_info(self):
         self.name = "一起去寻找许愿龙珠吧"
