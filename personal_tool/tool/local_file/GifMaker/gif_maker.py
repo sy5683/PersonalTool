@@ -6,7 +6,7 @@ import win32api
 from PIL import Image
 
 from personal_tool.base.tool_base import ToolBase
-from personal_tool.tool.local_file.GifMaker.gif_maker.feature.image_feature import ImageFeature
+from gif_maker.feature.image_feature import ImageFeature
 
 
 class GifMaker(ToolBase):
