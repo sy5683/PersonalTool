@@ -1,5 +1,5 @@
-from event_creator.feture.event.event_feature import EventFeature
-from event_creator.feture.role.role_feature import RoleFeature
+from event_creator.feture.event_feature import EventFeature
+from event_creator.feture.role_feature import RoleFeature
 from personal_tool.base.tool_base import ToolBase
 
 

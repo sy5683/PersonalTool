@@ -1,5 +1,5 @@
 from ..base.event_base import EventBase
-from ...role.entity.东方灵 import DongFangLing
+from ..role.东方灵 import DongFangLing
 
 
 class YiQiQuXunZhaoXuYuanLongZhu(EventBase):

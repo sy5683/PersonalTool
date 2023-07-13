@@ -1,5 +1,5 @@
 from ..base.event_base import EventBase
-from ...role.entity.纱鸠晴栖 import ShaJiuQingXi
+from ..role.纱鸠晴栖 import ShaJiuQingXi
 
 
 class WenQuanShanZhuangBianTaiChuMoShiJian(EventBase):

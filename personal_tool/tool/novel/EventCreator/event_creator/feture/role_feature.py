@@ -2,18 +2,19 @@ import random
 from pathlib import Path
 from typing import List
 
-from .base.role_base import RoleBase
-from ...util.import_util import ImportUtil
+from ..entity.base.role_base import RoleBase
+from ..util.import_util import ImportUtil
 
 
 class RoleFeature:
-    ImportUtil.import_module(Path(__file__).parent.joinpath("entity"))
     _all_roles: List[RoleBase] = None
 
     @classmethod
     def get_all_roles(cls) -> List[RoleBase]:
         """获取所有角色"""
         if cls._all_roles is None:
+            role_entity_path = Path(__file__).parent.parent.joinpath("entity\\role")
+            ImportUtil.import_module(role_entity_path)  # 使用subclasses之前必须将子类导入
             cls._all_roles = [role() for role in RoleBase.__subclasses__()]
         return cls._all_roles
 

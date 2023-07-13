@@ -2,19 +2,19 @@ import random
 from pathlib import Path
 from typing import List
 
-from .base.event_base import EventBase
-from ...util.import_util import ImportUtil
+from ..entity.base.event_base import EventBase
+from ..util.import_util import ImportUtil
 
 
 class EventFeature:
-    ImportUtil.import_module(Path(__file__).parent.joinpath("entity"))
     _all_events: List[EventBase] = None
 
-    #
     @classmethod
     def get_all_events(cls):
         """获取所有事件"""
         if cls._all_events is None:
+            event_entity_path = Path(__file__).parent.parent.joinpath("entity\\event")
+            ImportUtil.import_module(event_entity_path)  # 使用subclasses之前必须将子类导入
             cls._all_events = [event() for event in EventBase.__subclasses__()]
         return cls._all_events
 
