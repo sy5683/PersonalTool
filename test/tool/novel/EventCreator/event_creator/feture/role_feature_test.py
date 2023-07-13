@@ -1,6 +1,6 @@
 import unittest
 
-from personal_tool.tool.novel.EventCreator.event_creator.feture.role.role_feature import RoleFeature
+from personal_tool.tool.novel.EventCreator.event_creator.feture.role_feature import RoleFeature
 
 
 class RoleFeatureTestCase(unittest.TestCase):

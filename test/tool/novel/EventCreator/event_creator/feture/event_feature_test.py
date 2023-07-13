@@ -1,6 +1,6 @@
 import unittest
 
-from personal_tool.tool.novel.EventCreator.event_creator.feture.event.event_feature import EventFeature
+from personal_tool.tool.novel.EventCreator.event_creator.feture.event_feature import EventFeature
 
 
 class EventFeatureTestCase(unittest.TestCase):

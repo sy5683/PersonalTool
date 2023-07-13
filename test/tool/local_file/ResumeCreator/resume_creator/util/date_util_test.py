@@ -1,7 +1,7 @@
 import datetime
 import unittest
 
-from personal_tool.local_file.resume_creator.util.date_util import DateUtil
+from personal_tool.tool.local_file.ResumeCreator.resume_creator.util.date_util import DateUtil
 
 
 class DateUtilTestCase(unittest.TestCase):
