@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from personal_tool.local_file.resume_creator.entity.base.experience_base import WorkExperience
+from ...base.experience_base import WorkExperience
 
 
 class Work002(WorkExperience):

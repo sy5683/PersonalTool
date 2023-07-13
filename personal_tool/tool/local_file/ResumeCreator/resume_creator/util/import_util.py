@@ -15,11 +15,10 @@ class ImportUtil:
 
         for py_path in py_paths:
             py_parts = py_path.parts
-            for i in range(1, len(py_parts)):
+            for i in range(len(py_parts), 1, -1):
                 try:
-                    module_name = ".".join(py_parts[i:])
-                    module_name = os.path.splitext(module_name)[0]  # 一定要记得去除导入路径的后缀，否则会导入失败
-                    importlib.import_module(module_name)
+                    module_name = ".".join(py_parts[i - 1:])
+                    importlib.import_module(os.path.splitext(module_name)[0])  # 一定要记得去除导入路径的后缀
                     break
                 except ModuleNotFoundError:
                     pass
