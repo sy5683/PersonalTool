@@ -1,12 +1,8 @@
 from event_creator.feture.event_feature import EventFeature
 from event_creator.feture.role_feature import RoleFeature
-from personal_tool.base.tool_base import ToolBase
 
 
-class EventCreator(ToolBase):
-
-    def __init__(self):
-        super().__init__("事件生成器")
+class EventCreator:
 
     def main(self):
         # 获取随机未发生事件

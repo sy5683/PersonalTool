@@ -1,12 +1,8 @@
-from personal_tool.base.tool_base import ToolBase
 from resume_creator.feature.resume_feature import ResumeFeature
 
 
-class ResumeCreator(ToolBase):
+class ResumeCreator:
     """简历生成器"""
-
-    def __init__(self):
-        super().__init__("简历生成器")
 
     def main(self):
         # 1) 添加标题

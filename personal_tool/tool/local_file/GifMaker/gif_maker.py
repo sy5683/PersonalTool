@@ -2,13 +2,12 @@ import win32api
 
 from gif_maker.feature.image_feature import ImageFeature
 from gif_maker.make_rotate_gif import MakeRotateGif
-from personal_tool.base.tool_base import ToolBase
 
 
-class GifMaker(ToolBase):
+class GifMaker:
+    """gif生成器"""
 
     def __init__(self, duration: float = 0.1):
-        super().__init__("gif生成器")
         self.duration = duration  # 每张图片播放时间
 
     def main(self, function=None, **kwargs):
