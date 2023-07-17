@@ -1,6 +1,6 @@
 import unittest
 
-from personal_tool.game.GameCode.game_code.feature.operation_feature import OperationFeature
+from personal_tool.game.GameCode.game_code.feature.operation_feature.operation_feature import OperationFeature
 
 
 class OperationFeatureTestCase(unittest.TestCase):

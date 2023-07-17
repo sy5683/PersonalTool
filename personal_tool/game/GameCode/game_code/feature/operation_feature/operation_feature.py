@@ -1,8 +1,6 @@
 from .operation_type import OperationType
 
 
-
-
 class OperationFeature:
 
     @classmethod
