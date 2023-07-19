@@ -14,4 +14,4 @@ class ImageFeature:
                 background.paste(image, mask=image.split()[3])
             image_save_path = image_path.replace(".webp", ".jpg")
             image.save(image_save_path)
-        # os.remove(image_path)
+        os.remove(image_path)

@@ -1,4 +1,3 @@
-import logging
 from typing import List, Tuple
 
 from .entity.sql_connect import SqlConnect
