@@ -1,8 +1,8 @@
 import win32api
 
 from file_format.anime_format import AnimeFormat
-from file_format.manga_format import MangaFormat
 from file_format.feature.file_feature import FileFeature
+from file_format.manga_format import MangaFormat
 
 
 class FileFormat:
