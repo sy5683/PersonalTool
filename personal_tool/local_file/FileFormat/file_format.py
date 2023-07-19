@@ -12,7 +12,7 @@ class FileFormat:
         if function and FileFeature.get_directory_path():
             function(**kwargs)
             # 打开结果文件夹
-            win32api.ShellExecute(0, "open", FileFeature.get_directory_path(), "", "", 1)
+            win32api.ShellExecute(0, "open", str(FileFeature.get_directory_path()), "", "", 1)
 
 
 if __name__ == '__main__':

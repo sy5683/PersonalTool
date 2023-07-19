@@ -12,7 +12,7 @@ class FileFeature:
     def get_directory_path(cls) -> Path:
         if cls._directory_path is None:
             tkinter.Tk().withdraw()  # 隐藏tk窗口
-            cls._directory_path = filedialog.askdirectory()
+            cls._directory_path = Path(filedialog.askdirectory())
         return cls._directory_path
 
     @staticmethod
@@ -20,7 +20,7 @@ class FileFeature:
         def get_stem(stem):
             return stem if sorted_format_function is None else sorted_format_function(stem)
 
-        return sorted(path.glob("*.*"), key=lambda x: int(re.sub(r"\D+", "", str(get_stem(x.stem)))))
+        return sorted(path.glob("*.*"), key=lambda x: int(re.sub(r"\D+", "", str(get_stem(x.stem))) + "0"))
 
     @staticmethod
     def file_rename(path: Path, new_path: Path = None):
