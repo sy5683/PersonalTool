@@ -2,6 +2,7 @@ import uuid
 
 import cv2
 import imageio
+import numpy as np
 from PIL import Image
 
 from .feature.image_feature import ImageFeature
@@ -18,7 +19,7 @@ class MakeRotateGif:
 
             if func_way == "cv2":
                 # TODO cv2实现生成的gif背景不透明，需要寻找优化方案
-                image = cv2.imread(image_path)
+                image = cv2.imdecode(np.fromfile(image_path, dtype=np.uint8), -1)
                 for times in range(360 // angle):
                     rotate_image = ImageFeature.image_rotate(image, angle, times)
                     rotate_images.append(rotate_image)
