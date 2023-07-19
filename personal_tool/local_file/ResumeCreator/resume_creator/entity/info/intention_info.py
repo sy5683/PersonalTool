@@ -1,6 +1,6 @@
 from typing import List
 
-from personal_tool.local_file.resume_creator.entity.base.info_base import InfoBase
+from ..base.info_base import InfoBase
 
 
 class IntentionInfo(InfoBase):
