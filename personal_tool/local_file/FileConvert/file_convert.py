@@ -8,6 +8,7 @@ from file_convert.pdf_convert import PdfConvert
 
 class Operations(Enum):
     pdf_to_images = PdfConvert.pdf_to_images
+    images_to_pdf = PdfConvert.images_to_pdf
 
 
 class FileConvert:
