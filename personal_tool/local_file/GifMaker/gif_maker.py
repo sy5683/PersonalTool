@@ -1,7 +1,13 @@
+from enum import Enum
+
 import win32api
 
 from gif_maker.feature.image_feature import ImageFeature
 from gif_maker.make_rotate_gif import MakeRotateGif
+
+
+class Operations(Enum):
+    make_rotate_gif = MakeRotateGif.make_rotate_gif
 
 
 class GifMaker:
@@ -20,4 +26,4 @@ class GifMaker:
 
 if __name__ == '__main__':
     gif_maker = GifMaker()
-    gif_maker.main(MakeRotateGif.make_rotate_gif, angle=2)
+    gif_maker.main(Operations.make_rotate_gif, angle=2)
