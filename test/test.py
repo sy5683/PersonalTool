@@ -8,5 +8,3 @@ class Test(unittest.TestCase):
 
     def test_(self):
         """"""
-        image_path = r"E:\Download\VOneManagerMan.exe"
-        fitz.open(image_path)
