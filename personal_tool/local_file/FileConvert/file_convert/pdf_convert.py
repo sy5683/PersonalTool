@@ -9,20 +9,12 @@ from .feature.file_feature import FileFeature
 
 class PdfConvert:
 
-    @classmethod
-    def pdf_convert(cls):
-        file_paths = FileFeature.get_file_paths()
-        suffix = FileFeature.get_suffix()
-        if len(file_paths) == 1:
-            if suffix == ".pdf":
-                cls._pdf_to_images(file_paths[0])
-        else:
-            if suffix == ".png":
-                cls._images_to_pdf(file_paths)
-
     @staticmethod
-    def _pdf_to_images(pdf_path: str):
-        pdf = fitz.open(pdf_path)
+    def pdf_to_images():
+        file_paths = FileFeature.get_file_paths()
+        assert len(file_paths) == 1, "pdf转图片时一次只能选择一份文件"
+        assert FileFeature.get_suffix() == ".pdf", "选择的文件无法进行pdf转图片操作"
+        pdf = fitz.open(file_paths[0])
         pdf_page_size = pdf.pageCount
         for page_num in range(pdf_page_size):
             pdf_page = pdf[page_num]

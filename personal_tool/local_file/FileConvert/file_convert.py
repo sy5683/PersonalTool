@@ -7,7 +7,7 @@ from file_convert.pdf_convert import PdfConvert
 
 
 class Operations(Enum):
-    pdf_convert = PdfConvert.pdf_convert
+    pdf_to_images = PdfConvert.pdf_to_images
 
 
 class FileConvert:
@@ -21,4 +21,4 @@ class FileConvert:
 
 if __name__ == '__main__':
     file_convert = FileConvert()
-    file_convert.main(Operations.pdf_convert)
+    file_convert.main(Operations.pdf_to_images)
