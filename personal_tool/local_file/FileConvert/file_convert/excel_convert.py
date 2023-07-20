@@ -1,8 +1,7 @@
-import os.path
+from pathlib import Path
 
 import excel2img
 import xlrd
-from pathlib import Path
 
 from .feature.file_feature import FileFeature
 
