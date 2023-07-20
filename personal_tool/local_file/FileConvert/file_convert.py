@@ -2,6 +2,7 @@ from enum import Enum
 
 import win32api
 
+from file_convert.excel_convert import ExcelConvert
 from file_convert.feature.file_feature import FileFeature
 from file_convert.pdf_convert import PdfConvert
 
@@ -9,6 +10,7 @@ from file_convert.pdf_convert import PdfConvert
 class Operations(Enum):
     pdf_to_images = PdfConvert.pdf_to_images
     images_to_pdf = PdfConvert.images_to_pdf
+    excel_to_images = ExcelConvert.excel_to_images
 
 
 class FileConvert:
@@ -22,4 +24,4 @@ class FileConvert:
 
 if __name__ == '__main__':
     file_convert = FileConvert()
-    file_convert.main(Operations.pdf_to_images)
+    file_convert.main(Operations.excel_to_images)
