@@ -9,10 +9,10 @@ class FileFeature:
     _directory_path = None
 
     @classmethod
-    def get_directory_path(cls) -> Path:
+    def get_directory_path(cls) -> str:
         if cls._directory_path is None:
             tkinter.Tk().withdraw()  # 隐藏tk窗口
-            cls._directory_path = Path(filedialog.askdirectory())
+            cls._directory_path = filedialog.askdirectory()
         return cls._directory_path
 
     @staticmethod

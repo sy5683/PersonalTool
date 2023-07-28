@@ -1,4 +1,5 @@
 import re
+from pathlib import Path
 
 from .feature.file_feature import FileFeature
 
@@ -7,7 +8,7 @@ class AnimeFormat:
 
     @classmethod
     def anime_format(cls, anime_name: str = None):
-        directory_path = FileFeature.get_directory_path()
+        directory_path = Path(FileFeature.get_directory_path())
 
         # 未指定动漫名称则取文件夹名称
         if anime_name is None:
