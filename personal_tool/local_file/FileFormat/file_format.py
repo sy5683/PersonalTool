@@ -25,4 +25,4 @@ class FileFormat:
 if __name__ == '__main__':
     file_format = FileFormat()
     # file_format.main(Operations.anime_format)
-    file_format.main(Operations.manga_format, start_number=109)
+    file_format.main(Operations.manga_format, start_number=1)
