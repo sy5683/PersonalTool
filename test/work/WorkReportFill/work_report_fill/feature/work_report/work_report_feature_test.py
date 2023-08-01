@@ -1,0 +1,22 @@
+import unittest
+
+from personal_tool.work.WorkReportFill.work_report_fill.feature.work_report.work_report_feature import WorkReportFeature
+
+
+class WorkReportFeatureTestCase(unittest.TestCase):
+
+    def test_get_now_weekly_report(self):
+        now_weekly_report = WorkReportFeature.get_now_weekly_report()
+        self.assertNotEqual(now_weekly_report, None)
+        print(now_weekly_report.__dict__)
+
+    def test_get_weekly_reports(self):
+        weekly_reports = WorkReportFeature.get_weekly_reports()
+        self.assertNotEqual(weekly_reports, None)
+        for weekly_report in weekly_reports:
+            print(weekly_report.__dict__)
+
+    def test_get_work_report_path(self):
+        work_report_path = WorkReportFeature._get_work_report_path()
+        self.assertNotEqual(work_report_path, None)
+        print(work_report_path)
