@@ -9,6 +9,7 @@ class WorkReportFill:
         weekly_report = WorkReportFeature.get_now_weekly_report()
         for daily_report in weekly_report.daily_reports:
             print(daily_report.to_report())
+            print("=" * 20)
 
 
 if __name__ == '__main__':
