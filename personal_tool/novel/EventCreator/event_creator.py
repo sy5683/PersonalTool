@@ -3,6 +3,7 @@ from event_creator.feture.role_feature import RoleFeature
 
 
 class EventCreator:
+    """事件生成器"""
 
     def main(self):
         # 获取随机未发生事件
