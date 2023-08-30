@@ -11,7 +11,7 @@ class PathFeature:
     @classmethod
     def to_novel_path(cls, novel_name: str = None) -> Path:
         """小说路径"""
-        novel_path = cls.to_project_path("novel")
+        novel_path = cls.to_project_path("小说")
         if novel_name is not None:
             novel_path = novel_path.joinpath(novel_name)
             assert novel_path.is_dir(), f"小说不存在: {novel_name}"
