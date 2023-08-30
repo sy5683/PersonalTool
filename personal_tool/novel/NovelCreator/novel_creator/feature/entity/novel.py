@@ -1,11 +1,12 @@
 import importlib
+from abc import ABCMeta
 from typing import List
 
 from .outline import Outline
 from ...feature.path_feature import PathFeature
 
 
-class Novel:
+class Novel(metaclass=ABCMeta):
     """小说"""
 
     def __init__(self, novel_name: str):
@@ -26,7 +27,7 @@ class Novel:
     def _get_outlines(self) -> List[Outline]:
         """获取大纲列表"""
         outlines = []
-        for outline_path in self.__novel_path.glob("*"):
+        for outline_path in self.__novel_path.joinpath("大纲").glob("*"):
             if not outline_path.is_dir():
                 continue
             if outline_path.stem == "__pycache__":

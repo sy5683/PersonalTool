@@ -1,12 +1,13 @@
 import importlib
 import sys
+from abc import ABCMeta
 from pathlib import Path
 from typing import List
 
 from .event import Event
 
 
-class Outline:
+class Outline(metaclass=ABCMeta):
     """大纲"""
 
     def __init__(self, outline_path: Path):
@@ -18,7 +19,8 @@ class Outline:
     def _get_outline_synopsis(self) -> str:
         """获取大纲梗概"""
         # 相对导入目标大纲文件夹，获取其下__init__.py中的大纲梗概
-        params = importlib.import_module(f"novel_creator.小说.构灵.{self.outline_name}")
+        novel_name = self.__outline_path.parent.parent.stem
+        params = importlib.import_module(f"novel_creator.小说.{novel_name}.大纲.{self.outline_name}")
         try:
             return params.outline_synopsis
         except AttributeError:

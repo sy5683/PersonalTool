@@ -1,4 +1,4 @@
-from ....feature.entity.event import Event
+from .....feature.entity.event import Event
 
 
 class WenQuanShanZhuangBianTaiChuMoShiJian(Event):
