@@ -1,3 +1,4 @@
+import importlib
 import sys
 from pathlib import Path
 from typing import List
@@ -11,8 +12,17 @@ class Outline:
     def __init__(self, outline_path: Path):
         self.__outline_path = outline_path  # 大纲路径
         self.outline_name = outline_path.stem  # 大纲名称
-        self.synopsis = """"""  # 大纲梗概
+        self.outline_synopsis = self._get_outline_synopsis()  # 大纲梗概
         self.events = self._get_events()  # 事件列表
+
+    def _get_outline_synopsis(self) -> str:
+        """获取大纲梗概"""
+        # 相对导入目标大纲文件夹，获取其下__init__.py中的大纲梗概
+        params = importlib.import_module(f"novel_creator.小说.构灵.{self.outline_name}")
+        try:
+            return params.outline_synopsis
+        except AttributeError:
+            raise Exception(f"大纲【{self.outline_name}】中缺少大纲梗概")
 
     def _get_events(self) -> List[Event]:
         """获取事件列表"""
