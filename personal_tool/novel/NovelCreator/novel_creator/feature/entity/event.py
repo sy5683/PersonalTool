@@ -10,12 +10,10 @@ class Event(metaclass=ABCMeta):
         self.set_event_info()
         self.__check_event_info()
 
-    # @abstractmethod
+    @abstractmethod
     def set_event_info(self):
         """设置事件信息"""
 
     def __check_event_info(self):
         """校验事件信息"""
         assert self.event_name, f"事件类【{self.__class__.__name__}】名称未设置"
-
-

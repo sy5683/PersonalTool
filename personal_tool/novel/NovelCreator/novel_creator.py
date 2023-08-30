@@ -1,14 +1,21 @@
-from personal_tool.novel.NovelCreator.novel_creator.feature.novel.novel_feature import NovelFeature
+from enum import Enum
+
+from novel_creator.feature.novel_feature import NovelFeature
+
+
+class Operations(Enum):
+    show_outline = NovelFeature.show_outline
 
 
 class NovelCreator:
     """小说生成器"""
 
-    def main(self, novel_name: str):
+    def main(self, novel_name: str, function=None):
         novel = NovelFeature.get_novel(novel_name)
-        novel.show_outline()
+        if function:
+            function(novel)
 
 
 if __name__ == '__main__':
     novel_creator = NovelCreator()
-    novel_creator.main("构灵")
+    novel_creator.main("构灵", Operations.show_outline)
