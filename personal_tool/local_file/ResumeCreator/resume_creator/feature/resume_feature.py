@@ -15,7 +15,7 @@ from ..util.word_util import WordUtil
 
 
 class ResumeFeature:
-    ImportUtil.import_module(Path(__file__).parent.parent.joinpath("entity"))  # 使用subclasses之前必须将子类导入
+    ImportUtil.import_modules(Path(__file__).parent.parent.joinpath("entity"))  # 使用subclasses之前必须将子类导入
     _resume_path = None
 
     @classmethod

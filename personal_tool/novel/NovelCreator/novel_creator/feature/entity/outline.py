@@ -1,10 +1,10 @@
-import importlib
 import sys
 from abc import ABCMeta
 from pathlib import Path
 from typing import List
 
 from .event import Event
+from ...util.import_util import ImportUtil
 
 
 class Outline(metaclass=ABCMeta):
@@ -19,10 +19,9 @@ class Outline(metaclass=ABCMeta):
     def _get_outline_synopsis(self) -> str:
         """获取大纲梗概"""
         # 相对导入目标大纲文件夹，获取其下__init__.py中的大纲梗概
-        novel_name = self.__outline_path.parent.parent.stem
-        params = importlib.import_module(f"novel_creator.小说.{novel_name}.大纲.{self.outline_name}")
+        module = ImportUtil.import_module(self.__outline_path)
         try:
-            return params.outline_synopsis
+            return module.outline_synopsis
         except AttributeError:
             raise Exception(f"大纲【{self.outline_name}】中缺少大纲梗概")
 
@@ -31,7 +30,6 @@ class Outline(metaclass=ABCMeta):
         events = []
         for event_class in Event.__subclasses__():
             event = event_class()
-            event_path = Path(sys.modules[event.__module__].__file__)
-            if event_path.parent == self.__outline_path:
+            if str(self.__outline_path) in str(Path(sys.modules[event.__module__].__file__)):
                 events.append(event)
         return events

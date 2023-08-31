@@ -11,7 +11,7 @@ class NovelFeature:
         """获取小说对象"""
         if cls._novel is None:
             # 1) 首先获取所有事件对象（最底层对象）
-            ImportUtil.import_module(PathFeature.to_novel_path())  # 使用subclasses之前必须将子类导入
+            ImportUtil.import_modules(PathFeature.to_novel_path())  # 使用subclasses之前必须将子类导入
             cls._novel = Novel(novel_name)
         return cls._novel
 

@@ -1,9 +1,9 @@
-import importlib
 from abc import ABCMeta
 from typing import List
 
 from .outline import Outline
 from ...feature.path_feature import PathFeature
+from ...util.import_util import ImportUtil
 
 
 class Novel(metaclass=ABCMeta):
@@ -18,9 +18,9 @@ class Novel(metaclass=ABCMeta):
     def _get_novel_synopsis(self) -> str:
         """获取小说梗概"""
         # 相对导入目标小说文件夹，获取其下__init__.py中的小说梗概
-        params = importlib.import_module(f"novel_creator.小说.{self.novel_name}")
+        module = ImportUtil.import_module(self.__novel_path)
         try:
-            return params.novel_synopsis
+            return module.novel_synopsis
         except AttributeError:
             raise Exception(f"小说【{self.novel_name}】中缺少小说梗概")
 
