@@ -20,7 +20,7 @@ class Novel(metaclass=ABCMeta):
         # 相对导入目标小说文件夹，获取其下__init__.py中的小说梗概
         module = ImportUtil.import_module(self.__novel_path)
         try:
-            return module.novel_synopsis
+            return module.novel_synopsis.strip("\n")
         except AttributeError:
             raise Exception(f"小说【{self.novel_name}】中缺少小说梗概")
 

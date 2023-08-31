@@ -21,7 +21,7 @@ class Outline(metaclass=ABCMeta):
         # 相对导入目标大纲文件夹，获取其下__init__.py中的大纲梗概
         module = ImportUtil.import_module(self.__outline_path)
         try:
-            return module.outline_synopsis
+            return module.outline_synopsis.strip("\n")
         except AttributeError:
             raise Exception(f"大纲【{self.outline_name}】中缺少大纲梗概")
 
