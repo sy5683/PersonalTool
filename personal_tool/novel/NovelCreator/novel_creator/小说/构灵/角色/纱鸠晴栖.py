@@ -3,9 +3,6 @@ from ....feature.entity.role import Role
 
 class ShaJiuQingXi(Role):
 
-    def __init__(self):
-        super().__init__(role_name="纱鸠晴栖")
-
     def set_role_info(self):
         """设置角色信息"""
         self.persona = """

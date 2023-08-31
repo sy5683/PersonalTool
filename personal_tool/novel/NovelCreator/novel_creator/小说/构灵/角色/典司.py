@@ -3,9 +3,6 @@ from ....feature.entity.role import Role
 
 class DianSi(Role):
 
-    def __init__(self):
-        super().__init__(role_name="典司")
-
     def set_role_info(self):
         """设置角色信息"""
         self.persona = """
