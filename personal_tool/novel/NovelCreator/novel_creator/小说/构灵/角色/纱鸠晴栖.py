@@ -4,9 +4,10 @@ from ....feature.entity.role import Role
 class ShaJiuQingXi(Role):
 
     def __init__(self):
-        super().__init__("纱鸠晴栖", "年龄未知")
+        super().__init__(role_name="纱鸠晴栖")
 
     def set_role_info(self):
+        """设置角色信息"""
         self.persona = """
         身高两米二的巨汉，战力极高。
         女性，是魅魔，因为战力拘束器崩坏导致身材完全无法控制。

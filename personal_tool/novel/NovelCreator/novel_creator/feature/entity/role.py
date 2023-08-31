@@ -5,9 +5,8 @@ from abc import ABCMeta, abstractmethod
 class Role(metaclass=ABCMeta):
     """角色"""
 
-    def __init__(self, role_name: str = '', age: str = ''):
+    def __init__(self, role_name: str = ''):
         self.role_name = role_name  # 角色名字
-        self.age = age  # 年龄
         self.persona = None  # 人设
 
         # 设置角色信息

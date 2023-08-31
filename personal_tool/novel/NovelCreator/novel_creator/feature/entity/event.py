@@ -6,6 +6,9 @@ class Event(metaclass=ABCMeta):
 
     def __init__(self, event_name: str = ''):
         self.event_name = event_name  # 事件名称
+        self.is_done = False  # 是否完成
+        self.key_roles = []  # 关键角色
+        self.partake_size = 9  # 事件参与人数
 
         self.set_event_info()
         self.__check_event_info()
