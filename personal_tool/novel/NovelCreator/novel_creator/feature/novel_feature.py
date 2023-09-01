@@ -19,7 +19,7 @@ class NovelFeature:
     def show_outline(novel: Novel):
         """展示小说大纲"""
         print(f"《{novel.novel_name}》")
-        print(novel.novel_synopsis)
+        print(f"{novel.novel_synopsis}\n")
         for index, outline in enumerate(novel.outlines):
             print(f"第{index + 1}章 {outline.outline_name}")
             print(outline.outline_synopsis)
