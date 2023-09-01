@@ -1,6 +1,7 @@
 import sys
 from abc import ABCMeta
 from pathlib import Path
+from types import ModuleType
 from typing import List
 
 from .event import Event
@@ -13,17 +14,8 @@ class Outline(metaclass=ABCMeta):
     def __init__(self, outline_path: Path):
         self.__outline_path = outline_path  # 大纲路径
         self.outline_name = outline_path.stem  # 大纲名称
-        self.outline_synopsis = self._get_outline_synopsis()  # 大纲梗概
+        self.outline_synopsis = self.__get_outline_attribute("outline_synopsis", "大纲梗概")
         self.events = self._get_events()  # 事件列表
-
-    def _get_outline_synopsis(self) -> str:
-        """获取大纲梗概"""
-        # 相对导入目标大纲文件夹，获取其下__init__.py中的大纲梗概
-        module = ImportUtil.import_module(self.__outline_path)
-        try:
-            return module.outline_synopsis.strip("\n")
-        except AttributeError:
-            raise Exception(f"大纲【{self.outline_name}】中缺少大纲梗概")
 
     def _get_events(self) -> List[Event]:
         """获取事件列表"""
@@ -33,3 +25,19 @@ class Outline(metaclass=ABCMeta):
             if str(self.__outline_path) in str(Path(sys.modules[event.__module__].__file__)):
                 events.append(event)
         return events
+
+    def __get_outline_module(self) -> ModuleType:
+        """获取小说的导入模块"""
+        # 相对导入目标大纲文件夹，获取其下__init__.py中的大纲梗概
+        return ImportUtil.import_module(self.__outline_path)
+
+    def __get_outline_attribute(self, attribute_key: str, attribute_name: str = ''):
+        """获取大纲参数"""
+        # 相对导入目标大纲文件夹，获取其下__init__.py中的大纲梗概
+        outline_module = ImportUtil.import_module(self.__outline_path)
+        try:
+            attribute_value = getattr(outline_module, attribute_key)
+            attribute_value = attribute_value.strip("\n") if isinstance(attribute_value, str) else attribute_value
+            return attribute_value
+        except AttributeError:
+            raise Exception(f"大纲【{self.outline_name}】中缺少{attribute_name}: {attribute_key}")
