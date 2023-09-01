@@ -1,4 +1,3 @@
-import sys
 from abc import ABCMeta
 from pathlib import Path
 from typing import List
@@ -21,7 +20,7 @@ class Outline(metaclass=ABCMeta):
         events = []
         for event_class in Event.__subclasses__():
             event = event_class()
-            if str(self.__outline_path) in str(Path(sys.modules[event.__module__].__file__)):
+            if str(self.__outline_path) in str(event.event_path):
                 events.append(event)
         return events
 
