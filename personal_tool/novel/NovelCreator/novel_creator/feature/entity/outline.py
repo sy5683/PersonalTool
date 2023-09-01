@@ -1,7 +1,6 @@
 import sys
 from abc import ABCMeta
 from pathlib import Path
-from types import ModuleType
 from typing import List
 
 from .event import Event
@@ -25,11 +24,6 @@ class Outline(metaclass=ABCMeta):
             if str(self.__outline_path) in str(Path(sys.modules[event.__module__].__file__)):
                 events.append(event)
         return events
-
-    def __get_outline_module(self) -> ModuleType:
-        """获取小说的导入模块"""
-        # 相对导入目标大纲文件夹，获取其下__init__.py中的大纲梗概
-        return ImportUtil.import_module(self.__outline_path)
 
     def __get_outline_attribute(self, attribute_key: str, attribute_name: str = ''):
         """获取大纲参数"""
