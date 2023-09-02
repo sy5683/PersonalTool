@@ -1,3 +1,4 @@
+import random
 from abc import ABCMeta
 from typing import List
 
@@ -20,7 +21,9 @@ class Novel(metaclass=ABCMeta):
         """获取大纲列表"""
         main_outline_sequence = self.__get_novel_attribute("main_outline_sequence", "主干大纲顺序")
         outlines = []
-        for outline_path in self.__novel_path.joinpath("大纲").glob("*"):
+        outline_paths = list(self.__novel_path.joinpath("大纲").glob("*"))
+        random.shuffle(outline_paths)
+        for outline_path in outline_paths:
             if not outline_path.is_dir():
                 continue
             if outline_path.stem == "__pycache__":
