@@ -5,6 +5,7 @@ from novel_creator.feature.novel_feature import NovelFeature
 
 class Operations(Enum):
     show_outline = NovelFeature.show_outline
+    show_content = NovelFeature.show_content
 
 
 class NovelCreator:
@@ -18,4 +19,5 @@ class NovelCreator:
 
 if __name__ == '__main__':
     novel_creator = NovelCreator()
-    novel_creator.main("构灵", Operations.show_outline)
+    # novel_creator.main("构灵", Operations.show_outline)
+    novel_creator.main("构灵", Operations.show_content)

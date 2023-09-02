@@ -13,7 +13,7 @@ class Novel(metaclass=ABCMeta):
         self.novel_name = novel_name  # 小说名称
         self.__novel_path = PathFeature.to_novel_path(self.novel_name)  # 小说路径
         self.novel_synopsis = self.__get_novel_attribute("novel_synopsis", "小说梗概")
-        self._novel_setting = self.__get_novel_attribute("novel_setting", "小说设定")
+        self.text = self.__get_novel_attribute("text", "正文")
         self.outlines = self._get_outlines()  # 大纲列表
 
     def _get_outlines(self) -> List[Outline]:
