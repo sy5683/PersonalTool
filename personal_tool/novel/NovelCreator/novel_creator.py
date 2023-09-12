@@ -1,23 +1,27 @@
 from enum import Enum
 
 from novel_creator.feature.novel_feature import NovelFeature
+from novel_creator.show_novel import ShowNovel
 
 
 class Operations(Enum):
-    show_outline = NovelFeature.show_outline
-    show_content = NovelFeature.show_content
+    show_outline = ShowNovel.show_outline
+    show_content = ShowNovel.show_content
 
 
 class NovelCreator:
     """小说生成器"""
 
-    def main(self, novel_name: str, function=None):
-        novel = NovelFeature.get_novel(novel_name)
+    def __init__(self, novel_name: str):
+        self.novel_name = novel_name
+
+    def main(self, function=None):
+        novel = NovelFeature.get_novel(self.novel_name)
         if function:
             function(novel)
 
 
 if __name__ == '__main__':
-    novel_creator = NovelCreator()
-    # novel_creator.main("构灵", Operations.show_outline)
-    novel_creator.main("构灵", Operations.show_content)
+    novel_creator = NovelCreator("构灵")
+    # novel_creator.main(Operations.show_outline)
+    novel_creator.main(Operations.show_content)
