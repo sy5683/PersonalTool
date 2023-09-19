@@ -1,5 +1,12 @@
-from personal_util.win32_util import Win32Util as win32Util
+from pathlib import Path
+from typing import Union
+
+import win32api
 
 
-class Win32Util(win32Util):
-    """"""
+class Win32Util:
+
+    @staticmethod
+    def open_file(file_path: Union[str, Path]):
+        """打开文件"""
+        win32api.ShellExecute(0, "open", str(file_path), "", "", 1)

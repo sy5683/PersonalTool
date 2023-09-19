@@ -1,5 +1,13 @@
-from personal_util.time_util import TimeUtil as timeUtil
+import datetime
+from typing import Union
+
+from dateutil.relativedelta import relativedelta
 
 
-class TimeUtil(timeUtil):
-    """"""
+class TimeUtil:
+
+    @staticmethod
+    def get_year_between_dates(from_date: Union[datetime.datetime, datetime.date],
+                               to_date: Union[datetime.datetime, datetime.date]) -> int:
+        """获取两个日期之间的年份"""
+        return relativedelta(from_date, to_date).years

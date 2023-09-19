@@ -14,7 +14,7 @@ class House:
 
     def add_room(self, room: Room):
         self.rooms.append(room)
-        self.all_furniture_price = FloatUtil.add_float(self.all_furniture_price, room.all_furniture_price)
+        self.all_furniture_price = FloatUtil.add(self.all_furniture_price, room.all_furniture_price)
 
     def show(self):
         print("房子")

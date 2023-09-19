@@ -14,7 +14,7 @@ class Room(metaclass=ABCMeta):
 
     def add_furniture(self, furniture: Furniture):
         self.furniture.append(furniture)
-        self.all_furniture_price = FloatUtil.add_float(self.all_furniture_price, furniture.price)
+        self.all_furniture_price = FloatUtil.add(self.all_furniture_price, furniture.price)
 
     def show(self):
         print(f"【{self.room_name}】 合计: {self.all_furniture_price}")
