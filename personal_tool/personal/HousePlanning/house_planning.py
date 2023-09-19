@@ -15,7 +15,7 @@ class HousePlanning:
     def __init__(self, house_plan: Type[HousePlan]):
         self.house = house_plan.get_plan()
 
-    def main(self, function=None):
+    def main(self):
         self.house.show()
 
 

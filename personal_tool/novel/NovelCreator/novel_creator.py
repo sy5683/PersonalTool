@@ -15,10 +15,9 @@ class NovelCreator:
     def __init__(self, novel_name: str):
         self.novel_name = novel_name
 
-    def main(self, function=None):
+    def main(self, function):
         novel = NovelFeature.get_novel(self.novel_name)
-        if function:
-            function(novel)
+        function(novel)
 
 
 if __name__ == '__main__':

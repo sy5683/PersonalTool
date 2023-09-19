@@ -1,4 +1,4 @@
-from personal_tool.work.WorkReportFill.work_report_fill.feature.work_report.work_report_feature import WorkReportFeature
+from work_report_fill.feature.work_report.work_report_feature import WorkReportFeature
 
 
 class WorkReportFill:

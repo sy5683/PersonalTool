@@ -1,10 +1,9 @@
 from enum import Enum
 
-import win32api
-
 from file_convert.excel_convert import ExcelConvert
 from file_convert.feature.file_feature import FileFeature
 from file_convert.pdf_convert import PdfConvert
+from file_convert.util.win32_util import Win32Util
 
 
 class Operations(Enum):
@@ -14,12 +13,15 @@ class Operations(Enum):
 
 
 class FileConvert:
+    """文件转换"""
 
-    def main(self, function=None, **kwargs):
-        if function and FileFeature.get_file_paths():
+    def __init__(self):
+        self.file_paths = FileFeature.get_file_paths()
+
+    def main(self, function, **kwargs):
+        if self.file_paths:
             function(**kwargs)
-            # 打开结果文件夹
-            win32api.ShellExecute(0, "open", FileFeature.get_save_path(), "", "", 1)
+            Win32Util.open_file(FileFeature.get_save_path())
 
 
 if __name__ == '__main__':
