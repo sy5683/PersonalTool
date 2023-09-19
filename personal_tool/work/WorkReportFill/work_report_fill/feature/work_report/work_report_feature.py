@@ -9,7 +9,7 @@ import openpyxl
 
 from .entity.weekly_report import WeeklyReport
 from .factory.daily_report_factory import DailyReportFactory
-from ...util.date_util import DateUtil
+from ...util.time_util import TimeUtil
 
 
 class WorkReportFeature:
@@ -17,7 +17,7 @@ class WorkReportFeature:
 
     @classmethod
     def get_now_weekly_report(cls) -> WeeklyReport:
-        now_date = DateUtil.get_now_date()
+        now_date = TimeUtil.get_now()
         weekly_reports = cls.get_weekly_reports()
         for weekly_report in reversed(weekly_reports):
             if now_date in weekly_report.date_range:

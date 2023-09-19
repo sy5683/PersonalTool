@@ -80,4 +80,4 @@ class OperationType(Enum):
         return self.value['name']
 
     def to_function(self):
-        return self.value.get("function")
+        return self.value['function']
