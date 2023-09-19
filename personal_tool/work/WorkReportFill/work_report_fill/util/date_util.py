@@ -1,12 +1,5 @@
-import datetime
+from personal_util.date_util import DateUtil as dateUtil
 
 
-class DateUtil:
-
-    @classmethod
-    def get_now_date(cls) -> str:
-        return cls.datetime_to_str(datetime.datetime.now())
-
-    @staticmethod
-    def datetime_to_str(datetime_stamp: datetime.datetime) -> str:
-        return datetime_stamp.strftime("%Y-%m-%d")
+class DateUtil(dateUtil):
+    """"""
