@@ -38,7 +38,6 @@ class CrawlingTemplateImage:
                 download_path = NetUtil.download(image_url, "jpg")
                 shutil.move(download_path, save_path.joinpath(download_path.name))
                 time.sleep(0.5)
-                break
             page_number += 1
             if quantity and len(list(save_path.rglob("*"))) > quantity:
                 break
