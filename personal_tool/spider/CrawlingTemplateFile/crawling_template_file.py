@@ -7,6 +7,7 @@ from crawling_template_file.util.win32_util import Win32Util
 
 
 class Operations(Enum):
+    crawling_baidu_image_urls = CrawlingTemplateImage.crawling_baidu_image_urls
     crawling_baidu_image = CrawlingTemplateImage.crawling_baidu_image
 
 
@@ -26,4 +27,4 @@ class CrawlingTemplateFile:
 
 if __name__ == '__main__':
     crawling_template_file = CrawlingTemplateFile(["文档", "证书", "表格", "广告", "合同", "论文", "路牌", "财务报表"])
-    crawling_template_file.main(Operations.crawling_baidu_image, quantity=8000)
+    crawling_template_file.main(Operations.crawling_baidu_image_urls)
