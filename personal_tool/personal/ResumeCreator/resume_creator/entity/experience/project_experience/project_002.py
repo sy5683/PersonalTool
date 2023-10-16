@@ -1,4 +1,4 @@
-from typing import List, Tuple
+import typing
 
 from ...base.experience_base import ProjectExperience
 
@@ -13,7 +13,7 @@ class Project002(ProjectExperience):
         """获取工作角色"""
         return "自动化开发测试工程师"
 
-    def get_date_range(self) -> Tuple[str, str]:
+    def get_date_range(self) -> typing.Tuple[str, str]:
         """获取开始时间与结束时间"""
         return "2019年12月", "2020年06月"
 
@@ -22,7 +22,7 @@ class Project002(ProjectExperience):
         return "为了保证公司App的稳定性，提升测试效率，定制公司APP与微信小程序专门的自动化测试脚本。" \
                "保证每天对程序进行测试，并将相应结果报告发送至部门邮箱。"
 
-    def get_technologies(self) -> List[str]:
+    def get_technologies(self) -> typing.List[str]:
         """获取开发技术"""
         return ["Appium"]
 

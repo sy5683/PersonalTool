@@ -1,8 +1,8 @@
 import os.path
 import tempfile
 import tkinter
+import typing
 from tkinter import filedialog
-from typing import List
 
 import cv2
 from numpy import cos, fabs, radians, sin
@@ -14,7 +14,7 @@ class ImageFeature:
     _save_dir_path = None
 
     @classmethod
-    def get_image_paths(cls) -> List[str]:
+    def get_image_paths(cls) -> typing.List[str]:
         if cls._image_paths is None:
             tkinter.Tk().withdraw()  # 隐藏tk窗口
             cls._image_paths = filedialog.askopenfilenames()

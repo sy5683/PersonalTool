@@ -1,13 +1,13 @@
+import abc
 import random
-from abc import ABCMeta
-from typing import List
+import typing
 
 from .outline import Outline
 from ...feature.path_feature import PathFeature
 from ...util.import_util import ImportUtil
 
 
-class Novel(metaclass=ABCMeta):
+class Novel(metaclass=abc.ABCMeta):
     """小说"""
 
     def __init__(self, novel_name: str):
@@ -17,7 +17,7 @@ class Novel(metaclass=ABCMeta):
         self.text = self.__get_novel_attribute("text", "正文")
         self.outlines = self._get_outlines()  # 大纲列表
 
-    def _get_outlines(self) -> List[Outline]:
+    def _get_outlines(self) -> typing.List[Outline]:
         """获取大纲列表"""
         main_outline_sequence = self.__get_novel_attribute("main_outline_sequence", "主干大纲顺序")
         outlines = []

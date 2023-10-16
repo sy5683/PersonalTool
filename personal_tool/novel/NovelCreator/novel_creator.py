@@ -1,10 +1,10 @@
-from enum import Enum
+import enum
 
 from novel_creator.feature.novel_feature import NovelFeature
 from novel_creator.show_novel import ShowNovel
 
 
-class Operations(Enum):
+class Operations(enum.Enum):
     show_outline = ShowNovel.show_outline
     show_content = ShowNovel.show_content
 

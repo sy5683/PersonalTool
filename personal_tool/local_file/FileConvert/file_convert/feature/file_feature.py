@@ -2,8 +2,8 @@ import logging
 import os
 import tempfile
 import tkinter
+import typing
 from tkinter import filedialog
-from typing import List
 
 
 class FileErrorException(Exception):
@@ -15,7 +15,7 @@ class FileFeature:
     _save_dir_path = None
 
     @classmethod
-    def get_file_paths(cls) -> List[str]:
+    def get_file_paths(cls) -> typing.List[str]:
         if cls._file_paths is None:
             tkinter.Tk().withdraw()  # 隐藏tk窗口
             cls._file_paths = list(filedialog.askopenfilenames())

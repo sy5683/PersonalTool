@@ -1,12 +1,12 @@
-from abc import ABCMeta
+import abc
+import typing
 from pathlib import Path
-from typing import List
 
 from .event import Event
 from ...util.import_util import ImportUtil
 
 
-class Outline(metaclass=ABCMeta):
+class Outline(metaclass=abc.ABCMeta):
     """大纲"""
 
     def __init__(self, outline_path: Path):
@@ -15,7 +15,7 @@ class Outline(metaclass=ABCMeta):
         self.outline_synopsis = self.__get_outline_attribute("outline_synopsis", "大纲梗概")
         self.events = self._get_events()  # 事件列表
 
-    def _get_events(self) -> List[Event]:
+    def _get_events(self) -> typing.List[Event]:
         """获取事件列表"""
         events = []
         for event_class in Event.__subclasses__():

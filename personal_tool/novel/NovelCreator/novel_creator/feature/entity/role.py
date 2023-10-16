@@ -1,10 +1,10 @@
+import abc
 import logging
 import sys
-from abc import ABCMeta, abstractmethod
 from pathlib import Path
 
 
-class Role(metaclass=ABCMeta):
+class Role(metaclass=abc.ABCMeta):
     """角色"""
 
     def __init__(self):
@@ -16,7 +16,7 @@ class Role(metaclass=ABCMeta):
         self.set_role_info()
         self.__check_role_info()
 
-    @abstractmethod
+    @abc.abstractmethod
     def set_role_info(self):
         """设置角色信息"""
 

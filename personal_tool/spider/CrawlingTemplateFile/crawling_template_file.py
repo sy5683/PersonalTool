@@ -1,12 +1,12 @@
-from enum import Enum
-from typing import List
+import enum
+import typing
 
 from crawling_template_file.crawling_baidu_image import CrawlingTemplateImage
 from crawling_template_file.util.file_util import FileUtil
 from crawling_template_file.util.win32_util import Win32Util
 
 
-class Operations(Enum):
+class Operations(enum.Enum):
     crawling_baidu_image_urls = CrawlingTemplateImage.crawling_baidu_image_urls
     crawling_baidu_image = CrawlingTemplateImage.crawling_baidu_image
 
@@ -14,7 +14,7 @@ class Operations(Enum):
 class CrawlingTemplateFile:
     """爬取样本文件"""
 
-    def __init__(self, words: List[str]):
+    def __init__(self, words: typing.List[str]):
         self.words = words
 
     def main(self, function, **kwargs):

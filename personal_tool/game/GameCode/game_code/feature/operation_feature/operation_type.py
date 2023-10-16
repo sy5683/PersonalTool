@@ -1,5 +1,5 @@
+import enum
 import re
-from enum import Enum
 
 from .operation_exception import OperationExit
 from ..sql_feature.sql_feature import SqlFeature
@@ -67,7 +67,7 @@ class Operations:
             print(f"【{result_name}】 {result_code}")
 
 
-class OperationType(Enum):
+class OperationType(enum.Enum):
     add_item = {'id': "1", 'name': "添加道具", 'function': Operations.add_item}
     get_item_command = {'id': "2", 'name': "获取道具指令", 'function': Operations.get_item_command}
     show_items = {'id': "3", 'name': "展示道具", 'function': Operations.show_items}

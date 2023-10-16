@@ -1,4 +1,4 @@
-from typing import List, Tuple
+import typing
 
 from ...base.experience_base import ProjectExperience
 
@@ -13,7 +13,7 @@ class Project003(ProjectExperience):
         """获取工作角色"""
         return "Python开发工程师"
 
-    def get_date_range(self) -> Tuple[str, str]:
+    def get_date_range(self) -> typing.Tuple[str, str]:
         """获取开始时间与结束时间"""
         return "2020年04月", "2020年04月"
 
@@ -21,7 +21,7 @@ class Project003(ProjectExperience):
         """获取简介"""
         return "因为打印机调用接口报错时无法将错误及时反馈，因为了在接口出现异常时第一时间发现问题，开发定时检测接口的脚本，并返回告警邮件给项目经理。"
 
-    def get_technologies(self) -> List[str]:
+    def get_technologies(self) -> typing.List[str]:
         """获取开发技术"""
         return ["Selenium"]
 

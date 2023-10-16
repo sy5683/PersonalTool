@@ -1,4 +1,4 @@
-from typing import List, Tuple
+import typing
 
 from ...base.experience_base import ProjectExperience
 
@@ -13,7 +13,7 @@ class Project004(ProjectExperience):
         """获取工作角色"""
         return "Python开发工程师"
 
-    def get_date_range(self) -> Tuple[str, str]:
+    def get_date_range(self) -> typing.Tuple[str, str]:
         """获取开始时间与结束时间"""
         return "2020年08月", "至今"
 
@@ -21,7 +21,7 @@ class Project004(ProjectExperience):
         """获取简介"""
         return "根据财务的各种需求，定制开发场景脚本，通过机器人客户端运行，实现客户需要的各种功能，包括但不限于接口页面取数、页面填报、pdf回单解析、excel与word生成等……"
 
-    def get_technologies(self) -> List[str]:
+    def get_technologies(self) -> typing.List[str]:
         """获取开发技术"""
         return ["Selenium", "win32", "fitz、openpyxl、python-docx等各种业务相关库"]
 

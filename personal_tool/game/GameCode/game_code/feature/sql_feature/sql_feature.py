@@ -1,4 +1,4 @@
-from typing import List, Tuple
+import typing
 
 from .entity.sql_connect import SqlConnect
 
@@ -8,7 +8,7 @@ class SqlFeature:
     _table_name = "fallout4_code"
 
     @classmethod
-    def find_item(cls, item_name: str) -> Tuple[str, str]:
+    def find_item(cls, item_name: str) -> typing.Tuple[str, str]:
         """查找道具"""
         sql = f"SELECT item_name, item_code FROM {cls._table_name} WHERE item_name='{item_name}';"
         results = cls._get_connect().select(sql)
@@ -16,7 +16,7 @@ class SqlFeature:
             return results[0]
 
     @classmethod
-    def find_items(cls, item_name: str = None) -> List[Tuple[str, str]]:
+    def find_items(cls, item_name: str = None) -> typing.List[typing.Tuple[str, str]]:
         sql = f"SELECT item_name, item_code FROM {cls._table_name} "
         if item_name:
             sql += f"WHERE item_name LIKE '%{item_name}%';"

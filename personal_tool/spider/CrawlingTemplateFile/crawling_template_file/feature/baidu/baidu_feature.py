@@ -1,5 +1,5 @@
 import re
-from typing import List
+import typing
 
 import requests
 
@@ -11,7 +11,7 @@ class BaiduFeature:
     }
 
     @classmethod
-    def search_baidu_image_urls(cls, search_word: str, page_number: int) -> List[str]:
+    def search_baidu_image_urls(cls, search_word: str, page_number: int) -> typing.List[str]:
         """查询百度图片url列表"""
         url = cls._get_baidu_image_url(f"/search/acjson?tn=resultjson_com&logid=9047316633247341826&ipn=rj"
                                        f"&ct=201326592&is=&fp=result&queryWord={search_word}&cl=2&lm=-1&ie=utf-8"

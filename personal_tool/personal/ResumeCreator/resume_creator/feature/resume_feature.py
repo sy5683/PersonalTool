@@ -1,7 +1,7 @@
 import os
 import tempfile
+import typing
 from pathlib import Path
-from typing import Tuple
 
 import win32api
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
@@ -99,7 +99,7 @@ class ResumeFeature:
         WordUtil.set_font_size(run, 22)  # 二号字体
 
     @staticmethod
-    def _add_heading_2(heading_name: str, date_range: Tuple[str, str] = None):
+    def _add_heading_2(heading_name: str, date_range: typing.Tuple[str, str] = None):
         """添加标题日期"""
         document = WordFeature.get_document()
         heading = document.add_heading(level=2)

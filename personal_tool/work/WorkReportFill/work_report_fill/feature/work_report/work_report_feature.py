@@ -1,9 +1,9 @@
 import logging
 import os
 import tkinter
+import typing
 from pathlib import Path
 from tkinter import filedialog
-from typing import List
 
 import openpyxl
 
@@ -25,7 +25,7 @@ class WorkReportFeature:
         raise Exception(f"未找到当前日期所在的周报: {now_date}")
 
     @classmethod
-    def get_weekly_reports(cls) -> List[WeeklyReport]:
+    def get_weekly_reports(cls) -> typing.List[WeeklyReport]:
         daily_report_path = cls._get_work_report_path()
         wb = openpyxl.load_workbook(daily_report_path)
         weekly_reports = []

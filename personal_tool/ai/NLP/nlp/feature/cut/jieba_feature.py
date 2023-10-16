@@ -1,4 +1,4 @@
-from typing import List
+import typing
 
 from .entity.jieba_cut import JiebaCut
 
@@ -7,7 +7,7 @@ class JiebaFeature:
     _jieba_cut = None
 
     @classmethod
-    def cut(cls, string: str) -> List[str]:
+    def cut(cls, string: str) -> typing.List[str]:
         return cls._get_jieba_cut().cut(string)
 
     @classmethod

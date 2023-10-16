@@ -1,4 +1,4 @@
-from typing import Tuple
+import typing
 
 from ...base.experience_base import WorkExperience
 
@@ -13,7 +13,7 @@ class Work002(WorkExperience):
         """获取职位"""
         return "Python开发工程师"
 
-    def get_date_range(self) -> Tuple[str, str]:
+    def get_date_range(self) -> typing.Tuple[str, str]:
         """获取开始时间与结束时间"""
         return "2020年08月", "至今"
 

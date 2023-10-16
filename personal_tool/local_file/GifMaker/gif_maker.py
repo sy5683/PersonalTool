@@ -1,11 +1,11 @@
-from enum import Enum
+import enum
 
 from gif_maker.feature.image_feature import ImageFeature
 from gif_maker.make_rotate_gif import MakeRotateGif
 from gif_maker.util.win32_util import Win32Util
 
 
-class Operations(Enum):
+class Operations(enum.Enum):
     make_rotate_gif = MakeRotateGif.make_rotate_gif
 
 

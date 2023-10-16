@@ -1,6 +1,6 @@
 import sqlite3
+import typing
 from contextlib import contextmanager
-from typing import List
 
 from ....feature.file_feature import FileFeature
 
@@ -12,7 +12,7 @@ class SqlConnect:
         self.connect = sqlite3.connect(str(self.database_path))  # 连接数据库
         self.cursor = self.connect.cursor()  # 得到一个可以执行SQL语句的游标对象
 
-    def select(self, sql: str) -> List[tuple]:
+    def select(self, sql: str) -> typing.List[tuple]:
         """查询"""
         with self._execute(sql):
             return self.cursor.fetchall()

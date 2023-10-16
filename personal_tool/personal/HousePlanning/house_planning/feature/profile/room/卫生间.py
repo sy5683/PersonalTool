@@ -1,9 +1,9 @@
-from abc import ABCMeta
+import abc
 
 from ..base.room import Room
 
 
-class CloakRoom(Room, metaclass=ABCMeta):
+class CloakRoom(Room, metaclass=abc.ABCMeta):
 
     def __init__(self, room_name: str):
         super().__init__(room_name)

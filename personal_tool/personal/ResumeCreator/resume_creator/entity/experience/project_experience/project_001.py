@@ -1,4 +1,4 @@
-from typing import List, Tuple
+import typing
 
 from ...base.experience_base import ProjectExperience
 
@@ -13,7 +13,7 @@ class Project001(ProjectExperience):
         """获取工作角色"""
         return "Python开发工程师"
 
-    def get_date_range(self) -> Tuple[str, str]:
+    def get_date_range(self) -> typing.Tuple[str, str]:
         """获取开始时间与结束时间"""
         return "2019年09月", "2019年12月"
 
@@ -23,7 +23,7 @@ class Project001(ProjectExperience):
                "为了满足公司需求，提升识别准确度并降低调用接口的费用，在调用百度API接口之前需要对试卷答案进行特殊处理。" \
                "同时因为选择判断题的体量并不需要用到过于强大的OCR，因此还专门对选择判断题进行单独训练。"
 
-    def get_technologies(self) -> List[str]:
+    def get_technologies(self) -> typing.List[str]:
         """获取开发技术"""
         return ["OpenCV", "TensorFlow"]
 

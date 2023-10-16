@@ -1,11 +1,11 @@
-from abc import ABCMeta, abstractmethod
+import abc
 
 from ...profile.base.house import House
 
 
-class HousePlan(metaclass=ABCMeta):
+class HousePlan(metaclass=abc.ABCMeta):
 
     @staticmethod
-    @abstractmethod
+    @abc.abstractmethod
     def get_plan() -> House:
         """"""

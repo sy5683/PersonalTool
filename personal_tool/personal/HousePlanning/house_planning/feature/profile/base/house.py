@@ -1,4 +1,4 @@
-from typing import List
+import typing
 
 from .room import Room
 from ....util.float_util import FloatUtil
@@ -9,7 +9,7 @@ class House:
     def __init__(self):
         # self.area = None  # 面积
         # self.construction_ratio = None  # 得房率
-        self.rooms: List[Room] = []  # 房间
+        self.rooms: typing.List[Room] = []  # 房间
         self.all_furniture_price = 0.0  # 家具合计金额
 
     def add_room(self, room: Room):

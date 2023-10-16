@@ -1,15 +1,15 @@
-from abc import ABCMeta
-from typing import List
+import abc
+import typing
 
 from .furniture import Furniture
 from ....util.float_util import FloatUtil
 
 
-class Room(metaclass=ABCMeta):
+class Room(metaclass=abc.ABCMeta):
 
     def __init__(self, room_name: str):
         self.room_name = room_name  # 房间名称
-        self.furniture: List[Furniture] = []  # 家具
+        self.furniture: typing.List[Furniture] = []  # 家具
         self.all_furniture_price = 0.0  # 家具合计金额
 
     def add_furniture(self, furniture: Furniture):

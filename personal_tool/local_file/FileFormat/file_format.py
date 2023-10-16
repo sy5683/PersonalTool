@@ -1,4 +1,4 @@
-from enum import Enum
+import enum
 
 from file_format.anime_format import AnimeFormat
 from file_format.feature.file_feature import FileFeature
@@ -6,7 +6,7 @@ from file_format.manga_format import MangaFormat
 from file_format.util.win32_util import Win32Util
 
 
-class Operations(Enum):
+class Operations(enum.Enum):
     anime_format = AnimeFormat.anime_format
     manga_format = MangaFormat.manga_format
 

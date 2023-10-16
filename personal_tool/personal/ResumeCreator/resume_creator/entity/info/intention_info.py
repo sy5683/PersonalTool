@@ -1,4 +1,4 @@
-from typing import List
+import typing
 
 from ..base.info_base import InfoBase
 
@@ -11,7 +11,7 @@ class IntentionInfo(InfoBase):
         self.in_position_time = "一个月内"  # 入职时间
         self.salary_expectation = 12000  # 期望薪资
 
-    def to_contexts(self) -> List[str]:
+    def to_contexts(self) -> typing.List[str]:
         """转换为文本"""
         return [f"求职岗位: {self.job_position}", f"期望薪资: {self.salary_expectation}",
                 f"到岗时间: {self.in_position_time}"]

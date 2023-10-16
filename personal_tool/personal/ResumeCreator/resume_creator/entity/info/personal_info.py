@@ -1,4 +1,4 @@
-from typing import List
+import typing
 
 from ..base.info_base import InfoBase
 
@@ -15,6 +15,6 @@ class PersonalInfo(InfoBase):
         ]
         self.profile = "为人诚信，能吃苦耐劳，对工作认真负责，积极取进，时间观念强，勇于面对困难挑战。"  # 个人介绍
 
-    def to_contexts(self) -> List[str]:
+    def to_contexts(self) -> typing.List[str]:
         """转换为文本"""
         return ["个人技能: "] + [f"\t· {skill}" for skill in self.skills] + [f"个人介绍: {self.profile}"]

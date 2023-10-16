@@ -1,4 +1,4 @@
-from typing import List
+import typing
 
 from ..base.info_base import InfoBase
 
@@ -13,6 +13,6 @@ class EducationInfo(InfoBase):
         self.to_date = "2019年06月"  # 毕业时间
         self.major = "软件工程"  # 专业
 
-    def to_contexts(self) -> List[str]:
+    def to_contexts(self) -> typing.List[str]:
         """转换为文本"""
         return [f"{self.school_name} | {self.from_date}-{self.to_date}", f"专业: {self.major}"]

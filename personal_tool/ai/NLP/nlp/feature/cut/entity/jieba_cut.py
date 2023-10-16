@@ -1,4 +1,4 @@
-from typing import List
+import typing
 
 import jieba
 
@@ -10,9 +10,9 @@ class JiebaCut:
         jieba.add_word("玊烨")
 
     @staticmethod
-    def cut(string: str) -> List[str]:
+    def cut(string: str) -> typing.List[str]:
         return jieba.lcut(string)  # 精确模式
 
     @staticmethod
-    def cut_for_search(string: str) -> List[str]:
+    def cut_for_search(string: str) -> typing.List[str]:
         return jieba.lcut_for_search(string)

@@ -1,9 +1,9 @@
+import abc
 import sys
-from abc import ABCMeta, abstractmethod
 from pathlib import Path
 
 
-class Event(metaclass=ABCMeta):
+class Event(metaclass=abc.ABCMeta):
     """事件"""
 
     def __init__(self):
@@ -23,11 +23,11 @@ class Event(metaclass=ABCMeta):
         self.__format_text()
         self.__check_event_content()
 
-    @abstractmethod
+    @abc.abstractmethod
     def _set_event_info(self):
         """设置事件信息"""
 
-    @abstractmethod
+    @abc.abstractmethod
     def _set_event_content(self):
         """设置事件内容"""
 
