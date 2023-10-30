@@ -93,6 +93,7 @@ class HousePlan001(HousePlan):
         # 阳台
         balcony = Balcony()
         balcony.add_furniture(Washer(3000))  # 洗衣机
+        balcony.add_furniture(Washer(2000))  # 洗衣机
         house.add_room(balcony)
 
         # 次卧
