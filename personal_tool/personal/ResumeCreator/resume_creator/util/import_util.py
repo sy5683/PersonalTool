@@ -21,8 +21,7 @@ class ImportUtil:
     @staticmethod
     def _import_module(module_name: str) -> ModuleType:
         """导入"""
-        # 一定要记得去除导入路径的后缀，否则会导入失败
-        module_name = re.sub(r"\.py$", "", module_name)
-        # 有__init__.py时需要导入其所在文件夹
-        module_name = re.sub(r"\.__init__$", "", module_name)
+        # 导入需要去除导入路径的后缀，否则会导入失败
+        # 导入__init__.py时导入路径为其所在的文件夹
+        module_name = re.sub(r"\.py$|\.__init__.py$", "", module_name)
         return importlib.import_module(module_name)
