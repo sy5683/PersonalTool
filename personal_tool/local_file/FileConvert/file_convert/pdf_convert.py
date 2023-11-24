@@ -1,4 +1,6 @@
+import logging
 import re
+import traceback
 import uuid
 from pathlib import Path
 
@@ -30,10 +32,14 @@ class PdfConvert:
         pdf = fitz.open()
         assert re.match(r"\.png|\.jpg", FileFeature.get_suffix())
         for image_path in sorted(file_paths, key=lambda x: int(re.sub(r"\D+", "", str(Path(x).stem)) + "0")):
-            image = fitz.open(image_path)  # 打开图片
-            pdf_bytes = image.convertToPDF()  # 使用图片创建单页的 PDF
-            image_pdf = fitz.open("pdf", pdf_bytes)
-            pdf.insertPDF(image_pdf)  # 将当前页插入文档
+            try:
+                image = fitz.open(image_path)  # 打开图片
+                pdf_bytes = image.convertToPDF()  # 使用图片创建单页的 PDF
+                image_pdf = fitz.open("pdf", pdf_bytes)
+                pdf.insertPDF(image_pdf)  # 将当前页插入文档
+            except RuntimeError:
+                logging.error(traceback.format_exc())
+                raise RuntimeError(f"图片异常，pdf保存失败: {image_path}")
         pdf_path = FileFeature.get_save_path(f"temp_file_{str(uuid.uuid4())}.pdf")
         pdf.save(pdf_path)
         pdf.close()
