@@ -1,10 +1,10 @@
-import enum
 import re
+from enum import Enum
 
 from tags_factory.feature.pinyin_feature import PinyinFeature
 
 
-class Operations(enum.Enum):
+class Operations(Enum):
     to_class = {'name': "类实例", 'format': """\t\tself.{object_name} = None  # {tag}"""}
     to_dict = {'name': "字典", 'format': """'{object_name}': ""  # {tag}"""}
     to_factory = {'name': "工厂方法", 'format': """\t\t\tentity.{object_name} = data.get("{tag}")"""}

@@ -1,4 +1,4 @@
-import enum
+from enum import Enum
 
 from file_convert.excel_convert import ExcelConvert
 from file_convert.feature.file_feature import FileFeature
@@ -6,7 +6,7 @@ from file_convert.pdf_convert import PdfConvert
 from file_convert.util.win32_util import Win32Util
 
 
-class Operations(enum.Enum):
+class Operations(Enum):
     pdf_to_images = PdfConvert.pdf_to_images
     images_to_pdf = PdfConvert.images_to_pdf
     excel_to_images = ExcelConvert.excel_to_images

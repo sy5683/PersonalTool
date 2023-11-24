@@ -1,9 +1,9 @@
 import datetime
-import enum
 import typing
+from enum import Enum
 
 
-class TimeFormat(enum.Enum):
+class TimeFormat(Enum):
     """日期格式"""
     date = {'format': "%Y-%m-%d"}
 

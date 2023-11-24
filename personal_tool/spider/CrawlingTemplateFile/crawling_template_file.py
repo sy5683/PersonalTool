@@ -1,12 +1,12 @@
-import enum
 import typing
+from enum import Enum
 
 from crawling_template_file.crawling_baidu_image import CrawlingTemplateImage
 from crawling_template_file.util.file_util import FileUtil
 from crawling_template_file.util.win32_util import Win32Util
 
 
-class Operations(enum.Enum):
+class Operations(Enum):
     crawling_baidu_image_urls = CrawlingTemplateImage.crawling_baidu_image_urls
     crawling_baidu_image = CrawlingTemplateImage.crawling_baidu_image
 

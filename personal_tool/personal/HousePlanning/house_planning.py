@@ -1,11 +1,11 @@
-import enum
 import typing
+from enum import Enum
 
 from house_planning.feature.house_plan.base.house_plan import HousePlan
 from house_planning.house_plan_001 import HousePlan001
 
 
-class HousePlanType(enum.Enum):
+class HousePlanType(Enum):
     house_plan_001 = HousePlan001.get_plan
 
 
