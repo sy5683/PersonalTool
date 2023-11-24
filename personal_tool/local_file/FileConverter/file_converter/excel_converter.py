@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 import excel2img
@@ -6,12 +7,13 @@ import xlrd
 from .feature.file_feature import FileFeature
 
 
-class ExcelConvert:
+class ExcelConverter:
 
     @staticmethod
     def excel_to_images():
+        """excel转图片"""
         file_paths = FileFeature.get_file_paths()
-        assert FileFeature.get_suffix() == ".xlsx", "选择的文件无法进行excel转图片操作"
+        assert re.match(r"\.xlsx", FileFeature.get_suffix()), "选择的文件无法进行excel转图片操作"
         for file_path in file_paths:
             file_name = Path(file_path).stem
             # 获取sheet
