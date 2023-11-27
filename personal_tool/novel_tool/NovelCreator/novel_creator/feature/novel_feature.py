@@ -1,6 +1,6 @@
+from common_util.code_util.import_util.import_util import ImportUtil
 from .entity.novel import Novel
 from ..feature.path_feature import PathFeature
-from ..util.import_util import ImportUtil
 
 
 class NovelFeature:

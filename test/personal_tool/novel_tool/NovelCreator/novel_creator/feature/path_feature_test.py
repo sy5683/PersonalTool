@@ -1,6 +1,6 @@
 import unittest
 
-from personal_tool.novel.NovelCreator.novel_creator.feature.path_feature import PathFeature
+from personal_tool.novel_tool.NovelCreator.novel_creator.feature.path_feature import PathFeature
 
 
 class PathFeatureTestCase(unittest.TestCase):

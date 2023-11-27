@@ -22,5 +22,5 @@ class NovelCreator:
 
 if __name__ == '__main__':
     novel_creator = NovelCreator("构灵")
-    # novel_creator.main(Operations.show_outline)
-    novel_creator.main(Operations.show_content)
+    novel_creator.main(Operations.show_outline)
+    # novel_creator.main(Operations.show_content)

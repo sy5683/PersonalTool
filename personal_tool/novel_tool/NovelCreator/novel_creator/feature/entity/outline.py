@@ -2,8 +2,8 @@ import abc
 import typing
 from pathlib import Path
 
+from common_util.code_util.import_util.import_util import ImportUtil
 from .event import Event
-from ...util.import_util import ImportUtil
 
 
 class Outline(metaclass=abc.ABCMeta):

@@ -2,9 +2,9 @@ import abc
 import random
 import typing
 
+from common_util.code_util.import_util.import_util import ImportUtil
 from .outline import Outline
 from ...feature.path_feature import PathFeature
-from ...util.import_util import ImportUtil
 
 
 class Novel(metaclass=abc.ABCMeta):

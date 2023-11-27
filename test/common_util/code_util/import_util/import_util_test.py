@@ -1,8 +1,8 @@
 import unittest
 
-from personal_tool.novel.NovelCreator.novel_creator.feature.entity.event import Event
-from personal_tool.novel.NovelCreator.novel_creator.feature.path_feature import PathFeature
-from personal_tool.novel.NovelCreator.novel_creator.util.import_util import ImportUtil
+from common_util.code_util.import_util.import_util import ImportUtil
+from personal_tool.novel_tool.NovelCreator.novel_creator.feature.entity.event import Event
+from personal_tool.novel_tool.NovelCreator.novel_creator.feature.path_feature import PathFeature
 
 
 class ImportUtilTestCase(unittest.TestCase):
