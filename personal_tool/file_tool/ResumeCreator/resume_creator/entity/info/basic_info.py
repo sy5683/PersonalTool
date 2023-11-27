@@ -1,8 +1,8 @@
 import datetime
 import typing
 
+from common_util.data_util.time_util.time_util import TimeUtil
 from ..base.info_base import InfoBase
-from ...util.time_util import TimeUtil
 
 
 class BasicInfo(InfoBase):

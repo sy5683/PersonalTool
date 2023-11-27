@@ -6,12 +6,12 @@ from pathlib import Path
 import win32api
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 
+from common_util.code_util.import_util.import_util import ImportUtil
+from common_util.file_util.word_util.word_util import WordUtil
 from .word_feature import WordFeature
 from ..entity.base.experience_base import ProjectExperience, WorkExperience
 from ..entity.base.info_base import InfoBase
 from ..entity.info.basic_info import BasicInfo
-from ..util.import_util import ImportUtil
-from ..util.word_util import WordUtil
 
 
 class ResumeFeature:
@@ -25,9 +25,8 @@ class ResumeFeature:
         paragraph = document.add_paragraph()
         WordUtil.set_paragraph_alignment(paragraph, WD_PARAGRAPH_ALIGNMENT.CENTER)
         run = paragraph.add_run("个人简历")
-        WordUtil.set_bold(run)
-        WordUtil.set_font_type(run, "黑体")
-        WordUtil.set_font_size(run, 26)  # 一号字体
+        # 一号黑体加粗
+        WordUtil.set_run(run, bold=True, font_size=26, font_type="黑体")
 
     @classmethod
     def add_info(cls):
@@ -94,9 +93,8 @@ class ResumeFeature:
         heading = document.add_heading(level=1)
         WordUtil.set_paragraph_space_before(heading, 6)
         run = heading.add_run(heading_name)
-        WordUtil.set_bold(run)
-        WordUtil.set_font_type(run, "宋体")
-        WordUtil.set_font_size(run, 22)  # 二号字体
+        # 二号宋体加粗
+        WordUtil.set_run(run, bold=True, font_size=22)
 
     @staticmethod
     def _add_heading_2(heading_name: str, date_range: typing.Tuple[str, str] = None):
@@ -106,12 +104,12 @@ class ResumeFeature:
         WordUtil.set_paragraph_indent(heading, 10)
         WordUtil.set_paragraph_space_before(heading, 6)
         run = heading.add_run(heading_name)
-        WordUtil.set_font_type(run, "宋体")
-        WordUtil.set_font_size(run, 14)  # 四号字体
+        # 四号宋体
+        WordUtil.set_run(run, font_size=14)
         if date_range:
             run = heading.add_run(" | %s-%s" % date_range)
-            WordUtil.set_font_type(run, "宋体")
-            WordUtil.set_font_size(run, 12)  # 小四号字体
+            # 小四号宋体
+            WordUtil.set_run(run, font_size=12)
 
     @staticmethod
     def _add_paragraph(indent: int, context: str):
@@ -121,8 +119,8 @@ class ResumeFeature:
         WordUtil.set_paragraph_indent(paragraph, indent)
         WordUtil.set_paragraph_space_after(paragraph, 0)
         run = paragraph.add_run(context)
-        WordUtil.set_font_type(run, "仿宋")
-        WordUtil.set_font_size(run, 12)  # 小四号字体
+        # 小四号仿宋
+        WordUtil.set_run(run, font_size=12, font_type="仿宋")
 
     @classmethod
     def _get_resume_path(cls) -> str:
