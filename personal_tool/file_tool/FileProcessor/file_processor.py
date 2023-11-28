@@ -1,7 +1,7 @@
 from enum import Enum
 
 from common_util.file_util.file_util.file_util import FileUtil
-from file_rocessor.compress_file import CompressFile
+from file_processor.compress_file import CompressFile
 
 
 class Operations(Enum):
