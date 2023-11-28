@@ -16,6 +16,7 @@ class _FileOriginalType(Enum):
     pdf = {'binary_head': b"%PDF"}
     png = {'binary_head': b"\x89PNG"}
     rar = {'binary_head': b"Rar!"}
+    zip = {'binary_head': b"PK\x03\x04\x14\x00\x00\x00\x08\x00"}
 
     def to_binary_head(self) -> bytes:
         return self.value['binary_head']
