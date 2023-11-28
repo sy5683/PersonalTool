@@ -61,7 +61,6 @@ class CopyXlsx:
     def _copy_merged_cell(worksheet: Worksheet, copy_worksheet: Worksheet):
         """复制excel合并单元格"""
         # 开始处理合并单元格形式为“(<CellRange A1:A4>,)，替换掉(<CellRange 和 >,)' 找到合并单元格
-        wm = list(worksheet.merged_cells)
-        for index, cell in enumerate(wm):
+        for index, cell in enumerate(list(worksheet.merged_cells)):
             merge_cell = str(cell).replace('(<CellRange ', '').replace('>,)', '')
             copy_worksheet.merge_cells(merge_cell)

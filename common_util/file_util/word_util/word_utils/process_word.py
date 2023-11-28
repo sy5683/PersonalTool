@@ -37,7 +37,7 @@ class ProcessWord:
         paragraph.paragraph_format.first_line_indent = shared.Pt(indent_size)
 
     @staticmethod
-    def set_paragraph_left_indent(paragraph: Paragraph, indent_size: int = 0):
+    def set_paragraph_left_indent(paragraph: Paragraph, indent_size: int):
         """设置段落左侧缩进"""
         paragraph.paragraph_format.left_indent = 0  # 预先对缩进赋值，防止对象为空报错
         paragraph.paragraph_format.element.pPr.ind.set(qn("w:firstLineChars"), str(indent_size))

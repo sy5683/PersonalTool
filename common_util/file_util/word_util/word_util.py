@@ -39,6 +39,11 @@ class WordUtil:
         ProcessWord.set_paragraph_indent(paragraph, indent_size)
 
     @staticmethod
+    def set_paragraph_left_indent(paragraph: Paragraph, indent_size: int = 0):
+        """设置段落左侧缩进"""
+        ProcessWord.set_paragraph_left_indent(paragraph, indent_size)
+
+    @staticmethod
     def set_paragraph_space_after(paragraph: Paragraph, indent_size: int):
         """设置段落结尾行距"""
         ProcessWord.set_paragraph_space_after(paragraph, indent_size)

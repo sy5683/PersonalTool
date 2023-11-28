@@ -27,7 +27,7 @@ class ReplaceDocx:
             template_paragraphs = copy.deepcopy(cell.paragraphs)
             cell.text = cell.text.replace(replace_from, replace_to)
             for index, paragraph in enumerate(cell.paragraphs):
-                ProcessWord.set_paragraph_left_indent(paragraph)
+                ProcessWord.set_paragraph_left_indent(paragraph, 0)
                 cls._copy_paragraph_format(paragraph, template_paragraphs[index])
         except TypeError:
             logging.warning(f"表格值【{replace_from}】替换至【{replace_to}】失败: {cell.text}")
