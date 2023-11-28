@@ -21,6 +21,7 @@ class MakeRotateGif:
 
             if func_way == "cv2":
                 # TODO cv2实现生成的gif背景不透明，需要寻找优化方案
+                # TODO 这个方法生成的gif会报错，方法需要重新检查
                 image = cv2.imdecode(np.fromfile(image_path, dtype=np.uint8), -1)
                 for times in range(360 // angle):
                     rotate_image = ImageUtil.rotate_image(image, angle, times)
