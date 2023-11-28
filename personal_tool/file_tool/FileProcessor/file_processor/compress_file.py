@@ -1,6 +1,6 @@
 import typing
 
-from common_util.file_util.file_util.file_util import FileUtil
+from common_util.file_util.zip_util.zip_util import ZipUtil
 
 
 class CompressFile:
@@ -13,5 +13,4 @@ class CompressFile:
     def decompress(file_paths: typing.Tuple[str]):
         """解压"""
         for file_path in file_paths:
-            original_type = FileUtil.get_original_type(file_path)
-            print(original_type)
+            ZipUtil.decompress(file_path)
