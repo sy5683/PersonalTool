@@ -7,6 +7,6 @@ from .zip_utils.decompress import Decompress
 class ZipUtil:
 
     @classmethod
-    def decompress(cls, file_path: typing.Union[Path, str]):
+    def decompress(cls, file_path: typing.Union[Path, str], password: bytes = None):
         """解压文件"""
-        Decompress.decompress(Path(file_path))
+        Decompress.decompress(Path(file_path), password)

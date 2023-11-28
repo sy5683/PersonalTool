@@ -6,11 +6,11 @@ from common_util.file_util.zip_util.zip_util import ZipUtil
 class CompressFile:
 
     @staticmethod
-    def compress(file_paths: typing.Tuple[str]):
+    def compress(file_paths: typing.Tuple[str], password: bytes):
         """压缩"""
 
     @staticmethod
-    def decompress(file_paths: typing.Tuple[str]):
+    def decompress(file_paths: typing.Tuple[str], password: bytes):
         """解压"""
         for file_path in file_paths:
-            ZipUtil.decompress(file_path)
+            ZipUtil.decompress(file_path, password)

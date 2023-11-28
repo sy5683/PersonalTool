@@ -15,9 +15,9 @@ class FileProcessor:
     def __init__(self):
         self.file_paths = FileUtil.get_file_paths()
 
-    def main(self, function):
+    def main(self, function, password: bytes = None):
         if self.file_paths:
-            function(self.file_paths)
+            function(self.file_paths, password)
 
 
 if __name__ == '__main__':
