@@ -1,3 +1,4 @@
+import datetime
 import re
 import typing
 
@@ -19,13 +20,15 @@ class FormatExcelData:
         然后通过计算，将一串数字显示为目标日期
         因此在取的时候，需要对其进行转换
         """
-        if isinstance(date, int):
-            date = cls._format_excel_date_number(date, time_format)
-        elif isinstance(date, str):
+        if isinstance(date, (datetime.datetime, datetime.date)):
+            date = date.strftime(time_format)
+        if isinstance(date, str):
             date = cls.format_int_data(date)
             if date.isdigit():
-                date = cls._format_excel_date_number(int(date), time_format)
-        return date
+                date = int(date)
+        if isinstance(date, int):
+            date = cls._format_excel_date_number(date, time_format)
+        return date.format(Y="年", m="月", d="日", H="时", M="分", S="秒")
 
     @staticmethod
     def _format_excel_date_number(date_number: int, time_format: str) -> str:
@@ -36,4 +39,4 @@ class FormatExcelData:
         因此在取的时候，需要对其进行转换
         """
         stamp = xlrd.xldate_as_datetime(date_number, 0)
-        return stamp.strftime(time_format).format(Y="年", m="月", d="日", H="时", M="分", S="秒")
+        return stamp.strftime(time_format)

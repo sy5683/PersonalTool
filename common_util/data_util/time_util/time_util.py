@@ -44,6 +44,6 @@ class TimeUtil:
         return CalculateDatetime.get_year_between_dates(from_date, to_date)
 
     @staticmethod
-    def format_time(time_str: str, time_format: str = '%Y{Y}%m{m}%d{d}%H{H}%M{M}%S{S}') -> str:
+    def format_time(time_str: str, time_format: str = '%Y-%m-%d %H:%M:%S') -> str:
         """格式时间"""
         return ConvertDatetime.format_time(time_str, time_format)

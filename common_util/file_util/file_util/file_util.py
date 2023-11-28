@@ -23,6 +23,11 @@ class FileUtil:
         return ProcessTempFile.get_temp_path(file_name)
 
     @staticmethod
+    def get_file_path() -> str:
+        """获取文件路径"""
+        return ProcessFile.get_file_path()
+
+    @staticmethod
     def get_file_paths() -> typing.Tuple[str]:
         """获取文件路径列表"""
         return ProcessFile.get_file_paths()
