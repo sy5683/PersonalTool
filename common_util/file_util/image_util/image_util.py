@@ -26,6 +26,11 @@ class ImageUtil:
         return ProcessOpenCVImage.remove_border(str(image_path), color, save_path)
 
     @staticmethod
+    def rotate_image(image: numpy.ndarray, angle: int, times: int) -> numpy.ndarray:
+        """图片旋转"""
+        return ProcessOpenCVImage.rotate_image(image, angle, times)
+
+    @staticmethod
     def save_opencv_image(image: numpy.ndarray, image_path: typing.Union[Path, str]):
         """保存opencv图片"""
         ProcessOpenCVImage.save_image(image, str(image_path))

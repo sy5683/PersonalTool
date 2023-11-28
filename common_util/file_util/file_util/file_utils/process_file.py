@@ -1,8 +1,11 @@
 import os
 import re
 import time
+import tkinter
+import typing
 from enum import Enum
 from pathlib import Path
+from tkinter import filedialog
 
 
 class _FileOriginalType(Enum):
@@ -35,6 +38,12 @@ class ProcessFile:
             file_path = file_path.parent.joinpath(f"{file_name}({add_num}){file_path.suffix}")
         cls.make_dir(file_path)
         return file_path
+
+    @staticmethod
+    def get_file_paths() -> typing.Tuple[str]:
+        """获取文件路径列表"""
+        tkinter.Tk().withdraw()  # 隐藏tk窗口
+        return filedialog.askopenfilenames()
 
     @staticmethod
     def get_original_type(file_path: str) -> str:

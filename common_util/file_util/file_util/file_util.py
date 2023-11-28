@@ -23,6 +23,11 @@ class FileUtil:
         return ProcessTempFile.get_temp_path(file_name)
 
     @staticmethod
+    def get_file_paths() -> typing.Tuple[str]:
+        """获取文件路径列表"""
+        return ProcessFile.get_file_paths()
+
+    @staticmethod
     def make_dir(file_path: typing.Union[Path, str]):
         """新建文件夹"""
         ProcessFile.make_dir(Path(file_path))

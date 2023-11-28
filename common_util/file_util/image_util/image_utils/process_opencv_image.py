@@ -36,6 +36,19 @@ class ProcessOpenCVImage:
         cls.save_image(image, save_path)
         return save_path
 
+    @staticmethod
+    def rotate_image(image: numpy.ndarray, angle: int, times: int) -> numpy.ndarray:
+        """图片旋转"""
+        height, width = image.shape[:2]
+        new_height = int(width * numpy.fabs(numpy.sin(numpy.radians(angle))) +
+                         height * numpy.fabs(numpy.cos(numpy.radians(angle))))
+        new_width = int(height * numpy.fabs(numpy.sin(numpy.radians(angle))) +
+                        width * numpy.fabs(numpy.cos(numpy.radians(angle))))
+        rotate_image = cv2.getRotationMatrix2D((width // 2, height // 2), angle * times, 1)
+        rotate_image[0, 2] += (new_width - width) // 2
+        rotate_image[1, 2] += (new_height - height) // 2
+        return cv2.warpAffine(image, rotate_image, (new_width, new_height))
+
     @classmethod
     def save_image(cls, image: numpy.ndarray, image_path: str):
         """保存图片"""
