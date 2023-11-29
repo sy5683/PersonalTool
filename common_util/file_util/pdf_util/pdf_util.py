@@ -12,6 +12,6 @@ class PdfUtil:
         return ConvertPdf.pdf_to_images(str(pdf_path), suffix)
 
     @staticmethod
-    def images_to_pdf(image_paths: typing.List[typing.Union[Path, str]], pdf_path) -> Path:
+    def images_to_pdf(image_paths: typing.List[typing.Union[Path, str]], pdf_path: typing.Union[Path, str]) -> str:
         """图片转pdf"""
-        return ConvertPdf.images_to_pdf(image_paths, pdf_path)
+        return ConvertPdf.images_to_pdf(image_paths, str(pdf_path))

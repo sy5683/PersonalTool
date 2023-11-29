@@ -30,7 +30,7 @@ class ConvertPdf:
         return image_paths
 
     @staticmethod
-    def images_to_pdf(image_paths: typing.List[str], save_path: typing.Union[Path, str]) -> Path:
+    def images_to_pdf(image_paths: typing.List[str], save_path: str) -> str:
         """图片转pdf"""
         assert image_paths, "图片数量为空，无法生成pdf"
         pdf = fitz.open()
@@ -43,7 +43,7 @@ class ConvertPdf:
             except RuntimeError:
                 logging.error(traceback.format_exc())
                 raise Exception(f"图片异常，pdf保存失败: {image_path}")
-        pdf.save(str(save_path))
+        pdf.save(save_path)
         pdf.close()
         return save_path
 

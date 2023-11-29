@@ -55,7 +55,7 @@ class ProcessFile:
     @staticmethod
     def get_original_type(file_path: str) -> str:
         """获取文件原始类型"""
-        assert os.path.exists(file_path), "文件路径不存在"
+        assert os.path.exists(file_path), f"文件路径不存在: {file_path}"
         # 根据文件读取出来的二进制数据开头判断文件类型
         try:
             with open(file_path, "rb") as file:

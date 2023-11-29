@@ -15,6 +15,11 @@ class ExcelUtil:
         """复制excel的sheet并带上相应格式"""
         CopyXlsx.copy_sheet(worksheet, copy_worksheet)
 
+    @staticmethod
+    def excel_to_images(file_path: str) -> typing.List[str]:
+        """excel转图片"""
+        return Win32Excel.excel_to_images(file_path)
+
     @classmethod
     def format_date_data(cls, date: typing.Union[int, str], time_format: str = '%Y-%m-%d %H:%M:%S') -> str:
         """格式化日期数据"""
