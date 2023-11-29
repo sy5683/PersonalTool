@@ -4,10 +4,14 @@ from enum import Enum
 from common_core.base.tool_base import ToolBase
 from common_util.file_util.file_util.file_util import FileUtil
 from feature.compress_feature import CompressFeature
+from feature.convert_feature import ConvertFeature
 
 
 class Operations(Enum):
     decompress = CompressFeature.decompress
+    to_excel = ConvertFeature.to_excel
+    to_image = ConvertFeature.to_excel
+    to_pdf = ConvertFeature.to_excel
 
 
 class FileProcessor(ToolBase):
@@ -25,3 +29,6 @@ class FileProcessor(ToolBase):
 if __name__ == '__main__':
     file_processor = FileProcessor()
     file_processor.main(Operations.decompress, password="123456")
+    # file_processor.main(Operations.to_excel)
+    # file_processor.main(Operations.to_image)
+    # file_processor.main(Operations.to_pdf)
