@@ -3,7 +3,7 @@ import typing
 from enum import Enum
 
 from common_util.data_util.textual_util.textual_util import TextualUtil
-from tags_factory.feature.tag_feature import TagFeature
+from feature.tag_feature import TagFeature
 
 
 class Operations(Enum):
@@ -20,7 +20,7 @@ class Operations(Enum):
 
 
 class TagsFactory:
-    """excel表头转换工厂"""
+    """表头转换工厂"""
 
     def __init__(self, operation: Operations):
         self.show_str = operation.to_format()
