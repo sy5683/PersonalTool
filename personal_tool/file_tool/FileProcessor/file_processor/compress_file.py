@@ -10,7 +10,7 @@ class CompressFile:
         """压缩"""
 
     @staticmethod
-    def decompress(file_paths: typing.Tuple[str], password: bytes):
+    def decompress(file_paths: typing.Tuple[str], password: str):
         """解压"""
         for file_path in file_paths:
             ZipUtil.decompress(file_path, password)

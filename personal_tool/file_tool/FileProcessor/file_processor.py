@@ -1,5 +1,6 @@
 from enum import Enum
 
+from common_core.base.tool_base import ToolBase
 from common_util.file_util.file_util.file_util import FileUtil
 from file_processor.compress_file import CompressFile
 
@@ -9,7 +10,7 @@ class Operations(Enum):
     decompress = CompressFile.decompress
 
 
-class FileProcessor:
+class FileProcessor(ToolBase):
     """文件处理"""
 
     def __init__(self):
@@ -23,4 +24,4 @@ class FileProcessor:
 if __name__ == '__main__':
     file_processor = FileProcessor()
     # file_processor.main(Operations.compress)
-    file_processor.main(Operations.decompress, password=b"123456")
+    file_processor.main(Operations.decompress, password="123456")

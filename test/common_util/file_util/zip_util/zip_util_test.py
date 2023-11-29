@@ -10,4 +10,4 @@ class ZipUtilTestCase(unittest.TestCase):
         self.test_path = Path(__file__).parent.joinpath("测试.GIF")
 
     def test_decompress(self):
-        ZipUtil.decompress(self.test_path, password=b"123456")
+        ZipUtil.decompress(self.test_path, password="123456")
