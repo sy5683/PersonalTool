@@ -15,7 +15,7 @@ from ..entity.info.basic_info import BasicInfo
 
 
 class ResumeFeature:
-    ImportUtil.import_modules(Path(__file__).parent.parent.joinpath("entity"))  # 使用subclasses之前必须将子类导入
+    ImportUtil.import_modules(Path(__file__).parent.parent.joinpath("小说"))  # 使用subclasses之前必须将子类导入
     _resume_path = None
 
     @classmethod

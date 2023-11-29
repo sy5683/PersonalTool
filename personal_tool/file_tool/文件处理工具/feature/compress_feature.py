@@ -3,7 +3,7 @@ import typing
 from common_util.file_util.zip_util.zip_util import ZipUtil
 
 
-class CompressFile:
+class CompressFeature:
 
     @staticmethod
     def compress(file_paths: typing.Tuple[str], password: bytes):

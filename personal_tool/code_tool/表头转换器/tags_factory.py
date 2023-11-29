@@ -9,7 +9,7 @@ from feature.tag_feature import TagFeature
 class Operations(Enum):
     to_class = {'name': "类实例", 'format': """\t\tself.{object_name} = None  # {tag}"""}
     to_dict = {'name': "字典", 'format': """'{object_name}': ""  # {tag}"""}
-    to_factory = {'name': "工厂方法", 'format': """\t\t\tentity.{object_name} = data.get("{tag}")"""}
+    to_factory = {'name': "工厂方法", 'format': """\t\t\t小说.{object_name} = data.get("{tag}")"""}
     to_tag_width_tuples = {'name': "表头行宽映射", 'format': """({tag}, 16),"""}
 
     def to_name(self) -> str:
@@ -19,8 +19,7 @@ class Operations(Enum):
         return self.value['format']
 
 
-class TagsFactory:
-    """表头转换工厂"""
+class TagsConverter:
 
     def __init__(self, operation: Operations):
         self.show_str = operation.to_format()
@@ -33,5 +32,5 @@ class TagsFactory:
 
 
 if __name__ == '__main__':
-    tags_factory = TagsFactory(Operations.to_class)
-    tags_factory.main("""测试123 _拼音(正则)""")
+    tags_converter = TagsConverter(Operations.to_class)
+    tags_converter.main("""测试123 _拼音(正则)""")

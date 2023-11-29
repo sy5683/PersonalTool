@@ -1,10 +1,9 @@
 import datetime
 
-from work_report_fill.feature.work_report.work_report_feature import WorkReportFeature
+from feature.work_report.work_report_feature import WorkReportFeature
 
 
-class WorkReportFill:
-    """工作报告填写"""
+class FillWorkReport:
 
     def __init__(self, target_date: str = str(datetime.datetime.now())):
         self.target_date = target_date
@@ -17,5 +16,5 @@ class WorkReportFill:
 
 
 if __name__ == '__main__':
-    work_report_fill = WorkReportFill()
-    work_report_fill.main()
+    fill_work_report = FillWorkReport()
+    fill_work_report.main()

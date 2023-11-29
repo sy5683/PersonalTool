@@ -2,7 +2,6 @@ from resume_creator.feature.resume_feature import ResumeFeature
 
 
 class ResumeCreator:
-    """简历生成器"""
 
     def main(self):
         # 1) 添加标题
