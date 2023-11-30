@@ -3,7 +3,7 @@ import datetime
 from feature.work_report.work_report_feature import WorkReportFeature
 
 
-class FillWorkReport:
+class WorkReportFiller:
 
     def __init__(self, target_date: str = str(datetime.datetime.now())):
         self.target_date = target_date
@@ -16,5 +16,5 @@ class FillWorkReport:
 
 
 if __name__ == '__main__':
-    fill_work_report = FillWorkReport()
-    fill_work_report.main()
+    work_report_filler = WorkReportFiller()
+    work_report_filler.main()

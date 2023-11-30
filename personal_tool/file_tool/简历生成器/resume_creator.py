@@ -1,4 +1,4 @@
-from resume_creator.feature.resume_feature import ResumeFeature
+from feature.resume_feature import ResumeFeature
 
 
 class ResumeCreator:

@@ -1,7 +1,7 @@
 import datetime
 import unittest
 
-from personal_tool.work_tool.填写工作报告.feature.work_report.work_report_feature import WorkReportFeature
+from personal_tool.work_tool.工作报告填写器.feature.work_report.work_report_feature import WorkReportFeature
 
 
 class WorkReportFeatureTestCase(unittest.TestCase):
