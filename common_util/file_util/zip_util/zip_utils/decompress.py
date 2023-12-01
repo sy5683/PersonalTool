@@ -59,7 +59,7 @@ class Decompress:
     def _decompress_7z(cls, zip_path: str, save_path: str, password: str) -> str:
         """解压7z文件"""
         # 1) 根据文件二进制数据头判断文件类型
-        zip_path = cls.__format_file_path(zip_path, "rar", b"Rar!")
+        zip_path = cls.__format_file_path(zip_path, "rar", b"7z\xbc\xaf")
         # 2) 解压7z文件
         logging.info(f"解压7z文件: {zip_path}")
         with py7zr.SevenZipFile(zip_path, "r", password=password) as zip_file:
@@ -91,7 +91,9 @@ class Decompress:
     def _decompress_zip(cls, zip_path: str, save_path: str, password: str) -> str:
         """解压zip文件"""
         # 1) 根据文件二进制数据头判断文件类型
-        zip_path = cls.__format_file_path(zip_path, "zip", b"PK")
+        if re.search(r"\.docx$|\.xlsx$", zip_path):  # docx和xlsx的二进制数据头与zip相同，因此如果后缀为这两个则直接不运行
+            raise PermissionError
+        zip_path = cls.__format_file_path(zip_path, "zip", b"PK\x03\x04")
         # 2) 解压zip文件
         logging.info(f"解压zip文件: {zip_path}")
         with zipfile.ZipFile(zip_path, "r") as zip_file:

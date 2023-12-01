@@ -65,6 +65,8 @@ class ProcessFile:
             return "pdf"
         elif re.search("PNG image data", file_type):
             return "png"
+        elif re.search("RAR archive data", file_type):
+            return "rar"
         elif re.search("text", file_type):
             return "txt"
         elif re.search("Zip archive data", file_type):
