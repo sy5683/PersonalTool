@@ -36,7 +36,7 @@ class Decompress:
             if decompress_save_path.is_dir():
                 save_path += "~"
             # 1.1) 解压压缩包
-            decompress_save_path = cls._decompress_file(file_path=str(decompress_file_path), save_path=save_path,
+            decompress_save_path = cls._decompress_file(zip_path=str(decompress_file_path), save_path=save_path,
                                                         password=password)
             if not decompress_save_path:
                 return
