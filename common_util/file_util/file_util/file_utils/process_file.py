@@ -1,26 +1,11 @@
-import os
 import re
 import time
 import tkinter
 import typing
-from enum import Enum
 from pathlib import Path
 from tkinter import filedialog
 
-
-class _FileOriginalType(Enum):
-    _7z = {'binary_head': b"7z"}
-    exe = {'binary_head': b"MZ|MZx"}
-    gif = {'binary_head': b"GIF89a"}
-    jpg = {'binary_head': b"\xff\xd8\xff"}
-    mp3 = {'binary_head': b"ID3"}
-    pdf = {'binary_head': b"%PDF"}
-    png = {'binary_head': b"\x89PNG"}
-    rar = {'binary_head': b"Rar!"}
-    zip = {'binary_head': b"PK"}
-
-    def to_binary_head(self) -> bytes:
-        return self.value['binary_head']
+import magic
 
 
 class ProcessFile:
@@ -42,6 +27,12 @@ class ProcessFile:
         return file_path
 
     @staticmethod
+    def get_directory_path() -> str:
+        """获取文件夹路径"""
+        tkinter.Tk().withdraw()  # 隐藏tk窗口
+        return filedialog.askdirectory()
+
+    @staticmethod
     def get_file_path() -> str:
         """获取文件路径"""
         tkinter.Tk().withdraw()  # 隐藏tk窗口
@@ -56,19 +47,35 @@ class ProcessFile:
     @staticmethod
     def get_original_type(file_path: str) -> str:
         """获取文件原始类型"""
-        assert os.path.exists(file_path), f"文件路径不存在: {file_path}"
         # 根据文件读取出来的二进制数据开头判断文件类型
-        try:
-            with open(file_path, "rb") as file:
-                content = file.read()
-                for file_original_type in _FileOriginalType:
-                    if re.match(file_original_type.to_binary_head(), content):
-                        return file_original_type.name
-                else:
-                    print(content)
-                    return "unknown"
-        except PermissionError:
-            return "folder"
+        with open(file_path, "rb") as file:
+            file_type = magic.Magic().from_buffer(file.read(1024))
+        # 根据magic的返回规范文件类型
+        if re.search("7-zip archive data", file_type):
+            return "7z"
+        elif re.search("Composite Document File V2 Document", file_type):
+            if re.search(r"\.xls$", file_path):
+                return "xls"
+            return "doc"
+        elif re.search("GIF image data", file_type):
+            return "gif"
+        elif re.search("JPEG image data", file_type):
+            return "jpg"
+        elif re.search("PDF document", file_type):
+            return "pdf"
+        elif re.search("PNG image data", file_type):
+            return "png"
+        elif re.search("text", file_type):
+            return "txt"
+        elif re.search("Zip archive data", file_type):
+            if re.search(r"\.docx$", file_path):
+                return "docx"
+            elif re.search(r"\.xlsx$", file_path):
+                return "xlsx"
+            return "zip"
+        else:
+            print(file_type)
+            return "unknown"
 
     @staticmethod
     def make_dir(file_path: Path):
