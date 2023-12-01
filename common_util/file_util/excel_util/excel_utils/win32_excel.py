@@ -1,5 +1,6 @@
-import os.path
+import os
 import typing
+from pathlib import Path
 
 import excel2img
 import xlrd
@@ -23,29 +24,29 @@ class Win32Excel:
         app.Application.Quit()
 
     @staticmethod
-    def xls_to_xlsx(excel_path: str) -> str:
+    def xls_to_xlsx(excel_path: str, save_path: typing.Union[Path, str]) -> str:
         """xls文件转换为xlsx文件"""
         _path, suffix = os.path.splitext(excel_path)
-        assert suffix == ".xls", "待转换excel不为xls文件"
+        assert suffix == ".xls", f"待转换excel不为xls文件: {excel_path}"
+        save_path = f"{_path}.xlsx" if save_path is None else str(save_path)
+        assert not os.path.exists(save_path), f"文件已存在，无法转换: {save_path}"
         app = Dispatch("Excel.Application")
         workbook = app.Workbooks.Open(excel_path)
-        workbook.Save()
-        new_excel_path = f"{_path}.xlsx"
-        # 如果新excel有重命文件，win32则会弹窗提示是否覆盖
-        if os.path.exists(new_excel_path):
-            os.remove(new_excel_path)
-        workbook.SaveAs(new_excel_path, FileFormat=51)  # xlsx格式的FileFormat=51
+        workbook.SaveAs(save_path, FileFormat=51)  # xlsx格式的FileFormat=51
         workbook.Close()
         app.Application.Quit()
-        return new_excel_path
+        return save_path
 
     @staticmethod
-    def excel_to_images(file_path: str) -> typing.List[str]:
+    def excel_to_images(file_path: str, save_path: typing.Union[Path, str]) -> typing.List[str]:
         """excel转图片"""
+        save_path = os.path.splitext(file_path)[0] if save_path is None else str(save_path)
+        if not os.path.exists(save_path):
+            os.mkdir(save_path)
         image_paths = []
         wb = xlrd.open_workbook(file_path)
         for index, sheet_name in enumerate(wb.sheet_names()):
-            image_path = f"{os.path.splitext(file_path)[0]}_{sheet_name}.png"
+            image_path = os.path.join(save_path, f"{sheet_name}.png")
             excel2img.export_img(file_path, image_path, page=index + 1)
             image_paths.append(image_path)
         return image_paths

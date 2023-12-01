@@ -2,6 +2,7 @@ import os
 import re
 import typing
 
+from common_util.code_util.win32_util.win32_util import Win32Util
 from common_util.file_util.excel_util.excel_util import ExcelUtil
 from common_util.file_util.pdf_util.pdf_util import PdfUtil
 from common_util.file_util.word_util.word_util import WordUtil
@@ -15,7 +16,10 @@ class ConvertFeature:
         for file_path in file_paths:
             _, suffix = os.path.splitext(file_path)
             if re.match(r"\.doc$|\.docx$", suffix):
-                WordUtil.word_to_excel(file_path)
+                excel_path = WordUtil.word_to_excel(file_path)
+            else:
+                continue
+            Win32Util.open_file(excel_path)
 
     @staticmethod
     def to_image(file_paths: typing.Tuple[str, ...]):
@@ -23,9 +27,12 @@ class ConvertFeature:
         for file_path in file_paths:
             _, suffix = os.path.splitext(file_path)
             if re.match(r"\.xlsx$", suffix):
-                ExcelUtil.excel_to_images(file_path)
+                image_paths = ExcelUtil.excel_to_images(file_path)
             elif re.match(r"\.pdf$", suffix):
-                PdfUtil.pdf_to_images(file_path)
+                image_paths = PdfUtil.pdf_to_images(file_path)
+            else:
+                continue
+            Win32Util.open_file(os.path.dirname(image_paths[0]))
 
     @staticmethod
     def to_pdf(file_paths: typing.Tuple[str, ...]):
@@ -36,4 +43,5 @@ class ConvertFeature:
             if re.match(r"\.png$|\.jpg$", suffix):
                 image_paths.append(file_path)
         if image_paths:
-            PdfUtil.images_to_pdf(image_paths, f"{os.path.splitext(image_paths[0])[0]}.pdf")
+            pdf_path = PdfUtil.images_to_pdf(image_paths)
+            Win32Util.open_file(pdf_path)

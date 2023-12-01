@@ -1,10 +1,12 @@
 import logging
-import os.path
+import os
 import re
 import shutil
+import typing
 import zipfile
 from pathlib import Path
 
+import py7zr
 import rarfile
 
 
@@ -12,17 +14,20 @@ class Decompress:
     """解压"""
 
     @classmethod
-    def decompress(cls, file_path: Path, password: bytes):
+    def decompress(cls, file_path: Path, password: str) -> typing.List[Path]:
         """解压文件，可以传入压缩文件或者存放多个压缩文件的文件夹"""
         decompress_file_paths = file_path.glob("*.*") if file_path.is_dir() else [file_path]
+        decompress_save_paths = []
         for decompress_file_path in decompress_file_paths:
             decompress_save_path = cls.__to_decompress_save_path(decompress_file_path)
             if decompress_save_path.is_dir():
                 shutil.rmtree(decompress_save_path)
             cls._decompress_all(decompress_file_path, password)
+            decompress_save_paths.append(decompress_save_path)
+        return decompress_save_paths
 
     @classmethod
-    def _decompress_all(cls, file_path: Path, password: bytes):
+    def _decompress_all(cls, file_path: Path, password: str):
         """递归解压缩压缩文件中的所有文件"""
         decompress_file_paths = file_path.glob("*.*") if file_path.is_dir() else [file_path]
         for decompress_file_path in decompress_file_paths:
@@ -51,14 +56,30 @@ class Decompress:
                 pass
 
     @classmethod
-    def _decompress_rar(cls, file_path: str, save_path: str, password: bytes) -> str:
+    def _decompress_7z(cls, zip_path: str, save_path: str, password: str) -> str:
+        """解压7z文件"""
+        # 1) 根据文件二进制数据头判断文件类型
+        zip_path = cls.__format_file_path(zip_path, "rar", b"Rar!")
+        # 2) 解压7z文件
+        logging.info(f"解压7z文件: {zip_path}")
+        with py7zr.SevenZipFile(zip_path, "r", password=password) as zip_file:
+            try:
+                zip_file.extractall(save_path)
+            except FileExistsError:
+                save_path += "~"
+                zip_file.extractall(save_path)
+        return save_path
+
+    @classmethod
+    def _decompress_rar(cls, zip_path: str, save_path: str, password: str) -> str:
         """解压rar文件"""
         # 1) 根据文件二进制数据头判断文件类型
-        file_path = cls.__format_file_path(file_path, "rar", b"Rar!")
+        zip_path = cls.__format_file_path(zip_path, "rar", b"Rar!")
         # 2) 解压rar文件
-        logging.info(f"解压rar文件: {file_path}")
+        logging.info(f"解压rar文件: {zip_path}")
         rarfile.UNRAR_TOOL = str(Path(__file__).parent.joinpath("UnRAR.exe"))
-        with rarfile.RarFile(file_path) as rar:
+        with rarfile.RarFile(zip_path) as rar:
+            password = password.encode("utf-8")
             try:
                 rar.extractall(path=save_path, pwd=password)
             except FileExistsError:
@@ -67,13 +88,14 @@ class Decompress:
         return save_path
 
     @classmethod
-    def _decompress_zip(cls, file_path: str, save_path: str, password: bytes) -> str:
+    def _decompress_zip(cls, zip_path: str, save_path: str, password: str) -> str:
         """解压zip文件"""
         # 1) 根据文件二进制数据头判断文件类型
-        file_path = cls.__format_file_path(file_path, "zip", b"PK")
+        zip_path = cls.__format_file_path(zip_path, "zip", b"PK")
         # 2) 解压zip文件
-        logging.info(f"解压zip文件: {file_path}")
-        with zipfile.ZipFile(file_path, "r") as zip_file:
+        logging.info(f"解压zip文件: {zip_path}")
+        with zipfile.ZipFile(zip_path, "r") as zip_file:
+            password = password.encode("utf-8")
             try:
                 zip_file.extractall(save_path, pwd=password)
             except FileExistsError:

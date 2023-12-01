@@ -12,27 +12,26 @@ class ConvertPdf:
     """转换pdf"""
 
     @classmethod
-    def pdf_to_images(cls, pdf_path: str, suffix: str) -> typing.List[str]:
+    def pdf_to_images(cls, pdf_path: str, save_path: typing.Union[Path, str], suffix: str) -> typing.List[str]:
         """pdf转图片"""
-        assert os.path.exists(pdf_path), f"PDF文件不存在: {pdf_path}"
-        image_dir_path = os.path.splitext(pdf_path)[0]
-        if not os.path.exists(image_dir_path):
-            os.mkdir(image_dir_path)
+        save_path = os.path.splitext(pdf_path)[0] if save_path is None else str(save_path)
+        if not os.path.exists(save_path):
+            os.mkdir(save_path)
         image_paths = []
         pdf = fitz.open(pdf_path)
         for index in range(pdf.page_count):
             pdf_page = pdf[index]
             image_name = f"{str(index).zfill(len(str(pdf.page_count)))}.%s" % re.sub(r"^\.+", "", suffix)
-            image_path = os.path.join(image_dir_path, image_name)
+            image_path = os.path.join(save_path, image_name)
             cls._page_to_image(pdf_page, image_path)
             image_paths.append(image_path)
         pdf.close()
         return image_paths
 
     @staticmethod
-    def images_to_pdf(image_paths: typing.List[str], save_path: str) -> str:
+    def images_to_pdf(image_paths: typing.List[str], save_path: typing.Union[Path, str]) -> str:
         """图片转pdf"""
-        assert image_paths, "图片数量为空，无法生成pdf"
+        save_path = f"{os.path.splitext(image_paths[0])[0]}.pdf" if save_path is None else str(save_path)
         pdf = fitz.open()
         for image_path in image_paths:
             try:

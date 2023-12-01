@@ -54,6 +54,6 @@ class WordUtil:
         ProcessWord.set_paragraph_space_before(paragraph, indent_size)
 
     @staticmethod
-    def word_to_excel(word_path: typing.Union[Path, str]) -> str:
+    def word_to_excel(word_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None) -> str:
         """word转excel"""
-        return ConvertWord.word_to_excel(str(word_path))
+        return ConvertWord.word_to_excel(str(word_path), save_path)

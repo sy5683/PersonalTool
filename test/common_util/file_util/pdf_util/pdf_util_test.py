@@ -18,6 +18,5 @@ class PdfUtilTestCase(unittest.TestCase):
 
     def test_images_to_pdf(self):
         image_paths = [self.image_path]
-        save_path = Path(__file__).parent.joinpath("测试_new.pdf")
-        pdf_path = PdfUtil.images_to_pdf(image_paths, save_path)
+        pdf_path = PdfUtil.images_to_pdf(image_paths)
         print(pdf_path)

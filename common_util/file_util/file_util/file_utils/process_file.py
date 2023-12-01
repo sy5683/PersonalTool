@@ -9,6 +9,7 @@ from tkinter import filedialog
 
 
 class _FileOriginalType(Enum):
+    _7z = {'binary_head': b"7z"}
     exe = {'binary_head': b"MZ|MZx"}
     gif = {'binary_head': b"GIF89a"}
     jpg = {'binary_head': b"\xff\xd8\xff"}
@@ -64,6 +65,7 @@ class ProcessFile:
                     if re.match(file_original_type.to_binary_head(), content):
                         return file_original_type.name
                 else:
+                    print(content)
                     return "unknown"
         except PermissionError:
             return "folder"

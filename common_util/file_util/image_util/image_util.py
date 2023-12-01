@@ -15,9 +15,9 @@ class ImageUtil:
         return ProcessOpenCVImage.convert_to_jpg(str(image_path), save_path)
 
     @staticmethod
-    def convert_to_jpg_by_pil(image_path: typing.Union[Path, str]) -> str:
+    def convert_to_jpg_by_pil(image_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None) -> str:
         """通过pil将图片转换为jpg图片"""
-        return ProcessPILImage.convert_to_jpg(str(image_path))
+        return ProcessPILImage.convert_to_jpg(str(image_path), save_path)
 
     @staticmethod
     def remove_border(image_path: typing.Union[Path, str], color: typing.Union[int, typing.Tuple[int, int, int]] = 255,

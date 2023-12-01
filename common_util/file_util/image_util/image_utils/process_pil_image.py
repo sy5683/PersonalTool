@@ -20,7 +20,7 @@ class ProcessPILImage:
         return new_image
 
     @classmethod
-    def convert_to_jpg(cls, image_path: str) -> str:
+    def convert_to_jpg(cls, image_path: str, save_path: typing.Union[Path, str]) -> str:
         """转换为jpg图片"""
         image = Image.open(image_path)
         if image.mode == "RGB":
@@ -31,7 +31,7 @@ class ProcessPILImage:
             new_image.paste(image, mask=image.split()[3])
         else:
             raise Exception(f"未知的图片模式: {image.mode}")
-        save_path = f"{os.path.splitext(image_path)[0]}.jpg"
+        save_path = f"{os.path.splitext(image_path)[0]}.jpg" if save_path is None else str(save_path)
         image.save(save_path)
         return save_path
 
@@ -47,7 +47,7 @@ class ProcessPILImage:
             new_width = height * printer_width // printer_height
         new_image = cls._create_image((new_width, new_height))
         cls._paste_image_center(new_image, image)
-        save_path = str(save_path) or image_path
+        save_path = image_path if save_path is None else str(save_path)
         new_image.save(save_path)
         return save_path
 

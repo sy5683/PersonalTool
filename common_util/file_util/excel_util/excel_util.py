@@ -16,9 +16,9 @@ class ExcelUtil:
         CopyXlsx.copy_sheet(worksheet, copy_worksheet)
 
     @staticmethod
-    def excel_to_images(file_path: str) -> typing.List[str]:
+    def excel_to_images(file_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None) -> typing.List[str]:
         """excel转图片"""
-        return Win32Excel.excel_to_images(file_path)
+        return Win32Excel.excel_to_images(str(file_path), save_path)
 
     @classmethod
     def format_date_data(cls, date: typing.Union[int, str], time_format: str = '%Y-%m-%d %H:%M:%S') -> str:
@@ -36,6 +36,6 @@ class ExcelUtil:
         Win32Excel.re_save_excel(str(excel_path))
 
     @staticmethod
-    def xls_to_xlsx(excel_path: typing.Union[Path, str]) -> str:
+    def xls_to_xlsx(excel_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None) -> str:
         """xls文件转换为xlsx文件"""
-        return Win32Excel.xls_to_xlsx(str(excel_path))
+        return Win32Excel.xls_to_xlsx(str(excel_path), save_path)

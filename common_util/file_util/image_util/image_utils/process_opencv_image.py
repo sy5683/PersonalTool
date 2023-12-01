@@ -16,7 +16,7 @@ class ProcessOpenCVImage:
         image = cls._read_image(image_path)
         if image.shape[2] == 4:
             image = cv2.cvtColor(image, cv2.COLOR_BGRA2BGR)
-        save_path = str(save_path) or f"{os.path.splitext(image_path)[0]}.jpg"
+        save_path = f"{os.path.splitext(image_path)[0]}.jpg" if save_path is None else str(save_path)
         cls.save_image(image, save_path)
         return save_path
 
@@ -32,7 +32,7 @@ class ProcessOpenCVImage:
             gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
             edges_y, edges_x = numpy.where(gray_image != color)
         image = image[min(edges_y):max(edges_y), min(edges_x):max(edges_x)]
-        save_path = str(save_path) or image_path
+        save_path = image_path if save_path is None else str(save_path)
         cls.save_image(image, save_path)
         return save_path
 
