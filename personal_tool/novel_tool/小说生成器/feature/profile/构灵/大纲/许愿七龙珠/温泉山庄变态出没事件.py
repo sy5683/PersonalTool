@@ -1,5 +1,6 @@
 from ...角色.纱鸠晴栖 import ShaJiuQingXi
-from .....feature.entity.event import Event
+
+from .....entity.event import Event
 
 
 class WenQuanShanZhuangBianTaiChuMoShiJian(Event):

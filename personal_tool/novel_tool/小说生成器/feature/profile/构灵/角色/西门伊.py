@@ -1,4 +1,4 @@
-from ....feature.entity.role import Role
+from ....entity.role import Role
 
 
 class XiMenYi(Role):

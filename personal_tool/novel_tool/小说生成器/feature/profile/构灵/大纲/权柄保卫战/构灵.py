@@ -1,5 +1,6 @@
 from ...角色.东方灵 import DongFangLing
-from .....feature.entity.event import Event
+
+from .....entity.event import Event
 
 
 class Gouling(Event):

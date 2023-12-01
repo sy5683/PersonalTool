@@ -1,18 +1,18 @@
 import abc
 import random
 import typing
+from pathlib import Path
 
 from common_util.code_util.import_util.import_util import ImportUtil
 from .outline import Outline
-from ...feature.path_feature import PathFeature
 
 
 class Novel(metaclass=abc.ABCMeta):
     """小说"""
 
-    def __init__(self, novel_name: str):
-        self.novel_name = novel_name  # 小说名称
-        self.__novel_path = PathFeature.to_novel_path(self.novel_name)  # 小说路径
+    def __init__(self, novel_path: Path):
+        self.novel_name = novel_path.name  # 小说名称
+        self.novel_path = novel_path  # 小说路径
         self.novel_synopsis = self.__get_novel_attribute("novel_synopsis", "小说梗概")
         self.text = self.__get_novel_attribute("text", "正文")
         self.outlines = self._get_outlines()  # 大纲列表
@@ -21,7 +21,7 @@ class Novel(metaclass=abc.ABCMeta):
         """获取大纲列表"""
         main_outline_sequence = self.__get_novel_attribute("main_outline_sequence", "主干大纲顺序")
         outlines = []
-        outline_paths = list(self.__novel_path.joinpath("大纲").glob("*"))
+        outline_paths = list(self.novel_path.joinpath("大纲").glob("*"))
         random.shuffle(outline_paths)
         for outline_path in outline_paths:
             if not outline_path.is_dir():
@@ -37,7 +37,7 @@ class Novel(metaclass=abc.ABCMeta):
     def __get_novel_attribute(self, attribute_key: str, attribute_name: str = ''):
         """获取小说参数"""
         # 相对导入目标小说文件夹，获取其下__init__.py中的各种参数
-        novel_module = ImportUtil.import_module(self.__novel_path)
+        novel_module = ImportUtil.import_module(self.novel_path)
         try:
             attribute_value = getattr(novel_module, attribute_key)
             attribute_value = attribute_value.strip("\n") if isinstance(attribute_value, str) else attribute_value

@@ -1,16 +1,14 @@
 from enum import Enum
 
-from novel_creator.feature.novel_feature import NovelFeature
-from novel_creator.show_novel import ShowNovel
+from feature.novel_feature import NovelFeature
 
 
 class Operations(Enum):
-    show_outline = ShowNovel.show_outline
-    show_content = ShowNovel.show_content
+    show_outline = NovelFeature.show_outline
+    show_content = NovelFeature.show_content
 
 
 class NovelCreator:
-    """小说生成器"""
 
     def __init__(self, novel_name: str):
         self.novel_name = novel_name
