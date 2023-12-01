@@ -10,7 +10,6 @@ import fitz
 import requests
 
 
-
 class Test(unittest.TestCase):
 
     def test_(self):

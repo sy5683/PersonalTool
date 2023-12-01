@@ -9,13 +9,13 @@ from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from common_util.code_util.import_util.import_util import ImportUtil
 from common_util.file_util.word_util.word_util import WordUtil
 from .word_feature import WordFeature
-from ..entity.base.experience_base import ProjectExperience, WorkExperience
-from ..entity.base.info_base import InfoBase
-from ..entity.info.basic_info import BasicInfo
+from .entity.base.experience_base import ProjectExperience, WorkExperience
+from .entity.base.info_base import InfoBase
+from .entity.info.basic_info import BasicInfo
 
 
 class ResumeFeature:
-    ImportUtil.import_modules(Path(__file__).parent.parent.joinpath("小说"))  # 使用subclasses之前必须将子类导入
+    ImportUtil.import_modules(Path(__file__).parent.joinpath("entity"))  # 使用subclasses之前必须将子类导入
     _resume_path = None
 
     @classmethod
