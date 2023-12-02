@@ -29,5 +29,5 @@ class FileFormatter(ToolBase):
 
 if __name__ == '__main__':
     file_formatter = FileFormatter()
-    file_formatter.main(Operations.format_anime_name)
-    # file_formatter.main(Operations.format_manga_name, start_number=1)
+    # file_formatter.main(Operations.format_anime_name)
+    file_formatter.main(Operations.format_manga_name, start_number=1)
