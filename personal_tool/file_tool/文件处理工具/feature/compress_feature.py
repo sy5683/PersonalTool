@@ -11,4 +11,4 @@ class CompressFeature:
         """解压"""
         for file_path in file_paths:
             save_paths = ZipUtil.decompress(file_path, password)
-            Win32Util.open_file(save_paths[0])
+            Win32Util.open_file(next(save_paths))
