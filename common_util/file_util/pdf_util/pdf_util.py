@@ -1,10 +1,11 @@
 import typing
 from pathlib import Path
 
+from common_core.base.util_base import UtilBase
 from .pdf_utils.convert_pdf import ConvertPdf
 
 
-class PdfUtil:
+class PdfUtil(UtilBase):
 
     @staticmethod
     def pdf_to_images(pdf_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None,

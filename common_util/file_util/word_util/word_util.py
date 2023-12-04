@@ -6,12 +6,13 @@ from docx.table import _Cell
 from docx.text.paragraph import Paragraph
 from docx.text.run import Run
 
+from common_core.base.util_base import UtilBase
 from .word_utils.convert_word import ConvertWord
 from .word_utils.process_word import ProcessWord
 from .word_utils.replace_word import ReplaceDocx
 
 
-class WordUtil:
+class WordUtil(UtilBase):
 
     @staticmethod
     def replace_paragraph(paragraph: Paragraph, replace_from: str, replace_to: str):

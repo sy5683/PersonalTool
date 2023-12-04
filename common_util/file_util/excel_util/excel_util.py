@@ -3,12 +3,13 @@ from pathlib import Path
 
 from openpyxl.worksheet.worksheet import Worksheet
 
+from common_core.base.util_base import UtilBase
 from .excel_utils.copy_xlsx import CopyXlsx
 from .excel_utils.format_excel_data import FormatExcelData
 from .excel_utils.win32_excel import Win32Excel
 
 
-class ExcelUtil:
+class ExcelUtil(UtilBase):
 
     @staticmethod
     def copy_sheet(worksheet: Worksheet, copy_worksheet: Worksheet):

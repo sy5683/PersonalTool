@@ -3,11 +3,12 @@ from pathlib import Path
 
 import numpy
 
+from common_core.base.util_base import UtilBase
 from .image_utils.process_opencv_image import ProcessOpenCVImage
 from .image_utils.process_pil_image import ProcessPILImage
 
 
-class ImageUtil:
+class ImageUtil(UtilBase):
 
     @staticmethod
     def convert_to_jpg_by_opencv(image_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None) -> str:

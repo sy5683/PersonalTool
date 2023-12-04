@@ -23,7 +23,6 @@ class SubprocessUtil:
     @staticmethod
     def _run_cmd_and_get_result(cmd: str) -> str:
         """运行cmd命令并获取结果"""
-
         with subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                               stderr=subprocess.PIPE, encoding='gbk') as p:
             return p.stdout.read()

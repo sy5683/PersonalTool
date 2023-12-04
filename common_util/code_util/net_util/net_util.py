@@ -3,10 +3,11 @@ from pathlib import Path
 
 import requests
 
+from common_core.base.util_base import UtilBase
 from .net_utils.request_net import RequestNet
 
 
-class NetUtil:
+class NetUtil(UtilBase):
 
     @staticmethod
     def download(download_url: str, download_path: typing.Union[Path, str] = None, suffix: str = 'tmp', **kwargs) -> str:

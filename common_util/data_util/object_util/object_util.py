@@ -1,9 +1,10 @@
 import copy
 
+from common_core.base.util_base import UtilBase
 from .object_utils.convert_object import ConvertObject
 
 
-class ObjectUtil:
+class ObjectUtil(UtilBase):
 
     @classmethod
     def print_object(cls, obj: object):

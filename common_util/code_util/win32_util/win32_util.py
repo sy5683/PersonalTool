@@ -3,11 +3,12 @@ from pathlib import Path
 
 import numpy
 
+from common_core.base.util_base import UtilBase
 from .win32_utils.win32_path import Win32Path
 from .win32_utils.win32_visual import Win32Visual
 
 
-class Win32Util:
+class Win32Util(UtilBase):
 
     @staticmethod
     def open_file(file_path: typing.Union[Path, str]):
