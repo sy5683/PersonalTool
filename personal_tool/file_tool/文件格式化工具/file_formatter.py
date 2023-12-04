@@ -17,11 +17,11 @@ class Operations(Enum):
 class FileFormatter(ToolBase):
 
     def __init__(self):
-        self.directory_path = Path(FileUtil.get_directory_path())
+        self.directory_path = FileUtil.get_directory_path()
 
     def main(self, function, **kwargs):
         if self.directory_path:
-            function(self.directory_path, **kwargs)
+            function(Path(self.directory_path), **kwargs)
             Win32Util.open_file(self.directory_path)
         else:
             logging.info("未选择文件夹")
