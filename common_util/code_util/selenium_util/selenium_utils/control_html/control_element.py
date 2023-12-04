@@ -1,14 +1,34 @@
-from selenium import webdriver
+import typing
+
+from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
+
+from common_core.base.exception_base import ErrorException
 
 
 class ControlElement:
     """控制元素"""
 
     @staticmethod
-    def find_element(driver: webdriver, xpath: str, wait_seconds: float, interval: float = 0.3) -> WebElement:
-        """显性等待查找元素"""
-        # 注！查询间隔为一秒时，这个方法无法检测等待时间为1秒的元素（检测次数为1，即即时检测，而不是预计的等待一秒后报错）
-        return WebDriverWait(driver, wait_seconds, interval).until(lambda x: x.find_element(By.XPATH, xpath))
+    def find_element(element: typing.Union[WebDriver, WebElement], xpath: str, wait_seconds: int) -> WebElement:
+        """查找元素"""
+        return WebDriverWait(element, wait_seconds, 0.3).until(lambda x: x.find_element(By.XPATH, xpath))
+
+    @staticmethod
+    def find_elements(element: typing.Union[WebDriver, WebElement], xpath: str,
+                      wait_seconds: int) -> typing.List[WebElement]:
+        """查找元素列表"""
+        return WebDriverWait(element, wait_seconds, 0.3).until(lambda x: x.find_elements(By.XPATH, xpath))
+
+    @classmethod
+    def get_attribute(cls, element: typing.Union[WebDriver, WebElement], xpath: str, parameter: str,
+                      wait_seconds: int) -> str:
+        """获取元素参数"""
+        if xpath:
+            element = cls.find_element(element, xpath, wait_seconds)
+        else:
+            if isinstance(element, WebDriver):
+                raise ErrorException("WebDriver无法使用get_attribute方法")
+        return element.get_attribute(parameter)

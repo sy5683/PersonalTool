@@ -1,8 +1,8 @@
 import time
-import typing
 
 from selenium import webdriver
 from selenium.common import WebDriverException
+from selenium.webdriver.chrome.webdriver import WebDriver
 
 from common_core.base.exception_base import ErrorException
 from .browser_type import BrowserType
@@ -16,17 +16,24 @@ class ControlBrowser:
     _driver = None
 
     @classmethod
-    def get_driver(cls, wait_seconds: int) -> webdriver:
+    def get_driver(cls) -> WebDriver:
         """获取driver"""
         if cls._driver is None:
             # 1) 启动浏览器
-            driver = cls.__get_driver_launch().launch_browser()
-            # 2.1) 设置超时时间
-            driver.set_page_load_timeout(wait_seconds)  # 设置默认加载超时时间
-            driver.implicitly_wait(wait_seconds)  # 设置隐性等待时间
+            cls._driver = cls.__get_driver_launch().launch_browser()
+            # 2.1) 设置默认加载超时时间
+            cls._driver.set_page_load_timeout(SeleniumConfig.wait_seconds)
             # 2.2) 设置窗口最前端
-            cls._set_browser_front(driver)
+            cls._set_browser_front(cls._driver)
         return cls._driver
+
+    @classmethod
+    def close_browser(cls):
+        """关闭谷歌浏览器"""
+        if cls._driver is None:
+            return
+        cls.__get_driver_launch().close_browser(cls._driver)
+        cls._driver = None
 
     @staticmethod
     def __get_driver_launch():

@@ -4,6 +4,7 @@ import win32api
 import win32con
 from selenium import webdriver
 from selenium.webdriver.ie.service import Service
+from selenium.webdriver.ie.webdriver import WebDriver
 
 from .download_driver import DownloadDriver
 from .launch_base import LaunchBase
@@ -13,7 +14,7 @@ from ..selenium_config import SeleniumConfig
 class LaunchIe(LaunchBase):
 
     @classmethod
-    def launch_browser(cls) -> webdriver:
+    def launch_browser(cls) -> WebDriver:
         """启动IE浏览器"""
         logging.info("启动IE浏览器")
         # 1) 启动IE浏览器需要初始化其对应的参数与缩放比例
@@ -48,7 +49,7 @@ class LaunchIe(LaunchBase):
             cls.__set_regedit_value(regedit_path, "2500", 3)
 
     @staticmethod
-    def __launch_ie_driver(options: webdriver.IeOptions) -> webdriver:
+    def __launch_ie_driver(options: webdriver.IeOptions) -> WebDriver:
         """启动IE浏览器"""
         driver_path = DownloadDriver.get_ie_driver_path()
         service = Service(executable_path=driver_path)

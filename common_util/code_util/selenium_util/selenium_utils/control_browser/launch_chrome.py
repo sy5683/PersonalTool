@@ -13,6 +13,7 @@ import win32con
 from selenium import webdriver
 from selenium.common import InvalidArgumentException
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.webdriver import WebDriver
 
 from common_core.base.exception_base import FileFindError
 from common_util.code_util.selenium_util.selenium_utils.control_browser.download_driver import DownloadDriver
@@ -24,7 +25,7 @@ class LaunchChrome(LaunchBase):
     __debug_port = 9222
 
     @classmethod
-    def launch_browser(cls) -> webdriver:
+    def launch_browser(cls) -> WebDriver:
         """启动谷歌浏览器"""
         if cls.__netstat_debug_port_running():
             logging.info(f"接管已debug运行的谷歌浏览器，端口: {cls.__debug_port}")
@@ -63,10 +64,8 @@ class LaunchChrome(LaunchBase):
                          encoding='gbk').communicate()
 
     @classmethod
-    def close_browser(cls, driver: webdriver):
+    def close_browser(cls, driver: WebDriver):
         """关闭谷歌浏览器"""
-        if driver is None:
-            return
         # 1) 使用selenium自带的quit方法关闭driver
         driver.quit()
         # 2) 因为经常出现quit之后cmd窗口未关的情况，因此这里使用命令行直接关闭进程
@@ -81,7 +80,7 @@ class LaunchChrome(LaunchBase):
             os.system(f"taskkill /f /pid {temp_result[4]}")
 
     @classmethod
-    def _get_chrome_driver(cls, user_data_dir: str = None) -> webdriver:
+    def _get_chrome_driver(cls, user_data_dir: str = None) -> WebDriver:
         """获取chrome_driver"""
         # 1.1) 获取谷歌浏览器设置
         options = webdriver.ChromeOptions()
@@ -152,7 +151,7 @@ class LaunchChrome(LaunchBase):
         return None
 
     @staticmethod
-    def __launch_chrome_driver(options: webdriver.ChromeOptions) -> webdriver:
+    def __launch_chrome_driver(options: webdriver.ChromeOptions) -> WebDriver:
         """启动谷歌浏览器"""
         driver_path = DownloadDriver.get_chrome_driver_path()
         service = Service(executable_path=driver_path)

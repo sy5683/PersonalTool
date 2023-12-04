@@ -10,6 +10,7 @@ import win32con
 from selenium import webdriver
 from selenium.common import InvalidArgumentException
 from selenium.webdriver.edge.service import Service as EdgeService
+from selenium.webdriver.edge.webdriver import WebDriver
 from selenium.webdriver.ie.service import Service as IeService
 
 from common_core.base.exception_base import FileFindError
@@ -21,7 +22,7 @@ from ..selenium_config import SeleniumConfig
 class LaunchEdge(LaunchBase):
 
     @classmethod
-    def launch_browser(cls) -> webdriver:
+    def launch_browser(cls) -> WebDriver:
         """启动Edge浏览器"""
         logging.info("启动Edge浏览器")
         try:
@@ -35,7 +36,7 @@ class LaunchEdge(LaunchBase):
         return driver
 
     @classmethod
-    def launch_edge_with_ie(cls) -> webdriver:
+    def launch_edge_with_ie(cls) -> WebDriver:
         """ie模式启动Edge浏览器"""
         # 1.1) 获取IE浏览器设置
         options = webdriver.IeOptions()
@@ -59,7 +60,7 @@ class LaunchEdge(LaunchBase):
         driver.quit()
 
     @classmethod
-    def _get_edge_driver(cls, user_data_dir: str = None) -> webdriver:
+    def _get_edge_driver(cls, user_data_dir: str = None) -> WebDriver:
         """获取edge_driver"""
         # 1.1) 获取Edge浏览器设置
         options = webdriver.EdgeOptions()
@@ -126,7 +127,7 @@ class LaunchEdge(LaunchBase):
         return None
 
     @staticmethod
-    def __launch_edge_driver(options: webdriver.EdgeOptions) -> webdriver:
+    def __launch_edge_driver(options: webdriver.EdgeOptions) -> WebDriver:
         """启动Edge浏览器"""
         driver_path = DownloadDriver.get_edge_driver_path()
         service = EdgeService(executable_path=driver_path)
