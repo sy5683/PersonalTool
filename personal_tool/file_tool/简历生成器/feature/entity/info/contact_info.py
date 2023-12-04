@@ -14,4 +14,4 @@ class ContactInfo(InfoBase):
 
     def to_contexts(self) -> typing.List[str]:
         """转换为文本"""
-        return [f"{self.phone} | {self.email_address}"]
+        return [f"电话: {self.phone}"]
