@@ -2,6 +2,7 @@ import re
 import typing
 from enum import Enum
 
+from common_core.base.tool_base import ToolBase
 from common_util.data_util.textual_util.textual_util import TextualUtil
 from feature.tag_feature import TagFeature
 
@@ -19,7 +20,7 @@ class Operations(Enum):
         return self.value['format']
 
 
-class TagsConverter:
+class TagsConverter(ToolBase):
 
     def __init__(self, operation: Operations):
         self.show_str = operation.to_format()

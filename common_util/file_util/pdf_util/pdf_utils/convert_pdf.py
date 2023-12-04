@@ -14,6 +14,7 @@ class ConvertPdf:
     @classmethod
     def pdf_to_images(cls, pdf_path: str, save_path: typing.Union[Path, str], suffix: str) -> typing.List[str]:
         """pdf转图片"""
+        logging.info(f"开始将pdf文件转换为图片: {pdf_path}")
         save_path = os.path.splitext(pdf_path)[0] if save_path is None else str(save_path)
         if not os.path.exists(save_path):
             os.mkdir(save_path)
@@ -26,11 +27,13 @@ class ConvertPdf:
             cls._page_to_image(pdf_page, image_path)
             image_paths.append(image_path)
         pdf.close()
+        logging.info(f"成功将pdf文件转换为图片: {save_path}")
         return image_paths
 
     @staticmethod
     def images_to_pdf(image_paths: typing.List[str], save_path: typing.Union[Path, str]) -> str:
         """图片转pdf"""
+        logging.info("开始将图片转换为pdf文件")
         save_path = f"{os.path.splitext(image_paths[0])[0]}.pdf" if save_path is None else str(save_path)
         pdf = fitz.open()
         for image_path in image_paths:
@@ -44,6 +47,7 @@ class ConvertPdf:
                 raise Exception(f"图片异常，pdf保存失败: {image_path}")
         pdf.save(save_path)
         pdf.close()
+        logging.info(f"成功将图片转换为pdf文件: {save_path}")
         return save_path
 
     @staticmethod

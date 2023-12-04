@@ -1,3 +1,4 @@
+import logging
 import re
 from pathlib import Path
 
@@ -12,6 +13,7 @@ class AnimeFormatter:
         # 未指定动漫名称则取文件夹名称
         if anime_name is None:
             anime_name = directory_path.stem
+        logging.info(f"格式化动漫名称: {anime_name}")
         for index, anime_path in enumerate(FileFeature.get_file_paths(directory_path)):
             # 1) 更改文件名
             episodes = str(index + 1).zfill(2)

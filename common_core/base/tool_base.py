@@ -10,3 +10,7 @@ class ToolBase(metaclass=abc.ABCMeta):
                         datefmt="%Y-%m-%d %H:%M:%S",
                         filename=None,
                         filemode='a')
+
+    @abc.abstractmethod
+    def main(self, *args, **kwargs):
+        """"""

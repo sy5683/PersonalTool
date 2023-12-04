@@ -16,6 +16,7 @@ class Decompress:
     @classmethod
     def decompress(cls, file_path: Path, password: str) -> typing.Generator[Path, None, None]:
         """解压文件，可以传入压缩文件或者存放多个压缩文件的文件夹"""
+        logging.info(f"解压文件: {file_path}")
         zip_paths = file_path.glob("*.*") if file_path.is_dir() else [file_path]
         for zip_path in zip_paths:
             save_path = cls.__to_save_path(zip_path)
