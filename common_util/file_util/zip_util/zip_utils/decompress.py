@@ -59,6 +59,10 @@ class Decompress:
     def _decompress_7z(cls, zip_path: Path, save_path: Path, password: str):
         """解压7z文件"""
         logging.info(f"解压7z文件: {zip_path}")
+        # 1) 判断压缩包是否分卷
+        if re.search(r"\.7z\.001$", str(zip_path)):  # 7z的分卷规则是: .7z后面跟分卷编号
+            zip_path = cls.__merge_zip_by_7z(zip_path)
+        # 2) 解压7z文件
         try:
             with py7zr.SevenZipFile(zip_path, password=password) as zip_file:
                 zip_file.extractall(save_path)
@@ -75,11 +79,17 @@ class Decompress:
             zip_file.extractall(path=save_path)
 
     @classmethod
-    def _decompress_zip(cls, zip_path: Path, save_path: Path, password: str):
+    def _decompress_zip(cls, zip_path: Path, save_path: Path, password: typing.Union[bytes, str]):
         """解压zip文件"""
+        if isinstance(password, str):
+            password = password.encode("utf-8")
         logging.info(f"解压zip文件: {zip_path}")
+        # 1) 判断压缩包是否分卷
+        if re.search(r"\.zip\.001$", str(zip_path)):  # 7z的分卷规则是: .zip后面跟分卷编号
+            zip_path = cls.__merge_zip_by_7z(zip_path)
+        # 2) 解压zip文件
         with zipfile.ZipFile(zip_path) as zip_file:
-            zip_file.extractall(save_path, pwd=password.encode("utf-8"))
+            zip_file.extractall(save_path, pwd=password)
 
     @staticmethod
     def __format_decompress_file(save_path: Path):
@@ -92,5 +102,19 @@ class Decompress:
                 pass
 
     @staticmethod
+    def __merge_zip_by_7z(zip_path: Path) -> Path:
+        """合并使用7z软件分卷的压缩包"""
+        logging.info(f"合并使用7z软件分卷的压缩包: {zip_path.name}")
+        contents = b""
+        for zip_path in list(zip_path.parent.glob(f"{zip_path.stem}.*")):
+            with open(zip_path, "rb") as file:
+                contents += file.read()
+        new_zip_path = zip_path.parent.joinpath(zip_path.stem)
+        with open(new_zip_path, "wb") as file:
+            file.write(contents)
+        return new_zip_path
+
+    @staticmethod
     def __to_save_path(zip_path: Path) -> Path:
-        return zip_path.parent.joinpath(zip_path.stem)
+        save_name = zip_path.name[:zip_path.name.find(".")]
+        return zip_path.parent.joinpath(save_name)

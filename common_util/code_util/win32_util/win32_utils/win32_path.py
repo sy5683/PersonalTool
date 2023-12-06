@@ -1,7 +1,10 @@
 import logging
 import os
 
+import pywintypes
 import win32api
+
+from common_core.base.exception_base import FileFindError
 
 
 class Win32Path:
@@ -17,4 +20,7 @@ class Win32Path:
     @staticmethod
     def _open_file(file_path: str):
         """打开文件"""
-        win32api.ShellExecute(0, "open", file_path, "", "", 1)
+        try:
+            win32api.ShellExecute(0, "open", file_path, "", "", 1)
+        except pywintypes.error:
+            raise FileFindError(f"文件不存在: {file_path}")

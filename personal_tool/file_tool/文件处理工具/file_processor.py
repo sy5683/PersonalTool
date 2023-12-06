@@ -28,7 +28,7 @@ class FileProcessor(ToolBase):
 
 if __name__ == '__main__':
     file_processor = FileProcessor()
-    file_processor.main(Operations.decompress, password="123456")
+    file_processor.main(Operations.decompress)
     # file_processor.main(Operations.to_excel)
     # file_processor.main(Operations.to_image)
     # file_processor.main(Operations.to_pdf)
