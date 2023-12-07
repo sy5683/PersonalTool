@@ -68,6 +68,8 @@ class Decompress:
                 zip_file.extractall(save_path)
         except py7zr.exceptions.Bad7zFile:
             logging.warning(f"解压7z文件失败: {zip_path}")
+        except py7zr.exceptions.PasswordRequired:
+            logging.warning(f"7z文件需要密码: {zip_path}")
 
     @classmethod
     def _decompress_rar(cls, zip_path: Path, save_path: Path, password: str):
