@@ -1,7 +1,7 @@
-from abc import ABCMeta
+import abc
 
 
-class ExceptionBase(Exception, metaclass=ABCMeta):
+class ExceptionBase(Exception, metaclass=abc.ABCMeta):
     """所有异常基类"""
 
     @property
@@ -14,21 +14,13 @@ class ErrorException(ExceptionBase):
     """通用异常报错"""
 
 
-class DisappearOutTime(ExceptionBase):
-    """存在超时"""
-
-
-class ElementFindError(ExceptionBase):
-    """查找元素失败"""
-
-
 class FileFindError(ExceptionBase):
-    """未找到文件"""
+    """查找文件失败"""
+
+
+class HandleDisappearOutTime(ExceptionBase):
+    """句柄消失超时"""
 
 
 class HandleFindError(ExceptionBase):
     """查找元素失败"""
-
-
-class MatchError(ExceptionBase):
-    """匹配失败"""

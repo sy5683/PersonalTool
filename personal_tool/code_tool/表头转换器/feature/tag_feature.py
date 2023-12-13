@@ -1,6 +1,8 @@
 import re
 import typing
 
+from common_core.base.exception_base import ErrorException
+
 
 class TagFeature:
 
@@ -10,4 +12,4 @@ class TagFeature:
             return [str(tag) for tag in tags]
         elif isinstance(tags, str):
             return re.split(r"\s+", str(tags))
-        raise Exception(f"未知的参数类型【{type(tags)}】: {tags}")
+        raise ErrorException(f"未知的参数类型【{type(tags)}】: {tags}")

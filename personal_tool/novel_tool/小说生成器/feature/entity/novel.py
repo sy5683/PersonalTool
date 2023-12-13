@@ -3,6 +3,7 @@ import random
 import typing
 from pathlib import Path
 
+from common_core.base.exception_base import ErrorException
 from common_util.code_util.import_util.import_util import ImportUtil
 from .outline import Outline
 
@@ -43,4 +44,4 @@ class Novel(metaclass=abc.ABCMeta):
             attribute_value = attribute_value.strip("\n") if isinstance(attribute_value, str) else attribute_value
             return attribute_value
         except AttributeError:
-            raise Exception(f"小说【{self.novel_name}】中缺少{attribute_name}: {attribute_key}")
+            raise ErrorException(f"小说【{self.novel_name}】中缺少{attribute_name}: {attribute_key}")

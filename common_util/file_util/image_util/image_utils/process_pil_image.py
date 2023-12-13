@@ -4,6 +4,8 @@ from pathlib import Path
 
 from PIL import Image
 
+from common_core.base.exception_base import ErrorException
+
 
 class ProcessPILImage:
     """处理pil图片"""
@@ -30,7 +32,7 @@ class ProcessPILImage:
                 new_image = cls._create_image(image.size)
                 new_image.paste(image, mask=image.split()[3])
             else:
-                raise Exception(f"未知的图片模式: {image.mode}")
+                raise ErrorException(f"未知的图片模式: {image.mode}")
             save_path = f"{os.path.splitext(image_path)[0]}.jpg" if save_path is None else str(save_path)
             new_image.save(save_path)
         return save_path

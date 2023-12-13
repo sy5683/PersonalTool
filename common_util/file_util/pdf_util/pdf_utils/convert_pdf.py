@@ -7,6 +7,8 @@ from pathlib import Path
 
 import fitz
 
+from common_core.base.exception_base import ErrorException
+
 
 class ConvertPdf:
     """转换pdf"""
@@ -44,7 +46,7 @@ class ConvertPdf:
                 pdf.insert_pdf(image)  # 将当前页插入文档
             except RuntimeError:
                 logging.error(traceback.format_exc())
-                raise Exception(f"图片异常，pdf保存失败: {image_path}")
+                raise ErrorException(f"图片异常，pdf保存失败: {image_path}")
         pdf.save(save_path)
         pdf.close()
         logging.info(f"成功将图片转换为pdf文件: {save_path}")
