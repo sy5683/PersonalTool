@@ -11,6 +11,16 @@ from .win32_utils.win32_visual import Win32Visual
 class Win32Util(UtilBase):
 
     @staticmethod
+    def find_handle(class_name: str = None, title: str = None, wait_seconds: int = 120) -> int:
+        """查找窗口句柄"""
+        return Win32Visual.find_handle(class_name, title, wait_seconds)
+
+    @staticmethod
+    def find_handles(class_name: str = None, title: str = None, wait_seconds: int = 120) -> typing.List[int]:
+        """查找窗口句柄列表"""
+        return Win32Visual.find_handles(class_name, title, wait_seconds)
+
+    @staticmethod
     def open_file(file_path: typing.Union[Path, str]):
         """打开文件"""
         Win32Path.open_file(str(file_path))

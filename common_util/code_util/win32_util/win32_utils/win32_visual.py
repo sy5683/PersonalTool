@@ -12,8 +12,32 @@ import win32gui
 import win32ui
 from win32com import client
 
+from common_core.base.exception_base import HandleFindError
+
 
 class Win32Visual:
+
+    @classmethod
+    def find_handle(cls, class_name: str, title: str, wait_seconds: int) -> int:
+        """查找窗口句柄"""
+        for _ in range(wait_seconds):
+            handles = cls._find_handles(class_name, title)
+            if handles:
+                return handles[0]
+            if wait_seconds > 1:
+                time.sleep(1)
+        raise HandleFindError(f"未找到窗口: class_name={class_name}, title={title}")
+
+    @classmethod
+    def find_handles(cls, class_name: str, title: str, wait_seconds: int) -> typing.List[int]:
+        """查找窗口句柄列表"""
+        for _ in range(wait_seconds):
+            handles = cls._find_handles(class_name, title)
+            if handles:
+                return handles
+            if wait_seconds > 1:
+                time.sleep(1)
+        raise HandleFindError(f"未找到窗口: class_name={class_name}, title={title}")
 
     @classmethod
     def screenshot(cls, handle: int) -> typing.Generator[numpy.ndarray, None, None]:
@@ -48,6 +72,23 @@ class Win32Visual:
             # 无限制窗口最前时，windows可能因为安全问题会报错并无法最前，因此这里捕捉一下
             logging.warning(e)
         time.sleep(1)
+
+    @staticmethod
+    def _find_handles(class_name: str, title: str) -> typing.List[int]:
+        """查找窗口句柄列表"""
+
+        def _filter_handle(handle: int, _handles: list):
+            if not win32gui.IsWindowVisible(handle):
+                return
+            if class_name and class_name != win32gui.GetClassName(handle):
+                return
+            if title and title != win32gui.GetWindowText(handle):
+                return
+            _handles.append(handle)
+
+        handles = []
+        win32gui.EnumWindows(_filter_handle, handles)
+        return handles
 
     @staticmethod
     def _get_window_rect_ctypes(handle: int) -> typing.Tuple[int, int, int, int]:

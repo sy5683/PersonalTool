@@ -101,5 +101,6 @@ class ProcessFile:
                         continue
                     return True
             finally:
-                time.sleep(1)
+                if wait_seconds > 1:
+                    time.sleep(1)
         return False

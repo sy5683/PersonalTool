@@ -26,5 +26,9 @@ class FileFindError(ExceptionBase):
     """未找到文件"""
 
 
+class HandleFindError(ExceptionBase):
+    """查找元素失败"""
+
+
 class MatchError(ExceptionBase):
     """匹配失败"""
