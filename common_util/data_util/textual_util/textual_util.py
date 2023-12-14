@@ -1,9 +1,8 @@
-from common_core.base.util_base import UtilBase
 from .textual_utils.convert_chinese import ConvertChinese
 from .textual_utils.convert_textual import ConvertTextual
 
 
-class TextualUtil(UtilBase):
+class TextualUtil:
 
     @staticmethod
     def chinese_to_object_name(chinese: str) -> str:

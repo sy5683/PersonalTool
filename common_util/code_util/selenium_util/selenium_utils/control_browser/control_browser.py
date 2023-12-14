@@ -4,7 +4,6 @@ from selenium import webdriver
 from selenium.common import WebDriverException
 from selenium.webdriver.chrome.webdriver import WebDriver
 
-from common_core.base.exception_base import ErrorException
 from .browser_type import BrowserType
 from .launch_chrome import LaunchChrome
 from .launch_edge import LaunchEdge
@@ -44,7 +43,7 @@ class ControlBrowser:
         elif SeleniumConfig.browser_type == BrowserType.chrome:
             return LaunchIe
         else:
-            raise ErrorException(f"暂不支持的浏览器类型: {SeleniumConfig.browser_type.name}")
+            raise TypeError(f"暂不支持的浏览器类型: {SeleniumConfig.browser_type.name}")
 
     @staticmethod
     def _set_browser_front(driver: webdriver):

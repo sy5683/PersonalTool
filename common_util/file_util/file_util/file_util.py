@@ -1,12 +1,11 @@
 import typing
 from pathlib import Path
 
-from common_core.base.util_base import UtilBase
 from .file_utils.process_file import ProcessFile
 from .file_utils.process_temp_file import ProcessTempFile
 
 
-class FileUtil(UtilBase):
+class FileUtil:
 
     @staticmethod
     def format_path(file_path: typing.Union[Path, str]) -> Path:

@@ -5,7 +5,6 @@ from pathlib import Path
 
 import openpyxl
 
-from common_core.base.exception_base import ErrorException
 from common_util.data_util.time_util.time_util import TimeUtil
 from common_util.file_util.file_util.file_util import FileUtil
 from .entity.weekly_report import WeeklyReport
@@ -23,7 +22,7 @@ class WorkReportFeature:
         for weekly_report in reversed(cls.get_weekly_reports()):
             if target_date in weekly_report.date_range:
                 return weekly_report
-        raise ErrorException(f"未找到目标日期所在的周报: {target_date}")
+        raise AttributeError(f"未找到目标日期所在的周报: {target_date}")
 
     @classmethod
     def get_weekly_reports(cls) -> typing.List[WeeklyReport]:

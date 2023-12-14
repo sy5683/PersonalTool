@@ -1,9 +1,8 @@
-from common_core.base.util_base import UtilBase
 from .command_utils.cmd_util import CmdUtil
 from .command_utils.subprocess_util import SubprocessUtil
 
 
-class CommandUtil(UtilBase):
+class CommandUtil:
 
     @staticmethod
     def check_process_running(process_name: str) -> bool:

@@ -3,12 +3,11 @@ from pathlib import Path
 
 import numpy
 
-from common_core.base.util_base import UtilBase
 from .win32_utils.win32_path import Win32Path
 from .win32_utils.win32_visual import Win32Visual
 
 
-class Win32Util(UtilBase):
+class Win32Util:
 
     @staticmethod
     def find_handle(class_name: str = None, title: str = None, wait_seconds: int = 120) -> int:
@@ -34,3 +33,8 @@ class Win32Util(UtilBase):
     def show_window(handle: int, need_admin_right: bool = False):
         """显示窗口"""
         Win32Visual.show_window(handle, need_admin_right)
+
+    @staticmethod
+    def wait_handle_disappear(class_name: str = None, title: str = None, wait_seconds: int = 120) -> bool:
+        """等待窗口消失"""
+        return Win32Visual.wait_handle_disappear(class_name, title, wait_seconds)

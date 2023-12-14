@@ -1,9 +1,8 @@
-from common_core.base.util_base import UtilBase
 from .number_utils.calculate_float import CalculateFloat
 from .number_utils.convert_amount import ConvertAmount
 
 
-class NumberUtil(UtilBase):
+class NumberUtil:
 
     @staticmethod
     def add_float(summand: float, addend: float) -> float:

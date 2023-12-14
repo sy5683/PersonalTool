@@ -1,12 +1,11 @@
 import datetime
 import typing
 
-from common_core.base.util_base import UtilBase
 from .time_utils.calculate_datetime import CalculateDatetime
 from .time_utils.convert_datetime import ConvertDatetime
 
 
-class TimeUtil(UtilBase):
+class TimeUtil:
 
     @staticmethod
     def get_last_month_first_day(stamp: typing.Union[datetime.datetime, datetime.date]) -> datetime.date:

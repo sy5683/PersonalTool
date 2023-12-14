@@ -4,8 +4,6 @@ import os
 import pywintypes
 import win32api
 
-from common_core.base.exception_base import FileFindError
-
 
 class Win32Path:
 
@@ -23,4 +21,4 @@ class Win32Path:
         try:
             win32api.ShellExecute(0, "open", file_path, "", "", 1)
         except pywintypes.error:
-            raise FileFindError(f"文件不存在: {file_path}")
+            raise FileExistsError(f"文件不存在: {file_path}")

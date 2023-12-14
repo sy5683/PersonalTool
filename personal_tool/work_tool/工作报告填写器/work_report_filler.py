@@ -1,10 +1,9 @@
 import datetime
 
-from common_core.base.tool_base import ToolBase
 from feature.work_report.work_report_feature import WorkReportFeature
 
 
-class WorkReportFiller(ToolBase):
+class WorkReportFiller:
 
     def __init__(self, target_date: str = str(datetime.datetime.now())):
         self.target_date = target_date

@@ -2,11 +2,10 @@ import typing
 from pathlib import Path
 from types import ModuleType
 
-from common_core.base.util_base import UtilBase
 from .import_utils.import_path import ImportPath
 
 
-class ImportUtil(UtilBase):
+class ImportUtil:
 
     @staticmethod
     def import_module(module_path: typing.Union[Path, str]) -> ModuleType:

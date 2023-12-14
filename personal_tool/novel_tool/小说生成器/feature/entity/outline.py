@@ -2,7 +2,6 @@ import abc
 import typing
 from pathlib import Path
 
-from common_core.base.exception_base import ErrorException
 from common_util.code_util.import_util.import_util import ImportUtil
 from .event import Event
 
@@ -34,4 +33,4 @@ class Outline(metaclass=abc.ABCMeta):
             attribute_value = attribute_value.strip("\n") if isinstance(attribute_value, str) else attribute_value
             return attribute_value
         except AttributeError:
-            raise ErrorException(f"大纲【{self.outline_name}】中缺少{attribute_name}: {attribute_key}")
+            raise AttributeError(f"大纲【{self.outline_name}】中缺少{attribute_name}: {attribute_key}")

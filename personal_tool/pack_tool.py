@@ -5,8 +5,6 @@ from pathlib import Path
 
 import win32api
 
-from common_core.base.exception_base import ErrorException
-
 
 class PackTool:
 
@@ -23,11 +21,7 @@ class PackTool:
         # 1) 复制工具
         copy_tool_path = os.path.join(self.save_path, self.tool_name)
         shutil.copytree(self._get_tool_path(), copy_tool_path)
-        # 2) 复制框架
-        core_path = self.__to_project_path("common_core")
-        copy_core_path = os.path.join(self.save_path, f"{self.tool_name}\\{core_path.name}")
-        shutil.copytree(core_path, copy_core_path)
-        # 3) 复制组件
+        # 2) 复制组件
         util_path = self.__to_project_path("common_util")
         copy_util_path = os.path.join(self.save_path, f"{self.tool_name}\\{util_path.name}")
         shutil.copytree(util_path, copy_util_path)
@@ -39,14 +33,14 @@ class PackTool:
         try:
             tool_path = next(tool_dir_path.rglob(self.tool_name))
         except StopIteration:
-            raise ErrorException(f"未找到目标工具文件: {self.tool_name}")
+            raise FileExistsError(f"未找到目标工具文件: {self.tool_name}")
         # 2) 校验获取到的路径
         # 2.1) 根据命名规则，工具根目录同级不能有py文件
         if list(tool_path.parent.glob("*.py")):
-            raise ErrorException(f"文件路径异常，并不为工具根目录: {tool_path}")
+            raise FileExistsError(f"文件路径异常，并不为工具根目录: {tool_path}")
         # 2.2) 根据命名规则，工具根目录子级不能没有py文件
         if not list(tool_path.glob("*.py")):
-            raise ErrorException(f"文件路径异常，并不为工具根目录: {tool_path}")
+            raise FileExistsError(f"文件路径异常，并不为工具根目录: {tool_path}")
         return tool_path
 
     @staticmethod

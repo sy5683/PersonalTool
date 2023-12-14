@@ -15,7 +15,6 @@ from selenium.common import InvalidArgumentException
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import WebDriver
 
-from common_core.base.exception_base import FileFindError
 from common_util.code_util.selenium_util.selenium_utils.control_browser.download_driver import DownloadDriver
 from .launch_base import LaunchBase
 from ..selenium_config import SeleniumConfig
@@ -135,7 +134,7 @@ class LaunchChrome(LaunchBase):
             # 使用pathlib的rglob遍历，比for循环遍历更快，代码更简单
             for chrome_path in Path(root_path).rglob("chrome.exe"):
                 return str(chrome_path)
-        raise FileFindError("未找到谷歌浏览器路径")
+        raise FileExistsError("未找到谷歌浏览器路径")
 
     @classmethod
     def _get_chrome_user_data_path(cls) -> typing.Union[str, None]:

@@ -13,7 +13,6 @@ from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.edge.webdriver import WebDriver
 from selenium.webdriver.ie.service import Service as IeService
 
-from common_core.base.exception_base import FileFindError
 from .download_driver import DownloadDriver
 from .launch_base import LaunchBase
 from ..selenium_config import SeleniumConfig
@@ -115,7 +114,7 @@ class LaunchEdge(LaunchBase):
             # 使用pathlib的rglob遍历，比for循环遍历更快，代码更简单
             for edge_path in Path(root_path).rglob("msedge.exe"):
                 return str(edge_path)
-        raise FileFindError("未找到谷歌浏览器路径")
+        raise FileExistsError("未找到谷歌浏览器路径")
 
     @classmethod
     def _get_edge_user_data_path(cls) -> typing.Union[str, None]:

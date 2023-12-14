@@ -12,8 +12,6 @@ import win32gui
 import win32ui
 from win32com import client
 
-from common_core.base.exception_base import HandleDisappearOutTime, HandleFindError
-
 
 class Win32Visual:
 
@@ -26,7 +24,8 @@ class Win32Visual:
                 return handles[0]
             if wait_seconds > 1:
                 time.sleep(1)
-        raise HandleFindError(f"未找到窗口: class_name={class_name}, title={title}")
+        logging.warning(f"未找到窗口: class_name={class_name}, title={title}")
+        return 0
 
     @classmethod
     def find_handles(cls, class_name: str, title: str, wait_seconds: int) -> typing.List[int]:
@@ -37,18 +36,20 @@ class Win32Visual:
                 return handles
             if wait_seconds > 1:
                 time.sleep(1)
-        raise HandleFindError(f"未找到窗口: class_name={class_name}, title={title}")
+        logging.warning(f"未找到窗口: class_name={class_name}, title={title}")
+        return []
 
     @classmethod
-    def wait_handle_disappear(cls, class_name: str, title: str, wait_seconds: int):
+    def wait_handle_disappear(cls, class_name: str, title: str, wait_seconds: int) -> bool:
         """等待窗口消失"""
         for _ in range(wait_seconds):
             handles = cls._find_handles(class_name, title)
             if not handles:
-                return
+                return True
             if wait_seconds > 1:
                 time.sleep(1)
-        return HandleDisappearOutTime(f"窗口存在超时: class_name={class_name}, title={title}")
+        logging.warning(f"窗口存在超时: class_name={class_name}, title={title}")
+        return False
 
     @classmethod
     def screenshot(cls, handle: int) -> typing.Generator[numpy.ndarray, None, None]:

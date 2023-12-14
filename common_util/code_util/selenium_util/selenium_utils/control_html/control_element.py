@@ -5,8 +5,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
 
-from common_core.base.exception_base import ErrorException
-
 
 class ControlElement:
     """控制元素"""
@@ -30,5 +28,5 @@ class ControlElement:
             element = cls.find_element(element, xpath, wait_seconds)
         else:
             if isinstance(element, WebDriver):
-                raise ErrorException("WebDriver无法使用get_attribute方法")
+                raise TypeError("WebDriver无法使用get_attribute方法")
         return element.get_attribute(parameter)

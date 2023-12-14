@@ -7,8 +7,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.constants import DEFAULT_USER_HOME_CACHE_PATH
 from webdriver_manager.microsoft import EdgeChromiumDriverManager, IEDriverManager
 
-from common_core.base.exception_base import FileFindError
-
 
 class DownloadDriver:
 
@@ -21,7 +19,7 @@ class DownloadDriver:
         # 2.1) 根据默认下载路径遍历文件，获取指定版本的chrome_driver文件
         try:
             return cls._get_driver_in_manager_path("chromedriver.exe", chrome_version)
-        except FileFindError:
+        except FileExistsError:
             # 2.2) 未找到指定版本的chrome_driver文件，则调用下载方法
             return ChromeDriverManager().install()
 
@@ -34,7 +32,7 @@ class DownloadDriver:
         # 2.1) 根据默认下载路径遍历文件，获取指定版本的edge_driver文件
         try:
             return cls._get_driver_in_manager_path("msedgedriver.exe", edge_version)
-        except FileFindError:
+        except FileExistsError:
             # 2.2) 未找到指定版本的edge_driver文件，则调用下载方法
             return EdgeChromiumDriverManager().install()
 
@@ -44,7 +42,7 @@ class DownloadDriver:
         # 1) 根据默认下载路径遍历文件，获取ie_driver文件
         try:
             return cls._get_driver_in_manager_path("IEDriverServer.exe")
-        except FileFindError:
+        except FileExistsError:
             # 2) 未找到指定版本的chrome_driver文件，则调用下载方法
             return IEDriverManager().install()
 
@@ -67,4 +65,4 @@ class DownloadDriver:
                 if check_version not in str(driver_path):
                     continue
             return str(driver_path)
-        raise FileFindError
+        raise FileExistsError
