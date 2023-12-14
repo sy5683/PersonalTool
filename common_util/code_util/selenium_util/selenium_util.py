@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 
 from .selenium_utils.control_browser.control_browser import ControlBrowser
+from .selenium_utils.control_browser.launch_chrome import LaunchChrome
 from .selenium_utils.control_html.control_element import ControlElement
 from .selenium_utils.control_html.control_iframe import ControlIframe
 from .selenium_utils.selenium_config import SeleniumConfig
@@ -32,6 +33,11 @@ class SeleniumUtil:
     def get_driver() -> WebDriver:
         """获取driver"""
         return ControlBrowser.get_driver()
+
+    @staticmethod
+    def launch_browser_debug():
+        """debug启动谷歌浏览器"""
+        LaunchChrome.launch_browser_debug()
 
     @classmethod
     def open_url(cls, url: str):

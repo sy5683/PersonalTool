@@ -15,7 +15,7 @@ from selenium.common import InvalidArgumentException
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import WebDriver
 
-from common_util.code_util.selenium_util.selenium_utils.control_browser.download_driver import DownloadDriver
+from .download_driver import DownloadDriver
 from .launch_base import LaunchBase
 from ..selenium_config import SeleniumConfig
 
@@ -58,9 +58,7 @@ class LaunchChrome(LaunchBase):
         # 1) 获取谷歌浏览器路径
         chrome_path = cls._get_chrome_path()
         # 2) cmd调用命令行debug启动谷歌浏览器
-        cmd = f'"{chrome_path}" "--remote-debugging-port={cls.__debug_port}"'
-        subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                         encoding='gbk').communicate()
+        subprocess.Popen(f'"{chrome_path}" "--remote-debugging-port={cls.__debug_port}"')
 
     @classmethod
     def close_browser(cls, driver: WebDriver):
