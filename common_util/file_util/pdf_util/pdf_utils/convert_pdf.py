@@ -34,7 +34,11 @@ class ConvertPdf:
     def images_to_pdf(image_paths: typing.List[str], save_path: typing.Union[Path, str]) -> str:
         """图片转pdf"""
         logging.info("开始将图片转换为pdf文件")
-        save_path = f"{os.path.splitext(image_paths[0])[0]}.pdf" if save_path is None else str(save_path)
+        if save_path is None:
+            save_name = f"{os.path.basename(os.path.dirname(image_paths[0]))}.pdf"
+            save_path = os.path.join(os.path.dirname(image_paths[0]), save_name)
+        else:
+            save_path = str(save_path)
         pdf = fitz.open()
         for image_path in image_paths:
             try:
