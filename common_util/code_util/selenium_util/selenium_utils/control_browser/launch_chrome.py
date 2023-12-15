@@ -22,7 +22,7 @@ from ..selenium_config import SeleniumConfig
 
 
 class LaunchChrome(LaunchBase):
-    __driver_map: typing.Dict[typing.Union[str, int], WebDriver] = {}
+    __driver_map: typing.Dict[int, WebDriver] = {}
 
     @classmethod
     def get_driver(cls, debug_port: int = 0) -> WebDriver:
@@ -56,7 +56,7 @@ class LaunchChrome(LaunchBase):
     def close_browser(cls, debug_port: int = 0):
         """关闭谷歌浏览器"""
         debug_port = cls.__format_debug_port(debug_port)
-        driver = cls.get_driver(debug_port)
+        driver = cls.get_driver(debug_port=debug_port)
         # 1) 使用selenium自带的quit方法关闭driver
         driver.quit()
         time.sleep(1)
