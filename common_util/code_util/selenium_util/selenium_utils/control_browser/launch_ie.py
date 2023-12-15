@@ -1,4 +1,5 @@
 import logging
+import typing
 
 import win32api
 import win32con
@@ -12,13 +13,45 @@ from ..selenium_config import SeleniumConfig
 
 
 class LaunchIe(LaunchBase):
+    __driver: typing.Union[WebDriver, None] = None
 
     @classmethod
-    def launch_browser(cls) -> WebDriver:
+    def get_driver(cls) -> WebDriver:
+        """获取driver"""
+        if cls.__driver is None:
+            # 1) 启动IE浏览器需要初始化其对应的参数与缩放比例
+            cls._set_ie_setting()
+            # 2) 启动IE浏览器
+            cls.__driver = cls._launch_ie()
+            # 3.1) 设置默认加载超时时间
+            cls.__driver.set_page_load_timeout(SeleniumConfig.wait_seconds)
+            # 3.2) 启动后设置浏览器最前端
+            cls.set_browser_front(cls.__driver)
+        return cls.__driver
+
+    @classmethod
+    def close_browser(cls):
+        """关闭IE浏览器"""
+        if cls.__driver is not None:
+            # 使用selenium自带的quit方法关闭driver
+            cls.__driver.quit()
+            cls.__driver = None
+
+    @classmethod
+    def _set_ie_setting(cls):
+        """设置IE浏览器，这些设置是selenium启动IE浏览器的必要条件"""
+        # 1) 设置浏览器缩放为100%
+        cls.__set_regedit_value("Software\\Microsoft\\Internet Explorer\\Zoom", "ZoomFactor", 100000)
+        # 2) 设置浏览器所有保护模式统一开启或关闭
+        for each in range(1, 5):
+            # 最后一个参数: 0: 开启, 3: 关闭
+            regedit_path = f"Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\{each}"
+            cls.__set_regedit_value(regedit_path, "2500", 3)
+
+    @staticmethod
+    def _launch_ie() -> WebDriver:
         """启动IE浏览器"""
         logging.info("启动IE浏览器")
-        # 1) 启动IE浏览器需要初始化其对应的参数与缩放比例
-        cls._set_ie_setting()
         # 2.1) 获取IE浏览器设置
         options = webdriver.IeOptions()
         # 2.2) IE浏览器无法设置静默运行
@@ -28,29 +61,6 @@ class LaunchIe(LaunchBase):
         # 2.4) 设置忽略私密链接警告，但IE驱动程序不允许绕过不安全(自签名)SSL证书，因此这个方法相当于无效
         # options.set_capability("acceptInsecureCerts", True)
         # 3) 启动IE浏览器
-        return cls.__launch_ie_driver(options)
-
-    @classmethod
-    def close_browser(cls, driver: webdriver):
-        """关闭IE浏览器"""
-        if driver is None:
-            return
-        driver.quit()
-
-    @classmethod
-    def _set_ie_setting(cls):
-        """设置IE浏览器，这些设置是selenium启动IE浏览器的必要条件"""
-        # 1.1) 设置浏览器缩放为100%
-        cls.__set_regedit_value("Software\\Microsoft\\Internet Explorer\\Zoom", "ZoomFactor", 100000)
-        # 1.2) 设置浏览器所有保护模式统一开启或关闭
-        for each in range(1, 5):
-            # 最后一个参数: 0: 开启, 3: 关闭
-            regedit_path = f"Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\{each}"
-            cls.__set_regedit_value(regedit_path, "2500", 3)
-
-    @staticmethod
-    def __launch_ie_driver(options: webdriver.IeOptions) -> WebDriver:
-        """启动IE浏览器"""
         driver_path = DownloadDriver.get_ie_driver_path()
         service = Service(executable_path=driver_path)
         return webdriver.Ie(options=options, service=service)

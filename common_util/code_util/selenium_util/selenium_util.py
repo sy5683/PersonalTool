@@ -13,38 +13,41 @@ from .selenium_utils.selenium_config import SeleniumConfig
 class SeleniumUtil:
 
     @staticmethod
-    def close_browser():
-        """关闭谷歌浏览器"""
-        ControlBrowser.close_browser()
+    def close_browser(**kwargs):
+        """关闭浏览器"""
+        ControlBrowser.close_browser(**kwargs)
 
     @staticmethod
-    def find_element(element: typing.Union[WebDriver, WebElement], xpath: str,
-                     wait_seconds: int = SeleniumConfig.wait_seconds) -> WebElement:
+    def find(xpath: str, **kwargs) -> WebElement:
         """查找元素"""
-        return ControlElement.find_element(element, xpath, wait_seconds)
+        return ControlElement.find(xpath, **kwargs)
 
     @staticmethod
-    def get_attribute(element: typing.Union[WebDriver, WebElement], xpath: str, parameter: str,
-                      wait_seconds: int = SeleniumConfig.wait_seconds) -> str:
-        """获取元素参数"""
-        return ControlElement.get_attribute(element, xpath, parameter, wait_seconds)
+    def finds(xpath: str, **kwargs) -> typing.List[WebElement]:
+        """查找元素列表"""
+        return ControlElement.finds(xpath, **kwargs)
 
     @staticmethod
-    def get_driver() -> WebDriver:
+    def get_driver(**kwargs) -> WebDriver:
         """获取driver"""
-        return ControlBrowser.get_driver()
+        return ControlBrowser.get_driver(**kwargs)
 
     @staticmethod
-    def launch_browser_debug():
+    def input(element_or_xpath: typing.Union[WebElement, str], value: str, need_check: bool, **kwargs):
+        """输入"""
+        ControlElement.input(element_or_xpath, value, need_check, **kwargs)
+
+    @staticmethod
+    def launch_chrome_debug(debug_port: int = SeleniumConfig.default_debug_port):
         """debug启动谷歌浏览器"""
-        LaunchChrome.launch_browser_debug()
+        LaunchChrome.launch_browser_debug(debug_port)
 
     @classmethod
-    def open_url(cls, url: str):
+    def open_url(cls, url: str, **kwargs):
         """打开url"""
-        cls.get_driver().get(url)
+        cls.get_driver(**kwargs).get(url)
 
-    @classmethod
-    def switch_iframe(cls, xpath: str, wait_seconds: int = SeleniumConfig.wait_seconds):
+    @staticmethod
+    def switch_iframe(element_or_xpath: typing.Union[WebElement, str] = '', **kwargs):
         """切换iframe"""
-        ControlIframe.switch_iframe(cls.get_driver(), xpath, wait_seconds)
+        ControlIframe.switch_iframe(element_or_xpath, **kwargs)

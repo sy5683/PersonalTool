@@ -19,9 +19,30 @@ from ..selenium_config import SeleniumConfig
 
 
 class LaunchEdge(LaunchBase):
+    __driver: typing.Union[WebDriver, None] = None
 
     @classmethod
-    def launch_browser(cls) -> WebDriver:
+    def get_driver(cls) -> WebDriver:
+        """获取driver"""
+        if cls.__driver is None:
+            # 1) 启动Edge浏览器
+            cls.__driver = cls._launch_edge()
+            # 2.1) 设置默认加载超时时间
+            cls.__driver.set_page_load_timeout(SeleniumConfig.wait_seconds)
+            # 2.2) 启动后设置浏览器最前端
+            cls.set_browser_front(cls.__driver)
+        return cls.__driver
+
+    @classmethod
+    def close_browser(cls):
+        """关闭Edge浏览器"""
+        if cls.__driver is not None:
+            # 使用selenium自带的quit方法关闭driver
+            cls.__driver.quit()
+            cls.__driver = None
+
+    @classmethod
+    def _launch_edge(cls) -> WebDriver:
         """启动Edge浏览器"""
         logging.info("启动Edge浏览器")
         try:
@@ -35,8 +56,9 @@ class LaunchEdge(LaunchBase):
         return driver
 
     @classmethod
-    def launch_edge_with_ie(cls) -> WebDriver:
+    def _launch_edge_with_ie(cls) -> WebDriver:
         """ie模式启动Edge浏览器"""
+        logging.info("ie模式启动Edge浏览器")
         # 1.1) 获取IE浏览器设置
         options = webdriver.IeOptions()
         # 1.2) IE浏览器无法设置静默运行
@@ -51,15 +73,8 @@ class LaunchEdge(LaunchBase):
         service = IeService(executable_path=driver_path)
         return webdriver.Ie(options=options, service=service)
 
-    @classmethod
-    def close_browser(cls, driver: webdriver):
-        """关闭Edge浏览器"""
-        if driver is None:
-            return
-        driver.quit()
-
-    @classmethod
-    def _get_edge_driver(cls, user_data_dir: str = None) -> WebDriver:
+    @staticmethod
+    def _get_edge_driver(user_data_dir: str = None) -> WebDriver:
         """获取edge_driver"""
         # 1.1) 获取Edge浏览器设置
         options = webdriver.EdgeOptions()
@@ -87,10 +102,12 @@ class LaunchEdge(LaunchBase):
         if user_data_dir and os.path.exists(user_data_dir):
             options.add_argument(f"--user-data-dir={user_data_dir}")
         # 2) 启动Edge浏览器
-        return cls.__launch_edge_driver(options)
+        driver_path = DownloadDriver.get_edge_driver_path()
+        service = EdgeService(executable_path=driver_path)
+        return webdriver.Edge(options=options, service=service)
 
-    @classmethod
-    def _get_edge_path(cls) -> str:
+    @staticmethod
+    def _get_edge_path() -> str:
         """获取Edge浏览器路径"""
         # 1) 通过注册表查找Edge浏览器路径
         for regedit_dir in [win32con.HKEY_LOCAL_MACHINE, win32con.HKEY_CURRENT_USER]:  # 谷歌浏览器路径注册表一般在这两个位置下固定位置
@@ -116,18 +133,11 @@ class LaunchEdge(LaunchBase):
                 return str(edge_path)
         raise FileExistsError("未找到谷歌浏览器路径")
 
-    @classmethod
-    def _get_edge_user_data_path(cls) -> typing.Union[str, None]:
+    @staticmethod
+    def _get_edge_user_data_path() -> typing.Union[str, None]:
         """获取Edge浏览器用户缓存User Data路径"""
         # 查找User Data文件默认路径
         user_data_path = os.path.join(os.path.expanduser('~'), "AppData\\Local\\Microsoft\\Edge\\User Data\\Default")
         if os.path.exists(user_data_path):
             return user_data_path
         return None
-
-    @staticmethod
-    def __launch_edge_driver(options: webdriver.EdgeOptions) -> WebDriver:
-        """启动Edge浏览器"""
-        driver_path = DownloadDriver.get_edge_driver_path()
-        service = EdgeService(executable_path=driver_path)
-        return webdriver.Edge(options=options, service=service)

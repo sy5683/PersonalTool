@@ -5,9 +5,6 @@ from common_util.code_util.selenium_util.selenium_utils.control_browser.launch_c
 
 class LaunchChromeTestCase(unittest.TestCase):
 
-    def test_launch_browser_debug(self):
-        self.assertEqual(LaunchChrome.launch_browser_debug(), None)
-
     def test_get_chrome_path(self):
         chrome_path = LaunchChrome._get_chrome_path()
         self.assertNotEqual(chrome_path, None)

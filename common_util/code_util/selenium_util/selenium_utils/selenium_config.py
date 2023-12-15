@@ -7,3 +7,4 @@ class SeleniumConfig:
     headless: bool = False  # 是否无头启动，默认为否
     proxy_ip: str = None  # 代理ip
     wait_seconds = 120  # 等待时间，默认为120秒
+    default_debug_port = 9222  # 默认的debug端口
