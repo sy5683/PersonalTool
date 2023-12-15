@@ -112,27 +112,34 @@ class LaunchChrome(LaunchBase):
         """获取chrome_driver"""
         # 1.1) 获取谷歌浏览器设置
         options = webdriver.ChromeOptions()
-        # 1.2) 设置静默运行
+        # 1.2.1) 设置静默运行
         if SeleniumConfig.headless:
             options.add_argument('--headless')
-        # 1.3) 设置ip代理
+        # 1.2.2) 设置ip代理
         if SeleniumConfig.proxy_ip:
             options.add_argument(f"--proxy-server={SeleniumConfig.proxy_ip}")
-        # 1.4) 设置忽略私密链接警告
+        # 1.3.1) 设置忽略私密链接警告
         options.add_argument('--ignore-certificate-errors')
-        # 1.5) 设置取消提示受自动控制
+        # 1.3.2) 设置取消提示受自动控制
         options.add_experimental_option('excludeSwitches', ['enable-automation'])
+        options.add_experimental_option('useAutomationExtension', False)
+        # 1.4.1) 伪装浏览器请求头
+        options.add_argument('lang=zh-CN,zh,zh-TW,en-US,en')
+        options.add_argument(
+            'user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36')
+        # 1.4.2) 去掉webdriver痕迹
+        options.add_argument("disable-blink-features=AutomationControlled")
         # 取消提示和默认下载路径在同一个参数中配置
         prefs = options.experimental_options.get("prefs", {})
-        # 1.6) 设置取消提示
+        # 1.5) 设置取消提示
         prefs.update({'credentials_enable_service': False})  # 设置取消提示保存密码
         prefs.update({'download.prompt_for_download': False})  # 取消提示下载
-        # 1.7) 设置默认下载路径
+        # 1.6) 设置默认下载路径
         logging.info(f"浏览器下载路径为: {SeleniumConfig.download_path}")
         if os.path.exists(SeleniumConfig.download_path):
             prefs.update({'download.default_directory': SeleniumConfig.download_path})
         options.add_experimental_option('prefs', prefs)
-        # 1.8) 设置读取用户缓存目录
+        # 1.7) 设置读取用户缓存目录
         if user_data_dir and os.path.exists(user_data_dir):
             options.add_argument(f"--user-data-dir={user_data_dir}")
         # 2) 启动谷歌浏览器
