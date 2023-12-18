@@ -1,6 +1,7 @@
 import logging
 import time
 import unittest
+from concurrent import futures
 
 from common_util.code_util.selenium_util.selenium_util import SeleniumUtil
 
@@ -12,19 +13,21 @@ class SeleniumUtilTestCase(unittest.TestCase):
                         filename=None,
                         filemode='a')
 
+    def _launch_driver(self):
+        driver = SeleniumUtil.get_driver(use_user_data=False)
+        SeleniumUtil.open_url("https://www.baidu.com/", use_user_data=False)  # 多并发时不能使用user_data
+        element = SeleniumUtil.find('//input[@id="su"]')
+        print(f"1: {element}")
+        element = SeleniumUtil.find('./ancestor::form[@id="form"]', element=element)
+        print(f"2: {element}")
+        time.sleep(1)
+        SeleniumUtil.close_browser(driver=driver)
+
     def test_(self):
         """"""
-        # SeleniumUtil.launch_chrome_debug()
-        # driver_1 = SeleniumUtil.get_driver()
-        # SeleniumUtil.launch_chrome_debug(8222)
-        # driver_2 = SeleniumUtil.get_driver(8222)
-        # driver_1.get("https://www.baidu.com/")
-        # driver_2.get("https://fanyi.baidu.com/")
-
-        SeleniumUtil.open_url("https://www.baidu.com/")
-        element = SeleniumUtil.find('//input[@id="su"]')
-        print(element)
-        element = SeleniumUtil.find('./ancestor::form[@id="kw"]', element=element)
-        print(element)
-        time.sleep(1)
-        SeleniumUtil.close_browser()
+        pool = futures.ThreadPoolExecutor(3, thread_name_prefix="test")
+        tasks = []
+        for _ in range(3):
+            tasks.append(pool.submit(self._launch_driver))
+        for task in futures.as_completed(tasks):
+            print(task.result())

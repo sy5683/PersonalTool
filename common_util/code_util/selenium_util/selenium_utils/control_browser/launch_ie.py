@@ -30,12 +30,14 @@ class LaunchIe(LaunchBase):
         return cls.__driver
 
     @classmethod
-    def close_browser(cls):
+    def close_browser(cls, **kwargs):
         """关闭IE浏览器"""
-        if cls.__driver is not None:
+        driver = kwargs.get("driver", cls.__driver)
+        if driver is not None:
             # 使用selenium自带的quit方法关闭driver
-            cls.__driver.quit()
-            cls.__driver = None
+            driver.quit()
+            if driver == cls.__driver:
+                cls.__driver = None
 
     @classmethod
     def _set_ie_setting(cls):

@@ -3,6 +3,7 @@ import os
 import re
 import subprocess
 import sys
+import threading
 import time
 import traceback
 import typing
@@ -12,7 +13,7 @@ import pywintypes
 import win32api
 import win32con
 from selenium import webdriver
-from selenium.common import InvalidArgumentException
+from selenium.common import InvalidArgumentException, SessionNotCreatedException
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import WebDriver
 
@@ -23,22 +24,28 @@ from ..selenium_config import SeleniumConfig
 
 class LaunchChrome(LaunchBase):
     __driver_map: typing.Dict[int, WebDriver] = {}
+    __debug_driver_map: typing.Dict[int, WebDriver] = {}
 
     @classmethod
-    def get_driver(cls, debug_port: int = 0) -> WebDriver:
+    def get_driver(cls, **kwargs) -> WebDriver:
         """获取driver"""
-        debug_port = cls.__format_debug_port(debug_port)
-        if debug_port not in cls.__driver_map:
-            if debug_port:
-                cls.__driver_map[debug_port] = cls._take_over_chrome(debug_port)
-            else:
-                cls.__driver_map[debug_port] = cls._launch_chrome()
-        return cls.__driver_map[debug_port]
+        debug_port = cls.__format_debug_port(**kwargs)
+        if debug_port is None:
+            # 获取进程id，并启动谷歌浏览器
+            thread_id = threading.current_thread().ident
+            if thread_id not in cls.__driver_map:
+                cls.__driver_map[thread_id] = cls._launch_chrome(**kwargs)
+            return cls.__driver_map[thread_id]
+        else:
+            # 使用debug方式接管谷歌浏览器
+            if debug_port not in cls.__debug_driver_map:
+                cls.__debug_driver_map[debug_port] = cls._take_over_chrome(debug_port)
+            return cls.__debug_driver_map[debug_port]
 
     @classmethod
     def launch_browser_debug(cls, debug_port: int):
         """debug启动谷歌浏览器"""
-        debug_port = cls.__format_debug_port(debug_port)
+        debug_port = cls.__format_debug_port(debug_port=debug_port)
         if debug_port in cls.__driver_map:
             logging.info(f"Debug端口的谷歌浏览器正在运行: {debug_port}")
             return
@@ -53,33 +60,40 @@ class LaunchChrome(LaunchBase):
         time.sleep(1)
 
     @classmethod
-    def close_browser(cls, debug_port: int = 0):
+    def close_browser(cls, **kwargs):
         """关闭谷歌浏览器"""
-        debug_port = cls.__format_debug_port(debug_port)
-        driver = cls.get_driver(debug_port=debug_port)
-        # 1) 使用selenium自带的quit方法关闭driver
-        driver.quit()
-        time.sleep(1)
-        # 2) 因为经常出现quit之后cmd窗口未关的情况，因此这里使用命令行直接关闭进程
-        os.system(f"taskkill /f /im {os.path.basename(DownloadDriver.get_chrome_driver_path())}")
-        # 3) 如果控制debug接管的浏览器，使用driver.quit()仅会关闭selenium，因此需要将端口也进行处理
-        if debug_port and cls._netstat_debug_port_running(debug_port):
-            with os.popen(f'netstat -aon|findstr "{debug_port}"') as cmd:
-                result = cmd.read()
-            temp_result = [each for each in result.split('\n')[0].split(' ') if each != '']
-            os.system(f"taskkill /f /pid {temp_result[4]}")
-        del cls.__driver_map[debug_port]
+        driver = kwargs.get("driver", cls.get_driver(**kwargs))
+        if driver is not None:
+            # 1) 使用selenium自带的quit方法关闭driver
+            driver.quit()
+            time.sleep(1)
+            # 2) 因为经常出现quit之后cmd窗口未关的情况，因此这里使用命令行直接关闭进程
+            os.system(f"taskkill /f /im {os.path.basename(DownloadDriver.get_chrome_driver_path())}")
+            # 3) 如果控制debug接管的浏览器，使用driver.quit()仅会关闭selenium，因此需要将端口也进行处理
+            debug_port = cls.__format_debug_port(**kwargs)
+            if debug_port and cls._netstat_debug_port_running(debug_port):
+                with os.popen(f'netstat -aon|findstr "{debug_port}"') as cmd:
+                    result = cmd.read()
+                temp_result = [each for each in result.split('\n')[0].split(' ') if each != '']
+                os.system(f"taskkill /f /pid {temp_result[4]}")
+            for thread_id, _driver in list(cls.__driver_map.items()):
+                if driver == _driver:
+                    del cls.__driver_map[thread_id]
+            for _debug_port, _driver in list(cls.__debug_driver_map.items()):
+                if driver == _driver:
+                    del cls.__debug_driver_map[_debug_port]
 
     @classmethod
-    def _launch_chrome(cls) -> WebDriver:
+    def _launch_chrome(cls, **kwargs) -> WebDriver:
         """启动谷歌浏览器"""
         logging.info("启动谷歌浏览器")
         try:
+            assert kwargs.get("use_user_data", True)
             # 1.1) 获取谷歌浏览器用户缓存路径
             user_data_dir = cls._get_chrome_user_data_path()
             # 1.2) 获取driver
             driver = cls._get_chrome_driver(user_data_dir)
-        except InvalidArgumentException:
+        except (AssertionError, InvalidArgumentException, SessionNotCreatedException):
             # 2) 重新获取driver，不加载user_data_dir
             driver = cls._get_chrome_driver()
         # 3.1) 设置默认加载超时时间
@@ -202,9 +216,12 @@ class LaunchChrome(LaunchBase):
             return False
 
     @classmethod
-    def __format_debug_port(cls, debug_port: int) -> int:
-        if not debug_port and cls._netstat_debug_port_running(SeleniumConfig.default_debug_port):
-            debug_port = SeleniumConfig.default_debug_port
+    def __format_debug_port(cls, **kwargs) -> int:
+        debug_port = kwargs.get("debug_port")
+        if debug_port is None:
+            # 未启动driver并且默认debug端口正在运行
+            if not cls.__driver_map and cls._netstat_debug_port_running(SeleniumConfig.default_debug_port):
+                return SeleniumConfig.default_debug_port
         return debug_port
 
     @staticmethod
