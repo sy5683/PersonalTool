@@ -38,7 +38,7 @@ class SeleniumUtil:
         ControlElement.input(element_or_xpath, value, need_check, **kwargs)
 
     @staticmethod
-    def launch_chrome_debug(debug_port: int = SeleniumConfig.default_debug_port):
+    def launch_chrome_debug(debug_port: int = None):
         """debug启动谷歌浏览器"""
         LaunchChrome.launch_browser_debug(debug_port)
 

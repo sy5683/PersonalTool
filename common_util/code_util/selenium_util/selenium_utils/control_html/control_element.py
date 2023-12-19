@@ -40,7 +40,7 @@ class ControlElement:
     @classmethod
     def input(cls, element_or_xpath: typing.Union[WebElement, str], value: str, need_check: bool, **kwargs):
         """输入"""
-        element = cls.__format_element(element_or_xpath)
+        element = cls.__format_element(element_or_xpath, **kwargs)
         logging.info(f"输入元素: {element_or_xpath} 【%s】" %
                      ("*" * len(value) if cls.__check_element_is_password(element) else value))
         for _ in range(3):

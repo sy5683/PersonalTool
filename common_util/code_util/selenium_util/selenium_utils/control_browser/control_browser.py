@@ -1,5 +1,3 @@
-import logging
-
 from selenium.webdriver.chrome.webdriver import WebDriver
 
 from .browser_type import BrowserType
