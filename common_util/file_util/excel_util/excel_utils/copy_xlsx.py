@@ -16,10 +16,9 @@ class CopyXlsx:
         cls._copy_widths(worksheet, copy_worksheet)
         cls._copy_heights(worksheet, copy_worksheet)
         # 2) 复制excel中的数值
-        all_row_cells = worksheet.iter_rows()
-        for row, row_cells in enumerate(all_row_cells):
+        for row, row_cells in enumerate(worksheet.iter_rows()):
             for col, cell in enumerate(row_cells):
-                copy_cell = worksheet.cell(row + 1, col + 1, cell.value)
+                copy_cell = copy_worksheet.cell(row + 1, col + 1, cell.value)
                 if isinstance(cell, MergedCell):
                     continue  # excel中有合并了的单元格，先跳过，复制其他单元格的格式
                 cls._copy_cell_format(cell, copy_cell)

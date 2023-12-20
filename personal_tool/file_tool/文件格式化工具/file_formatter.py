@@ -17,13 +17,11 @@ class FileFormatter:
 
     def __init__(self):
         self.directory_path = FileUtil.get_directory_path()
+        assert self.directory_path, "未选择文件夹"
 
     def main(self, function, **kwargs):
-        if self.directory_path:
-            function(Path(self.directory_path), **kwargs)
-            Win32Util.open_file(self.directory_path)
-        else:
-            logging.info("未选择文件夹")
+        function(Path(self.directory_path), **kwargs)
+        Win32Util.open_file(self.directory_path)
 
 
 if __name__ == '__main__':

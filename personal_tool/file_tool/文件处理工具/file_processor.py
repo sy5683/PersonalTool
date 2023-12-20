@@ -17,12 +17,10 @@ class FileProcessor:
 
     def __init__(self):
         self.file_paths = FileUtil.get_file_paths()
+        assert self.file_paths, "未选择文件"
 
     def main(self, function, **kwargs):
-        if self.file_paths:
-            function(self.file_paths, **kwargs)
-        else:
-            logging.info("未选择文件")
+        function(self.file_paths, **kwargs)
 
 
 if __name__ == '__main__':
