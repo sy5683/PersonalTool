@@ -1,6 +1,7 @@
 import logging
 import re
 import time
+import typing
 
 from selenium import webdriver
 from selenium.common import NoSuchWindowException, UnexpectedAlertPresentException
@@ -11,6 +12,28 @@ from ..selenium_config import SeleniumConfig
 
 class ControlWindow:
     """控制窗口"""
+
+    @classmethod
+    def close_other_window(cls, window_titles: typing.Union[str, typing.List[str]], **kwargs):
+        """关闭其他窗口"""
+        window_titles = [window_titles] if isinstance(window_titles, str) else window_titles
+        driver = kwargs.get("driver", ControlBrowser.get_driver(**kwargs))
+        for window_handle in driver.window_handles:
+            try:
+                cls.__switch_to_window(driver, window_handle)
+            except NoSuchWindowException:
+                continue
+            title = cls.get_title(driver=driver)
+            for window_title in window_titles:
+                if window_title and re.search(window_title, title):
+                    break
+                elif not window_title and window_title == title:
+                    break
+            else:
+                logging.info(f"关闭窗口: {title}")
+                driver.close()
+        # 关闭完窗口之后还需要重新切换一下窗口
+        cls.switch_window(window_titles[-1])
 
     @classmethod
     def confirm_alert(cls, **kwargs):
@@ -46,10 +69,9 @@ class ControlWindow:
             for window_handle in driver.window_handles:
                 try:
                     cls.__switch_to_window(driver, window_handle)
-                    time.sleep(1)  # 切换完成之后需要等待一会操作才有效
                 except NoSuchWindowException:
                     continue
-                # 获取标题
+                # 校验标题
                 title = cls.get_title(driver=driver)
                 if window_title and not re.search(window_title, title):
                     continue
@@ -61,7 +83,7 @@ class ControlWindow:
                 cls.__switch_to_window(driver, target_handles[0])
                 break
             elif not target_handles:
-                logging.warning("指定的窗口数量为空")
+                logging.warning("指定的窗口数量为空，重新查询")
             else:
                 cls.__switch_to_window(driver, target_handles[-1])
                 raise Exception(f"出现多个包含 {window_title} 的目标窗口")
@@ -74,4 +96,4 @@ class ControlWindow:
         """切换到window中"""
         driver.switch_to.window(window_handle)
         # window切换完之后需要等待一小段时间再进行操作，不然可能会出现无法找到元素的情况
-        time.sleep(1)
+        time.sleep(0.5)

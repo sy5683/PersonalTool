@@ -7,15 +7,35 @@ from .selenium_utils.control_browser.control_browser import ControlBrowser
 from .selenium_utils.control_browser.launch_chrome import LaunchChrome
 from .selenium_utils.control_html.control_element import ControlElement
 from .selenium_utils.control_html.control_iframe import ControlIframe
-from .selenium_utils.selenium_config import SeleniumConfig
+from .selenium_utils.control_html.control_window import ControlWindow
 
 
 class SeleniumUtil:
 
     @staticmethod
+    def close_other_window(window_titles: typing.Union[str, typing.List[str]], **kwargs):
+        """关闭其他窗口"""
+        ControlWindow.close_other_window(window_titles, **kwargs)
+
+    @staticmethod
+    def confirm_alert(**kwargs):
+        """确定alert弹窗"""
+        ControlWindow.confirm_alert(**kwargs)
+
+    @staticmethod
+    def click(element_or_xpath: typing.Union[WebElement, str], **kwargs):
+        """模拟点击"""
+        ControlElement.click(element_or_xpath, **kwargs)
+
+    @staticmethod
     def close_browser(**kwargs):
         """关闭浏览器"""
         ControlBrowser.close_browser(**kwargs)
+
+    @staticmethod
+    def exist(xpath: str, **kwargs) -> bool:
+        """查找元素"""
+        return ControlElement.exist(xpath, **kwargs)
 
     @staticmethod
     def find(xpath: str, **kwargs) -> WebElement:
@@ -33,9 +53,9 @@ class SeleniumUtil:
         return ControlBrowser.get_driver(**kwargs)
 
     @staticmethod
-    def input(element_or_xpath: typing.Union[WebElement, str], value: str, need_check: bool, **kwargs):
+    def input(element_or_xpath: typing.Union[WebElement, str], value: str, **kwargs):
         """输入"""
-        ControlElement.input(element_or_xpath, value, need_check, **kwargs)
+        ControlElement.input(element_or_xpath, value, **kwargs)
 
     @staticmethod
     def launch_chrome_debug(debug_port: int = None):
@@ -51,3 +71,8 @@ class SeleniumUtil:
     def switch_iframe(element_or_xpath: typing.Union[WebElement, str] = '', **kwargs):
         """切换iframe"""
         ControlIframe.switch_iframe(element_or_xpath, **kwargs)
+
+    @staticmethod
+    def switch_window(window_title: str, **kwargs):
+        """切换窗口"""
+        ControlWindow.switch_window(window_title, **kwargs)
