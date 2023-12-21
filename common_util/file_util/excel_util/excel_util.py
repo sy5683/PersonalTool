@@ -17,8 +17,8 @@ class ExcelUtil:
         CopyXlsx.copy_sheet(worksheet, copy_worksheet)
 
     @staticmethod
-    def excel_to_images(file_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None) -> typing.List[
-        str]:
+    def excel_to_images(file_path: typing.Union[Path, str],
+                        save_path: typing.Union[Path, str] = None) -> typing.List[str]:
         """excel转图片"""
         return Win32Excel.excel_to_images(str(file_path), save_path)
 
