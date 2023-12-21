@@ -1,5 +1,6 @@
 import logging
 import os
+import time
 import typing
 from pathlib import Path
 
@@ -23,6 +24,7 @@ class Win32Excel:
         workbook.Save()
         workbook.Close()
         app.Application.Quit()
+        time.sleep(0.5)
 
     @staticmethod
     def xls_to_xlsx(excel_path: str, save_path: typing.Union[Path, str]) -> str:
