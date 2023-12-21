@@ -50,4 +50,4 @@ class PackTool:
 
 
 if __name__ == '__main__':
-    PackTool("表头转换器").copy_tool()
+    PackTool("绩效表格生成器").copy_tool()

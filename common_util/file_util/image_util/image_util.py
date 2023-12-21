@@ -36,6 +36,11 @@ class ImageUtil:
         ProcessOpenCVImage.save_image(image, str(image_path))
 
     @staticmethod
+    def screenshot(save_path: typing.Union[Path, str] = None) -> str:
+        """截图"""
+        return ProcessPILImage.screenshot(save_path)
+
+    @staticmethod
     def to_a4_size(image_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None) -> str:
         """将图片转换为A4比例"""
         return ProcessPILImage.to_a4_size(str(image_path), save_path)

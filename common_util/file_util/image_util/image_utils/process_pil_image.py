@@ -1,8 +1,9 @@
 import os
+import tempfile
 import typing
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageGrab
 
 
 class ProcessPILImage:
@@ -33,6 +34,14 @@ class ProcessPILImage:
                 raise TypeError(f"未知的图片模式: {image.mode}")
             save_path = f"{os.path.splitext(image_path)[0]}.jpg" if save_path is None else str(save_path)
             new_image.save(save_path)
+        return save_path
+
+    @staticmethod
+    def screenshot(save_path: typing.Union[Path, str]) -> str:
+        """截图"""
+        image = ImageGrab.grab()
+        save_path = f"{tempfile.mktemp()}.jpg" if save_path is None else str(save_path)
+        image.save(save_path)
         return save_path
 
     @classmethod
