@@ -4,7 +4,8 @@ import traceback
 import typing
 
 from selenium import webdriver
-from selenium.common import InvalidElementStateException, TimeoutException, ElementNotInteractableException
+from selenium.common import InvalidElementStateException, TimeoutException, ElementNotInteractableException, \
+    ElementClickInterceptedException
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
@@ -67,7 +68,10 @@ class ControlElement:
                      ("*" * len(value) if cls.__check_element_is_password(element) else value))
         for _ in range(3):
             # 先点击元素定位
-            element.click()
+            try:
+                element.click()
+            except ElementClickInterceptedException:
+                logging.warning("元素无法点击，请选择正确的元素")
             time.sleep(0.5)
             # 使用selenium自带的clear方法
             try:
