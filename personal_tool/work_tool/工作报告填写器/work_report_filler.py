@@ -1,5 +1,6 @@
 import datetime
 
+from feature.oa.oa_feature import OaFeature
 from feature.work_report.work_report_feature import WorkReportFeature
 
 
@@ -11,8 +12,7 @@ class WorkReportFiller:
     def main(self):
         weekly_report = WorkReportFeature.get_weekly_report(self.target_date)
         for daily_report in weekly_report.daily_reports:
-            print(f"【{daily_report.date}】")
-            print(daily_report.to_report())
+            OaFeature.show_report(daily_report)
 
 
 if __name__ == '__main__':
