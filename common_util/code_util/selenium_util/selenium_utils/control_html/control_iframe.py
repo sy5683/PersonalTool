@@ -28,4 +28,4 @@ class ControlIframe:
             logging.info(f"切换至指定iframe: {element_or_xpath}")
             driver.switch_to.frame(element_or_xpath)
         # iframe切换完之后需要等待一小段时间再进行操作，不然可能会出现无法找到元素的情况
-        time.sleep(1)
+        time.sleep(0.1)

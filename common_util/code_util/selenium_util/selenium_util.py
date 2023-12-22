@@ -53,9 +53,9 @@ class SeleniumUtil:
         return ControlBrowser.get_driver(**kwargs)
 
     @staticmethod
-    def input(element_or_xpath: typing.Union[WebElement, str], value: str, **kwargs):
+    def input(element_or_xpath: typing.Union[WebElement, str], value: typing.Union[float, str], **kwargs):
         """输入"""
-        ControlElement.input(element_or_xpath, value, **kwargs)
+        ControlElement.input(element_or_xpath, str(value), **kwargs)
 
     @staticmethod
     def launch_chrome_debug(debug_port: int = None):
