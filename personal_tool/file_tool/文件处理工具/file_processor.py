@@ -1,4 +1,3 @@
-import logging
 from enum import Enum
 
 from common_util.file_util.file_util.file_util import FileUtil

@@ -3,16 +3,15 @@ import tempfile
 import typing
 from pathlib import Path
 
-import win32api
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 
 from common_util.code_util.import_util.import_util import ImportUtil
 from common_util.code_util.win32_util.win32_util import Win32Util
 from common_util.file_util.word_util.word_util import WordUtil
-from .word_feature import WordFeature
 from .entity.base.experience_base import ProjectExperience, WorkExperience
 from .entity.base.info_base import InfoBase
 from .entity.info.basic_info import BasicInfo
+from .word_feature import WordFeature
 
 
 class ResumeFeature:
