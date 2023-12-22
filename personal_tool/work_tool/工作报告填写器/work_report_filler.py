@@ -10,8 +10,9 @@ class WorkReportFiller:
 
     def main(self):
         weekly_report = WorkReportFeature.get_weekly_report(self.target_date)
-        show_daily_reports = [daily_report.to_report() for daily_report in weekly_report.daily_reports]
-        print("\n\n==============================\n\n".join(show_daily_reports))
+        for daily_report in weekly_report.daily_reports:
+            print(f"【{daily_report.date}】")
+            print(daily_report.to_report())
 
 
 if __name__ == '__main__':

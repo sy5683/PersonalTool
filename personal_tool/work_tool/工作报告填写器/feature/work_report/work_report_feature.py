@@ -21,6 +21,7 @@ class WorkReportFeature:
         target_date = TimeUtil.format_time(target_date, cls._time_format)
         for weekly_report in reversed(cls.get_weekly_reports()):
             if target_date in weekly_report.date_range:
+                weekly_report.set_completion_rates()  # 生成日报的完成率
                 return weekly_report
         raise AttributeError(f"未找到目标日期所在的周报: {target_date}")
 
