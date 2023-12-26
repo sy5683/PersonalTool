@@ -1,7 +1,10 @@
 import copy
+import re
 import typing
 
 import xlrd
+
+from .format_excel_data import FormatExcelData
 
 
 class XlrdExcel:
@@ -54,4 +57,18 @@ class XlrdExcel:
 
     @staticmethod
     def __get_row_values(worksheet: xlrd.sheet.Sheet, row: int) -> typing.List[str]:
-        return [str(row_value).replace("\x00", "").strip() for row_value in worksheet.row_values(row)]
+        row_values = []
+        for col, value in enumerate(worksheet.row_values(row)):
+            # 字符串化数据并去除异常字符与空字符
+            value = str(value).replace("\x00", "").strip()
+            cell = worksheet.cell(row, col)
+            if cell.ctype == 2:  # 数字类型
+                # 去除掉excel数据中数字字符串中".0"结尾的小数
+                value = FormatExcelData.format_int_data(value)
+                if re.search(r"\d+\.\d+e[+-]\d+|\.\d+e[+-]\d+", value):
+                    raise ValueError(f"Excel中有数字被自动转换为科学计数法: {value}")
+            if cell.ctype == 3:  # 日期类型
+                # 将excel中的日期数据转换为标准日期字符串
+                value = FormatExcelData.format_date_data(value, "%Y-%m-%d")
+            row_values.append(value)
+        return row_values
