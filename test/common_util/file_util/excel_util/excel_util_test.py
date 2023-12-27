@@ -10,6 +10,10 @@ class ExcelUtilTestCase(unittest.TestCase):
     def setUp(self):
         self.excel_path = Path(__file__).parent.joinpath("测试.xls")
 
+    def test_excel_to_images(self):
+        images = ExcelUtil.excel_to_images(self.excel_path)
+        ObjectUtil.print_object(images)
+
     def test_format_date_data(self):
         date_data = ExcelUtil.format_date_data("2958465")
         self.assertNotEqual(date_data, None)

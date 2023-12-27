@@ -14,4 +14,5 @@ class ObjectUtil:
     @staticmethod
     def format_object(obj: object) -> object:
         """格式化对象"""
+        # 为了不影响原数据，一定要对对象进行深拷贝
         return ConvertObject.format_object(copy.deepcopy(obj))
