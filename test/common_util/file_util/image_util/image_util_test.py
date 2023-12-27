@@ -27,4 +27,5 @@ class ImageUtilTestCase(unittest.TestCase):
         Win32Util.open_file(image_path)
 
     def test_to_a4_size(self):
-        ImageUtil.to_a4_size(self.image_path)
+        image_path = ImageUtil.to_a4_size(self.image_path)
+        print(image_path)
