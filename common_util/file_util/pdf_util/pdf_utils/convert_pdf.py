@@ -35,8 +35,12 @@ class ConvertPdf:
         """图片转pdf"""
         logging.info("开始将图片转换为pdf文件")
         if save_path is None:
-            save_name = f"{os.path.basename(os.path.dirname(image_paths[0]))}.pdf"
-            save_path = os.path.join(os.path.dirname(image_paths[0]), save_name)
+            image_path = image_paths[0]
+            if len(image_paths) == 1:
+                save_path = f"{os.path.splitext(image_path)[0]}.pdf"
+            else:
+                dir_path = os.path.dirname(image_path)
+                save_path = os.path.join(dir_path, f"{os.path.basename(dir_path)}.pdf")
         else:
             save_path = str(save_path)
         pdf = fitz.open()

@@ -10,6 +10,13 @@ class PdfUtilTestCase(unittest.TestCase):
         self.pdf_path = Path(__file__).parent.joinpath("测试.pdf")
         self.image_path = Path(__file__).parent.joinpath("测试.png")
 
+    def test_get_pdf_tables(self):
+        pdf_tables = PdfUtil.get_pdf_tables(self.pdf_path)
+        table = pdf_tables[0]
+        print(table.max_rows)
+        for row in range(table.max_rows):
+            print(table.get_row_values(row))
+
     def test_pdf_to_images(self):
         image_paths = PdfUtil.pdf_to_images(self.pdf_path)
         for image_path in image_paths:

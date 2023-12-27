@@ -2,9 +2,16 @@ import typing
 from pathlib import Path
 
 from .pdf_utils.convert_pdf import ConvertPdf
+from .pdf_utils.entity.pdf_element import Table
+from .pdf_utils.parser_pdf import ParserPdf
 
 
 class PdfUtil:
+
+    @staticmethod
+    def get_pdf_tables(pdf_path: typing.Union[Path, str]) -> typing.List[Table]:
+        """获取pdf中的表格"""
+        return ParserPdf.get_pdf_tables(str(pdf_path))
 
     @staticmethod
     def pdf_to_images(pdf_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None,
