@@ -56,7 +56,8 @@ class ProcessPILImage:
             new_width = height * printer_width // printer_height
         new_image = cls._create_image((new_width, new_height))
         cls._paste_image_center(new_image, image)
-        save_path = image_path if save_path is None else str(save_path)
+        _image_path, suffix = os.path.splitext(image_path)
+        save_path = f"{_image_path}(A4){suffix}" if save_path is None else str(save_path)
         new_image.save(save_path)
         return save_path
 
