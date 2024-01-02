@@ -1,5 +1,4 @@
 import copy
-import re
 import typing
 
 import xlrd
@@ -65,8 +64,6 @@ class XlrdExcel:
             if cell.ctype == 2:  # 数字类型
                 # 去除掉excel数据中数字字符串中".0"结尾的小数
                 value = FormatExcelData.format_int_data(value)
-                if re.search(r"\d+\.\d+e[+-]\d+|\.\d+e[+-]\d+", value):
-                    raise ValueError(f"Excel中有数字被自动转换为科学计数法: {value}")
             if cell.ctype == 3:  # 日期类型
                 # 将excel中的日期数据转换为标准日期字符串
                 value = FormatExcelData.format_date_data(value, "%Y-%m-%d")

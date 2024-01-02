@@ -5,6 +5,7 @@ from openpyxl.worksheet.worksheet import Worksheet
 
 from .excel_utils.copy_xlsx import CopyXlsx
 from .excel_utils.format_excel_data import FormatExcelData
+from .excel_utils.verify_excel_data import VerifyExcelData
 from .excel_utils.win32_excel import Win32Excel
 from .excel_utils.xlrd_excel import XlrdExcel
 
@@ -42,6 +43,11 @@ class ExcelUtil:
     def re_save_excel(excel_path: typing.Union[Path, str]):
         """重新保存excel"""
         Win32Excel.re_save_excel(str(excel_path))
+
+    @staticmethod
+    def verify_scientific_notation(value: str):
+        """校验科学计数法"""
+        VerifyExcelData.verify_scientific_notation(value)
 
     @staticmethod
     def xls_to_xlsx(excel_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None) -> str:
