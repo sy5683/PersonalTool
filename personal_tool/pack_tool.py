@@ -1,9 +1,11 @@
 import os
+import re
 import shutil
 import tempfile
+import typing
 from pathlib import Path
 
-import win32api
+from common_util.code_util.win32_util.win32_util import Win32Util
 
 
 class PackTool:
@@ -11,20 +13,21 @@ class PackTool:
     def __init__(self, tool_name: str):
         self.tool_name = tool_name
         assert self.tool_name, "工具名称不能为空"
-        self.save_path = tempfile.mkdtemp()
+        self.copy_path = None
 
     def __del__(self):
-        win32api.ShellExecute(0, "open", self.save_path, "", "", 1)
+        Win32Util.open_file(self.__to_copy_path())
 
     def copy_tool(self):
         """复制工具"""
         # 1) 复制工具
-        copy_tool_path = os.path.join(self.save_path, self.tool_name)
-        shutil.copytree(self._get_tool_path(), copy_tool_path)
+        tool_path = self._get_tool_path()
+        shutil.copytree(tool_path, self.__to_copy_path(self.tool_name))
         # 2) 复制组件
-        util_path = self.__to_project_path("common_util")
-        copy_util_path = os.path.join(self.save_path, f"{self.tool_name}\\{util_path.name}")
-        shutil.copytree(util_path, copy_util_path)
+        for relative_util_path in self._get_relative_util_paths(tool_path):
+            util_path = self.__to_project_path(relative_util_path)
+            copy_util_path = self.__to_copy_path(f"{self.tool_name}\\{relative_util_path}")
+            shutil.copytree(util_path, copy_util_path)
 
     def _get_tool_path(self) -> Path:
         """获取工具路径"""
@@ -34,19 +37,38 @@ class PackTool:
             tool_path = next(tool_dir_path.rglob(self.tool_name))
         except StopIteration:
             raise FileExistsError(f"未找到目标工具文件: {self.tool_name}")
-        # 2) 校验获取到的路径
-        # 2.1) 根据命名规则，工具根目录同级不能有py文件
-        if list(tool_path.parent.glob("*.py")):
-            raise FileExistsError(f"文件路径异常，并不为工具根目录: {tool_path}")
-        # 2.2) 根据命名规则，工具根目录子级不能没有py文件
-        if not list(tool_path.glob("*.py")):
+        # 2) 校验获取到的路径。根据命名规则，工具根目录同级不能有py文件，子级不能没有py文件
+        if list(tool_path.parent.glob("*.py")) or not list(tool_path.glob("*.py")):
             raise FileExistsError(f"文件路径异常，并不为工具根目录: {tool_path}")
         return tool_path
+
+    @staticmethod
+    def _get_relative_util_paths(tool_path: Path) -> typing.List[str]:
+        """获取公共组件相对导入路径"""
+        relative_util_paths = []
+        for tool_py_path in tool_path.rglob("*.py"):
+            with open(tool_py_path, "rb") as file:
+                for line in file.readlines():
+                    code = line.decode('utf-8')
+                    if "import" not in code:
+                        continue
+                    module_path = re.findall(r"^from common_util\.(.*?) import", code)
+                    if not module_path:
+                        continue
+                    relative_util_path = "\\".join(["common_util"] + module_path[0].split(".")[:-1])
+                    if relative_util_path not in relative_util_paths:
+                        relative_util_paths.append(relative_util_path)
+        return relative_util_paths
 
     @staticmethod
     def __to_project_path(file_name: str = '') -> Path:
         """获取项目路径"""
         return Path(__file__).parent.parent.joinpath(file_name)
+
+    def __to_copy_path(self, file_name: str = '') -> str:
+        if self.copy_path is None:
+            self.copy_path = tempfile.mkdtemp()
+        return os.path.join(self.copy_path, file_name)
 
 
 if __name__ == '__main__':
