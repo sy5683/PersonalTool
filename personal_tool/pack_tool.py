@@ -52,7 +52,7 @@ class PackTool:
                     code = line.decode('utf-8')
                     if "import" not in code:
                         continue
-                    module_path = re.findall(r"^from common_util\.(.*?) import", code)
+                    module_path = re.findall(r"^from common_util\.(.*?)_util.? import", code)
                     if not module_path:
                         continue
                     relative_util_path = "\\".join(["common_util"] + module_path[0].split(".")[:-1])
