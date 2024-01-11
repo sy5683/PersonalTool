@@ -1,4 +1,5 @@
 import re
+from urllib import parse
 
 
 class ConvertTextual:
@@ -8,6 +9,8 @@ class ConvertTextual:
         """文本解码"""
         if re.match(r"\\u", textual):
             return cls._unicode_to_str(textual)
+        elif re.match(r"\\x", textual):
+            return cls._utf_8_to_str(textual)
         return textual
 
     @staticmethod
@@ -18,3 +21,9 @@ class ConvertTextual:
             code = unicode.replace("\\u", "")
             unicodes = unicodes.replace(unicode, unicode.replace(f"\\u{code}", f"\\u{code.zfill(4)}"))
         return unicodes.encode('utf-8').decode('unicode_escape')
+
+    @staticmethod
+    def _utf_8_to_str(utf_8: str) -> str:
+        """utf-8转字符串"""
+        return parse.unquote(utf_8.replace("\\x", "%"))
+
