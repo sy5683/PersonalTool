@@ -21,9 +21,10 @@ class ConvertTextual:
     @staticmethod
     def _format_textual(textual: typing.Union[bytes, str]) -> str:
         """格式化文本"""
-        # bytes
+        # bytes类型转码为字符串
         if isinstance(textual, bytes):
             textual = textual.decode()
+        # 将文本中的单斜杠统一转换为双斜杠
         return textual.encode("raw_unicode_escape").decode()
 
     @staticmethod
