@@ -1,17 +1,30 @@
 import re
+import typing
 from urllib import parse
 
 
 class ConvertTextual:
 
     @classmethod
-    def textual_decode(cls, textual: str) -> str:
+    def textual_decode(cls, textual: typing.Union[bytes, str]) -> str:
         """文本解码"""
+        # 1) 格式化文本
+        textual = cls._format_textual(textual)
+        # 2) 根据文本类型转码
         if re.match(r"\\u", textual):
             return cls._unicode_to_str(textual)
         elif re.match(r"\\x", textual):
             return cls._utf_8_to_str(textual)
-        return textual
+        else:
+            return textual
+
+    @staticmethod
+    def _format_textual(textual: typing.Union[bytes, str]) -> str:
+        """格式化文本"""
+        # bytes
+        if isinstance(textual, bytes):
+            textual = textual.decode()
+        return textual.encode("raw_unicode_escape").decode()
 
     @staticmethod
     def _unicode_to_str(unicodes: str) -> str:
@@ -26,4 +39,3 @@ class ConvertTextual:
     def _utf_8_to_str(utf_8: str) -> str:
         """utf-8转字符串"""
         return parse.unquote(utf_8.replace("\\x", "%"))
-
