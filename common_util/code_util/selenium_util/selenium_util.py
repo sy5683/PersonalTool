@@ -5,6 +5,7 @@ from selenium.webdriver.remote.webelement import WebElement
 
 from .selenium_utils.control_browser.control_browser import ControlBrowser
 from .selenium_utils.control_browser.launch_chrome import LaunchChrome
+from .selenium_utils.control_html.control_driver import ControlDriver
 from .selenium_utils.control_html.control_element import ControlElement
 from .selenium_utils.control_html.control_iframe import ControlIframe
 from .selenium_utils.control_html.control_window import ControlWindow
@@ -31,6 +32,11 @@ class SeleniumUtil:
     def close_browser(**kwargs):
         """关闭浏览器"""
         ControlBrowser.close_browser(**kwargs)
+
+    @staticmethod
+    def execute_js(js: str, **kwargs):
+        """执行js代码"""
+        ControlDriver.execute_js(js, **kwargs)
 
     @staticmethod
     def exist(xpath: str, **kwargs) -> bool:

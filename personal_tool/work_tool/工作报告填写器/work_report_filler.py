@@ -12,7 +12,8 @@ class WorkReportFiller:
     def main(self):
         weekly_report = WorkReportFeature.get_weekly_report(self.target_date)
         for daily_report in weekly_report.daily_reports:
-            OaFeature.show_report(daily_report)
+            OaFeature.fill_report(daily_report)
+        OaFeature.submit_report()
 
 
 if __name__ == '__main__':

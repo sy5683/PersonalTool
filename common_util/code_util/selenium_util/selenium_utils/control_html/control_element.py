@@ -84,6 +84,9 @@ class ControlElement:
                 element.send_keys(Keys.RIGHT)
                 element.send_keys(Keys.BACK_SPACE)
                 time.sleep(0.1)
+            # 模拟全选
+            element.send_keys(Keys.CONTROL, "a")
+            time.sleep(0.2)
             # 输入元素
             element.send_keys(value)
             # 密码无需判断输入结果

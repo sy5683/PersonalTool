@@ -1,3 +1,5 @@
+import time
+
 from common_util.code_util.selenium_util.selenium_util import SeleniumUtil
 from ..work_report.entity.daily_report import DailyReport
 
@@ -23,13 +25,15 @@ class OaFeature:
         SeleniumUtil.click('//a[text()="填写进度"]')
         SeleniumUtil.switch_iframe()
         SeleniumUtil.switch_iframe('//iframe[@name="t_dialog2"]')
-        # TODO js选择日期
+        SeleniumUtil.input('//input[@id="workDate"]', daily_report.date, uncheck=True)
         SeleniumUtil.input('//input[@id="completionRadio"]', daily_report.completion_rate)
         SeleniumUtil.input('//input[@id="workingHoursNormal"]', 7.5)
         SeleniumUtil.input('//textarea[@id="workContent"]', daily_report.to_report())
+        SeleniumUtil.switch_iframe()
+        SeleniumUtil.click('//input[@type="button" and @value="保存"]')
+        time.sleep(1)  # 防止意外，操作结束后强制等待一秒
 
     @staticmethod
-    def show_report(daily_report: DailyReport):
-        print(f"【{daily_report.date}】")
-        print(daily_report.to_report())
-        print()
+    def submit_report():
+        """提交报告"""
+        SeleniumUtil.click('//input[@type="button" and @value="确定"]')
