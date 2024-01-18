@@ -10,9 +10,9 @@ class ConnectServer:
     def get_connect(cls, host: str, port: int, username: str, password: str, **kwargs) -> ConnectBase:
         """获取服务器连接对象"""
         ip = f"{host}:{port}"
+        sever_type = kwargs.get("sever_type")
         if ip not in cls._connect_map:
             assert all([username, password])
-            sever_type = kwargs.get("sever_type")
             if sever_type == "sftp":
                 connect = FtpConnect(host, port, username, password)
             else:

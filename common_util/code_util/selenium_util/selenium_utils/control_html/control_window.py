@@ -16,8 +16,8 @@ class ControlWindow:
     @classmethod
     def close_other_window(cls, window_titles: typing.Union[str, typing.List[str]], **kwargs):
         """关闭其他窗口"""
-        window_titles = [window_titles] if isinstance(window_titles, str) else window_titles
         driver = kwargs.get("driver", ControlBrowser.get_driver(**kwargs))
+        window_titles = [window_titles] if isinstance(window_titles, str) else window_titles
         for window_handle in driver.window_handles:
             try:
                 cls.__switch_to_window(driver, window_handle)

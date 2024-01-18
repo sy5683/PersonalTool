@@ -63,6 +63,7 @@ class ControlElement:
     @classmethod
     def input(cls, element_or_xpath: typing.Union[WebElement, str], value: str, **kwargs):
         """输入"""
+        uncheck = kwargs.get("uncheck")
         element = cls.__format_element(element_or_xpath, **kwargs)
         logging.info(f"输入元素: {element_or_xpath} 【%s】" %
                      ("*" * len(value) if cls.__check_element_is_password(element) else value))
@@ -93,7 +94,7 @@ class ControlElement:
             if cls.__check_element_is_password(element):
                 break
             # 某些特殊情况无需判断输入结果: 日期格式化、金额会计格式化等
-            if kwargs.get("uncheck"):
+            if uncheck:
                 break
             # 判断输入结果是否正确
             if element.get_attribute("value") == value:
@@ -106,11 +107,11 @@ class ControlElement:
     def __find_with_lambda(find_method, xpath: str, **kwargs) -> typing.Union[WebElement, typing.List[WebElement]]:
         """显性等待查找元素"""
         element: typing.Union[webdriver, WebElement] = kwargs.get("element")
+        wait_seconds = kwargs.get("wait_seconds", SeleniumConfig.wait_seconds)
         if element is None:
             element = kwargs.get("driver", ControlBrowser.get_driver(**kwargs))
         if isinstance(element, WebElement):
             assert xpath.startswith("./"), f"WebElement的查询xpath需要以./开头: {xpath}"
-        wait_seconds = kwargs.get("wait_seconds", SeleniumConfig.wait_seconds)
         # 注！查询间隔为一秒时，这个方法无法检测等待时间为1秒的元素（检测次数为1，即即时检测，而不是预计的等待一秒后报错，因此这里将间隔时间修改为0.3s）
         return WebDriverWait(element, wait_seconds, 0.3).until(find_method)
 

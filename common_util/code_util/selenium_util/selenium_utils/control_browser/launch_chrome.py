@@ -63,6 +63,7 @@ class LaunchChrome(LaunchBase):
     def close_browser(cls, **kwargs):
         """关闭谷歌浏览器"""
         driver = kwargs.get("driver")
+        close_task = kwargs.get("close_task")
         if driver is None:
             debug_port = cls.__format_debug_port(**kwargs)
             if debug_port is None:
@@ -75,7 +76,7 @@ class LaunchChrome(LaunchBase):
         driver.quit()
         time.sleep(1)
         # 2) 因为经常出现quit之后cmd窗口未关的情况，因此这里使用命令行直接关闭进程
-        if kwargs.get("close_task"):
+        if close_task:
             os.system(f"taskkill /f /im {os.path.basename(DownloadDriver.get_chrome_driver_path())}")
         # 3) 如果控制debug接管的浏览器，使用driver.quit()仅会关闭selenium，因此需要将端口也进行处理
         debug_port = cls.__format_debug_port(**kwargs)
@@ -94,9 +95,10 @@ class LaunchChrome(LaunchBase):
     @classmethod
     def _launch_chrome(cls, **kwargs) -> WebDriver:
         """启动谷歌浏览器"""
+        use_user_data = kwargs.get("use_user_data", True)
         logging.info("启动谷歌浏览器")
         try:
-            assert kwargs.get("use_user_data", True)
+            assert use_user_data
             # 1.1) 获取谷歌浏览器用户缓存路径
             user_data_dir = cls._get_chrome_user_data_path()
             # 1.2) 获取driver

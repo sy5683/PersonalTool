@@ -7,4 +7,4 @@ class ServerUtil:
     @staticmethod
     def get_connect(host: str, port: int, username: str = None, password: str = None, **kwargs) -> ConnectBase:
         """获取服务器连接对象"""
-        return ConnectServer.get_connect(host, port, username, password)
+        return ConnectServer.get_connect(host, port, username, password, **kwargs)
