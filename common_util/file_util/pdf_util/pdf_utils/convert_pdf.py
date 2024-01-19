@@ -20,11 +20,13 @@ class ConvertPdf:
             os.mkdir(save_path)
         image_paths = []
         pdf = fitz.open(pdf_path)
+        pdf_size = Path(pdf_path).stat().st_size / 1024 / 1024
         for index in range(pdf.page_count):
             pdf_page = pdf[index]
             image_name = f"{str(index).zfill(len(str(pdf.page_count)))}.%s" % re.sub(r"^\.+", "", suffix)
             image_path = os.path.join(save_path, image_name)
-            cls._page_to_image(pdf_page, image_path)
+            zoom = round(pdf_size / pdf.page_count * 8)
+            cls._page_to_image(pdf_page, image_path, zoom=zoom)
             image_paths.append(image_path)
         pdf.close()
         logging.info(f"成功将pdf文件转换为图片: {save_path}")
