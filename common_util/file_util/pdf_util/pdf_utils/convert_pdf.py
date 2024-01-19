@@ -6,6 +6,7 @@ import typing
 from pathlib import Path
 
 import fitz
+from PIL import Image
 
 
 class ConvertPdf:
@@ -20,12 +21,11 @@ class ConvertPdf:
             os.mkdir(save_path)
         image_paths = []
         pdf = fitz.open(pdf_path)
-        zoom = round(Path(pdf_path).stat().st_size / 1024 / 1024 / pdf.page_count * 8)
         for index in range(pdf.page_count):
             pdf_page = pdf[index]
             image_name = f"{str(index).zfill(len(str(pdf.page_count)))}.%s" % re.sub(r"^\.+", "", suffix)
             image_path = os.path.join(save_path, image_name)
-            cls._page_to_image(pdf_page, image_path, zoom=zoom)
+            cls._page_to_image(pdf_page, image_path)
             image_paths.append(image_path)
         pdf.close()
         logging.info(f"成功将pdf文件转换为图片: {save_path}")
@@ -60,10 +60,9 @@ class ConvertPdf:
         return save_path
 
     @staticmethod
-    def _page_to_image(page, image_path: str, zoom: float = 2.0, rotate: float = 0.0):
+    def _page_to_image(page, image_path: str, dpi: int = 320, rotate: float = 0.0):
         """页面转图片"""
-        # zoom为缩放倍率，倍率为1的话，转换的图片会非常模糊，因此倍率最好从2往上加
-        trans = fitz.Matrix(zoom, zoom).prerotate(rotate)
+        trans = fitz.Matrix(dpi / 72, dpi / 72).prerotate(rotate)
         image = page.get_pixmap(matrix=trans, alpha=False)
-        # PyMuPdf在1.19.0之后的版本中修改了保存图片的方法，不再使用writePNG
-        image.save(image_path)
+        pil_image = Image.frombytes("RGB", (image.width, image.height), image.samples)
+        pil_image.save(image_path, dpi=(dpi, dpi), format='PNG')
