@@ -65,6 +65,26 @@ class Win32Visual:
             logging.warning(e)
         time.sleep(1)
 
+    @classmethod
+    def upload(cls, file_path: str, wait_seconds: int):
+        """上传文件"""
+        # 一级窗口
+        dialog = cls.find_handle("#32770", "打开", wait_seconds)
+        # 二级窗口
+        combobox_ex32 = win32gui.FindWindowEx(dialog, 0, 'Comboboxex32', None)
+        # 三级窗口
+        combobox = win32gui.FindWindowEx(combobox_ex32, 0, 'Combobox', None)
+        # 四级窗口-文件路经输入框
+        edit = win32gui.FindWindowEx(combobox, 0, 'Edit', None)
+        # 二级窗口-打开按钮
+        button = win32gui.FindWindowEx(dialog, 0, "Button", "打开(&0)")
+        time.sleep(1)  # 切换完窗口之后需要稍微等待一下
+        # 操作-发送文件路经
+        win32gui.SendMessage(edit, win32con.WM_SETTEXT, None, file_path)
+        time.sleep(1)  # 演示等待一秒
+        # 点击打开按钮
+        win32gui.SendMessage(dialog, win32con.WM_COMMAND, 1, button)
+
     @staticmethod
     def _find_handles(class_name: str, title: str) -> typing.List[int]:
         """查找窗口句柄列表"""

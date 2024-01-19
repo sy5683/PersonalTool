@@ -28,6 +28,11 @@ class Win32Util:
         Win32Visual.show_window(handle, need_admin_right)
 
     @staticmethod
+    def upload(file_path: typing.Union[Path, str], wait_seconds: int):
+        """上传文件"""
+        Win32Visual.upload(str(file_path), wait_seconds)
+
+    @staticmethod
     def wait_handle_disappear(class_name: str = None, title: str = None, wait_seconds: int = 120) -> bool:
         """等待窗口消失"""
         return Win32Visual.wait_handle_disappear(class_name, title, wait_seconds)
