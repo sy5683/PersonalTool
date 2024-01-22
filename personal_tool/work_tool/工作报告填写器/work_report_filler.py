@@ -10,6 +10,8 @@ class WorkReportFiller:
         self.target_date = target_date
 
     def main(self):
+        OaFeature.login_oa()
+        OaFeature.switch_in_report_page()
         weekly_report = WorkReportFeature.get_weekly_report(self.target_date)
         for daily_report in weekly_report.daily_reports:
             OaFeature.fill_report(daily_report)
