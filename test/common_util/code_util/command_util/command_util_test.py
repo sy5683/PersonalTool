@@ -10,5 +10,5 @@ class CommandUtilTestCase(unittest.TestCase):
         self.assertNotEqual(result, None)
         print(result)
 
-    def test_pip_install(self):
-        self.assertEqual(CommandUtil.pip_install(""), None)
+    def test_install_python_package(self):
+        self.assertEqual(CommandUtil.install_python_package(""), None)

@@ -1,11 +1,11 @@
 import os
 
 
-class CmdUtil:
+class OsCmd:
 
     @staticmethod
-    def pip_install(requirement_name: str, requirement_version: str, timeout: int):
-        """安装python依赖"""
+    def install_python_package(requirement_name: str, requirement_version: str, timeout: int):
+        """安装python库"""
         cmd_code = f"pip install --default-timeout={timeout}"
         cmd_code += " -i https://pypi.tuna.tsinghua.edu.cn/simple"
         cmd_code += f" {requirement_name}"

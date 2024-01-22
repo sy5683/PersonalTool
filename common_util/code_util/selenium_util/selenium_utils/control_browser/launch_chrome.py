@@ -214,10 +214,7 @@ class LaunchChrome(LaunchBase):
         """判断debug端口是否正在运行"""
         # noinspection PyBroadException
         try:
-            if sys.platform == "win32":
-                cmd = f'netstat -ano | findstr "{debug_port}" | findstr "LISTEN"'
-            else:
-                cmd = f'netstat -ano | grep {debug_port} | grep LISTEN'
+            cmd = f'netstat -ano | findstr "{debug_port}" | findstr "LISTEN"'
             with subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                   stderr=subprocess.PIPE, encoding='gbk') as p:
                 return str(debug_port) in p.stdout.read()

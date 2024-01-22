@@ -1,7 +1,7 @@
 import psutil
 
 
-class PsutilUtil:
+class PsutilProcess:
 
     @staticmethod
     def check_process_running(process_name: str) -> bool:

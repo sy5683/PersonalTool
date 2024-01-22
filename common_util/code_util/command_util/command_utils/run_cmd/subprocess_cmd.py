@@ -2,16 +2,10 @@ import subprocess
 import sys
 
 
-class SubprocessUtil:
+class SubprocessCmd:
 
     @classmethod
-    def check_process_running(cls, process_name: str) -> bool:
-        """判断程序是否运行"""
-        result = cls._run_cmd_and_get_result(f'tasklist /fi "imagename eq {process_name}"')
-        return process_name in result
-
-    @classmethod
-    def netstat_port(cls, port: int) -> bool:
+    def check_port_running(cls, port: int) -> bool:
         """判断端口是否正在运行"""
         if sys.platform == "win32":
             cmd = f'netstat -ano | findstr "{port}" | findstr "LISTEN"'
@@ -19,6 +13,12 @@ class SubprocessUtil:
             cmd = f'netstat -ano | grep {port} | grep LISTEN'
         result = cls._run_cmd_and_get_result(cmd)
         return str(port) in result
+
+    @classmethod
+    def check_process_running(cls, process_name: str) -> bool:
+        """判断程序是否正在运行"""
+        result = cls._run_cmd_and_get_result(f'tasklist /fi "imagename eq {process_name}"')
+        return process_name in result
 
     @staticmethod
     def _run_cmd_and_get_result(cmd: str) -> str:
