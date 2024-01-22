@@ -10,6 +10,3 @@ class OaFeatureTestCase(unittest.TestCase):
 
     def test_switch_in_report_page(self):
         self.assertEqual(OaFeature.switch_in_report_page(), None)
-
-    def test_submit_report(self):
-        self.assertEqual(OaFeature.submit_report(), None)

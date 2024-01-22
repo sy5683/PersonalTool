@@ -1,4 +1,5 @@
 import time
+import typing
 
 from selenium.common import TimeoutException
 
@@ -33,21 +34,19 @@ class OaFeature:
         SeleniumUtil.click('//span[@class="spanhide" and text()="项目个人任务"]')
 
     @staticmethod
-    def fill_report(daily_report: DailyReport):
+    def fill_report(daily_reports: typing.List[DailyReport]):
         """填写报告"""
-        SeleniumUtil.switch_iframe('//iframe[@class="J_iframe  mainShow"]')
-        SeleniumUtil.click('//a[text()="填写进度"]')
-        SeleniumUtil.switch_iframe()
-        SeleniumUtil.switch_iframe('//iframe[@name="t_dialog2"]')
-        SeleniumUtil.input('//input[@id="workDate"]', daily_report.date, uncheck=True)
-        SeleniumUtil.input('//input[@id="completionRadio"]', daily_report.completion_rate)
-        SeleniumUtil.input('//input[@id="workingHoursNormal"]', 7.5)
-        SeleniumUtil.input('//textarea[@id="workContent"]', daily_report.to_report())
-        SeleniumUtil.switch_iframe()
-        SeleniumUtil.click('//input[@type="button" and @value="保存"]')
-        time.sleep(1)  # 防止意外，操作结束后强制等待一秒
-
-    @staticmethod
-    def submit_report():
-        """提交报告"""
+        for daily_report in daily_reports:
+            SeleniumUtil.switch_iframe('//iframe[@class="J_iframe  mainShow"]')
+            SeleniumUtil.click('//a[text()="填写进度"]')
+            SeleniumUtil.switch_iframe()
+            SeleniumUtil.switch_iframe('//iframe[@name="t_dialog2"]')
+            SeleniumUtil.input('//input[@id="workDate"]', daily_report.date, uncheck=True)
+            SeleniumUtil.input('//input[@id="completionRadio"]', daily_report.completion_rate)
+            SeleniumUtil.input('//input[@id="workingHoursNormal"]', 7.5)
+            SeleniumUtil.input('//textarea[@id="workContent"]', daily_report.to_report())
+            SeleniumUtil.switch_iframe()
+            SeleniumUtil.click('//input[@type="button" and @value="保存"]')
+            time.sleep(1)  # 防止意外，操作结束后强制等待一秒
+        # 提交报告
         SeleniumUtil.click('//input[@type="button" and @value="确定"]')

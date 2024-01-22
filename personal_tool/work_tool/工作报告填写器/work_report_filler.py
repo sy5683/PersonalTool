@@ -10,12 +10,14 @@ class WorkReportFiller:
         self.target_date = target_date
 
     def main(self):
+        # 1) 登录OA
         OaFeature.login_oa()
+        # 2) 切换至日报界面
         OaFeature.switch_in_report_page()
+        # 3) 获取周报
         weekly_report = WorkReportFeature.get_weekly_report(self.target_date)
-        for daily_report in weekly_report.daily_reports:
-            OaFeature.fill_report(daily_report)
-        OaFeature.submit_report()
+        # 4) 填写工作报告
+        OaFeature.fill_report(weekly_report.daily_reports)
 
 
 if __name__ == '__main__':
