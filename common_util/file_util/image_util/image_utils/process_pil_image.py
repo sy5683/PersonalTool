@@ -42,6 +42,7 @@ class ProcessPILImage:
         image = ImageGrab.grab()
         save_path = f"{tempfile.mktemp()}.jpg" if save_path is None else str(save_path)
         image.save(save_path)
+        image.close()  # 关闭流
         return save_path
 
     @classmethod
