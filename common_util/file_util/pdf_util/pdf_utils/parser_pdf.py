@@ -1,3 +1,5 @@
+import copy
+import re
 import typing
 
 import cv2
@@ -11,25 +13,50 @@ class ParserPdf:
     """解析pdf"""
 
     @classmethod
+    def get_pdf_key_values(cls, pdf_path: str, threshold_x: int) -> typing.List[dict]:
+        """获取pdf中的键值对"""
+        pdf_key_values = []
+        pattern = re.compile(r"[:：]")
+        for pdf_word in cls.get_pdf_words(pdf_path, threshold_x):
+            if not pattern.search(pdf_word.text):
+                continue
+            split_words = [each.strip() for each in pattern.split(pdf_word.text)]
+            if len(split_words) != 2:
+                continue
+            pdf_key_values.append({split_words[0]: split_words[1]})
+        return pdf_key_values
+
+    @classmethod
     def get_pdf_tables(cls, pdf_path: str) -> typing.List[Table]:
         """获取pdf中的表格"""
         pdf_tables = []
-        pdf = fitz.open(pdf_path)
-        for index in range(pdf.page_count):
-            pdf_page = pdf[index]
-            # 获取表格图像
-            table_image = cls._get_table_image(pdf_page)
-            # 获取表格列表
-            tables = cls._get_tables(table_image)
-            # 获取pdf文字
-            words = cls._get_words(pdf_page)
-            # 获取表格单元格列表
-            cells = cls._get_table_cells(table_image, words)
-            # 将单元格合并至表格中
-            cls._group_table_cells(tables, cells)
-            pdf_tables += tables
-        pdf.close()
+        with fitz.open(pdf_path) as pdf:
+            for index in range(pdf.page_count):
+                pdf_page = pdf[index]
+                # 获取表格图像
+                table_image = cls._get_table_image(pdf_page)
+                # 获取表格列表
+                tables = cls._get_tables(table_image)
+                # 获取pdf文字
+                words = cls._get_words(pdf_page)
+                # 获取表格单元格列表
+                cells = cls._get_table_cells(table_image, words)
+                # 将单元格合并至表格中
+                cls._group_table_cells(tables, cells)
+                pdf_tables += tables
         return pdf_tables
+    @classmethod
+    def get_pdf_words(cls, pdf_path: str, threshold_x: int) -> typing.List[Word]:
+        """获取pdf中的文字"""
+        pdf_words = []
+        with fitz.open(pdf_path) as pdf:
+            for index in range(pdf.page_count):
+                pdf_page = pdf[index]
+                # 获取pdf文字
+                words = cls._get_words(pdf_page)
+                # 合并相近文字
+                pdf_words += cls._merge_words(words, threshold_x)
+        return pdf_words
 
     @classmethod
     def _get_table_image(cls, page: fitz.Page) -> numpy.ndarray:
@@ -127,6 +154,27 @@ class ParserPdf:
             for cell in cells:
                 cell.col = xs.index(cell.rect[0])
                 cell.row = ys.index(cell.rect[1])
+
+    @staticmethod
+    def _merge_words(words: typing.List[Word], threshold_x: int = 1) -> typing.List[Word]:
+        """合并相近的文字"""
+        new_words = []
+        for index, word in enumerate(copy.deepcopy(words)):
+            # 第一条数据
+            if not index:
+                new_words.append(word)
+                continue
+            # 单个词语的坐标信息
+            x1, y1, x2, y2 = word.rect
+            last_word = new_words[-1]
+            x_min, y_min, x_max, y_max = last_word.rect
+            if y1 < y_max and x1 - x_max < threshold_x:
+                x_min, y_min, x_max, y_max = min(x_min, x1), min(y_min, y1), max(x_max, x2), max(y_max, y2)
+                last_word.rect = (x_min, y_min, x_max, y_max)
+                last_word.text += f"\n{word.text}"  # 使用\n来做为分隔符，表示这个词语是两个文字合并的
+            else:  # 新的一行
+                new_words.append(word)
+        return new_words
 
     @staticmethod
     def __check_inside(point: typing.Tuple[float, float], rect: typing.Tuple[float, float, float, float]):
