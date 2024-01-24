@@ -45,6 +45,7 @@ class ParserPdf:
                 cls._group_table_cells(tables, cells)
                 pdf_tables += tables
         return pdf_tables
+
     @classmethod
     def get_pdf_words(cls, pdf_path: str, threshold_x: int) -> typing.List[Word]:
         """获取pdf中的文字"""
@@ -55,7 +56,7 @@ class ParserPdf:
                 # 获取pdf文字
                 words = cls._get_words(pdf_page)
                 # 合并相近文字
-                pdf_words += cls._merge_words(words, threshold_x)
+                pdf_words += cls.__merge_words(words, threshold_x)
         return pdf_words
 
     @classmethod
@@ -156,7 +157,12 @@ class ParserPdf:
                 cell.row = ys.index(cell.rect[1])
 
     @staticmethod
-    def _merge_words(words: typing.List[Word], threshold_x: int = 1) -> typing.List[Word]:
+    def __check_inside(point: typing.Tuple[float, float], rect: typing.Tuple[float, float, float, float]):
+        """判断点是否在框内"""
+        return rect[0] <= point[0] <= rect[2] and rect[1] <= point[1] <= rect[3]
+
+    @staticmethod
+    def __merge_words(words: typing.List[Word], threshold_x: int = 1) -> typing.List[Word]:
         """合并相近的文字"""
         new_words = []
         for index, word in enumerate(copy.deepcopy(words)):
@@ -168,6 +174,7 @@ class ParserPdf:
             x1, y1, x2, y2 = word.rect
             last_word = new_words[-1]
             x_min, y_min, x_max, y_max = last_word.rect
+            # 根据坐标判断是否需要合并
             if y1 < y_max and x1 - x_max < threshold_x:
                 x_min, y_min, x_max, y_max = min(x_min, x1), min(y_min, y1), max(x_max, x2), max(y_max, y2)
                 last_word.rect = (x_min, y_min, x_max, y_max)
@@ -175,11 +182,6 @@ class ParserPdf:
             else:  # 新的一行
                 new_words.append(word)
         return new_words
-
-    @staticmethod
-    def __check_inside(point: typing.Tuple[float, float], rect: typing.Tuple[float, float, float, float]):
-        """判断点是否在框内"""
-        return rect[0] <= point[0] <= rect[2] and rect[1] <= point[1] <= rect[3]
 
     @staticmethod
     def __sort_pdf_element(pdf_elements: typing.List[typing.Union[Cell, Word, Table]]):
