@@ -1,7 +1,6 @@
 import unittest
 from pathlib import Path
 
-from common_util.data_util.object_util.object_util import ObjectUtil
 from common_util.file_util.pdf_util.pdf_util import PdfUtil
 
 
@@ -11,21 +10,27 @@ class PdfUtilTestCase(unittest.TestCase):
         self.pdf_path = Path(__file__).parent.joinpath("水土保持.pdf")
         self.image_path = Path(__file__).parent.joinpath("测试.png")
 
-    def test_get_pdf_key_values(self):
-        pdf_key_values = PdfUtil.get_pdf_key_values(self.pdf_path, 20)
-        ObjectUtil.print_object(pdf_key_values)
+    def test_get_pdf_profiles(self):
+        pdf_profiles = PdfUtil.get_pdf_profiles(self.pdf_path, 20)
+        for pdf_profile in pdf_profiles:
+            for table in pdf_profile.tables:
+                for row in range(table.max_rows):
+                    print(table.get_row_values(row))
+            print()
+            for pdf_word in pdf_profile.words:
+                print(pdf_word.text)
+            print()
 
     def test_get_pdf_words(self):
         pdf_words = PdfUtil.get_pdf_words(self.pdf_path, 20)
         for pdf_word in pdf_words:
-            print([pdf_word.text])
+            print(pdf_word.text)
 
     def test_get_pdf_tables(self):
         pdf_tables = PdfUtil.get_pdf_tables(self.pdf_path)
-        table = pdf_tables[0]
-        print(table.max_rows)
-        for row in range(table.max_rows):
-            print(table.get_row_values(row))
+        for table in pdf_tables:
+            for row in range(table.max_rows):
+                print(table.get_row_values(row))
 
     def test_pdf_to_images(self):
         image_paths = PdfUtil.pdf_to_images(self.pdf_path)

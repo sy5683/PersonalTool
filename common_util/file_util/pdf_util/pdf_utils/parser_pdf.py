@@ -1,5 +1,4 @@
 import copy
-import re
 import typing
 
 import cv2
@@ -7,57 +6,86 @@ import fitz
 import numpy
 
 from .entity.pdf_element import Cell, Table, Word
+from .entity.pdf_profile import PdfProfile
 
 
 class ParserPdf:
     """解析pdf"""
 
     @classmethod
-    def get_pdf_key_values(cls, pdf_path: str, threshold_x: int) -> typing.List[dict]:
-        """获取pdf中的键值对"""
-        pdf_key_values = []
-        pattern = re.compile(r"[:：]")
-        for pdf_word in cls.get_pdf_words(pdf_path, threshold_x):
-            if not pattern.search(pdf_word.text):
-                continue
-            split_words = [each.strip() for each in pattern.split(pdf_word.text)]
-            if len(split_words) != 2:
-                continue
-            pdf_key_values.append({split_words[0]: split_words[1]})
-        return pdf_key_values
+    def get_pdf_profiles(cls, pdf_path: str, threshold_x: int) -> typing.List[PdfProfile]:
+        """获取pdf内容"""
+        pdf_profiles = []
+        with fitz.open(pdf_path) as pdf:
+            for index in range(pdf.page_count):
+                pdf_profile = PdfProfile()
+                pdf_page = pdf[index]
+                # 1.1) 获取pdf文字
+                words = cls._get_words(pdf_page)
+                # 1.2) 获取表格图像
+                table_image = cls._get_table_image(pdf_page)
+                # 1.3) 获取表格列表
+                tables = cls._get_tables(table_image)
+                # 2.1) 获取表格单元格列表
+                cells = cls._get_table_cells(table_image, words)
+                # 2.2) 将单元格合并至表格中
+                cls._group_table_cells(tables, cells)
+                pdf_profile.tables += tables
+                # 3.1) 合并相近文字
+                words = cls.__merge_words(words, threshold_x)
+                # 3.2) 过滤表格中的文字
+                pdf_profile.words += cls._filter_word_in_table(tables, words)
+                pdf_profiles.append(pdf_profile)
+        return pdf_profiles
 
     @classmethod
     def get_pdf_tables(cls, pdf_path: str) -> typing.List[Table]:
         """获取pdf中的表格"""
         pdf_tables = []
-        with fitz.open(pdf_path) as pdf:
-            for index in range(pdf.page_count):
-                pdf_page = pdf[index]
-                # 获取表格图像
-                table_image = cls._get_table_image(pdf_page)
-                # 获取表格列表
-                tables = cls._get_tables(table_image)
-                # 获取pdf文字
-                words = cls._get_words(pdf_page)
-                # 获取表格单元格列表
-                cells = cls._get_table_cells(table_image, words)
-                # 将单元格合并至表格中
-                cls._group_table_cells(tables, cells)
-                pdf_tables += tables
+        # 因为表格是根据边框对数据进行分类合并的，因此无需考虑合并文字的操作，这个阈值随便写一个值就行
+        for pdf_profile in cls.get_pdf_profiles(pdf_path, 1):
+            pdf_tables += pdf_profile.tables
         return pdf_tables
 
     @classmethod
     def get_pdf_words(cls, pdf_path: str, threshold_x: int) -> typing.List[Word]:
         """获取pdf中的文字"""
         pdf_words = []
-        with fitz.open(pdf_path) as pdf:
-            for index in range(pdf.page_count):
-                pdf_page = pdf[index]
-                # 获取pdf文字
-                words = cls._get_words(pdf_page)
-                # 合并相近文字
-                pdf_words += cls.__merge_words(words, threshold_x)
+        for pdf_profile in cls.get_pdf_profiles(pdf_path, threshold_x):
+            pdf_words += pdf_profile.words
         return pdf_words
+
+    @classmethod
+    def _filter_word_in_table(cls, tables: typing.List[Table], words: typing.List[Word]) -> typing.List[Word]:
+        """过滤在表格中的文字"""
+
+        def __check_word_in_tables(w: Word):
+            for table in tables:
+                if cls.__check_inside(w.get_center(), table.rect):
+                    return True
+            return False
+
+        filter_words = []
+        for word in words:
+            if not __check_word_in_tables(word):
+                filter_words.append(word)
+        return filter_words
+
+    @classmethod
+    def _get_table_cells(cls, table_image: numpy.ndarray, words: typing.List[Word]):
+        """根据轮廓，获取表格单元格列表"""
+        # 查找相应的轮廓，得到每个表格cell的矩形框
+        cells = []
+        contours, hierarchy = cv2.findContours(table_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        for contour in contours[::-1]:
+            r = cv2.boundingRect(contour)
+            cell = Cell((r[0], r[1], r[0] + r[2], r[1] + r[3]))
+            for word in words:
+                if cls.__check_inside(word.get_center(), cell.rect):
+                    cell.words.append(word)
+            cells.append(cell)
+        # 根据左上角坐标排序，从上至下，从左至右
+        return cls.__sort_pdf_element(cells)
 
     @classmethod
     def _get_table_image(cls, page: fitz.Page) -> numpy.ndarray:
@@ -125,22 +153,6 @@ class ParserPdf:
         return sorted(words, key=lambda x: (x.rect[1], x.rect[0]))
 
     @classmethod
-    def _get_table_cells(cls, table_image: numpy.ndarray, words: typing.List[Word]):
-        """根据轮廓，获取表格单元格列表"""
-        # 查找相应的轮廓，得到每个表格cell的矩形框
-        cells = []
-        contours, hierarchy = cv2.findContours(table_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        for contour in contours[::-1]:
-            r = cv2.boundingRect(contour)
-            cell = Cell((r[0], r[1], r[0] + r[2], r[1] + r[3]))
-            for word in words:
-                if cls.__check_inside(word.get_center(), cell.rect):
-                    cell.words.append(word)
-            cells.append(cell)
-        # 根据左上角坐标排序，从上至下，从左至右
-        return cls.__sort_pdf_element(cells)
-
-    @classmethod
     def _group_table_cells(cls, tables: typing.List[Table], cells: typing.List[Cell]):
         """分组表格单元格"""
         for table in tables:
@@ -162,7 +174,7 @@ class ParserPdf:
         return rect[0] <= point[0] <= rect[2] and rect[1] <= point[1] <= rect[3]
 
     @staticmethod
-    def __merge_words(words: typing.List[Word], threshold_x: int = 1) -> typing.List[Word]:
+    def __merge_words(words: typing.List[Word], threshold_x: int) -> typing.List[Word]:
         """合并相近的文字"""
         new_words = []
         for index, word in enumerate(copy.deepcopy(words)):
@@ -178,7 +190,7 @@ class ParserPdf:
             if y1 < y_max and x1 - x_max < threshold_x:
                 x_min, y_min, x_max, y_max = min(x_min, x1), min(y_min, y1), max(x_max, x2), max(y_max, y2)
                 last_word.rect = (x_min, y_min, x_max, y_max)
-                last_word.text += f"\n{word.text}"  # 使用\n来做为分隔符，表示这个词语是两个文字合并的
+                last_word.text += word.text
             else:  # 新的一行
                 new_words.append(word)
         return new_words
