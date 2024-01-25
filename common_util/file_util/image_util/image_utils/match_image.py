@@ -6,12 +6,9 @@ from pathlib import Path
 
 import cv2
 import numpy
-import win32con
-import win32gui
-import win32print
-import win32ui
 
 from .process_opencv_image import ProcessOpenCVImage
+from .screenshot import Screenshot
 
 
 class MatchImage:
@@ -49,7 +46,7 @@ class MatchImage:
         handle = kwargs.get("handle")
         cut_item = kwargs.get("cut_item", ((0, 0), (1, 1)))
         # 1) 获取桌面图片
-        image = cls.__get_desktop_image()
+        image = Screenshot.screenshot()[0]  # TODO
         # 2) 如果需要获取窗口图片，则获取窗口坐标，再从桌面图片中截取
         if handle:
             left, top, right, bottom = cls.__get_window_rect(handle)
@@ -58,16 +55,6 @@ class MatchImage:
         if cut_item != ((0, 0), (1, 1)):
             image = cls.__cut_image(image, cut_item)
         return image
-
-    @classmethod
-    def __get_desktop_image(cls) -> numpy.ndarray:
-        """获取桌面图片"""
-        desktop_handle = win32gui.GetDesktopWindow()
-        dc = win32gui.GetDC(0)
-        width = win32print.GetDeviceCaps(dc, win32con.DESKTOPHORZRES)
-        height = win32print.GetDeviceCaps(dc, win32con.DESKTOPVERTRES)
-        win32gui.DeleteDC(dc)
-        return cls.__get_image(desktop_handle, width, height)
 
     @staticmethod
     def __cut_image(image: numpy.ndarray,
@@ -79,27 +66,6 @@ class MatchImage:
         right = int(width * (1 - cut_item[1][0]))
         bottom = int(height * (1 - cut_item[1][1]))
         return image[top:bottom, left:right]
-
-    @staticmethod
-    def __get_image(handle: int, width: int, height: int) -> numpy.ndarray:
-        """获取图片"""
-        window_dc = win32gui.GetWindowDC(handle)
-        mfc_dc = win32ui.CreateDCFromHandle(window_dc)
-        save_dc = mfc_dc.CreateCompatibleDC()
-        save_bitmap = win32ui.CreateBitmap()
-        save_bitmap.CreateCompatibleBitmap(mfc_dc, width, height)
-        save_dc.SelectObject(save_bitmap)
-        try:
-            save_dc.BitBlt((0, 0), (width, height), mfc_dc, (0, 0), win32con.SRCCOPY)
-            signed_ints_array = save_bitmap.GetBitmapBits(True)
-            image = numpy.frombuffer(signed_ints_array, dtype='uint8')
-            image.shape = (height, width, 4)
-            return image
-        finally:
-            win32gui.DeleteObject(save_bitmap.GetHandle())
-            mfc_dc.DeleteDC()
-            save_dc.DeleteDC()
-            win32gui.ReleaseDC(handle, window_dc)
 
     @staticmethod
     def __get_window_rect(handle: int) -> typing.Tuple[int, int, int, int]:
