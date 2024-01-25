@@ -9,6 +9,7 @@ class ImageUtilTestCase(unittest.TestCase):
 
     def setUp(self):
         self.image_path = Path(__file__).parent.joinpath("测试.png")
+        self.template_image_path = Path(__file__).parent.joinpath("测试模板.bmp")
 
     def test_convert_to_jpg_by_opencv(self):
         jpg_path = ImageUtil.convert_to_jpg_by_opencv(self.image_path)
@@ -17,6 +18,11 @@ class ImageUtilTestCase(unittest.TestCase):
     def test_convert_to_jpg_by_pil(self):
         jpg_path = ImageUtil.convert_to_jpg_by_pil(self.image_path)
         print(jpg_path)
+
+    def test_get_image_pos(self):
+        handle = Win32Util.find_handle("SunAwtFrame", "PersonalTool – image_util_test.py")
+        x, y = ImageUtil.get_image_pos(self.template_image_path, handle=handle)
+        print(x, y)
 
     def test_remove_border(self):
         ImageUtil.remove_border(self.image_path)

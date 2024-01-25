@@ -3,6 +3,7 @@ from pathlib import Path
 
 import numpy
 
+from .image_utils.match_image import MatchImage
 from .image_utils.process_opencv_image import ProcessOpenCVImage
 from .image_utils.process_pil_image import ProcessPILImage
 
@@ -18,6 +19,11 @@ class ImageUtil:
     def convert_to_jpg_by_pil(image_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None) -> str:
         """通过pil将图片转换为jpg图片"""
         return ProcessPILImage.convert_to_jpg(str(image_path), save_path)
+
+    @staticmethod
+    def get_image_pos(image: typing.Union[numpy.ndarray, Path, str], **kwargs) -> typing.Tuple[int, int]:
+        """获取图片坐标"""
+        return MatchImage.get_image_pos(image, **kwargs)
 
     @staticmethod
     def remove_border(image_path: typing.Union[Path, str], color: typing.Union[int, typing.Tuple[int, int, int]] = 255,
