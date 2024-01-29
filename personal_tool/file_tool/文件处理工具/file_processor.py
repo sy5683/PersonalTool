@@ -1,5 +1,6 @@
 from enum import Enum
 
+from common_core.base.tool_base import ToolBase
 from common_util.file_util.file_util.file_util import FileUtil
 from feature.compress_feature import CompressFeature
 from feature.convert_feature import ConvertFeature
@@ -12,7 +13,7 @@ class Operations(Enum):
     to_pdf = ConvertFeature.to_pdf
 
 
-class FileProcessor:
+class FileProcessor(ToolBase):
 
     def __init__(self):
         self.file_paths = FileUtil.get_file_paths()

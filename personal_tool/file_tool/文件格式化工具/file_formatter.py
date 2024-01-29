@@ -1,6 +1,7 @@
 from enum import Enum
 from pathlib import Path
 
+from common_core.base.tool_base import ToolBase
 from common_util.code_util.win32_util.win32_util import Win32Util
 from common_util.file_util.file_util.file_util import FileUtil
 from feature.formatter.anime_formatter import AnimeFormatter
@@ -12,7 +13,7 @@ class Operations(Enum):
     format_manga_name = MangaFormatter.format_manga_name
 
 
-class FileFormatter:
+class FileFormatter(ToolBase):
 
     def __init__(self):
         self.directory_path = FileUtil.get_directory_path()

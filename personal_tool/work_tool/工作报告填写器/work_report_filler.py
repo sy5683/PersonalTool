@@ -1,10 +1,11 @@
 import datetime
 
+from common_core.base.tool_base import ToolBase
 from feature.oa.oa_feature import OaFeature
 from feature.work_report.work_report_feature import WorkReportFeature
 
 
-class WorkReportFiller:
+class WorkReportFiller(ToolBase):
 
     def __init__(self, target_date: str = str(datetime.datetime.now())):
         self.weekly_report = WorkReportFeature.get_weekly_report(target_date)

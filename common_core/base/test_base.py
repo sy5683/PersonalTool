@@ -1,18 +1,14 @@
 import abc
-import logging
 import sys
 import time
 import unittest
 from pathlib import Path
 
+from .log_base import LogBase
 
-class TestBase(unittest.TestCase, metaclass=abc.ABCMeta):
+
+class TestBase(unittest.TestCase, LogBase, metaclass=abc.ABCMeta):
     """测试基类"""
-    logging.basicConfig(level=logging.INFO,
-                        format="[%(asctime)s]-%(levelname)s-%(filename)s(line:%(lineno)d): %(message)s",
-                        datefmt="%Y-%m-%d %H:%M:%S",
-                        filename=None,
-                        filemode='a')
 
     def get_test_file(self, file_name: str = None) -> Path:
         """获取测试用的文件路径（测试代码同级目录）"""

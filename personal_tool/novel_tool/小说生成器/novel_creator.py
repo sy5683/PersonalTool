@@ -1,5 +1,6 @@
 from enum import Enum
 
+from common_core.base.tool_base import ToolBase
 from feature.novel_feature import NovelFeature
 
 
@@ -8,7 +9,7 @@ class Operations(Enum):
     show_content = NovelFeature.show_content
 
 
-class NovelCreator:
+class NovelCreator(ToolBase):
 
     def __init__(self, novel_name: str):
         self.novel_name = novel_name

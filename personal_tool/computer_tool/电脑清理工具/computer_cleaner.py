@@ -2,10 +2,11 @@ import concurrent
 import tempfile
 from concurrent import futures
 
+from common_core.base.tool_base import ToolBase
 from feature.clean_feature import CleanFeature
 
 
-class ComputerCleaner:
+class ComputerCleaner(ToolBase):
 
     def __init__(self):
         self.clean_dirs = [

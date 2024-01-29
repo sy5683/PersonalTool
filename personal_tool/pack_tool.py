@@ -23,7 +23,10 @@ class PackTool:
         # 1) 复制工具
         tool_path = self._get_tool_path()
         shutil.copytree(tool_path, self.__to_copy_path(self.tool_name))
-        # 2) 复制组件
+        # 2) 复制框架
+        core_path = self.__to_project_path("common_core")
+        shutil.copytree(core_path, self.__to_copy_path(f"{self.tool_name}\\common_core"))
+        # 3) 复制组件
         for relative_util_path in self._get_relative_util_paths(tool_path):
             util_path = self.__to_project_path(relative_util_path)
             copy_util_path = self.__to_copy_path(f"{self.tool_name}\\{relative_util_path}")

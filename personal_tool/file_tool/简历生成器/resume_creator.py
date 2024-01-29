@@ -1,7 +1,8 @@
+from common_core.base.tool_base import ToolBase
 from feature.resume_feature import ResumeFeature
 
 
-class ResumeCreator:
+class ResumeCreator(ToolBase):
 
     def main(self):
         # 1) 添加标题
