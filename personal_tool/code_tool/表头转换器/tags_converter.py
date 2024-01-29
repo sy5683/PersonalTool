@@ -10,7 +10,7 @@ from feature.tag_feature import TagFeature
 class Operations(Enum):
     to_class = {'name': "类实例", 'format': """\t\tself.{object_name} = None  # {tag}"""}
     to_dict = {'name': "字典", 'format': """'{object_name}': ""  # {tag}"""}
-    to_factory = {'name': "工厂方法", 'format': """\t\t\t小说.{object_name} = data.get("{tag}")"""}
+    to_factory = {'name': "工厂方法", 'format': """\t\t\tself.{object_name} = data.get("{tag}")"""}
     to_tag_width_tuples = {'name': "表头行宽映射", 'format': """({tag}, 16),"""}
 
     def to_name(self) -> str:

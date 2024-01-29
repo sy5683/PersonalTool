@@ -1,3 +1,4 @@
+import logging
 import time
 import typing
 
@@ -15,6 +16,7 @@ class OaFeature:
         name = "解劲松"
         username = "xiejinsong"
         password = "SYggdd_947"
+        logging.info(f"登录OA系统: {name}")
         SeleniumUtil.open_url("http://10.50.144.123:8989/")
         SeleniumUtil.exist('//form[@autocomplete="off"]')
         try:
@@ -37,6 +39,7 @@ class OaFeature:
     def fill_report(daily_reports: typing.List[DailyReport]):
         """填写报告"""
         for daily_report in daily_reports:
+            logging.info(f"填写日报: {daily_report.date}")
             SeleniumUtil.switch_iframe('//iframe[@class="J_iframe  mainShow"]')
             SeleniumUtil.click('//a[text()="填写进度"]')
             SeleniumUtil.switch_iframe()
