@@ -6,6 +6,7 @@ import numpy
 from .image_utils.match_image import MatchImage
 from .image_utils.process_opencv_image import ProcessOpenCVImage
 from .image_utils.process_pil_image import ProcessPILImage
+from .image_utils.screenshot import Screenshot
 
 
 class ImageUtil:
@@ -42,9 +43,9 @@ class ImageUtil:
         ProcessOpenCVImage.save_image(image, str(image_path))
 
     @staticmethod
-    def screenshot(save_path: typing.Union[Path, str] = None) -> str:
+    def screenshot(save_path: typing.Union[Path, str] = None) -> typing.List[str]:
         """截图"""
-        return ProcessPILImage.screenshot(save_path)
+        return Screenshot.screenshot(save_path)
 
     @staticmethod
     def to_a4_size(image_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None) -> str:

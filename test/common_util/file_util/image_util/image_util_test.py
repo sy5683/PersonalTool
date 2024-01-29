@@ -28,9 +28,10 @@ class ImageUtilTestCase(unittest.TestCase):
         ImageUtil.remove_border(self.image_path)
 
     def test_screenshot(self):
-        image_path = ImageUtil.screenshot()
-        self.assertNotEqual(image_path, None)
-        Win32Util.open_file(image_path)
+        image_paths = ImageUtil.screenshot()
+        self.assertNotEqual(image_paths, None)
+        for image_path in image_paths:
+            Win32Util.open_file(image_path)
 
     def test_to_a4_size(self):
         image_path = ImageUtil.to_a4_size(self.image_path)
