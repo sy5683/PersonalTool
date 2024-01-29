@@ -1,4 +1,3 @@
-import copy
 import typing
 
 import xlrd
@@ -16,7 +15,7 @@ class XlrdExcel:
         通过1.2.0版本的xlrd可以同时读取xls和xlsx文件
         通过标签行生成字典key，然后标签行以下全部数据添加进字典列表中
         """
-        workbook = xlrd.open_workbook(excel_path, formatting_info=True)
+        workbook = xlrd.open_workbook(excel_path)
         worksheet = workbook.sheet_by_name(sheet_name) if sheet_name else workbook.sheet_by_index(sheet_index)
         data_list = []
         # 获取表头
@@ -34,48 +33,23 @@ class XlrdExcel:
     @classmethod
     def _get_tags(cls, worksheet: xlrd.sheet.Sheet, tag_row: int, tag_row_quantity: int):
         """获取表头，如果有多行表头时，自动将相同列的表头数据合并"""
-        tags_map = []
-        for row in [(tag_row + index) for index in range(tag_row_quantity)]:
-            # 获取表头
-            tags = cls.__get_row_values(worksheet, row)
-            # 将横向合并单元格的空单元格中赋值合并单元格的值
-            for col, tag in enumerate(tags):
-                # 无法处理第一列单元
-                if not col:
-                    continue
-                if tag:
-                    continue
-                merged_coordinate = cls.__get_merged_coordinate(worksheet, row, col)
-                # 赋值合并的单元格值
-                if merged_coordinate:
-                    from_row, to_row, from_col, to_col = merged_coordinate
-                    # 纵向合并的表头不在这处理，如果这里不跳过，则会导致合并出错误的表头
-                    if to_col - from_col <= 1:
-                        continue
-                else:
-                    # 如果当前单元格下方的单元格有值，则表头需要取合并值
-                    for child_row in [(tag_row + index) for index in range(tag_row_quantity)]:
-                        if child_row <= row:
-                            continue
-                        if worksheet.cell(child_row, col).value:
-                            break
-                    else:
-                        continue
-                tags[col] = tags[col - 1]
-            tags_map.append(tags)
-        # 组合单元格表头
-        excel_tags = copy.deepcopy(tags_map[0])
-        for map_index, tags in enumerate(tags_map[1:]):
-            for tag_index, tag in enumerate(tags):
-                excel_tags[tag_index] += tag
-        return excel_tags
-
-    @staticmethod
-    def __get_merged_coordinate(worksheet: xlrd.sheet.Sheet, row: int, col) -> typing.Tuple[int, int, int, int]:
-        """获取单元格所在的合并单元格坐标"""
-        for from_row, to_row, from_col, to_col in worksheet.merged_cells:
-            if from_row <= row < to_row and from_col <= col < to_col:
-                return from_row, to_row, from_col, to_col
+        tag_rows = [(tag_row + index) for index in range(tag_row_quantity)]
+        # 将表头以map格式保存，用于后续处理
+        row_tags_map = [cls.__get_row_values(worksheet, row) for row in tag_rows]
+        # 以列为单位读取表头map，用于父级判断
+        tags = []
+        for col in range(worksheet.ncols):
+            if col:  # 第一列表头不处理，直接合并
+                last_col_tags = [row_tags[col - 1] for row_tags in row_tags_map]
+                for index, col_tag in enumerate([row_tags[col] for row_tags in row_tags_map]):
+                    if not col_tag:
+                        last_col_tag = last_col_tags[index]
+                        if last_col_tag:
+                            row_tags_map[index][col] = last_col_tag  # 直接更新表头map，刷新数据
+                    else:  # 如果某一列的表头为正常情况，那么这一列之后的表头都不再处理
+                        break
+            tags.append("".join([row_tags[col] for row_tags in row_tags_map]))  # 重新从表头map中取数，确保数据
+        return tags
 
     @staticmethod
     def __get_row_values(worksheet: xlrd.sheet.Sheet, row: int) -> typing.List[str]:
