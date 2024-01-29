@@ -1,10 +1,9 @@
-import unittest
-
+from common_core.base.test_base import TestBase
 from common_util.data_util.object_util.object_util import ObjectUtil
 from personal_tool.novel_tool.小说生成器.feature.novel_feature import NovelFeature
 
 
-class NovelFeatureTestCase(unittest.TestCase):
+class NovelFeatureTestCase(TestBase):
 
     def setUp(self):
         self.novel_name = "构灵"

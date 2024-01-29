@@ -1,9 +1,8 @@
-import unittest
-
+from common_core.base.test_base import TestBase
 from common_util.data_util.textual_util.textual_util import TextualUtil
 
 
-class TextualUtilTestCase(unittest.TestCase):
+class TextualUtilTestCase(TestBase):
 
     def setUp(self):
         # self.textual = "\u738A\u70E8"

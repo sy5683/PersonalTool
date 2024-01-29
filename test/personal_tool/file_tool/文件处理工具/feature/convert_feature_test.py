@@ -1,16 +1,13 @@
-import unittest
-from pathlib import Path
-
+from common_core.base.test_base import TestBase
 from personal_tool.file_tool.文件处理工具.feature.convert_feature import ConvertFeature
 
 
-class ConvertFeatureTestCase(unittest.TestCase):
+class ConvertFeatureTestCase(TestBase):
 
     def setUp(self):
-        self.excel_paths = (str(Path(__file__).parent.joinpath("测试.xlsx")),)
-        self.image_paths = (str(Path(__file__).parent.joinpath("测试_1.png")),
-                            str(Path(__file__).parent.joinpath("测试_2.png")))
-        self.pdf_paths = (str(Path(__file__).parent.joinpath("测试.pdf")),)
+        self.excel_paths = (str(self.get_test_file("测试.xlsx")),)
+        self.image_paths = (str(self.get_test_file("测试_1.png")), str(self.get_test_file("测试_2.png")))
+        self.pdf_paths = (str(self.get_test_file("测试.pdf")),)
 
     def test_to_image(self):
         ConvertFeature.to_image(self.excel_paths)

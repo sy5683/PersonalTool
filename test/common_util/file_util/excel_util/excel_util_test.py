@@ -1,14 +1,12 @@
-import unittest
-from pathlib import Path
-
+from common_core.base.test_base import TestBase
 from common_util.data_util.object_util.object_util import ObjectUtil
 from common_util.file_util.excel_util.excel_util import ExcelUtil
 
 
-class ExcelUtilTestCase(unittest.TestCase):
+class ExcelUtilTestCase(TestBase):
 
     def setUp(self):
-        self.excel_path = Path(__file__).parent.joinpath("测试.xls")
+        self.excel_path = self.get_test_file("测试.xls")
 
     def test_excel_to_images(self):
         images = ExcelUtil.excel_to_images(self.excel_path)

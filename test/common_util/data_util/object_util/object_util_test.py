@@ -1,6 +1,6 @@
-import unittest
 from enum import Enum
 
+from common_core.base.test_base import TestBase
 from common_util.data_util.object_util.object_util import ObjectUtil
 
 
@@ -13,7 +13,7 @@ class TestClass:
         self.name = {TestEnum.test: "测试类"}
 
 
-class ObjectUtilTestCase(unittest.TestCase):
+class ObjectUtilTestCase(TestBase):
     def setUp(self):
         self.obj = {TestEnum: TestClass()}
 

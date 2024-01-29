@@ -1,15 +1,14 @@
-import unittest
-from pathlib import Path
-
+from common_core.base.test_base import TestBase
 from common_util.code_util.win32_util.win32_util import Win32Util
 from common_util.file_util.image_util.image_util import ImageUtil
 
 
-class ImageUtilTestCase(unittest.TestCase):
+class ImageUtilTestCase(TestBase):
 
     def setUp(self):
-        self.image_path = Path(__file__).parent.joinpath("测试.png")
-        self.template_image_path = Path(__file__).parent.joinpath("测试模板.bmp")
+        self.image_path = self.get_test_file("测试.png")
+        self.save_image_path = self.get_test_file("测试保存.bmp")
+        self.template_image_path = self.get_test_file("测试模板.bmp")
 
     def test_convert_to_jpg_by_opencv(self):
         jpg_path = ImageUtil.convert_to_jpg_by_opencv(self.image_path)
@@ -28,7 +27,7 @@ class ImageUtilTestCase(unittest.TestCase):
         ImageUtil.remove_border(self.image_path)
 
     def test_screenshot(self):
-        image_paths = ImageUtil.screenshot()
+        image_paths = ImageUtil.screenshot(self.save_image_path)
         self.assertNotEqual(image_paths, None)
         for image_path in image_paths:
             Win32Util.open_file(image_path)

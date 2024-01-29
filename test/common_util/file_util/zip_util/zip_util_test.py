@@ -1,13 +1,11 @@
-import unittest
-from pathlib import Path
-
+from common_core.base.test_base import TestBase
 from common_util.file_util.zip_util.zip_util import ZipUtil
 
 
-class ZipUtilTestCase(unittest.TestCase):
+class ZipUtilTestCase(TestBase):
 
     def setUp(self):
-        self.test_path = Path(__file__).parent.joinpath("测试.GIF")
+        self.test_path = self.get_test_file("测试.GIF")
 
     def test_decompress(self):
         decompress_paths = ZipUtil.decompress(self.test_path, password="123456")

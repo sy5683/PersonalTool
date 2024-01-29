@@ -1,10 +1,10 @@
-import unittest
 from concurrent import futures
 
+from common_core.base.test_base import TestBase
 from common_util.code_util.selenium_util.selenium_util import SeleniumUtil
 
 
-class SeleniumUtilTestCase(unittest.TestCase):
+class SeleniumUtilTestCase(TestBase):
 
     def setUp(self):
         self.url = "https://www.baidu.com/"

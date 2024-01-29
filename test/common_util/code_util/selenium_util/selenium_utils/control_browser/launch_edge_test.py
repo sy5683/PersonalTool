@@ -1,9 +1,8 @@
-import unittest
-
+from common_core.base.test_base import TestBase
 from common_util.code_util.selenium_util.selenium_utils.control_browser.launch_edge import LaunchEdge
 
 
-class LaunchEdgeTestCase(unittest.TestCase):
+class LaunchEdgeTestCase(TestBase):
 
     def test_get_edge_path(self):
         edge_path = LaunchEdge._get_edge_path()

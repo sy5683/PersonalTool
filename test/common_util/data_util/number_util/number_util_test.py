@@ -1,9 +1,8 @@
-import unittest
-
+from common_core.base.test_base import TestBase
 from common_util.data_util.number_util.number_util import NumberUtil
 
 
-class NumberUtilTestCase(unittest.TestCase):
+class NumberUtilTestCase(TestBase):
 
     def test_to_account(self):
         account = NumberUtil.to_account(123456.789)

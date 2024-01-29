@@ -1,13 +1,11 @@
-import unittest
-from pathlib import Path
-
+from common_core.base.test_base import TestBase
 from common_util.file_util.file_util.file_util import FileUtil
 
 
-class FileUtilTestCase(unittest.TestCase):
+class FileUtilTestCase(TestBase):
 
     def setUp(self):
-        self.image_path = Path(__file__).parent.joinpath("测试.png")
+        self.image_path = self.get_test_file("测试.png")
 
     def test_format_path(self):
         file_path = FileUtil.format_path(self.image_path)

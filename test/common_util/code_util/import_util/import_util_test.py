@@ -1,13 +1,11 @@
-import unittest
-from pathlib import Path
-
+from common_core.base.test_base import TestBase
 from common_util.code_util.import_util.import_util import ImportUtil
 
 
-class ImportUtilTestCase(unittest.TestCase):
+class ImportUtilTestCase(TestBase):
 
     def setUp(self) -> None:
-        self.module_path = Path(__file__)
+        self.module_path = self.get_test_file()
 
     def test_import_module(self):
         module = ImportUtil.import_module(self.module_path)

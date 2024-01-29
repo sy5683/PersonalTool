@@ -1,10 +1,10 @@
 import datetime
-import unittest
 
+from common_core.base.test_base import TestBase
 from common_util.data_util.time_util.time_util import TimeUtil
 
 
-class TimeUtilTestCase(unittest.TestCase):
+class TimeUtilTestCase(TestBase):
 
     def setUp(self):
         self.stamp = datetime.datetime.now()
