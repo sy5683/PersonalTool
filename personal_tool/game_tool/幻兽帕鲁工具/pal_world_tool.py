@@ -1,7 +1,7 @@
 from enum import Enum
 
 from common_core.base.tool_base import ToolBase
-from feature.character_feature import CharacterFeature
+from feature.character.character_feature import CharacterFeature
 
 
 class Operations(Enum):
