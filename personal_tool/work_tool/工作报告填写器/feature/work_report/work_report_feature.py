@@ -13,7 +13,7 @@ from .factory.daily_report_factory import DailyReportFactory
 
 class WorkReportFeature:
     _time_format = "%Y-%m-%d"
-    _work_report_path = str(Path(__file__).parent.parent.parent.joinpath("file\\日报.xlsx"))  # 工作报告默认地址
+    _work_report_path = None
 
     @classmethod
     def get_weekly_report(cls, target_date: str) -> WeeklyReport:
@@ -48,11 +48,15 @@ class WorkReportFeature:
 
     @classmethod
     def _get_work_report_path(cls) -> str:
-        if cls._work_report_path:
-            if not os.path.exists(cls._work_report_path):
-                logging.warning(f"默认日报文件路径不存在: {cls._work_report_path}")
-                cls._work_report_path = None  # 重置为None，然后使用tkinter窗口重新获取
+        default_work_report_path = str(Path(__file__).parent.parent.parent.joinpath("file\\日报.xlsx"))  # 工作报告默认路径
         if cls._work_report_path is None:
-            cls._work_report_path = FileUtil.get_file_path()
-        assert cls._work_report_path, "未获取日志文件"
+            if not os.path.exists(default_work_report_path):
+                logging.warning(f"默认日报文件路径不存在: {default_work_report_path}")
+                cls._work_report_path = FileUtil.get_file_path()  # 使用tkinter窗口重新获取工作报告路径
+            if not cls._work_report_path:
+                cls._work_report_path = default_work_report_path
+                FileUtil.make_dir(default_work_report_path)
+                workbook = openpyxl.Workbook()
+                workbook.save(cls._work_report_path)
+                workbook.close()
         return cls._work_report_path
