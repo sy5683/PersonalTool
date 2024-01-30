@@ -54,4 +54,5 @@ class WorkReportFeature:
                 cls._work_report_path = None  # 重置为None，然后使用tkinter窗口重新获取
         if cls._work_report_path is None:
             cls._work_report_path = FileUtil.get_file_path()
+        assert cls._work_report_path, "未获取日志文件"
         return cls._work_report_path
