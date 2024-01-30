@@ -55,8 +55,11 @@ class WorkReportFeature:
                 cls._work_report_path = FileUtil.get_file_path()  # 使用tkinter窗口重新获取工作报告路径
             if not cls._work_report_path:
                 cls._work_report_path = default_work_report_path
-                FileUtil.make_dir(default_work_report_path)
-                workbook = openpyxl.Workbook()
-                workbook.save(cls._work_report_path)
-                workbook.close()
+        if not os.path.exists(cls._work_report_path):
+            FileUtil.make_dir(default_work_report_path)
+            workbook = openpyxl.Workbook()
+            worksheet = workbook.active
+            worksheet.append(["", "日期", "今日任务", "明日计划"])
+            workbook.save(cls._work_report_path)
+            workbook.close()
         return cls._work_report_path
