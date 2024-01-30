@@ -34,6 +34,10 @@ class DatabaseConnect(metaclass=abc.ABCMeta):
         """获取运行结果"""
         return self.cursor.fetchone()
 
+    def get_results(self) -> any:
+        """获取运行结果"""
+        return self.cursor.fetchall()
+
     @abc.abstractmethod
     def _get_connect(self):
         """获取连接"""

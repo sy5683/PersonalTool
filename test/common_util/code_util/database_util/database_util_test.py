@@ -13,5 +13,5 @@ class DatabaseUtilTestCase(TestBase):
         print(database_connect)
 
         table_name = "Test"
-        database_connect.execute_sql(f"SELECT * FROM {table_name};")
-        print(database_connect.get_result())
+        database_connect.execute_sql(f"SELECT name FROM pragma_table_info('{table_name}');")
+        print(database_connect.get_results())
