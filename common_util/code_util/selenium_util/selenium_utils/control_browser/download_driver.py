@@ -56,13 +56,10 @@ class DownloadDriver:
     @staticmethod
     def _get_driver_in_manager_path(driver_name: str, check_version: str = '') -> str:
         """从获取DriverManager下载路径中获取driver"""
+        if "." in check_version:
+            check_version = check_version[:check_version.find(".")]
         for driver_path in Path(DEFAULT_USER_HOME_CACHE_PATH).rglob(driver_name):
-            if check_version:
-                try:
-                    check_version = check_version[:check_version.find(".")]
-                except IndexError:
-                    pass
-                if check_version not in str(driver_path):
-                    continue
+            if check_version and check_version not in str(driver_path):
+                continue
             return str(driver_path)
         raise FileExistsError

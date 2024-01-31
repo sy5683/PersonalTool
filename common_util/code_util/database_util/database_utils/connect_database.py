@@ -1,4 +1,5 @@
 from .entity.base.database_connect import DatabaseConnect
+from .entity.mysql_connect import MysqlConnect
 from .entity.oracle_connect import OracleConnect
 from .entity.sqlite_connect import SqliteConnect
 
@@ -18,6 +19,8 @@ class ConnectDatabase:
             oracle_client_path = kwargs.get("oracle_client_path")
             if kwargs.get("database_name"):
                 return OracleConnect(ip, port, database_name, username, password, str(oracle_client_path))
+            # MySQL数据库
+            return MysqlConnect(ip, port, database_name, username, password)
         # SQLite数据库
         sqlite_path = kwargs.get("sqlite_path")
         if sqlite_path:

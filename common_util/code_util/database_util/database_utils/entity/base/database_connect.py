@@ -13,9 +13,6 @@ class DatabaseConnect(metaclass=abc.ABCMeta):
         self.cursor = None
         try:
             self._get_connect()
-        except cx_Oracle.DatabaseError as e:
-            logging.warning(f"无法连接Oracle数据库，请设置dll客户端驱动路径")
-            raise e
         except Exception as e:
             logging.error(f"连接数据库失败: {traceback.format_exc()}")
             raise e

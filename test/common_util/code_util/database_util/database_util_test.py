@@ -1,9 +1,23 @@
+import contextlib
+
 from common_core.base.test_base import TestBase
 from common_util.code_util.database_util.database_util import DatabaseUtil
 from common_util.data_util.object_util.object_util import ObjectUtil
 
 
 class DatabaseUtilTestCase(TestBase):
+
+    def test_get_mysql_connect(self):
+        database_connect = DatabaseUtil.get_database_connect(ip='192.168.20.23', port=1521, database_name='spm',
+                                                             username='rpa_scene_mock', password='rpa_scene_mock')
+        # table_name = "Test"
+        # database_connect.execute_sql(f"SELECT name FROM pragma_table_info('{table_name}');")
+        # tags = [each[0] for each in database_connect.get_results()]
+        # database_connect.execute_sql(f"SELECT * FROM {table_name};")
+        # data_list = []
+        # for each in database_connect.get_results():
+        #     data_list.append(dict(zip(tags, each)))
+        # ObjectUtil.print_object(data_list)
 
     def test_oracle_connect(self):
         database_connect = DatabaseUtil.get_database_connect(ip='192.168.20.23', port=1521, database_name='spm',
@@ -28,3 +42,4 @@ class DatabaseUtilTestCase(TestBase):
         for each in database_connect.get_results():
             data_list.append(dict(zip(tags, each)))
         ObjectUtil.print_object(data_list)
+
