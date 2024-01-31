@@ -18,7 +18,7 @@ class WorkReportFeature:
     @classmethod
     def get_weekly_report(cls, target_date: str) -> WeeklyReport:
         """获取周报"""
-        target_date = TimeUtil.format_time(target_date, cls._time_format)
+        target_date = TimeUtil.format_time(target_date, time_format=cls._time_format)
         for weekly_report in reversed(cls.get_weekly_reports()):
             if target_date in weekly_report.date_range:
                 weekly_report.set_completion_rates()  # 生成日报的完成率

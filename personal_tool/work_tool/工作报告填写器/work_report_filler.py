@@ -16,7 +16,7 @@ class WorkReportFiller(ToolBase):
         # 2) 切换至日报界面
         OaFeature.switch_in_report_page()
         # 3) 填写工作报告
-        OaFeature.fill_report(self.weekly_report.daily_reports)
+        OaFeature.fill_reports(self.weekly_report.daily_reports)
 
 
 if __name__ == '__main__':
