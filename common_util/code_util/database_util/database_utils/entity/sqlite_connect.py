@@ -14,6 +14,6 @@ class SqliteConnect(DatabaseConnect):
 
     def _get_connect(self):
         """获取连接"""
-        logging.info(f"连接数据库: {self.sqlite_path}")
+        logging.info(f"连接SQLite数据库: {self.sqlite_path}")
         self.connect = sqlite3.connect(self.sqlite_path)
         self.cursor = self.connect.cursor()
