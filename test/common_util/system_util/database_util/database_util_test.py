@@ -1,8 +1,6 @@
-import contextlib
-
 from common_core.base.test_base import TestBase
-from common_util.code_util.database_util.database_util import DatabaseUtil
 from common_util.data_util.object_util.object_util import ObjectUtil
+from common_util.system_util.database_util.database_util import DatabaseUtil
 
 
 class DatabaseUtilTestCase(TestBase):
