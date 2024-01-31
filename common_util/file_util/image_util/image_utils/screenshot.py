@@ -1,4 +1,4 @@
-import os.path
+import os
 import tempfile
 import typing
 from pathlib import Path
