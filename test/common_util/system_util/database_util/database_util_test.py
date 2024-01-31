@@ -12,9 +12,7 @@ class DatabaseUtilTestCase(TestBase):
         # database_connect.execute_sql(f"SELECT name FROM pragma_table_info('{table_name}');")
         # tags = [each[0] for each in database_connect.get_results()]
         # database_connect.execute_sql(f"SELECT * FROM {table_name};")
-        # data_list = []
-        # for each in database_connect.get_results():
-        #     data_list.append(dict(zip(tags, each)))
+        # data_list = [dict(zip(tags, each)) for each in database_connect.get_results()]
         # ObjectUtil.print_object(data_list)
 
     def test_oracle_connect(self):
@@ -25,9 +23,7 @@ class DatabaseUtilTestCase(TestBase):
         database_connect.execute_sql(f"select column_name from all_tab_cols where Table_name='{table_name}'")
         tags = [each[0] for each in database_connect.get_results()]
         database_connect.execute_sql(f"SELECT * FROM {table_name}")
-        data_list = []
-        for each in database_connect.get_results():
-            data_list.append(dict(zip(tags, each)))
+        data_list = [dict(zip(tags, each)) for each in database_connect.get_results()]
         ObjectUtil.print_object(data_list)
 
     def test_get_sqlite_connect(self):
@@ -36,7 +32,5 @@ class DatabaseUtilTestCase(TestBase):
         database_connect.execute_sql(f"SELECT name FROM pragma_table_info('{table_name}');")
         tags = [each[0] for each in database_connect.get_results()]
         database_connect.execute_sql(f"SELECT * FROM {table_name};")
-        data_list = []
-        for each in database_connect.get_results():
-            data_list.append(dict(zip(tags, each)))
+        data_list = [dict(zip(tags, each)) for each in database_connect.get_results()]
         ObjectUtil.print_object(data_list)
