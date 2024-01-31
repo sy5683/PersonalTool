@@ -28,6 +28,11 @@ class TimeUtil:
         return CalculateDatetime.get_next_month_last_day(stamp)
 
     @staticmethod
+    def get_now(**kwargs):
+        """获取当前时间"""
+        return ConvertDatetime.format_time(str(datetime.datetime.now()), **kwargs)
+
+    @staticmethod
     def get_this_month_first_day(stamp: typing.Union[datetime.datetime, datetime.date]) -> datetime.date:
         """获取指定月份的第一天日期"""
         return CalculateDatetime.get_this_month_first_day(stamp)
@@ -44,6 +49,6 @@ class TimeUtil:
         return CalculateDatetime.get_year_between_dates(from_date, to_date)
 
     @staticmethod
-    def format_time(time_str: str, time_format: str = '%Y-%m-%d %H:%M:%S') -> str:
+    def format_time(time_str: str, **kwargs) -> str:
         """格式时间"""
-        return ConvertDatetime.format_time(time_str, time_format)
+        return ConvertDatetime.format_time(time_str, **kwargs)

@@ -2,12 +2,15 @@ import datetime
 import re
 import typing
 
+from .time_config import TimeConfig
+
 
 class ConvertDatetime:
 
     @classmethod
-    def format_time(cls, time_str: str, time_format: str) -> str:
+    def format_time(cls, time_str: str, **kwargs) -> str:
         """格式时间"""
+        time_format = kwargs.get("time_format", TimeConfig.default_time_format)
         stamp = cls._str_to_datetime(time_str)
         return cls._datetime_to_str(stamp, time_format)
 
