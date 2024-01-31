@@ -2,6 +2,8 @@ import abc
 import logging
 import traceback
 
+import cx_Oracle
+
 
 class DatabaseConnect(metaclass=abc.ABCMeta):
 
@@ -11,16 +13,21 @@ class DatabaseConnect(metaclass=abc.ABCMeta):
         self.cursor = None
         try:
             self._get_connect()
+        except cx_Oracle.DatabaseError as e:
+            logging.warning(f"无法连接Oracle数据库，请设置dll客户端驱动路径")
+            raise e
         except Exception as e:
             logging.error(f"连接数据库失败: {traceback.format_exc()}")
             raise e
 
     def __del__(self):
-        logging.info(f"关闭数据库连接: {self.name}")
         if self.cursor is not None:
             self.cursor.close()
+            self.cursor = None
         if self.connect is not None:
+            logging.info(f"关闭数据库连接: {self.name}")
             self.connect.close()
+            self.connect = None
 
     def __enter__(self):
         return self
