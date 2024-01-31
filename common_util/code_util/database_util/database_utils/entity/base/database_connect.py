@@ -1,5 +1,6 @@
 import abc
 import logging
+import traceback
 
 
 class DatabaseConnect(metaclass=abc.ABCMeta):
@@ -8,7 +9,11 @@ class DatabaseConnect(metaclass=abc.ABCMeta):
         self.name = name
         self.connect = None
         self.cursor = None
-        self._get_connect()
+        try:
+            self._get_connect()
+        except Exception as e:
+            logging.error(f"连接数据库失败: {traceback.format_exc()}")
+            raise e
 
     def __del__(self):
         logging.info(f"关闭数据库连接: {self.name}")
