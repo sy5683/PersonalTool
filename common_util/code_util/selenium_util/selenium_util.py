@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 
 from .selenium_utils.control_browser.control_browser import ControlBrowser
+from .selenium_utils.control_browser.download_driver import DownloadDriver
 from .selenium_utils.control_browser.launch_chrome import LaunchChrome
 from .selenium_utils.control_html.control_driver import ControlDriver
 from .selenium_utils.control_html.control_element import ControlElement
@@ -14,24 +15,24 @@ from .selenium_utils.control_html.control_window import ControlWindow
 class SeleniumUtil:
 
     @staticmethod
-    def close_other_window(window_titles: typing.Union[str, typing.List[str]], **kwargs):
-        """关闭其他窗口"""
-        ControlWindow.close_other_window(window_titles, **kwargs)
-
-    @staticmethod
-    def confirm_alert(**kwargs):
-        """确定alert弹窗"""
-        ControlWindow.confirm_alert(**kwargs)
-
-    @staticmethod
     def click(element_or_xpath: typing.Union[WebElement, str], **kwargs):
         """模拟点击"""
         ControlElement.click(element_or_xpath, **kwargs)
 
     @staticmethod
+    def close_other_window(window_titles: typing.Union[str, typing.List[str]], **kwargs):
+        """关闭其他窗口"""
+        ControlWindow.close_other_window(window_titles, **kwargs)
+
+    @staticmethod
     def close_browser(**kwargs):
         """关闭浏览器"""
         ControlBrowser.close_browser(**kwargs)
+
+    @staticmethod
+    def confirm_alert(**kwargs):
+        """确定alert弹窗"""
+        ControlWindow.confirm_alert(**kwargs)
 
     @staticmethod
     def execute_js(js: str, **kwargs):
@@ -52,6 +53,11 @@ class SeleniumUtil:
     def finds(xpath: str, **kwargs) -> typing.List[WebElement]:
         """查找元素列表"""
         return ControlElement.finds(xpath, **kwargs)
+
+    @staticmethod
+    def get_chrome_driver_path() -> str:
+        """获取chrome_driver路径"""
+        return DownloadDriver.get_chrome_driver_path()
 
     @staticmethod
     def get_driver(**kwargs) -> WebDriver:
