@@ -3,6 +3,7 @@ import typing
 
 from .time_utils.calculate_datetime import CalculateDatetime
 from .time_utils.convert_datetime import ConvertDatetime
+from .time_utils.convert_time import ConvertTime
 
 
 class TimeUtil:
@@ -52,3 +53,8 @@ class TimeUtil:
     def format_time(time_str: str, **kwargs) -> str:
         """格式时间"""
         return ConvertDatetime.format_time(time_str, **kwargs)
+
+    @staticmethod
+    def time_to_datetime(stamp: float) -> datetime.datetime:
+        """时间戳转datetime"""
+        return ConvertTime.time_to_datetime(stamp)
