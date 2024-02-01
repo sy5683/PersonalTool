@@ -75,4 +75,4 @@ class PackTool:
 
 
 if __name__ == '__main__':
-    PackTool("定时检测工具").copy_tool()
+    PackTool("电脑检测工具").copy_tool()
