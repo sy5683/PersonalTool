@@ -9,7 +9,7 @@ import win32gui
 class Win32Dialog:
 
     @staticmethod
-    def message_box(message: str, title: str, disable_close: bool):
+    def messagebox(message: str, title: str, disable_close: bool):
         """消息通知"""
 
         def set_top_dialog():
