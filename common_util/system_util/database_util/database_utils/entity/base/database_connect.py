@@ -2,8 +2,6 @@ import abc
 import logging
 import traceback
 
-import cx_Oracle
-
 
 class DatabaseConnect(metaclass=abc.ABCMeta):
 
