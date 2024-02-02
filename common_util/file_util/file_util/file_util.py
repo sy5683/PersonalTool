@@ -23,7 +23,7 @@ class FileUtil:
         return ProcessFile.get_file_path()
 
     @staticmethod
-    def get_file_paths() -> typing.Tuple[str]:
+    def get_file_paths() -> typing.Literal[""] | typing.Tuple[str, ...]:
         """获取文件路径列表"""
         return ProcessFile.get_file_paths()
 

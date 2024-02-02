@@ -39,7 +39,7 @@ class ProcessFile:
         return filedialog.askopenfilename()
 
     @staticmethod
-    def get_file_paths() -> typing.Tuple[str]:
+    def get_file_paths() -> typing.Literal[""] | typing.Tuple[str, ...]:
         """获取文件路径列表"""
         tkinter.Tk().withdraw()  # 隐藏tk窗口
         return filedialog.askopenfilenames()
