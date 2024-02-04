@@ -5,20 +5,17 @@ from pathlib import Path
 
 import openpyxl
 
-from common_util.data_util.time_util.time_util import TimeUtil
 from common_util.file_util.file_util.file_util import FileUtil
 from .entity.weekly_report import WeeklyReport
 from .factory.daily_report_factory import DailyReportFactory
 
 
 class WorkReportFeature:
-    _time_format = "%Y-%m-%d"
     _work_report_path = None
 
     @classmethod
     def get_weekly_report(cls, target_date: str) -> WeeklyReport:
         """获取周报"""
-        target_date = TimeUtil.format_time(target_date, time_format=cls._time_format)
         for weekly_report in reversed(cls.get_weekly_reports()):
             if target_date in weekly_report.date_range:
                 weekly_report.set_completion_rates()  # 生成日报的完成率
@@ -41,7 +38,7 @@ class WorkReportFeature:
             else:
                 if weekly_report is None:
                     continue
-                daily_report = DailyReportFactory.row_values_to_daily_report(row_values, cls._time_format)
+                daily_report = DailyReportFactory.row_values_to_daily_report(row_values)
                 weekly_report.add_daily_report(daily_report)
         wb.close()
         return weekly_reports
