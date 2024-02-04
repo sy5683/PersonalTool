@@ -1,6 +1,7 @@
 import logging
 import os
 import shutil
+import tempfile
 import typing
 from pathlib import Path
 
@@ -8,14 +9,15 @@ from pathlib import Path
 class CleanFeature:
 
     @classmethod
-    def clean_dir(cls, dir_path: typing.Union[Path, str]):
-        """清空文件夹"""
-        for file_path in Path(dir_path).glob("*"):
-            cls.delete_file(file_path)
-        logging.info(f"清空文件夹: {dir_path}")
+    def clean_tempdir(cls):
+        """清理临时文件夹"""
+        tempdir_path = tempfile.gettempdir()
+        logging.info(f"清理临时文件夹: {tempdir_path}")
+        for file_path in Path(tempdir_path).glob("*"):
+            cls._delete_file(file_path)
 
     @staticmethod
-    def delete_file(file_path: typing.Union[Path, str]):
+    def _delete_file(file_path: typing.Union[Path, str]):
         """删除文件"""
         try:
             if Path(file_path).is_dir():
