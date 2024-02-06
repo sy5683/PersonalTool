@@ -27,10 +27,19 @@ class ImageUtil:
         return MatchImage.get_image_pos(image, **kwargs)
 
     @staticmethod
-    def remove_border(image_path: typing.Union[Path, str], color: typing.Union[int, typing.Tuple[int, int, int]] = 255,
-                      save_path: typing.Union[Path, str] = None) -> str:
+    def image_to_transparent(image: numpy.ndarray, mask_image: numpy.ndarray) -> numpy.ndarray:
+        """根据蒙版将图片透明化"""
+        return ProcessOpenCVImage.image_to_transparent(image, mask_image)
+
+    @staticmethod
+    def read_opencv_image(image_path: typing.Union[Path, str]) -> numpy.ndarray:
+        """读取图片"""
+        return ProcessOpenCVImage.read_image(str(image_path))
+
+    @staticmethod
+    def remove_border(image: numpy.ndarray, color: typing.Union[int, typing.Tuple[int, int, int]] = 255) -> numpy.ndarray:
         """去除边框"""
-        return ProcessOpenCVImage.remove_border(str(image_path), color, save_path)
+        return ProcessOpenCVImage.remove_border(image, color)
 
     @staticmethod
     def rotate_image(image: numpy.ndarray, angle: int, times: int) -> numpy.ndarray:

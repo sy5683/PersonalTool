@@ -23,8 +23,8 @@ class ConvertPdf:
         pdf = fitz.open(pdf_path)
         for index in range(pdf.page_count):
             pdf_page = pdf[index]
-            image_name = f"{str(index).zfill(len(str(pdf.page_count)))}.%s" % re.sub(r"^\.+", "", suffix)
-            image_path = os.path.join(save_path, image_name)
+            image_name = f"{Path(pdf_path).stem}_{str(index).zfill(len(str(pdf.page_count)))}"
+            image_path = os.path.join(save_path, f"{image_name}.%s" % re.sub(r"^\.+", "", suffix))
             cls._page_to_image(pdf_page, image_path)
             image_paths.append(image_path)
         pdf.close()

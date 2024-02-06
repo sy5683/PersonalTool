@@ -20,6 +20,14 @@ class ProcessOpenCVImage:
         cls.save_image(image, save_path)
         return save_path
 
+    @staticmethod
+    def image_to_transparent(image: numpy.ndarray, mask_image: numpy.ndarray) -> numpy.ndarray:
+        """根据蒙版将图片透明化"""
+        transparent_image = cv2.bitwise_and(image, image, mask=mask_image)
+        transparent_image = cv2.cvtColor(transparent_image, cv2.COLOR_RGB2RGBA)
+        transparent_image[:, :, 3] = mask_image
+        return transparent_image
+
     @classmethod
     def read_image(cls, image_path: str) -> numpy.ndarray:
         """读取图片"""
@@ -28,21 +36,16 @@ class ProcessOpenCVImage:
         else:
             return cv2.imread(image_path)
 
-    @classmethod
-    def remove_border(cls, image_path: str, color: typing.Union[int, typing.Tuple[int, int, int]],
-                      save_path: typing.Union[Path, str]) -> str:
+    @staticmethod
+    def remove_border(image: numpy.ndarray, color: typing.Union[int, typing.Tuple[int, int, int]]) -> numpy.ndarray:
         """去除边框"""
-        image = cls.read_image(image_path)
         if isinstance(color, int):
-            edges_y, edges_x, _ = numpy.where(image != color)
+            edges_y, edges_x, _ = numpy.where(image <= color)
         else:
             # 如果是单色，可以使用灰度图处理，时间复杂度会快一些
             gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            edges_y, edges_x = numpy.where(gray_image != color)
-        image = image[min(edges_y):max(edges_y), min(edges_x):max(edges_x)]
-        save_path = image_path if save_path is None else str(save_path)
-        cls.save_image(image, save_path)
-        return save_path
+            edges_y, edges_x = numpy.where(gray_image <= color)
+        return image[min(edges_y):max(edges_y), min(edges_x):max(edges_x)]
 
     @staticmethod
     def rotate_image(image: numpy.ndarray, angle: int, times: int) -> numpy.ndarray:
