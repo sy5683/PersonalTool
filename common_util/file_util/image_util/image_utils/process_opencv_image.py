@@ -40,11 +40,11 @@ class ProcessOpenCVImage:
     def remove_border(image: numpy.ndarray, color: typing.Union[int, typing.Tuple[int, int, int]]) -> numpy.ndarray:
         """去除边框"""
         if isinstance(color, int):
-            edges_y, edges_x, _ = numpy.where(image <= color)
+            edges_y, edges_x, _ = numpy.where(image < color)
         else:
             # 如果是单色，可以使用灰度图处理，时间复杂度会快一些
             gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            edges_y, edges_x = numpy.where(gray_image <= color)
+            edges_y, edges_x = numpy.where(gray_image < color)
         return image[min(edges_y):max(edges_y), min(edges_x):max(edges_x)]
 
     @staticmethod
