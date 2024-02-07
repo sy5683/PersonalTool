@@ -13,7 +13,7 @@ class ImageFeature:
 
     @classmethod
     def matting_characters(cls, file_paths: typing.List[str], color: int = 255):
-        """扣取文字"""
+        """抠取文字"""
         image_paths = cls.__to_image_paths(file_paths)
         for image_path in image_paths:
             # 读取图片
