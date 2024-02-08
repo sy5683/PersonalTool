@@ -6,17 +6,16 @@ import cv2
 from common_util.code_util.win32_util.win32_util import Win32Util
 from common_util.file_util.file_util.file_util import FileUtil
 from common_util.file_util.image_util.image_util import ImageUtil
-from common_util.file_util.pdf_util.pdf_util import PdfUtil
+from .image_feature import ImageFeature
 
 
-class ImageFeature:
+class Cv2RemoveBackground:
 
-    @classmethod
-    def matting_characters(cls, file_paths: typing.List[str], color: int = 255):
+    @staticmethod
+    def matting_character(file_paths: typing.List[str], color: int = 255):
         """抠取文字"""
-        image_paths = cls.__to_image_paths(file_paths)
+        image_paths = ImageFeature.to_image_paths(file_paths)
         for image_path in image_paths:
-            # 读取图片
             image = ImageUtil.read_opencv_image(image_path)
             # 去除边框
             image = ImageUtil.remove_border(image, color)
@@ -29,13 +28,3 @@ class ImageFeature:
             save_path = FileUtil.get_temp_path(Path(image_path).name)
             ImageUtil.save_opencv_image(transparent_image, save_path)
         Win32Util.open_file(FileUtil.get_temp_path())
-
-    @staticmethod
-    def __to_image_paths(file_paths: typing.List[str]):
-        image_paths = []
-        for file_path in file_paths:
-            if FileUtil.get_original_type(file_path) == "pdf":
-                image_paths += PdfUtil.pdf_to_images(file_path)
-            else:
-                image_paths += [file_path]
-        return image_paths
