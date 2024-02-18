@@ -9,13 +9,16 @@ class DatabaseConnect(metaclass=abc.ABCMeta):
         self.name = name
         self.connect = None
         self.cursor = None
+
+    def __enter__(self):
+        logging.info(f"连接数据库: {self.name}")
         try:
             self._get_connect()
         except Exception as e:
             logging.error(f"连接数据库失败: {traceback.format_exc()}")
             raise e
 
-    def __del__(self):
+    def __exit__(self, exc_type, exc_val, exc_tb):
         if self.cursor is not None:
             self.cursor.close()
             self.cursor = None
@@ -24,11 +27,9 @@ class DatabaseConnect(metaclass=abc.ABCMeta):
             self.connect.close()
             self.connect = None
 
-    def __enter__(self):
-        return self
-
     def execute_sql(self, sql: str):
         """执行sql语句"""
+        assert self.connect is not None, "数据库未连接"
         # noinspection PyBroadException
         try:
             self.cursor.execute(sql)  # 执行SQL语句
@@ -47,4 +48,4 @@ class DatabaseConnect(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def _get_connect(self):
-        """获取连接"""
+        """连接数据库"""

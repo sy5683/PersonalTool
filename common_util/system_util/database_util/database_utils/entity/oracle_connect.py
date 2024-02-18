@@ -1,4 +1,3 @@
-import logging
 import os
 
 import cx_Oracle
@@ -18,8 +17,7 @@ class OracleConnect(DatabaseConnect):
         super().__init__(f"【Oracle】{self.__get_host()}")
 
     def _get_connect(self):
-        """获取连接"""
-        logging.info(f"连接Oracle数据库: {self.__get_host()}")
+        """连接数据库"""
         # 设置oracle客户端路径，客户端路径不能为中文
         if os.path.exists(self.oracle_client_path):
             cx_Oracle.init_oracle_client(lib_dir=self.oracle_client_path)
