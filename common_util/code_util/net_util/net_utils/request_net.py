@@ -1,4 +1,5 @@
 import json
+import logging
 import re
 import tempfile
 
@@ -10,6 +11,7 @@ class RequestNet:
     @staticmethod
     def download(download_url: str, download_path: str, suffix: str, **kwargs) -> str:
         """下载文件"""
+        logging.info(f"下载文件: {download_url}")
         response = requests.request("GET", download_url, **kwargs)
         download_path = str(download_path) or tempfile.mktemp(".%s" % re.sub(r"^\.+", "", suffix))
         with open(download_path, "wb") as file:
