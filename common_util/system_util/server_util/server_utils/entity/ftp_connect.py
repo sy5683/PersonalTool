@@ -1,5 +1,4 @@
 import ftplib
-import logging
 
 from .base.server_connect import ServerConnect
 
@@ -11,7 +10,12 @@ class FtpConnect(ServerConnect):
         self.port = port
         self.username = username
         self.password = password
-        super().__init__(f"【FTP】{self.__get_host()}", **kwargs)
+        super().__init__(f"【FTP】{self.ip}:{self.port}", **kwargs)
+
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        super().__exit__(exc_type, exc_value, exc_traceback)
+        if exc_value:
+            raise exc_type(exc_value)
 
     def check_remote_path_exists(self, remote_path: str) -> bool:
         """判断服务器路径是否存在"""
@@ -30,12 +34,8 @@ class FtpConnect(ServerConnect):
 
     def _get_connect(self):
         """获取连接"""
-        logging.info(f"连接FTP服务器: {self.__get_host()}")
         self.connect = ftplib.FTP()
         self.connect.encoding = "UTF-8"
         self.connect.timeout = self._timeout
         self.connect.connect(self.ip, self.port)
         self.connect.login(user=self.username, passwd=self.password)
-
-    def __get_host(self) -> str:
-        return f"{self.ip}:{self.port}"

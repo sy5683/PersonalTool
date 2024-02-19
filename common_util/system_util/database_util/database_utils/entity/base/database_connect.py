@@ -18,7 +18,7 @@ class DatabaseConnect(metaclass=abc.ABCMeta):
             logging.error(f"连接数据库失败: {traceback.format_exc()}")
             raise e
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type, exc_value, exc_traceback):
         if self.cursor is not None:
             self.cursor.close()
             self.cursor = None
@@ -26,6 +26,8 @@ class DatabaseConnect(metaclass=abc.ABCMeta):
             logging.info(f"关闭数据库连接: {self.name}")
             self.connect.close()
             self.connect = None
+        if exc_value:
+            raise exc_type(exc_value)
 
     def execute_sql(self, sql: str):
         """执行sql语句"""

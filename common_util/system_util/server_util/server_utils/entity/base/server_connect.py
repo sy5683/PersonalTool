@@ -1,5 +1,6 @@
 import abc
 import logging
+import traceback
 
 
 class ServerConnect(metaclass=abc.ABCMeta):
@@ -9,14 +10,19 @@ class ServerConnect(metaclass=abc.ABCMeta):
         self.connect = None
         self._timeout = kwargs.get("timeout", 120)
 
-    def __del__(self):
+    def __enter__(self):
+        logging.info(f"连接服务器: {self.name}")
+        try:
+            self._get_connect()
+        except Exception as e:
+            logging.error(f"连接服务器失败: {traceback.format_exc()}")
+            raise e
+
+    def __exit__(self, exc_type, exc_value, exc_traceback):
         if self.connect is not None:
             logging.info(f"关闭服务器连接: {self.name}")
             self.connect.close()
             self.connect = None
-
-    def __enter__(self):
-        return self
 
     @abc.abstractmethod
     def check_remote_path_exists(self, remote_path: str) -> bool:

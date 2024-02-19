@@ -14,13 +14,15 @@ class SftpConnect(ServerConnect):
         self.username = username
         self.password = password
         self._transport = None
-        super().__init__(f"【SFTP】{self.__get_host()}", **kwargs)
+        super().__init__(f"【SFTP】{self.ip}:{self.port}", **kwargs)
 
-    def __del__(self):
-        super().__del__()
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        super().__exit__(exc_type, exc_value, exc_traceback)
         if self._transport is not None:
             self._transport.close()
             self._transport = None
+        if exc_value:
+            raise exc_type(exc_value)
 
     def check_remote_path_exists(self, remote_path: str) -> bool:
         """判断服务器路径是否存在"""
@@ -39,11 +41,7 @@ class SftpConnect(ServerConnect):
 
     def _get_connect(self):
         """获取连接"""
-        logging.info(f"连接SFTP服务器: {self.__get_host()}")
         self._transport = paramiko.Transport((self.ip, self.port))
         self._transport.banner_timeout = self._timeout
         self._transport.connect(username=self.username, password=self.password)
         self.connect = paramiko.SFTPClient.from_transport(self._transport)
-
-    def __get_host(self) -> str:
-        return f"{self.ip}:{self.port}"
