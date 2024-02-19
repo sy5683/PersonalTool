@@ -18,6 +18,7 @@ class Win32Excel:
         因为使用openpyxl生成的excel，如果不手动打开并保存，其中的公式是未进行计算的，如果再次使用openpyxl进行读取，是取不到结果的
         因此需要使用win32重新将其打开并保存一次
         """
+        logging.info(f"重新保存excel: {excel_path}")
         app = Dispatch("Excel.Application")
         app.Visible = False
         workbook = app.Workbooks.Open(excel_path)

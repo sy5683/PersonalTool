@@ -9,6 +9,7 @@ from docx.text.run import Run
 from .word_utils.convert_word import ConvertWord
 from .word_utils.process_word import ProcessWord
 from .word_utils.replace_word import ReplaceDocx
+from .word_utils.win32_word import Win32Word
 
 
 class WordUtil:
@@ -57,3 +58,8 @@ class WordUtil:
     def word_to_excel(word_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None) -> str:
         """word转excel"""
         return ConvertWord.word_to_excel(str(word_path), save_path)
+
+    @staticmethod
+    def word_to_pdf(word_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None) -> str:
+        """word转pdf"""
+        return Win32Word.word_to_pdf(str(word_path), save_path)
