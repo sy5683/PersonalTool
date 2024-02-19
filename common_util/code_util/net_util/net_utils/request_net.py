@@ -11,7 +11,7 @@ class RequestNet:
     def download(download_url: str, download_path: str, suffix: str, **kwargs) -> str:
         """下载文件"""
         response = requests.request("GET", download_url, **kwargs)
-        download_path = str(download_path) or f"{tempfile.mktemp()}.%s" % re.sub(r"^\.+", "", suffix)
+        download_path = str(download_path) or tempfile.mktemp(".%s" % re.sub(r"^\.+", "", suffix))
         with open(download_path, "wb") as file:
             file.write(response.content)
         return download_path

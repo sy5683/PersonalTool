@@ -18,7 +18,7 @@ class Screenshot:
     def screenshot(cls, save_path: typing.Union[Path, str]) -> typing.List[str]:
         """截图"""
         save_paths = []
-        save_path, suffix = os.path.splitext(f"{tempfile.mktemp()}.jpg" if save_path is None else str(save_path))
+        save_path, suffix = os.path.splitext(tempfile.mktemp(".jpg") if save_path is None else str(save_path))
         for index, image in enumerate(cls.get_screenshot_image()):
             _save_path = (save_path + f"_{index}" if index else save_path) + suffix
             ProcessOpenCVImage.save_image(image, _save_path)
