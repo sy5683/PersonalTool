@@ -23,7 +23,7 @@ class FormatExcelData:
                 date = int(date)
         if isinstance(date, int):
             date = cls._format_excel_date_number(date, time_format)
-        return date.format(Y="年", m="月", d="日", H="时", M="分", S="秒")
+        return date.format(Y='年', m='月', d='日', H='时', M='分', S='秒')
 
     @staticmethod
     def format_int_data(data: str) -> str:

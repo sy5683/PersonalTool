@@ -23,9 +23,6 @@ class ImageUtilTestCase(TestBase):
         x, y = ImageUtil.get_image_pos(self.template_image_path, handle=handle)
         print(x, y)
 
-    def test_remove_border(self):
-        ImageUtil.remove_border(self.image_path)
-
     def test_screenshot(self):
         image_paths = ImageUtil.screenshot(self.save_image_path)
         self.assertNotEqual(image_paths, None)

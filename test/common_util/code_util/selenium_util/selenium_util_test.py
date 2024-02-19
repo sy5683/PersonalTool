@@ -16,7 +16,7 @@ class SeleniumUtilTestCase(TestBase):
 
     def test_click(self):
         # SeleniumUtil.click(self.xpath)  # 模拟点击，默认使用js点击
-        SeleniumUtil.click(self.xpath, click_type="selenium")  # 使用selenium的点击方法
+        SeleniumUtil.click(self.xpath, click_type='selenium')  # 使用selenium的点击方法
 
     def test_find(self):
         element = SeleniumUtil.find(self.xpath)  # 查找元素
@@ -35,7 +35,7 @@ class SeleniumUtilTestCase(TestBase):
             print(SeleniumUtil.find('//input[@id="su"]', wait_seconds=20))
             SeleniumUtil.close_browser(driver=SeleniumUtil.get_driver())
 
-        pool = futures.ThreadPoolExecutor(3, thread_name_prefix="test")
+        pool = futures.ThreadPoolExecutor(3, thread_name_prefix='test')
         tasks = []
         for _ in range(3):
             tasks.append(pool.submit(_launch_driver))

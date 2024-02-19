@@ -20,7 +20,7 @@ class ConvertDatetime:
         时间戳格式化为字符串
         中文格式必须为: %Y{Y}%m{m}%d{d}%H{H}%M{M}%S{S}
         """
-        return stamp.strftime(time_format).format(Y="年", m="月", d="日", H="时", M="分", S="秒")
+        return stamp.strftime(time_format).format(Y='年', m='月', d='日', H='时', M='分', S='秒')
 
     @staticmethod
     def _str_to_datetime(datetime_str: str) -> datetime.datetime:

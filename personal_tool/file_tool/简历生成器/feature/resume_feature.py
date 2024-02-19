@@ -26,7 +26,7 @@ class ResumeFeature:
         WordUtil.set_paragraph_alignment(paragraph, WD_PARAGRAPH_ALIGNMENT.CENTER)
         run = paragraph.add_run("个人简历")
         # 一号黑体加粗
-        WordUtil.set_run(run, bold=True, font_size=26, font_type="黑体")
+        WordUtil.set_run(run, bold=True, font_size=26, font_type='黑体')
 
     @classmethod
     def add_info(cls):
@@ -120,7 +120,7 @@ class ResumeFeature:
         WordUtil.set_paragraph_space_after(paragraph, 0)
         run = paragraph.add_run(context)
         # 小四号仿宋
-        WordUtil.set_run(run, font_size=12, font_type="仿宋")
+        WordUtil.set_run(run, font_size=12, font_type='仿宋')
 
     @classmethod
     def _get_resume_path(cls) -> str:

@@ -37,7 +37,8 @@ class ImageUtil:
         return ProcessOpenCVImage.read_image(str(image_path))
 
     @staticmethod
-    def remove_border(image: numpy.ndarray, color: typing.Union[int, typing.Tuple[int, int, int]] = 255) -> numpy.ndarray:
+    def remove_border(image: numpy.ndarray,
+                      color: typing.Union[int, typing.Tuple[int, int, int]] = 255) -> numpy.ndarray:
         """去除边框"""
         return ProcessOpenCVImage.remove_border(image, color)
 

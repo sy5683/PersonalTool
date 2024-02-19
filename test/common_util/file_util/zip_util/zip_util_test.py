@@ -8,6 +8,6 @@ class ZipUtilTestCase(TestBase):
         self.test_path = self.get_test_file("测试.GIF")
 
     def test_decompress(self):
-        decompress_paths = ZipUtil.decompress(self.test_path, password="123456")
+        decompress_paths = ZipUtil.decompress(self.test_path, password='123456')
         for decompress_path in decompress_paths:
             print(decompress_path)
