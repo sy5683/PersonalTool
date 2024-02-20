@@ -15,9 +15,6 @@ class PackTool:
         assert self.tool_name, "工具名称不能为空"
         self.copy_path = None
 
-    def __del__(self):
-        Win32Util.open_file(self.__to_copy_path())
-
     def copy_tool(self):
         """复制工具"""
         # 1) 复制工具
@@ -31,6 +28,7 @@ class PackTool:
             util_path = self.__to_project_path(relative_util_path)
             copy_util_path = self.__to_copy_path(f"{self.tool_name}\\{relative_util_path}")
             shutil.copytree(util_path, copy_util_path)
+        Win32Util.open_file(self.__to_copy_path())
 
     def _get_tool_path(self) -> Path:
         """获取工具路径"""

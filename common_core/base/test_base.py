@@ -17,7 +17,7 @@ class TestBase(unittest.TestCase, LogBase, metaclass=abc.ABCMeta):
             test_file = test_file.parent.joinpath(file_name)
         return test_file
 
-    def __del__(self):
+    def tearDown(self):
         # 结尾强制等待0.01秒，保证控制台打印的信息保留在一起
         try:
             time.sleep(0.01)
