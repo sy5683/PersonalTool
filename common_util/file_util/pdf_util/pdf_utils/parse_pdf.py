@@ -9,7 +9,7 @@ from .entity.pdf_element import Cell, Table, Word
 from .entity.pdf_profile import PdfProfile
 
 
-class ParserPdf:
+class ParsePdf:
     """解析pdf"""
 
     @classmethod

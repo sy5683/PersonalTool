@@ -3,11 +3,11 @@ from pathlib import Path
 
 from openpyxl.worksheet.worksheet import Worksheet
 
-from .excel_utils.copy_xlsx import CopyXlsx
-from .excel_utils.format_excel_data import FormatExcelData
-from .excel_utils.verify_excel_data import VerifyExcelData
-from .excel_utils.win32_excel import Win32Excel
-from .excel_utils.xlrd_excel import XlrdExcel
+from .excel_utils.process_excel.copy_xlsx import CopyXlsx
+from .excel_utils.parse_excel.read_excel import ReadExcel
+from .excel_utils.process_excel_data.format_excel_data import FormatExcelData
+from .excel_utils.process_excel_data.verify_excel_data import VerifyExcelData
+from .excel_utils.process_excel.win32_excel import Win32Excel
 
 
 class ExcelUtil:
@@ -37,7 +37,7 @@ class ExcelUtil:
     def get_data_list(excel_path: typing.Union[Path, str], sheet_index: int = 0, sheet_name: str = None,
                       tag_row: int = 0, tag_row_quantity: int = 1) -> typing.List[dict]:
         """获取excel数据"""
-        return XlrdExcel.get_data_list(str(excel_path), sheet_index, sheet_name, tag_row, tag_row_quantity)
+        return ReadExcel.get_data_list(str(excel_path), sheet_index, sheet_name, tag_row, tag_row_quantity)
 
     @staticmethod
     def re_save_excel(excel_path: typing.Union[Path, str]):
