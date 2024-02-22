@@ -19,7 +19,6 @@ class ConvertAmount:
         """提取金额转换为浮点数"""
         amount_str = cls._get_amount_str(amount)
         if not amount_str:
-            logging.warning(f"未提取到金额: {amount}")
             return 0.0
         try:
             return cls._round_amount(float(amount_str))
