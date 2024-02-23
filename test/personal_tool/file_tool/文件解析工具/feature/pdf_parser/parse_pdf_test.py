@@ -6,7 +6,7 @@ from personal_tool.file_tool.文件解析工具.feature.pdf_parser.parse_pdf imp
 class ParsePdfTestCase(TestBase):
 
     def setUp(self):
-        self.excel_path = self.get_test_file("广东大唐国际潮州发电有限责任公司 财务公司 202011.xls")
+        self.excel_path = self.get_test_file("江西大唐国际寻乌风电有限责任公司 工商银行 202207.pdf")
 
     def test_parse_statement(self):
         result = ParsePdf.parse_receipt(self.excel_path)

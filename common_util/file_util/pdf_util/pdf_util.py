@@ -10,7 +10,7 @@ from .pdf_utils.parse_pdf import ParsePdf
 class PdfUtil:
 
     @staticmethod
-    def get_pdf_profiles(pdf_path: typing.Union[Path, str], threshold_x: int) -> typing.List[PdfProfile]:
+    def get_pdf_profiles(pdf_path: typing.Union[Path, str], threshold_x: int = 10) -> typing.List[PdfProfile]:
         """获取pdf内容"""
         return ParsePdf.get_pdf_profiles(str(pdf_path), threshold_x)
 

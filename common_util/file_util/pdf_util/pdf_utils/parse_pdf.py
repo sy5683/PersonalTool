@@ -95,15 +95,15 @@ class ParsePdf:
         image = numpy.zeros([pix_map.h, pix_map.w], dtype=numpy.uint8) + 255
         # 绘制pdf的线条
         for draw in page.get_drawings():
-            color = draw.get("color")
-            fill = draw.get("fill")
-            if color == [1.0, 1.0, 1.0] and fill is None:
+            color = list(draw.get("color") or [])
+            fill = list(draw.get("fill") or [])
+            if color == [1.0, 1.0, 1.0] and not fill:
                 continue
-            if fill == [1.0, 1.0, 1.0] and color is None:
+            if fill == [1.0, 1.0, 1.0] and not color:
                 continue
-            if color == [1.0] and fill is None:
+            if color == [1.0] and not fill:
                 continue
-            if fill == [1.0] and color is None:
+            if fill == [1.0] and not color:
                 continue
             for items in draw['items']:
                 if 'l' == items[0]:
@@ -158,6 +158,7 @@ class ParsePdf:
         for table in tables:
             for cell in cells:
                 if cls.__check_inside(cell.get_center(), table.rect):
+                    # print([each.text for each in cell.words])
                     table.cells.append(cell)
             # 当所有单元格分组后，根据所有单元格坐标绘制表格中的行高定位
             xs = sorted(set([cell.rect[0] for cell in table.cells]))
@@ -165,8 +166,9 @@ class ParsePdf:
             table.max_cols = len(xs)
             table.max_rows = len(ys)
             for cell in cells:
-                cell.col = xs.index(cell.rect[0])
-                cell.row = ys.index(cell.rect[1])
+                if cls.__check_inside(cell.get_center(), table.rect):
+                    cell.col = xs.index(cell.rect[0])
+                    cell.row = ys.index(cell.rect[1])
 
     @staticmethod
     def __check_inside(point: typing.Tuple[float, float], rect: typing.Tuple[float, float, float, float]):

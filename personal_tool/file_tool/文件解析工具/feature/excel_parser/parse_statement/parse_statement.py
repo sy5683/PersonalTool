@@ -18,7 +18,6 @@ class ParseStatement:
     def parse_statement(cls, statement_path: str, **kwargs) -> StatementProfile:
         """解析银行流水"""
         logging.info(f"解析银行流水: {statement_path}")
-        statement_name = os.path.basename(statement_path)
         try:
             profiles = []  # 使用列表存储是为了校验该银行流水是否唯一对应格式
             for profile_class in StatementProfile.__subclasses__():
@@ -27,7 +26,7 @@ class ParseStatement:
                     continue
                 profiles.append(profile_class(statement_path=statement_path, tag_row=tag_row, **kwargs))
             if not len(profiles):
-                raise ValueError(f"银行流水无法识别: {statement_name}")
+                raise ValueError(f"银行流水无法识别: {statement_path}")
             elif len(profiles) > 1:
                 raise ValueError("银行流水匹配多种格式: %s" % "、".join([each.bank_name for each in profiles]))
             else:
@@ -38,8 +37,8 @@ class ParseStatement:
         except xlrd.XLRDError:
             # 因为财务公司的银行流水本质上是html，无法使用xlrd读取，因此当报错XLRDError时，就说明流水银行类型为财务公司
             logging.warning("银行流水的类型为html类型的财务公司，转换后重新处理")
-            new_statement_path = ExcelUtil.xls_to_xlsx(statement_path, FileUtil.get_temp_path(statement_name))
-            return cls.parse_statement(new_statement_path, **kwargs)
+            temp_statement_path = FileUtil.get_temp_path(os.path.basename(statement_path))
+            return cls.parse_statement(ExcelUtil.xls_to_xlsx(statement_path, temp_statement_path), **kwargs)
 
     @staticmethod
     def __get_tag_row(statement_path: str, check_tags: typing.List[str]) -> int:
