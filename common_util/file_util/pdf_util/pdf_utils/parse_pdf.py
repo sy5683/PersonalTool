@@ -97,13 +97,11 @@ class ParsePdf:
         for draw in page.get_drawings():
             color = list(draw.get("color") or [])
             fill = list(draw.get("fill") or [])
-            if color == [1.0, 1.0, 1.0] and not fill:
+            if (color == [1.0, 1.0, 1.0] or color == [1.0]) and not fill:
                 continue
-            if fill == [1.0, 1.0, 1.0] and not color:
+            if (fill == [1.0, 1.0, 1.0] or fill == [1.0]) and not color:
                 continue
-            if color == [1.0] and not fill:
-                continue
-            if fill == [1.0] and not color:
+            if color == [1.0, 1.0, 1.0] and fill == [1.0]:
                 continue
             for items in draw['items']:
                 if 'l' == items[0]:
