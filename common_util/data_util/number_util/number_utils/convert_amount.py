@@ -1,4 +1,3 @@
-import logging
 import re
 
 
@@ -18,7 +17,7 @@ class ConvertAmount:
     def to_amount(cls, amount: any) -> float:
         """提取金额转换为浮点数"""
         amount_str = cls._get_amount_str(amount)
-        if not amount_str:
+        if not amount_str or amount_str == "-":
             return 0.0
         try:
             return cls._round_amount(float(amount_str))

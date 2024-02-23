@@ -2,10 +2,10 @@ import typing
 
 import xlrd
 
-from ..process_excel_data.format_excel_data import FormatExcelData
+from .process_excel_data.format_excel_data import FormatExcelData
 
 
-class ReadExcel:
+class ParseExcel:
 
     @classmethod
     def get_data_list(cls, excel_path: str, sheet_index: int, sheet_name: str, tag_row: int,
