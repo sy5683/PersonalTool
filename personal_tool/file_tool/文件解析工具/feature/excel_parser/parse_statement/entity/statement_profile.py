@@ -15,12 +15,12 @@ class StatementProfile(metaclass=abc.ABCMeta):
 
     def __init__(self, bank_name: str, statement_path: str, check_tags: typing.List[str], **kwargs):
         self.bank_name = bank_name  # 银行名称
+        self.company_name = kwargs.get("company_name")  # 特殊情况需要使用到公司名称
         self.statement_path = statement_path  # 流水路径
         self.statement_name = os.path.basename(statement_path)
         self.tag_row = self.__get_tag_row(check_tags)  # 表头行
         self.account_number = None  # 银行账号
         self.statements: typing.List[Statement] = []  # 流水数据
-        self._company_name = kwargs.get("company_name")  # 特殊情况需要使用到公司名称
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
@@ -44,7 +44,7 @@ class StatementProfile(metaclass=abc.ABCMeta):
         获取在表头上方的特殊数据（一般为特殊银行的开户名称或者开户账号）
         获取方式一般为在指定标签单元格的右边一格获取公司名称，因此relative_col默认为1
         """
-        special_data_list = []  # 使用列表存储是为了校验获取的数据是否唯一
+        special_data_list = []
         workbook = xlrd.open_workbook(self.statement_path)
         worksheet = workbook.sheet_by_name(workbook.sheet_names()[0])
         for row in range(self.tag_row):

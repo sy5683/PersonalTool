@@ -39,7 +39,7 @@ class ABC03Statement(StatementProfile):
             self.account_number = self._get_special_data(ABC03SpecialTags.account_number.value, relative_col=0).replace(
                 ABC03SpecialTags.account_number.value, "")
         except ValueError:  # 无法匹配到指定列时，调用接口获取农行的开户名称与开户账号
-            assert self._company_name, "农行流水需要传入公司名称调用接口获取银行账号"
+            assert self.company_name, "农行流水需要传入公司名称调用接口获取银行账号"
             account_name, self.account_number = self._get_abc_account_info()
         assert self.account_number, f"银行流水【{self.statement_name}】未取到农行账号"
         for data in ExcelUtil.get_data_list(self.statement_path, tag_row=self.tag_row):
