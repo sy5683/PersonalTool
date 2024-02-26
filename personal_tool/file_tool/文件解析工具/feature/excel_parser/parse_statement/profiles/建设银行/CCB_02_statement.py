@@ -23,7 +23,7 @@ class CCB02Tags(Enum):
     balance = "余额"
 
 
-class CCB02(StatementProfile):
+class CCB02Statement(StatementProfile):
 
     def __init__(self, statement_path: str, tag_row: int, **kwargs):
         super().__init__("建设银行", statement_path, tag_row, **kwargs)

@@ -27,7 +27,7 @@ class BCM01SpecialTags(Enum):
     payment_mark = "借贷标志"
 
 
-class BCM01(StatementProfile):
+class BCM01Statement(StatementProfile):
 
     def __init__(self, statement_path: str, tag_row: int, **kwargs):
         super().__init__("交通银行", statement_path, tag_row, **kwargs)

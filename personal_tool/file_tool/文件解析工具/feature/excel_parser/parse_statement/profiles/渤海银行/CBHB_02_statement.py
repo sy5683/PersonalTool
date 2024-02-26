@@ -29,7 +29,7 @@ class CBHB02SpecialTags(Enum):
     account_number = "账号："
 
 
-class CBHB02(StatementProfile):
+class CBHB02Statement(StatementProfile):
 
     def __init__(self, statement_path: str, tag_row: int, **kwargs):
         super().__init__("渤海银行", statement_path, tag_row, **kwargs)

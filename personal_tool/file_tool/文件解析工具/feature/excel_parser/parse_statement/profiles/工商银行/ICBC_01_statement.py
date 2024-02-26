@@ -23,7 +23,7 @@ class ICBC01Tags(Enum):
     balance = "余额"
 
 
-class ICBC01(StatementProfile):
+class ICBC01Statement(StatementProfile):
 
     def __init__(self, statement_path: str, tag_row: int, **kwargs):
         super().__init__("工商银行", statement_path, tag_row, **kwargs)

@@ -28,7 +28,7 @@ class CCB01SpecialTags(Enum):
     receive_amount = "贷方"
 
 
-class CCB01(StatementProfile):
+class CCB01Statement(StatementProfile):
 
     def __init__(self, statement_path: str, tag_row: int, **kwargs):
         super().__init__("建设银行", statement_path, tag_row, **kwargs)

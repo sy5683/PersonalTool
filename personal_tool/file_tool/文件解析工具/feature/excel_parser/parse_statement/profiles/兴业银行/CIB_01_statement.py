@@ -23,7 +23,7 @@ class CIB01Tags(Enum):
     balance = "账户余额"
 
 
-class CIB01(StatementProfile):
+class CIB01Statement(StatementProfile):
 
     def __init__(self, statement_path: str, tag_row: int, **kwargs):
         super().__init__("兴业银行", statement_path, tag_row, **kwargs)

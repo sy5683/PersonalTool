@@ -22,7 +22,7 @@ class PAB01Tags(Enum):
     balance = "账户余额"
 
 
-class PAB01(StatementProfile):
+class PAB01Statement(StatementProfile):
 
     def __init__(self, statement_path: str, tag_row: int, **kwargs):
         super().__init__("平安银行", statement_path, tag_row, **kwargs)

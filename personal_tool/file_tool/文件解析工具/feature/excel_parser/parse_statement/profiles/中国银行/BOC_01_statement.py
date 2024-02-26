@@ -30,7 +30,7 @@ class BOC01SpecialTags(Enum):
     account_number = "查询账号[ Inquirer account number ]"
 
 
-class BOC01(StatementProfile):
+class BOC01Statement(StatementProfile):
 
     def __init__(self, statement_path: str, tag_row: int, **kwargs):
         super().__init__("中国银行", statement_path, tag_row, **kwargs)

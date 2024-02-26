@@ -27,7 +27,7 @@ class FC01SpecialTags(Enum):
     account_number = "账户号"
 
 
-class FC01(StatementProfile):
+class FC01Statement(StatementProfile):
 
     def __init__(self, statement_path: str, tag_row: int, **kwargs):
         super().__init__("财务公司", statement_path, tag_row, **kwargs)

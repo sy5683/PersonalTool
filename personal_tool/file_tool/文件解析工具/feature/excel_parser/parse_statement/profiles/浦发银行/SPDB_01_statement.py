@@ -28,7 +28,7 @@ class SPDB01SpecialTags(Enum):
     account_number = "账号"
 
 
-class SPDB01(StatementProfile):
+class SPDB01Statement(StatementProfile):
 
     def __init__(self, statement_path: str, tag_row: int, **kwargs):
         super().__init__("浦发银行", statement_path, tag_row, **kwargs)

@@ -8,26 +8,26 @@ from ...entity.statement import Statement
 from ...entity.statement_profile import StatementProfile
 
 
-class ABC02Tags(Enum):
+class ABC01Tags(Enum):
     """农业银行 表头"""
     # 【农业银行】无对应【交易流水号】
-    trade_datetime = "交易时间戳"
+    trade_datetime = "交易时间"
     reciprocal_account_name = "对方户名"
     reciprocal_account_number = "对方账号"
-    purpose = "交易附言"
+    purpose = "交易用途"
     # 【农业银行】无对应【用途】
     payment_amount = "支出金额"
     receive_amount = "收入金额"
-    balance = "本次余额"
+    balance = "账户余额"
 
 
-class ABC02SpecialTags(Enum):
+class ABC01SpecialTags(Enum):
     """农业银行 特殊表头"""
     account_name = "账户名称"
     account_number = "账户号"
 
 
-class ABC02(StatementProfile):
+class ABC01Statement(StatementProfile):
 
     def __init__(self, statement_path: str, tag_row: int, **kwargs):
         super().__init__("农业银行", statement_path, tag_row, **kwargs)
@@ -35,13 +35,13 @@ class ABC02(StatementProfile):
     @staticmethod
     def get_check_tags() -> typing.List[str]:
         """获取校验用的表头"""
-        return [tag.value for tag in ABC02Tags]
+        return [tag.value for tag in ABC01Tags]
 
     def parse_statement(self):
         """解析流水"""
         try:
-            account_name = self._get_special_data(ABC02SpecialTags.account_name.value, relative_col=2)
-            self.account_number = self._get_special_data(ABC02SpecialTags.account_number.value, relative_col=2)
+            account_name = self._get_special_data(ABC01SpecialTags.account_name.value, relative_col=2)
+            self.account_number = self._get_special_data(ABC01SpecialTags.account_number.value, relative_col=2)
         except ValueError:  # 无法匹配到指定列时，调用接口获取农行的开户名称与开户账号
             assert self.company_name, "农行流水需要传入公司名称调用接口获取银行账号"
             account_name, self.account_number = self._get_abc_account_info()
@@ -51,19 +51,20 @@ class ABC02(StatementProfile):
             statement.reference_number = ""  # 交易流水号(【农业银行】无对应交易流水号)
             # noinspection PyBroadException
             try:  # 交易时间
-                statement.trade_datetime = self._format_date(data[ABC02Tags.trade_datetime.value])
+                statement.trade_datetime = self._format_date(data[ABC01Tags.trade_datetime.value])
             except Exception:  
                 logging.warning(f"数据异常，不处理: {data}")
                 continue
             statement.account_name = account_name.strip()  # 开户名称
             statement.account_number = self.account_number  # 开户账号
-            statement.reciprocal_account_name = data[ABC02Tags.reciprocal_account_name.value]  # 对方账户名称
-            statement.reciprocal_account_number = data[ABC02Tags.reciprocal_account_number.value]  # 对方账户号
-            statement.abstract = f"{statement.reciprocal_account_name} {data[ABC02Tags.purpose.value]}"  # 摘要
+            reciprocal_account_name = data[ABC01Tags.reciprocal_account_name.value]
+            statement.reciprocal_account_name = reciprocal_account_name  # 对方账户名称
+            statement.reciprocal_account_number = data[ABC01Tags.reciprocal_account_number.value]  # 对方账户号
+            statement.abstract = f"{reciprocal_account_name}；{data[ABC01Tags.purpose.value]}"  # 摘要
             statement.purpose = ""  # 用途(【农业银行】无对应用途)
-            statement.payment_amount = NumberUtil.to_amount(data[ABC02Tags.payment_amount.value])  # 付款金额
-            statement.receive_amount = NumberUtil.to_amount(data[ABC02Tags.receive_amount.value])  # 收款金额
+            statement.payment_amount = NumberUtil.to_amount(data[ABC01Tags.payment_amount.value])  # 付款金额
+            statement.receive_amount = NumberUtil.to_amount(data[ABC01Tags.receive_amount.value])  # 收款金额
             if not statement.payment_amount and not statement.receive_amount:
                 continue
-            statement.balance = NumberUtil.to_amount(data[ABC02Tags.balance.value])  # 余额
+            statement.balance = NumberUtil.to_amount(data[ABC01Tags.balance.value])  # 余额
             self.statements.append(statement)
