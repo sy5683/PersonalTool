@@ -30,12 +30,7 @@ class BCM01SpecialTags(Enum):
 class BCM01Statement(StatementProfile):
 
     def __init__(self, statement_path: str, **kwargs):
-        super().__init__("交通银行", statement_path, **kwargs)
-
-    @staticmethod
-    def get_check_tags() -> typing.List[str]:
-        """获取校验用的表头"""
-        return [tag.value for tag in BCM01Tags]
+        super().__init__("交通银行", statement_path, check_tags=[tag.value for tag in BCM01Tags], **kwargs)
 
     def parse_statement(self):
         """解析流水"""

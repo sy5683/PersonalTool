@@ -1,5 +1,4 @@
 import logging
-import typing
 from enum import Enum
 
 from common_util.data_util.number_util.number_util import NumberUtil
@@ -26,12 +25,7 @@ class CDB01Tags(Enum):
 class CDB01Statement(StatementProfile):
 
     def __init__(self, statement_path: str, **kwargs):
-        super().__init__("国开行", statement_path, **kwargs)
-
-    @staticmethod
-    def get_check_tags() -> typing.List[str]:
-        """获取校验用的表头"""
-        return [tag.value for tag in CDB01Tags]
+        super().__init__("国开行", statement_path, check_tags=[tag.value for tag in CDB01Tags], **kwargs)
 
     def parse_statement(self):
         """解析流水"""
@@ -41,7 +35,7 @@ class CDB01Statement(StatementProfile):
             # noinspection PyBroadException
             try:  # 交易时间
                 statement.trade_datetime = self._format_date(data[CDB01Tags.trade_datetime.value])
-            except Exception:  
+            except Exception:
                 logging.warning(f"数据异常，不处理: {data}")
                 continue
             if data[CDB01Tags.payment_or_receive.value] == "收入":

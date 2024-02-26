@@ -13,23 +13,18 @@ from .statement import Statement
 
 class StatementProfile(metaclass=abc.ABCMeta):
 
-    def __init__(self, bank_name: str, statement_path: str, **kwargs):
+    def __init__(self, bank_name: str, statement_path: str, check_tags: typing.List[str], **kwargs):
         self.bank_name = bank_name  # 银行名称
-        self.company_name = kwargs.get("company_name")  # 特殊情况需要使用到公司名称
         self.statement_path = statement_path  # 流水路径
         self.statement_name = os.path.basename(statement_path)
-        self.tag_row = self.__get_tag_row(self.get_check_tags())  # 表头行
+        self.tag_row = self.__get_tag_row(check_tags)  # 表头行
         self.account_number = None  # 银行账号
         self.statements: typing.List[Statement] = []  # 流水数据
+        self._company_name = kwargs.get("company_name")  # 特殊情况需要使用到公司名称
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
         return True if self.tag_row else False
-
-    @staticmethod
-    @abc.abstractmethod
-    def get_check_tags() -> typing.List[str]:
-        """获取校验用的表头"""
 
     @abc.abstractmethod
     def parse_statement(self):
@@ -44,7 +39,7 @@ class StatementProfile(metaclass=abc.ABCMeta):
         """获取农行开户账号信息（开户名称与开户账号）"""
         results = []  # TODO
         if not len(results):
-            raise ValueError(f"未找到指定公司 {self.company_name} 下的农行账号")
+            raise ValueError(f"未找到指定公司 {self._company_name} 下的农行账号")
         elif len(results) > 1:
             # 当从接口中获取的账号有多个时，需要根据资源文件的文件名后四位判断
             if len(self.statement_name) < 4:

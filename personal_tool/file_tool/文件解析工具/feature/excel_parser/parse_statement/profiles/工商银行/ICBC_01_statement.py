@@ -1,5 +1,4 @@
 import logging
-import typing
 from enum import Enum
 
 from common_util.data_util.number_util.number_util import NumberUtil
@@ -26,27 +25,22 @@ class ICBC01Tags(Enum):
 class ICBC01Statement(StatementProfile):
 
     def __init__(self, statement_path: str, **kwargs):
-        super().__init__("工商银行", statement_path, **kwargs)
-
-    @staticmethod
-    def get_check_tags() -> typing.List[str]:
-        """获取校验用的表头"""
-        return [tag.value for tag in ICBC01Tags]
+        super().__init__("工商银行", statement_path, check_tags=[tag.value for tag in ICBC01Tags], **kwargs)
 
     def parse_statement(self):
         """解析流水"""
-        assert self.company_name, "工行流水需要传入公司名称作为开户名称"
+        assert self._company_name, "工行流水需要传入公司名称作为开户名称"
         for data in ExcelUtil.get_data_list(self.statement_path, tag_row=self.tag_row):
             statement = Statement()
             statement.reference_number = ""  # 交易流水号(【工商银行】无对应交易流水号)
             # noinspection PyBroadException
             try:  # 交易时间
                 statement.trade_datetime = self._format_date(data[ICBC01Tags.trade_datetime.value])
-            except Exception:  
+            except Exception:
                 logging.warning(f"数据异常，不处理: {data}")
                 continue
             # 工行下载时有异常情况，下载时选项没有开户名称，因此工行的开户名称通过表单参数传递
-            statement.account_name = self.company_name  # 开户名称
+            statement.account_name = self._company_name  # 开户名称
             statement.account_number = data[ICBC01Tags.account_number.value]  # 开户账号
             self.account_number = statement.account_number
             statement.reciprocal_account_name = data[ICBC01Tags.reciprocal_account_name.value]  # 对方账户名称

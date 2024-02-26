@@ -1,5 +1,4 @@
 import logging
-import typing
 from enum import Enum
 
 from common_util.data_util.number_util.number_util import NumberUtil
@@ -33,12 +32,7 @@ class BOC01SpecialTags(Enum):
 class BOC01Statement(StatementProfile):
 
     def __init__(self, statement_path: str, **kwargs):
-        super().__init__("中国银行", statement_path, **kwargs)
-
-    @staticmethod
-    def get_check_tags() -> typing.List[str]:
-        """获取校验用的表头"""
-        return [tag.value for tag in BOC01Tags]
+        super().__init__("中国银行", statement_path, check_tags=[tag.value for tag in BOC01Tags], **kwargs)
 
     def parse_statement(self):
         """解析流水"""
