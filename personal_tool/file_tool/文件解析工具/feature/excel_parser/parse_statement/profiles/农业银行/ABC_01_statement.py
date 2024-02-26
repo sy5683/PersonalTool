@@ -49,7 +49,7 @@ class ABC01Statement(StatementProfile):
             except Exception:
                 logging.warning(f"数据异常，不处理: {data}")
                 continue
-            statement.account_name = account_name.strip()  # 开户名称
+            statement.account_name = account_name  # 开户名称
             statement.account_number = self.account_number  # 开户账号
             reciprocal_account_name = data[ABC01Tags.reciprocal_account_name.value]
             statement.reciprocal_account_name = reciprocal_account_name  # 对方账户名称

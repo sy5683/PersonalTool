@@ -37,17 +37,7 @@ class StatementProfile(metaclass=abc.ABCMeta):
 
     def _get_abc_account_info(self) -> typing.Tuple[str, str]:
         """获取农行开户账号信息（开户名称与开户账号）"""
-        results = []  # TODO
-        if not len(results):
-            raise ValueError(f"未找到指定公司 {self._company_name} 下的农行账号")
-        elif len(results) > 1:
-            # 当从接口中获取的账号有多个时，需要根据资源文件的文件名后四位判断
-            if len(self.statement_name) < 4:
-                raise ValueError("该农行流水无法从文件内获取到账户信息，需要在文件名称的最后添加银行账号的后四位")
-            account_info = {}
-        else:
-            account_info = results[0]
-        return account_info.get("BANK_ACC_NAME"), account_info.get("BANK_NUM")
+        return "", ""  # TODO
 
     def _get_special_data(self, *check_tags: str, relative_col: int = 1) -> str:
         """

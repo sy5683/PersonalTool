@@ -51,7 +51,7 @@ class ABC03Statement(StatementProfile):
             except Exception:
                 logging.warning(f"数据异常，不处理: {data}")
                 continue
-            statement.account_name = account_name.strip()  # 开户名称
+            statement.account_name = account_name  # 开户名称
             statement.account_number = self.account_number  # 开户账号
             statement.reciprocal_account_name = data[ABC03Tags.reciprocal_account_name.value]  # 对方账户名称
             statement.reciprocal_account_number = data[ABC03Tags.reciprocal_account_number.value]  # 对方账户号
