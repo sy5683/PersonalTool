@@ -25,9 +25,8 @@ class ICBC01Tags(Enum):
 
 class ICBC01Statement(StatementProfile):
 
-    def __init__(self, statement_path: str, tag_row: int, **kwargs):
-        super().__init__("工商银行", statement_path, tag_row, **kwargs)
-        assert self.company_name, "工行流水需要传入公司名称作为开户名称"
+    def __init__(self, statement_path: str, **kwargs):
+        super().__init__("工商银行", statement_path, **kwargs)
 
     @staticmethod
     def get_check_tags() -> typing.List[str]:
@@ -36,6 +35,7 @@ class ICBC01Statement(StatementProfile):
 
     def parse_statement(self):
         """解析流水"""
+        assert self.company_name, "工行流水需要传入公司名称作为开户名称"
         for data in ExcelUtil.get_data_list(self.statement_path, tag_row=self.tag_row):
             statement = Statement()
             statement.reference_number = ""  # 交易流水号(【工商银行】无对应交易流水号)

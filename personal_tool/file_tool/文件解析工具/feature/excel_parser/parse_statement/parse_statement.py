@@ -1,6 +1,5 @@
 import logging
 import os.path
-import typing
 from pathlib import Path
 
 import xlrd
@@ -21,10 +20,9 @@ class ParseStatement:
         try:
             profiles = []  # 使用列表存储是为了校验该银行流水是否唯一对应格式
             for profile_class in StatementProfile.__subclasses__():
-                tag_row = cls.__get_tag_row(statement_path, profile_class.get_check_tags())
-                if not tag_row:  # 能获取到标签行，就说明能匹配这一类银行
-                    continue
-                profiles.append(profile_class(statement_path=statement_path, tag_row=tag_row, **kwargs))
+                profile = profile_class(statement_path=statement_path, **kwargs)
+                if profile.judge():
+                    profiles.append(profile)
             if not len(profiles):
                 raise ValueError(f"银行流水无法识别: {statement_path}")
             elif len(profiles) > 1:
@@ -39,13 +37,3 @@ class ParseStatement:
             logging.warning("银行流水的类型为html类型的财务公司，转换后重新处理")
             temp_statement_path = FileUtil.get_temp_path(os.path.basename(statement_path))
             return cls.parse_statement(ExcelUtil.xls_to_xlsx(statement_path, temp_statement_path), **kwargs)
-
-    @staticmethod
-    def __get_tag_row(statement_path: str, check_tags: typing.List[str]) -> int:
-        """获取表头所在行"""
-        workbook = xlrd.open_workbook(statement_path)
-        worksheet = workbook.sheet_by_name(workbook.sheet_names()[0])
-        for row in range(min(worksheet.nrows, 50)):
-            row_values = [str(each).strip() for each in worksheet.row_values(row)]
-            if set(check_tags) <= set(row_values):
-                return row

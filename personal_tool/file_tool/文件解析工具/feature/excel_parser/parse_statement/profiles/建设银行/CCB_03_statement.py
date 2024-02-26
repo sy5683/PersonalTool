@@ -29,8 +29,8 @@ class CCB03SpecialTags(Enum):
 
 class CCB03Statement(StatementProfile):
 
-    def __init__(self, statement_path: str, tag_row: int, **kwargs):
-        super().__init__("建设银行", statement_path, tag_row, **kwargs)
+    def __init__(self, statement_path: str, **kwargs):
+        super().__init__("建设银行", statement_path, **kwargs)
 
     @staticmethod
     def get_check_tags() -> typing.List[str]:
