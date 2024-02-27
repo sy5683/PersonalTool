@@ -156,7 +156,6 @@ class ParsePdf:
         for table in tables:
             for cell in cells:
                 if cls.__check_inside(cell.get_center(), table.rect):
-                    # print([each.text for each in cell.words])
                     table.cells.append(cell)
             # 当所有单元格分组后，根据所有单元格坐标绘制表格中的行高定位
             xs = sorted(set([cell.rect[0] for cell in table.cells]))
