@@ -13,10 +13,10 @@ class ICBC01Receipt(ReceiptProfile):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        document = fitz.open(self.receipt_path)
-        if "www.icbc.com.cn" in document[0].get_text():
-            return True
-        return False
+        with fitz.open(self.receipt_path) as pdf:
+            if "www.icbc.com.cn" not in pdf[0].get_text():
+                return False
+        return True
 
     def parse_receipt(self):
         """解析回单"""
