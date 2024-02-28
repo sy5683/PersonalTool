@@ -11,4 +11,6 @@ class ParsePdfTestCase(TestBase):
     def test_parse_statement(self):
         for pdf_path in self.pdf_path.rglob("*.pdf"):
             result = ParsePdf.parse_receipt(pdf_path)
-            print([each.__dict__ for each in result.receipts])
+            for receipt in result.receipts:
+                print(receipt.__dict__)
+            print()

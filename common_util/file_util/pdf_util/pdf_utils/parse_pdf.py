@@ -1,4 +1,5 @@
 import copy
+import re
 import typing
 
 import cv2
@@ -94,6 +95,7 @@ class ParsePdf:
         pix_map = page.get_pixmap(matrix=fitz.Matrix(1, 1))
         image = numpy.zeros([pix_map.h, pix_map.w], dtype=numpy.uint8) + 255
         # 绘制pdf的线条
+        _debug = False
         for draw in page.get_drawings():
             color = list(draw.get("color") or [])
             fill = list(draw.get("fill") or [])
@@ -104,16 +106,23 @@ class ParsePdf:
             if color == [1.0, 1.0, 1.0] and fill == [1.0]:
                 continue
             for items in draw['items']:
-                if 'l' == items[0]:
+                if "l" == items[0]:
                     p1, p2 = cls.__to_int(*items[1]), cls.__to_int(*items[2])
                     image = cv2.line(image, (p1[0], p1[1]), (p2[0], p2[1]), (0, 0, 0))
-                elif 're' == items[0]:
+                elif "re" == items[0]:
                     p = cls.__to_int(*items[1])
                     image = cv2.rectangle(image, (p[0], p[1]), (p[2], p[3]), (0, 0, 0))
-                elif 'c' == items[0]:
-                    print('c', items)  # TODO
+                elif "qu" == items[0]:
+                    p = cls.__to_int(*items[1].rect)
+                    image = cv2.rectangle(image, (p[0], p[1]), (p[2], p[3]), (0, 0, 0))
                 else:
-                    print(items)  # TODO
+                    # print(items[0], items)  # TODO
+                    _debug = True
+                    pass
+        if _debug:
+            cv2.imshow("show_name", image)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
         # 使用漫水填充算法，将周围变为黑色，这样可以去掉单独的线条
         cv2.floodFill(image, None, (1, 1), (0, 0, 0), flags=cv2.FLOODFILL_FIXED_RANGE)
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
@@ -146,7 +155,7 @@ class ParsePdf:
             # 旋转后矩形点位置发生改变，需要还原
             p3 = min(p1[0], p2[0]), min(p1[1], p2[1])  # 左上
             p4 = max(p1[0], p2[0]), max(p1[1], p2[1])  # 右下
-            words.append(Word((p3[0], p3[1], p4[0], p4[1]), pdf_word[4]))
+            words.append(Word((p3[0], p3[1], p4[0], p4[1]), re.sub(r"\s+", "", pdf_word[4])))
         # 根据左上角坐标排序，从上至下，从左至右
         return sorted(words, key=lambda x: (x.rect[1], x.rect[0]))
 

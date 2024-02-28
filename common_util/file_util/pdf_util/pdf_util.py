@@ -5,9 +5,10 @@ import numpy
 
 from .pdf_utils.convert_pdf import ConvertPdf
 from .pdf_utils.entity.pdf_element import Table, Word
-from .pdf_utils.entity.pdf_profile import PdfProfile
+from .pdf_utils.entity.pdf_profile import PdfProfile, ReceiptProfile
 from .pdf_utils.extract_pdf import ExtractPdf
 from .pdf_utils.parse_pdf import ParsePdf
+from .pdf_utils.process_pdf_profile import ProcessPdfProfile
 
 
 class PdfUtil:
@@ -33,13 +34,18 @@ class PdfUtil:
         return ParsePdf.get_pdf_words(str(pdf_path), threshold_x)
 
     @staticmethod
+    def images_to_pdf(image_paths: typing.List[typing.Union[Path, str]],
+                      save_path: typing.Union[Path, str] = None) -> str:
+        """图片转pdf"""
+        return ConvertPdf.images_to_pdf([str(image_path) for image_path in image_paths], save_path)
+
+    @staticmethod
     def pdf_to_images(pdf_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None,
                       suffix: str = 'png') -> typing.List[str]:
         """pdf转图片"""
         return ConvertPdf.pdf_to_images(str(pdf_path), save_path, suffix)
 
     @staticmethod
-    def images_to_pdf(image_paths: typing.List[typing.Union[Path, str]],
-                      save_path: typing.Union[Path, str] = None) -> str:
-        """图片转pdf"""
-        return ConvertPdf.images_to_pdf([str(image_path) for image_path in image_paths], save_path)
+    def split_receipt_pdf(pdf_profile: PdfProfile) -> typing.List[ReceiptProfile]:
+        """分割回单pdf"""
+        return ProcessPdfProfile.split_receipt_pdf(pdf_profile)

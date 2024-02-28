@@ -9,5 +9,5 @@ class ParseExcelTestCase(TestBase):
         self.excel_path = self.get_test_file("广东大唐国际潮州发电有限责任公司 财务公司 202011.xls")
 
     def test_parse_statement(self):
-        result = ParseExcel.parse_statement(self.excel_path)
-        ObjectUtil.print_object(result)
+        statement_parser = ParseExcel.parse_statement(self.excel_path)
+        ObjectUtil.print_object(statement_parser)
