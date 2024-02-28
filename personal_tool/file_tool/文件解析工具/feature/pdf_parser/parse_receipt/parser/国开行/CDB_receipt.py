@@ -35,5 +35,3 @@ class CDBReceiptParser(ReceiptParser):
                     raise ValueError(f"{self.bank_name}回单pdf中有匹配多个格式的回单")
                 else:
                     self.receipts.append(receipt_types[0].get_receipt())
-
-            # # # receipt.date = TimeUtil.format_time(table.get_row_values(7)[1])  # 日期
