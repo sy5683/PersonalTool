@@ -1,0 +1,34 @@
+import re
+
+from common_util.data_util.number_util.number_util import NumberUtil
+from .CDB_receipt_type import CDBReceiptType
+from ....entity.receipt import Receipt
+
+
+class CDBReceiptType01(CDBReceiptType):
+
+    def judge(self) -> bool:
+        """判断是否为当前格式"""
+        if self.table.max_cols != 6:
+            return False
+        if not {"付款人", "全称", "收款人", "全称"} < set(self.table.get_row_values(0)):
+            return False
+        return True
+
+    def get_receipt(self) -> Receipt:
+        """解析回单"""
+        receipt = Receipt()
+        receipt.date = self._get_date("人民币(.*?)流水号")  # 日期
+        name_row_values = self.table.get_row_values(0)
+        if name_row_values[0] == "付款人":
+            receipt.payer_account_name = name_row_values[2]  # 付款人户名
+            receipt.payer_account_number = self.table.get_row_values(1)[1]  # 付款人账号
+            receipt.payee_account_name = name_row_values[5]  # 收款人户名
+            receipt.payee_account_number = self.table.get_row_values(1)[3]  # 收款人账号
+        elif name_row_values[0] == "收款人":
+            receipt.payer_account_name = name_row_values[5]  # 付款人户名
+            receipt.payer_account_number = self.table.get_row_values(1)[3]  # 付款人账号
+            receipt.payee_account_name = name_row_values[2]  # 收款人户名
+            receipt.payee_account_number = self.table.get_row_values(1)[1]  # 收款人账号
+        receipt.amount = NumberUtil.to_amount(re.findall(r"￥(.*)", self.table.get_row_values(3)[1]))  # 金额
+        return receipt
