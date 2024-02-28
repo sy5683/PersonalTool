@@ -28,7 +28,7 @@ class CBHB01SpecialTags(Enum):
     account_number = "账号"
 
 
-class CBHB01Statement(StatementParser):
+class CBHB01StatementParser(StatementParser):
 
     def __init__(self, statement_path: str, **kwargs):
         super().__init__("渤海银行", statement_path, check_tags=[tag.value for tag in CBHB01Tags], **kwargs)

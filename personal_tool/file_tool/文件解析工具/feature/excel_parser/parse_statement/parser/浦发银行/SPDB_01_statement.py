@@ -27,7 +27,7 @@ class SPDB01SpecialTags(Enum):
     account_number = "账号"
 
 
-class SPDB01Statement(StatementParser):
+class SPDB01StatementParser(StatementParser):
 
     def __init__(self, statement_path: str, **kwargs):
         super().__init__("浦发银行", statement_path, check_tags=[tag.value for tag in SPDB01Tags], **kwargs)

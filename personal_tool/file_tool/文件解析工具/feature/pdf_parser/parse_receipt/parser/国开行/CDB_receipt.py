@@ -7,7 +7,7 @@ from ...entity.receipt import Receipt
 from ...entity.receipt_parser import ReceiptParser
 
 
-class CDBReceipt(ReceiptParser):
+class CDBReceiptParser(ReceiptParser):
 
     def __init__(self, receipt_path: str, **kwargs):
         super().__init__("国开行", receipt_path, **kwargs)

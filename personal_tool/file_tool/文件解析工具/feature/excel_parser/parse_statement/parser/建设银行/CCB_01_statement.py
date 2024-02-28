@@ -27,7 +27,7 @@ class CCB01SpecialTags(Enum):
     receive_amount = "贷方"
 
 
-class CCB01Statement(StatementParser):
+class CCB01StatementParser(StatementParser):
 
     def __init__(self, statement_path: str, **kwargs):
         super().__init__("建设银行", statement_path, check_tags=[tag.value for tag in CCB01Tags], **kwargs)

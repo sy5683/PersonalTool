@@ -22,7 +22,7 @@ class CDB01Tags(Enum):
     balance = "交易后余额（元）"
 
 
-class CDB01Statement(StatementParser):
+class CDB01StatementParser(StatementParser):
 
     def __init__(self, statement_path: str, **kwargs):
         super().__init__("国开行", statement_path, check_tags=[tag.value for tag in CDB01Tags], **kwargs)

@@ -29,7 +29,7 @@ class BOC01SpecialTags(Enum):
     account_number = "查询账号[ Inquirer account number ]"
 
 
-class BOC01Statement(StatementParser):
+class BOC01StatementParser(StatementParser):
 
     def __init__(self, statement_path: str, **kwargs):
         super().__init__("中国银行", statement_path, check_tags=[tag.value for tag in BOC01Tags], **kwargs)

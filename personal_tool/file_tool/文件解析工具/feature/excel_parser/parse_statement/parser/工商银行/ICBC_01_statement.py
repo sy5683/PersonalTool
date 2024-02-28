@@ -22,7 +22,7 @@ class ICBC01Tags(Enum):
     balance = "余额"
 
 
-class ICBC01Statement(StatementParser):
+class ICBC01StatementParser(StatementParser):
 
     def __init__(self, statement_path: str, **kwargs):
         super().__init__("工商银行", statement_path, check_tags=[tag.value for tag in ICBC01Tags], **kwargs)

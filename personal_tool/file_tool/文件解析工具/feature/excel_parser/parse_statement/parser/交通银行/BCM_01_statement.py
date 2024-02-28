@@ -1,5 +1,4 @@
 import logging
-import typing
 from enum import Enum
 
 from common_util.data_util.number_util.number_util import NumberUtil
@@ -27,7 +26,7 @@ class BCM01SpecialTags(Enum):
     payment_mark = "借贷标志"
 
 
-class BCM01Statement(StatementParser):
+class BCM01StatementParser(StatementParser):
 
     def __init__(self, statement_path: str, **kwargs):
         super().__init__("交通银行", statement_path, check_tags=[tag.value for tag in BCM01Tags], **kwargs)

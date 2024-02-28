@@ -22,7 +22,7 @@ class CCB02Tags(Enum):
     balance = "余额"
 
 
-class CCB02Statement(StatementParser):
+class CCB02StatementParser(StatementParser):
 
     def __init__(self, statement_path: str, **kwargs):
         super().__init__("建设银行", statement_path, check_tags=[tag.value for tag in CCB02Tags], **kwargs)

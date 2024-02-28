@@ -26,7 +26,7 @@ class ABC02SpecialTags(Enum):
     account_number = "账户号"
 
 
-class ABC02Statement(StatementParser):
+class ABC02StatementParser(StatementParser):
 
     def __init__(self, statement_path: str, **kwargs):
         super().__init__("农业银行", statement_path, check_tags=[tag.value for tag in ABC02Tags], **kwargs)

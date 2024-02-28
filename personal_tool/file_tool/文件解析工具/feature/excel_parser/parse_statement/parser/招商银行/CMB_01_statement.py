@@ -30,7 +30,7 @@ class CMB01SpecialTags(Enum):
     account_number = "银行账号"
 
 
-class CMB01Statement(StatementParser):
+class CMB01StatementParser(StatementParser):
 
     def __init__(self, statement_path: str, **kwargs):
         super().__init__("招商银行", statement_path, check_tags=[tag.value for tag in CMB01Tags], **kwargs)

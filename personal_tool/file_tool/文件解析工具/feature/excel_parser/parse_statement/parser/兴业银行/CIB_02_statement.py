@@ -22,7 +22,7 @@ class CIB02Tags(Enum):
     balance = "账户余额"
 
 
-class CIB02Statement(StatementParser):
+class CIB02StatementParser(StatementParser):
 
     def __init__(self, statement_path: str, **kwargs):
         super().__init__("兴业银行", statement_path, check_tags=[tag.value for tag in CIB02Tags], **kwargs)

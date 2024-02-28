@@ -21,7 +21,7 @@ class PAB01Tags(Enum):
     balance = "账户余额"
 
 
-class PAB01Statement(StatementParser):
+class PAB01StatementParser(StatementParser):
 
     def __init__(self, statement_path: str, **kwargs):
         super().__init__("平安银行", statement_path, check_tags=[tag.value for tag in PAB01Tags], **kwargs)

@@ -26,7 +26,7 @@ class ICBC02SpecialTags(Enum):
     account_number = "账号: "
 
 
-class ICBC02Statement(StatementParser):
+class ICBC02StatementParser(StatementParser):
 
     def __init__(self, statement_path: str, **kwargs):
         super().__init__("工商银行", statement_path, check_tags=[tag.value for tag in ICBC02Tags], **kwargs)
