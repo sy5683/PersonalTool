@@ -9,6 +9,7 @@ import numpy
 from common_util.file_util.file_util.file_util import FileUtil
 from common_util.file_util.image_util.image_util import ImageUtil
 from common_util.file_util.pdf_util.pdf_util import PdfUtil
+from common_util.file_util.pdf_util.pdf_utils.entity.pdf_profile import ReceiptProfile
 from .receipt import Receipt
 
 
@@ -43,6 +44,19 @@ class ReceiptParser(metaclass=abc.ABCMeta):
                 if self.__compare_image(image, judge_image) < different:
                     return True
         return False
+
+    def _parse_receipt(self, receipt_profile: ReceiptProfile, receipt_type_class):
+        receipt_types = []
+        for receipt_type_class in receipt_type_class.__subclasses__():
+            receipt_type = receipt_type_class(receipt_profile)
+            if receipt_type.judge():
+                receipt_types.append(receipt_type)
+        if not len(receipt_types):
+            raise ValueError(f"{self.bank_name}回单pdf中有无法解析的回单")
+        elif len(receipt_types) > 1:
+            raise ValueError(f"{self.bank_name}回单pdf中有匹配多个格式的回单")
+        else:
+            self.receipts.append(receipt_types[0].get_receipt())
 
     @staticmethod
     def __compare_image(image: numpy.ndarray, judge_image: numpy.ndarray) -> float:

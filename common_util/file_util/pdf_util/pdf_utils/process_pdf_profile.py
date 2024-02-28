@@ -18,8 +18,12 @@ class ProcessPdfProfile:
             interval_words = [word for word in pdf_profile.words if word.rect[1] > y[0] and word.rect[3] < y[1]]
             all_interval_words.append(interval_words)
         if not all_interval_words:
-            assert len(pdf_profile.tables) == 1, "异常格式，无法处理"
-            return [ReceiptProfile(pdf_profile.tables[0], pdf_profile.words)]
+            if not len(pdf_profile.tables):
+                return []
+            elif len(pdf_profile.tables) > 1:
+                raise ValueError("异常格式，无法处理")
+            else:
+                return [ReceiptProfile(pdf_profile.tables[0], pdf_profile.words)]
         # 获取间隔最大的两个word之间的纵坐标
         split_ys = []
         for interval_words in all_interval_words:
