@@ -27,14 +27,16 @@ class ParsePdf:
                 table_image = cls._get_table_image(pdf_page)
                 # 1.3) 获取表格列表
                 tables = cls._get_tables(table_image)
-                # 2.1) 获取表格单元格列表
+                # 2.1) 处理超出页面大小的文字坐标
+                cls._format_out_words(words, table_image)
+                # 3.1) 获取表格单元格列表
                 cells = cls._get_table_cells(table_image, words)
-                # 2.2) 将单元格合并至表格中
+                # 3.3) 将单元格合并至表格中
                 cls._group_table_cells(tables, cells)
                 pdf_profile.tables += tables
-                # 3.1) 合并相近文字
+                # 4.1) 合并相近文字
                 words = cls.__merge_words(words, threshold_x)
-                # 3.2) 过滤表格中的文字
+                # 4.2) 过滤表格中的文字
                 pdf_profile.words += cls._filter_word_in_table(tables, words)
                 pdf_profiles.append(pdf_profile)
         return pdf_profiles
@@ -71,6 +73,20 @@ class ParsePdf:
             if not __check_word_in_tables(word):
                 filter_words.append(word)
         return filter_words
+
+    @staticmethod
+    def _format_out_words(words: typing.List[Word], table_image: numpy.ndarray):
+        """处理超出页面大小的文字坐标"""
+        height, width = table_image.shape[:2]
+        for word in words:
+            while width < word.rect[0]:
+                word.update_rect((word.rect[0] - width, word.rect[1], word.rect[2] - width, word.rect[3]))
+            while 0 > word.rect[0]:
+                word.update_rect((word.rect[0] + width, word.rect[1], word.rect[2] + width, word.rect[3]))
+            while height < word.rect[1]:
+                word.update_rect((word.rect[0], word.rect[1] - height, word.rect[2], word.rect[3] - height))
+            while 0 > word.rect[1]:
+                word.update_rect((word.rect[0], word.rect[1] + height, word.rect[2], word.rect[3] + height))
 
     @classmethod
     def _get_table_cells(cls, table_image: numpy.ndarray, words: typing.List[Word]):

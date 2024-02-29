@@ -8,6 +8,7 @@ class ABCReceiptType01(ABCReceiptType):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
+        print(self.table.get_row_values(1))
         if not {"付款方", "账号", "收款方", "账号"} < set(self.table.get_row_values(1)):
             return False
         return True

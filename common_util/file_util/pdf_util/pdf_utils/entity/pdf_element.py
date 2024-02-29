@@ -8,7 +8,10 @@ class PdfElement(metaclass=abc.ABCMeta):
         self.rect = rect
 
     def get_center(self) -> typing.Tuple[float, float]:
-        return (self.rect[0] + self.rect[2]) // 2, (self.rect[1] + self.rect[3]) // 2
+        return (self.rect[0] + self.rect[2]) / 2, (self.rect[1] + self.rect[3]) / 2
+
+    def update_rect(self, rect: typing.Tuple[float, float, float, float]):
+        self.rect = rect
 
 
 class Word(PdfElement):
