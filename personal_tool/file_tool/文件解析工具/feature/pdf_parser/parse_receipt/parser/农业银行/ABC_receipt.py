@@ -22,8 +22,5 @@ class ABCReceiptParser(ReceiptParser):
     def parse_receipt(self):
         """解析回单"""
         for pdf_profile in self.pdf_profiles:
-            # print([each.rect for each in pdf_profile.words])
-            # for table in pdf_profile.tables:
-            #     print([each.rect for each in table.cells])
             for receipt_profile in PdfUtil.split_receipt_pdf(pdf_profile):
                 self._parse_receipt(receipt_profile, ABCReceiptType)

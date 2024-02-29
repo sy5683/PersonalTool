@@ -23,6 +23,8 @@ class ParsePdf:
                 pdf_page = pdf[index]
                 # 1.1) 获取pdf文字
                 words = cls._get_words(pdf_page)
+                if not words:
+                    continue
                 # 1.2) 获取表格图像
                 table_image = cls._get_table_image(pdf_page)
                 # 1.3) 获取表格列表
@@ -111,7 +113,6 @@ class ParsePdf:
         pix_map = page.get_pixmap(matrix=fitz.Matrix(1, 1))
         image = numpy.zeros([pix_map.h, pix_map.w], dtype=numpy.uint8) + 255
         # 绘制pdf的线条
-        _debug = False
         for draw in page.get_drawings():
             color = list(draw.get("color") or [])
             fill = list(draw.get("fill") or [])
@@ -133,12 +134,9 @@ class ParsePdf:
                     image = cv2.rectangle(image, (p[0], p[1]), (p[2], p[3]), (0, 0, 0))
                 else:
                     # print(items[0], items)  # TODO
-                    _debug = True
                     pass
-        if _debug:
-            cv2.imshow("show_name", image)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+        # cv2.imshow("show_name", image)
+        # cv2.waitKey(0)
         # 使用漫水填充算法，将周围变为黑色，这样可以去掉单独的线条
         cv2.floodFill(image, None, (1, 1), (0, 0, 0), flags=cv2.FLOODFILL_FIXED_RANGE)
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
@@ -171,7 +169,10 @@ class ParsePdf:
             # 旋转后矩形点位置发生改变，需要还原
             p3 = min(p1[0], p2[0]), min(p1[1], p2[1])  # 左上
             p4 = max(p1[0], p2[0]), max(p1[1], p2[1])  # 右下
-            words.append(Word((p3[0], p3[1], p4[0], p4[1]), re.sub(r"\s+", "", pdf_word[4])))
+            text = re.sub(r"\s+", "", pdf_word[4])
+            if not text:
+                continue
+            words.append(Word((p3[0], p3[1], p4[0], p4[1]), text))
         # 根据左上角坐标排序，从上至下，从左至右
         return sorted(words, key=lambda x: (x.rect[1], x.rect[0]))
 
