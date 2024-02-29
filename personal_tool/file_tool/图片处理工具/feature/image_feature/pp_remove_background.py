@@ -36,12 +36,12 @@ class PPRemoveBackground:
                 prediction = prediction[:, :, None]
                 prediction = (prediction * 255).astype(numpy.uint8)
                 cutout = numpy.concatenate((image, prediction), axis=-1)
+                save_path = FileUtil.get_temp_path(f"{Path(image_path).stem}.png")  # 透明图片必须保存为png
             else:
                 prediction = cv2.cvtColor(prediction, cv2.COLOR_GRAY2BGR)
                 background_color = numpy.asarray(background_color, dtype=numpy.uint8)
                 cutout = (background_color * (1 - prediction) + image * prediction).astype(numpy.uint8)
-            # 保存图片
-            save_path = FileUtil.get_temp_path(Path(image_path).name)
+                save_path = FileUtil.get_temp_path(Path(image_path).name)
             ImageUtil.save_opencv_image(cutout, save_path)
         Win32Util.open_file(FileUtil.get_temp_path())
 
