@@ -4,7 +4,7 @@ from .ICBC_receipt_type import ICBCReceiptType
 from ....entity.receipt import Receipt
 
 
-class CDBReceiptType01(ICBCReceiptType):
+class ICBCReceiptType01(ICBCReceiptType):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
