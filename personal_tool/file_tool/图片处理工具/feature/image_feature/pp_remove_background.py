@@ -14,8 +14,7 @@ from .image_feature import ImageFeature
 class PPRemoveBackground:
 
     @classmethod
-    def matting_picture(cls, file_paths: typing.List[str],
-                        background_color: typing.Tuple[int, int, int] = (255, 255, 255)):
+    def matting_picture(cls, file_paths: typing.List[str], background_color: typing.Tuple[int, int, int] = None):
         """抠取图像"""
         # 获取pp模型
         model_path = Path(__file__).parent.parent.parent.joinpath("file\\ppseg\\ppseg.onnx")
@@ -33,12 +32,14 @@ class PPRemoveBackground:
             prediction = session.run(None, {input_name: input_image})
             prediction = numpy.squeeze(prediction)
             prediction = cv2.resize(prediction, image.shape[:2][::-1], interpolation=cv2.INTER_LINEAR)
-            prediction = cv2.cvtColor(prediction, cv2.COLOR_GRAY2BGR)
-            background_color = numpy.asarray(background_color, dtype=numpy.uint8)
-            cutout = (background_color * (1 - prediction) + image * prediction).astype(numpy.uint8)
-            # pred = pred[:, :, None]
-            # pred = (pred * 255).astype(numpy.uint8)
-            # cutout = (background_color * (1 - pred) + image_1).astype(numpy.uint8)
+            if background_color is None:
+                prediction = prediction[:, :, None]
+                prediction = (prediction * 255).astype(numpy.uint8)
+                cutout = numpy.concatenate((image, prediction), axis=-1)
+            else:
+                prediction = cv2.cvtColor(prediction, cv2.COLOR_GRAY2BGR)
+                background_color = numpy.asarray(background_color, dtype=numpy.uint8)
+                cutout = (background_color * (1 - prediction) + image * prediction).astype(numpy.uint8)
             # 保存图片
             save_path = FileUtil.get_temp_path(Path(image_path).name)
             ImageUtil.save_opencv_image(cutout, save_path)

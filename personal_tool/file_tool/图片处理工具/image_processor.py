@@ -24,4 +24,4 @@ class ImageProcessor(ToolBase):
 if __name__ == '__main__':
     image_processor = ImageProcessor()
     # image_processor.main(Operations.matting_character, color=125)
-    image_processor.main(Operations.matting_picture, background_color=(0, 0, 255))
+    image_processor.main(Operations.matting_picture)
