@@ -33,10 +33,16 @@ class ReceiptParser(metaclass=abc.ABCMeta):
         """比较图片"""
         judge_images = self.__get_judge_images(*image_names)
         for image in PdfUtil.get_pdf_images(self.receipt_path):
+            if image is None:
+                continue
             if len(image.shape) == 2:
                 image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
-            elif len(image.shape) == 3 and image.shape[2] != 3:
+            elif len(image.shape) == 3 and image.shape[2] not in (3, 4):
                 continue
+            if image.shape[2] == 4:
+                image = cv2.cvtColor(image, cv2.COLOR_RGBA2BGR)
+            elif image.shape[2] == 3:
+                image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
             for judge_image in judge_images:
                 if self.__compare_image(image, judge_image) < different:
                     return True

@@ -54,8 +54,8 @@ class ProcessPdfProfile:
             receipt_profiles.append(receipt_profile)
         return receipt_profiles
 
-    @staticmethod
-    def merge_words(words: typing.List[Word], threshold: int) -> typing.List[Word]:
+    @classmethod
+    def merge_words(cls, words: typing.List[Word], threshold: int) -> typing.List[Word]:
         """合并pdf文字"""
         new_words = []
         for index, word in enumerate(words):
@@ -63,7 +63,8 @@ class ProcessPdfProfile:
                 new_words.append(word)
                 continue
             new_word = new_words[-1]
-            if word.rect[0] - new_word.rect[2] < threshold and word.rect[1] < new_word.rect[3]:
+            if (((abs(word.rect[0] - new_word.rect[2]) < threshold) or (abs(new_word.rect[0] - word.rect[2]) < threshold))
+                    and word.rect[1] < new_word.rect[3]):
                 new_word.update_rect((min(word.rect[0], new_word.rect[0]), min(word.rect[1], new_word.rect[1]),
                                       max(word.rect[2], new_word.rect[2]), max(word.rect[3], new_word.rect[3])))
                 new_word.text += word.text
