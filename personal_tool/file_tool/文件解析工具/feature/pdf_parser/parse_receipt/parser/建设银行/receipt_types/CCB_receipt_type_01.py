@@ -17,7 +17,7 @@ class CCBReceiptType01(CCBReceiptType):
     def get_receipt(self) -> Receipt:
         """解析回单"""
         receipt = Receipt()
-        receipt.date = TimeUtil.format_time(re.findall("日期：(.*?)凭证号", self.table.get_row_values(1)[0])[0])  # 日期
+        receipt.date = TimeUtil.format_time(re.findall("日期[:：](.*?)凭证号", self.table.get_row_values(1)[0])[0])  # 日期
         name_row_values = self.table.get_row_values(2)
         if name_row_values[0] == "付款人":
             receipt.payer_account_name = self.__get_name(name_row_values[1])  # 付款人户名

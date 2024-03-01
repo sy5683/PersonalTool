@@ -1,11 +1,11 @@
 import re
 
 from common_util.data_util.number_util.number_util import NumberUtil
-from .CDB_receipt_type import CDBReceiptType
+from .CCB_receipt_type import CCBReceiptType
 from ....entity.receipt import Receipt
 
 
-class CDBReceiptType02(CDBReceiptType):
+class CCBReceiptType04(CCBReceiptType):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""

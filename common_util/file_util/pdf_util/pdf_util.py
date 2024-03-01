@@ -40,6 +40,11 @@ class PdfUtil:
         return ConvertPdf.images_to_pdf([str(image_path) for image_path in image_paths], save_path)
 
     @staticmethod
+    def merge_words(words: typing.List[Word], threshold: int = 1) -> typing.List[Word]:
+        """合并pdf文字"""
+        return ProcessPdfProfile.merge_words(words, threshold)
+
+    @staticmethod
     def pdf_to_images(pdf_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None,
                       suffix: str = 'png') -> typing.List[str]:
         """pdf转图片"""

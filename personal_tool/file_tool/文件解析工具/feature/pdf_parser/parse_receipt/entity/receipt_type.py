@@ -24,4 +24,3 @@ class ReceiptType(metaclass=abc.ABCMeta):
         for word in self.words:
             if re.search(pattern, word.text):
                 return TimeUtil.format_time(re.findall(pattern, word.text)[0])
-        raise ValueError("回单中无法提取到日期")

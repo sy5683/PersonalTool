@@ -1,5 +1,6 @@
 import typing
 
+from .entity.pdf_element import Word
 from .entity.pdf_profile import PdfProfile, ReceiptProfile
 
 
@@ -21,7 +22,7 @@ class ProcessPdfProfile:
             if not len(pdf_profile.tables):
                 return []
             elif len(pdf_profile.tables) > 1:
-                raise ValueError("异常格式，无法处理")
+                return [ReceiptProfile(table) for table in pdf_profile.tables]
             else:
                 return [ReceiptProfile(pdf_profile.tables[0], pdf_profile.words)]
         # 获取间隔最大的两个word之间的纵坐标
@@ -36,6 +37,8 @@ class ProcessPdfProfile:
                 max_interval_y = interval_y
                 split_y = (interval_words[index].rect[1] + interval_words[index - 1].rect[3]) // 2
             split_ys.append(split_y)
+        if not any(split_ys):
+            return [ReceiptProfile(table) for table in pdf_profile.tables]
         split_ys = [0] + split_ys + [999999]
         # 根据纵坐标分割回单
         receipt_profiles = []
@@ -50,3 +53,20 @@ class ProcessPdfProfile:
                     receipt_profile.words.append(word)
             receipt_profiles.append(receipt_profile)
         return receipt_profiles
+
+    @staticmethod
+    def merge_words(words: typing.List[Word], threshold: int) -> typing.List[Word]:
+        """合并pdf文字"""
+        new_words = []
+        for index, word in enumerate(words):
+            if index == 0:
+                new_words.append(word)
+                continue
+            new_word = new_words[-1]
+            if word.rect[0] - new_word.rect[2] < threshold and word.rect[1] < new_word.rect[3]:
+                new_word.update_rect((min(word.rect[0], new_word.rect[0]), min(word.rect[1], new_word.rect[1]),
+                                      max(word.rect[2], new_word.rect[2]), max(word.rect[3], new_word.rect[3])))
+                new_word.text += word.text
+            else:
+                new_words.append(word)
+        return new_words

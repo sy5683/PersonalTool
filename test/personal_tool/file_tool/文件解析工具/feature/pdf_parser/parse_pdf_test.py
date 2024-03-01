@@ -8,7 +8,7 @@ class ParsePdfTestCase(TestBase):
     def setUp(self):
         self.pdf_path = self.get_test_file("input")
 
-    def test_parse_statement(self):
+    def test_parse_receipt(self):
         for pdf_path in self.pdf_path.rglob("*.pdf"):
             result = ParsePdf.parse_receipt(pdf_path)
             for receipt in result.receipts:
