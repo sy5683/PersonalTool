@@ -2,16 +2,19 @@ import re
 
 from common_util.data_util.number_util.number_util import NumberUtil
 from common_util.data_util.time_util.time_util import TimeUtil
-from .CCB_receipt_type import CCBReceiptType
+from .CDB_receipt_type import CDBReceiptType
 from ....entity.receipt import Receipt
 
 
-class CCBReceiptType01(CCBReceiptType):
+class CDBReceiptType03(CDBReceiptType):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        if self.table.get_row_values(0)[0] != "中国建设银行网上银行电子回执":
+        if self.table.get_row_values(0)[0] != "国家开发银行网上银行电子回执":
             return False
+        for key in ["付款人", "收款人", "全称"]:
+            if key not in "".join(self.table.get_row_values(2)):
+                return False
         return True
 
     def get_receipt(self) -> Receipt:
