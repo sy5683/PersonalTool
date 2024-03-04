@@ -1,3 +1,5 @@
+import re
+
 import fitz
 
 from common_util.file_util.pdf_util.pdf_util import PdfUtil
@@ -13,7 +15,7 @@ class ICBCReceiptParser(ReceiptParser):
     def judge(self) -> bool:
         """判断是否为当前格式"""
         with fitz.open(self.receipt_path) as pdf:
-            if "www.icbc.com.cn" not in pdf[0].get_text():
+            if not re.search("www.icbc.com.cn|中国工商银行电子化回单", pdf[0].get_text()):
                 return False
         return True
 
@@ -21,4 +23,6 @@ class ICBCReceiptParser(ReceiptParser):
         """解析回单"""
         for pdf_profile in self.pdf_profiles:
             for receipt_profile in PdfUtil.split_receipt_pdf(pdf_profile):
+                if not receipt_profile.table and len(receipt_profile.words) < 6:
+                    continue
                 self._parse_receipt(receipt_profile, ICBCReceiptType)

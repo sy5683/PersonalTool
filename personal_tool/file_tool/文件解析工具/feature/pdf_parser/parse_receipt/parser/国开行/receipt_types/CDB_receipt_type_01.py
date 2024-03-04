@@ -1,6 +1,7 @@
 import re
 
 from common_util.data_util.number_util.number_util import NumberUtil
+from common_util.data_util.time_util.time_util import TimeUtil
 from .CDB_receipt_type import CDBReceiptType
 from ....entity.receipt import Receipt
 
@@ -18,7 +19,7 @@ class CDBReceiptType01(CDBReceiptType):
     def get_receipt(self) -> Receipt:
         """解析回单"""
         receipt = Receipt()
-        receipt.date = self._get_date("人民币(.*?)流水号")  # 日期
+        receipt.date = TimeUtil.format_time(self._get_word("人民币(.*?)流水号"))  # 日期
         name_row_values = self.table.get_row_values(0)
         if name_row_values[0] == "付款人":
             receipt.payer_account_name = name_row_values[2]  # 付款人户名

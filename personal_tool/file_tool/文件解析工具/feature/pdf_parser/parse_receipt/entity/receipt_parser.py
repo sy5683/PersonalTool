@@ -1,4 +1,5 @@
 import abc
+import logging
 import sys
 import typing
 from pathlib import Path
@@ -58,7 +59,6 @@ class ReceiptParser(metaclass=abc.ABCMeta):
             judge_images.append(ImageUtil.read_opencv_image(image_path))
         return judge_images
 
-
     def _parse_receipt(self, receipt_profile: ReceiptProfile, receipt_type_class):
         receipt_types = []
         for receipt_type_class in receipt_type_class.__subclasses__():
@@ -68,6 +68,9 @@ class ReceiptParser(metaclass=abc.ABCMeta):
         if not len(receipt_types):
             raise ValueError(f"{self.bank_name}回单pdf中有无法解析的回单")
         elif len(receipt_types) > 1:
+            logging.error(f"{self.bank_name}回单pdf中有匹配多个格式的回单: {receipt_types}")
             raise ValueError(f"{self.bank_name}回单pdf中有匹配多个格式的回单")
         else:
-            self.receipts.append(receipt_types[0].get_receipt())
+            receipt = receipt_types[0].get_receipt()
+            if receipt:
+                self.receipts.append(receipt)

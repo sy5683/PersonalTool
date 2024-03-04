@@ -9,6 +9,8 @@ class ProcessPdfProfile:
     @staticmethod
     def split_receipt_pdf(pdf_profile: PdfProfile) -> typing.List[ReceiptProfile]:
         """分割回单pdf"""
+        if not pdf_profile.tables:
+            return [ReceiptProfile(None, pdf_profile.words)]
         # 获取回单中所有表格坐标
         table_rects = [table.rect for table in pdf_profile.tables]
         # 根据表格坐标提取表格之间的间隔纵坐标
@@ -19,9 +21,7 @@ class ProcessPdfProfile:
             interval_words = [word for word in pdf_profile.words if word.rect[1] > y[0] and word.rect[3] < y[1]]
             all_interval_words.append(interval_words)
         if not all_interval_words:
-            if not len(pdf_profile.tables):
-                return []
-            elif len(pdf_profile.tables) > 1:
+            if len(pdf_profile.tables) > 1:
                 return [ReceiptProfile(table) for table in pdf_profile.tables]
             else:
                 return [ReceiptProfile(pdf_profile.tables[0], pdf_profile.words)]

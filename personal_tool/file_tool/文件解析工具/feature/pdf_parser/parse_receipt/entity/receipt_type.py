@@ -2,7 +2,6 @@ import abc
 import re
 
 from common_util.data_util.number_util.number_util import NumberUtil
-from common_util.data_util.time_util.time_util import TimeUtil
 from common_util.file_util.pdf_util.pdf_utils.entity.pdf_profile import ReceiptProfile
 from .receipt import Receipt
 
@@ -33,10 +32,10 @@ class ReceiptType(metaclass=abc.ABCMeta):
                 return NumberUtil.to_amount(row_values[value_index])
         raise ValueError("格式异常，回单无法提取金额")
 
-    def _get_date(self, pattern: str) -> str:
+    def _get_word(self, pattern: str) -> str:
         for word in self.words:
             if re.search(pattern, word.text):
-                return TimeUtil.format_time(re.findall(pattern, word.text)[0])
+                return re.findall(pattern, word.text)[0]
 
     @staticmethod
     def _get_name(value: str) -> str:

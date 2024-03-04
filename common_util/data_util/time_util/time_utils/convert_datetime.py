@@ -1,4 +1,5 @@
 import datetime
+import logging
 import re
 import typing
 
@@ -30,6 +31,7 @@ class ConvertDatetime:
         datetime_str = "".join([each.zfill(2) for each in re.findall(r"\d+", datetime_str)])
         datetime_number = re.sub(r"\D+", "", datetime_str)
         if len(datetime_number) < 6:
+            logging.warning(f"时间异常，无法格式化: {datetime_number}")
             return datetime.datetime.now()
         elif len(datetime_number) == 6:
             datetime_number += "01000000"  # 补上日期，默认1号
