@@ -8,8 +8,6 @@ class ICBCReceiptType01(ICBCReceiptType):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        if not self.table:
-            return False
         if not {"付款人", "户名", "收款人"} < set(self.table.get_row_values(0)):
             return False
         return True

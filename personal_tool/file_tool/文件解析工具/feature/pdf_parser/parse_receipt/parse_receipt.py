@@ -12,7 +12,7 @@ class ParseReceipt:
     @staticmethod
     def parse_receipt(receipt_path: str, **kwargs) -> ReceiptParser:
         """解析银行回单"""
-        logging.info(f"解析解析银行回单: {receipt_path}")
+        logging.info(f"解析银行回单: {receipt_path}")
         receipt_name = os.path.basename(receipt_path)
         parsers = []
         for parser_class in ReceiptParser.__subclasses__():

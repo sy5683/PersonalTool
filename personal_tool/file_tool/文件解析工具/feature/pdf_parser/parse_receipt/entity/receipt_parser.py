@@ -63,8 +63,12 @@ class ReceiptParser(metaclass=abc.ABCMeta):
         receipt_types = []
         for receipt_type_class in receipt_type_class.__subclasses__():
             receipt_type = receipt_type_class(receipt_profile)
-            if receipt_type.judge():
-                receipt_types.append(receipt_type)
+            # noinspection PyBroadException
+            try:
+                if receipt_type.judge():
+                    receipt_types.append(receipt_type)
+            except Exception:
+                pass
         if not len(receipt_types):
             raise ValueError(f"{self.bank_name}回单pdf中有无法解析的回单")
         elif len(receipt_types) > 1:

@@ -91,14 +91,29 @@ class ParsePdf:
                 word.update_rect((word.rect[0], word.rect[1] + height, word.rect[2], word.rect[3] + height))
 
     @classmethod
-    def _get_table_cells(cls, table_image: numpy.ndarray, words: typing.List[Word]):
+    def _get_table_cells(cls, table_image: numpy.ndarray, words: typing.List[Word], threshold: int = 3):
         """根据轮廓，获取表格单元格列表"""
         # 查找相应的轮廓，得到每个表格cell的矩形框
         cells = []
         contours, hierarchy = cv2.findContours(table_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         for contour in contours[::-1]:
-            r = cv2.boundingRect(contour)
-            cell = Cell((r[0], r[1], r[0] + r[2], r[1] + r[3]))
+            rect = cv2.boundingRect(contour)
+            x1 = rect[0]
+            y1 = rect[1]
+            x2 = rect[0] + rect[2]
+            y2 = rect[1] + rect[3]
+            # 整理坐标，将误差较小的坐标进行统合，参数不要超过5个px
+            for _cell in cells:
+                _x1, _y1, _x2, _y2 = _cell.rect
+                if abs(x1 - _x1) <= threshold:
+                    x1 = _x1
+                if abs(y1 - _y1) <= threshold:
+                    y1 = _y1
+                if abs(x2 - _x2) <= threshold:
+                    x2 = _x2
+                if abs(y2 - _y2) <= threshold:
+                    y2 = _y2
+            cell = Cell((x1, y1, x2, y2))
             for word in words:
                 if cls.__check_inside(word.get_center(), cell.rect):
                     cell.words.append(word)
