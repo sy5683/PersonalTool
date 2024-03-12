@@ -14,10 +14,10 @@ class ConnectDatabase:
         username = kwargs.get("username")
         password = kwargs.get("password")
         if all([ip, port, username, password]):
-            # Oracle数据库
             database_name = kwargs.get("database_name")
+            # Oracle数据库
             oracle_client_path = kwargs.get("oracle_client_path")
-            if kwargs.get("database_name"):
+            if oracle_client_path:
                 return OracleConnect(ip, port, database_name, username, password, str(oracle_client_path))
             # MySQL数据库
             return MysqlConnect(ip, port, database_name, username, password)
