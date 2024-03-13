@@ -22,7 +22,7 @@ class ReceiptType(metaclass=abc.ABCMeta):
 
     @staticmethod
     def _get_account(value: str) -> str:
-        return re.sub("账号", "", value)
+        return re.sub("账号|[|]|基本户", "", value)
 
     def _get_amount(self, key_index: int, value_index: int) -> float:
         """获取金额"""

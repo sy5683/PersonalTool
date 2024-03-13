@@ -17,8 +17,8 @@ class ICBCReceiptType01(ICBCReceiptType):
         receipt = Receipt()
         receipt.date = TimeUtil.format_time(self.table.get_row_values(6)[3])  # 日期
         receipt.payer_account_name = self.table.get_row_values(0)[2]  # 付款人户名
-        receipt.payer_account_number = self.table.get_row_values(1)[1]  # 付款人账号
+        receipt.payer_account_number = self._get_account(self.table.get_row_values(1)[1])  # 付款人账号
         receipt.payee_account_name = self.table.get_row_values(0)[5]  # 收款人户名
-        receipt.payee_account_number = self.table.get_row_values(1)[3]  # 收款人账号
+        receipt.payee_account_number = self._get_account(self.table.get_row_values(1)[3])  # 收款人账号
         receipt.amount = NumberUtil.to_amount(self.table.get_row_values(3)[1])  # 金额
         return receipt
