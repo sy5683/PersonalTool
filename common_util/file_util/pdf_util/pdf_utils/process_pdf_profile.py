@@ -20,8 +20,6 @@ class ProcessPdfProfile:
         for y in ys:
             interval_words = [word for word in pdf_profile.words if word.rect[3] > y[0] and word.rect[1] < y[1]]
             all_interval_words.append(interval_words)
-        for interval_words in all_interval_words:
-            print([each.text for each in interval_words])
         if not all_interval_words:
             if len(pdf_profile.tables) > 1:
                 return [ReceiptProfile(table) for table in pdf_profile.tables]

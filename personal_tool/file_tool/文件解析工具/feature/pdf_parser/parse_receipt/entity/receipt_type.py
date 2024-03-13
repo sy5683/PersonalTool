@@ -39,4 +39,4 @@ class ReceiptType(metaclass=abc.ABCMeta):
 
     @staticmethod
     def _get_name(value: str) -> str:
-        return re.sub("全称", "", value)
+        return re.sub("全称|付款账户名称|收款账户名称", "", value)
