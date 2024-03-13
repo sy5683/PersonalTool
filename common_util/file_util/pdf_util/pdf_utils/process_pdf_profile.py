@@ -18,8 +18,10 @@ class ProcessPdfProfile:
         # 将所有表格外的文本根据纵坐标进行分组
         all_interval_words = []
         for y in ys:
-            interval_words = [word for word in pdf_profile.words if word.rect[1] > y[0] and word.rect[3] < y[1]]
+            interval_words = [word for word in pdf_profile.words if word.rect[3] > y[0] and word.rect[1] < y[1]]
             all_interval_words.append(interval_words)
+        for interval_words in all_interval_words:
+            print([each.text for each in interval_words])
         if not all_interval_words:
             if len(pdf_profile.tables) > 1:
                 return [ReceiptProfile(table) for table in pdf_profile.tables]
@@ -36,7 +38,8 @@ class ProcessPdfProfile:
                     continue
                 max_interval_y = interval_y
                 split_y = (interval_words[index].rect[1] + interval_words[index - 1].rect[3]) // 2
-            split_ys.append(split_y)
+            if split_y:
+                split_ys.append(split_y)
         if not any(split_ys):
             return [ReceiptProfile(table) for table in pdf_profile.tables]
         split_ys = [0] + split_ys + [999999]

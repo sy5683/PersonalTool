@@ -53,10 +53,10 @@ class ParsePdf:
         return pdf_tables
 
     @classmethod
-    def get_pdf_words(cls, pdf_path: str, threshold_x: int) -> typing.List[Word]:
+    def get_pdf_words(cls, pdf_path: str, threshold: int) -> typing.List[Word]:
         """获取pdf中的文字"""
         pdf_words = []
-        for pdf_profile in cls.get_pdf_profiles(pdf_path, threshold_x):
+        for pdf_profile in cls.get_pdf_profiles(pdf_path, threshold):
             pdf_words += pdf_profile.words
         return pdf_words
 
@@ -227,7 +227,9 @@ class ParsePdf:
             last_word = new_words[-1]
             x_min, y_min, x_max, y_max = last_word.rect
             # 根据坐标判断是否需要合并
-            if y1 < y_max and x1 - x_max < threshold_x:
+            if x2 < x_min:
+                new_words.append(word)
+            elif y1 < (y_max + y_min) / 2 and x1 - x_max < threshold_x:
                 x_min, y_min, x_max, y_max = min(x_min, x1), min(y_min, y1), max(x_max, x2), max(y_max, y2)
                 last_word.rect = (x_min, y_min, x_max, y_max)
                 last_word.text += word.text
