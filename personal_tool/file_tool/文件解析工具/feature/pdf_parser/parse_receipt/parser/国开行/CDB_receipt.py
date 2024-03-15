@@ -20,5 +20,5 @@ class CDBReceiptParser(ReceiptParser):
     def parse_receipt(self):
         """解析回单"""
         for pdf_profile in self.pdf_profiles:
-            for receipt_profile in PdfUtil.split_receipt_pdf(pdf_profile):
+            for receipt_profile in PdfUtil.split_receipt_pdf(pdf_profile, "国家开发银行电子回单"):
                 self._parse_receipt(receipt_profile, CDBReceiptType)
