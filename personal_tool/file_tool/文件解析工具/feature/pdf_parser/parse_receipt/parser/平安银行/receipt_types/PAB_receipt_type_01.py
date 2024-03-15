@@ -3,31 +3,28 @@ import re
 from common_util.data_util.number_util.number_util import NumberUtil
 from common_util.data_util.time_util.time_util import TimeUtil
 from common_util.file_util.pdf_util.pdf_util import PdfUtil
-from .BOC_receipt_type import BOCReceiptType
+from .PAB_receipt_type import PABReceiptType
 from ....entity.receipt import Receipt
 
 
-class BOCReceiptType01(BOCReceiptType):
+class PABReceiptType01(PABReceiptType):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        if self.table.max_rows != 1 or self.table.max_cols != 1:
-            return False
-        if not re.search("国内支付业务[付收]款回单|客户[借贷]记回单|客户[付收]费回单|利息收入回单",
-                         self.table.get_row_values(0)[0]):
+        if not re.search("收付款业务回单|收费回单[(（]付款通知[)）]", "".join([each.text for each in self.words])):
             return False
         return True
 
     def get_receipt(self) -> Receipt:
         """解析回单"""
         receipt = Receipt()
-        date_pattern = re.compile("日期[:：]")
+        date_pattern = re.compile("记账日期[:：]")
         payer_account_name_pattern = re.compile("付款人名称[:：]")
         payer_account_number_pattern = re.compile("付款人账号[:：]")
         payee_account_name_pattern = re.compile("收款人名称[:：]")
         payee_account_number_pattern = re.compile("收款人账号[:：]")
-        amount_pattern = re.compile("金额[:：]")
-        for word in PdfUtil.merge_words(self.table.cells[0].words, 10):
+        amount_pattern = re.compile("小写[:：]")
+        for word in PdfUtil.merge_words(self.words, 20):
             if date_pattern.match(word.text):
                 receipt.date = TimeUtil.format_time(date_pattern.sub("", word.text))  # 日期
             if payer_account_name_pattern.match(word.text):

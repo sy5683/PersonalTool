@@ -1,3 +1,4 @@
+import re
 import typing
 
 from .entity.pdf_element import Word
@@ -6,11 +7,11 @@ from .entity.pdf_profile import PdfProfile, ReceiptProfile
 
 class ProcessPdfProfile:
 
-    @staticmethod
-    def split_receipt_pdf(pdf_profile: PdfProfile) -> typing.List[ReceiptProfile]:
+    @classmethod
+    def split_receipt_pdf(cls, pdf_profile: PdfProfile, split_word: str) -> typing.List[ReceiptProfile]:
         """分割回单pdf"""
         if not pdf_profile.tables:
-            return [ReceiptProfile(None, pdf_profile.words)]
+            return cls.__split_receipt_without_table(pdf_profile, split_word)
         # 获取回单中所有表格坐标
         table_rects = [table.rect for table in pdf_profile.tables]
         # 根据表格坐标提取表格之间的间隔纵坐标
@@ -21,10 +22,7 @@ class ProcessPdfProfile:
             interval_words = [word for word in pdf_profile.words if word.rect[3] > y[0] and word.rect[1] < y[1]]
             all_interval_words.append(interval_words)
         if not all_interval_words:
-            if len(pdf_profile.tables) > 1:
-                return [ReceiptProfile(table) for table in pdf_profile.tables]
-            else:
-                return [ReceiptProfile(pdf_profile.tables[0], pdf_profile.words)]
+            return cls.__split_receipt_without_word(pdf_profile)
         # 获取间隔最大的两个word之间的纵坐标
         split_ys = []
         for interval_words in all_interval_words:
@@ -76,3 +74,26 @@ class ProcessPdfProfile:
             else:
                 new_words.append(word)
         return new_words
+
+    @staticmethod
+    def __split_receipt_without_table(pdf_profile: PdfProfile, split_word: str) -> typing.List[ReceiptProfile]:
+        """切割没有表格的回单"""
+        if split_word is None:
+            return [ReceiptProfile(None, pdf_profile.words)]
+        else:
+            receipt_profiles = []
+            receipt_profile = ReceiptProfile()
+            for index, word in enumerate(pdf_profile.words):
+                if re.search(split_word, word.text):
+                    receipt_profile = ReceiptProfile()
+                    receipt_profiles.append(receipt_profile)
+                receipt_profile.words.append(word)
+            return [receipt_profile for receipt_profile in receipt_profiles if len(receipt_profile.words) != 1]
+
+    @staticmethod
+    def __split_receipt_without_word(pdf_profile: PdfProfile) -> typing.List[ReceiptProfile]:
+        """切割没有表格外文字的回单"""
+        if len(pdf_profile.tables) > 1:
+            return [ReceiptProfile(table) for table in pdf_profile.tables]
+        else:
+            return [ReceiptProfile(pdf_profile.tables[0], pdf_profile.words)]
