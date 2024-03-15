@@ -6,10 +6,10 @@ from common_util.system_util.database_util.database_util import DatabaseUtil
 class DatabaseUtilTestCase(TestBase):
 
     def test_get_mysql_connect(self):
-        database_connect = DatabaseUtil.get_database_connect(ip='localhost', port=3306, database_name='测试',
+        database_connect = DatabaseUtil.get_database_connect(ip='localhost', port=3306, database_name='Test',
                                                              username='root', password='ggdd947')
         self.assertNotEqual(database_connect, None)
-        table_name = "Test"
+        table_name = "test"
         with database_connect:
             database_connect.execute_sql(
                 f"SELECT column_name FROM information_schema.columns WHERE table_name='{table_name}';")
