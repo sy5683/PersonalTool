@@ -67,6 +67,10 @@ class ReceiptParser(metaclass=abc.ABCMeta):
                 continue
             if len(image.shape) == 2:
                 image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
+            if image.shape[2] == 4:
+                image = cv2.cvtColor(image, cv2.COLOR_RGBA2BGR)
+            elif image.shape[2] == 3:
+                image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
             for judge_image in judge_images:
                 if self._compare_image(image, judge_image) < different:
                     return True
