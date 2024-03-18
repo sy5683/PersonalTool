@@ -1,5 +1,3 @@
-import re
-
 from common_util.data_util.number_util.number_util import NumberUtil
 from common_util.data_util.time_util.time_util import TimeUtil
 from .CDB_receipt_type import CDBReceiptType
@@ -12,14 +10,14 @@ class CDBReceiptType01(CDBReceiptType):
         """判断是否为当前格式"""
         if self.table.max_cols != 6:
             return False
-        if not {"付款人", "全称", "收款人", "全称"} < set(self.table.get_row_values(0)):
+        if not {"付款人", "收款人", "全称"} < set(self.table.get_row_values(0)):
             return False
         return True
 
     def get_receipt(self) -> Receipt:
         """解析回单"""
         receipt = Receipt()
-        receipt.date = TimeUtil.format_time(self._get_word("人民币(.*?)流水号"))  # 日期
+        receipt.date = TimeUtil.format_time(self._get_word("人民币(.*?)流水号") or self._get_word(".*年.*月.*日"))  # 日期
         name_row_values = self.table.get_row_values(0)
         if name_row_values[0] == "付款人":
             receipt.payer_account_name = name_row_values[2]  # 付款人户名
