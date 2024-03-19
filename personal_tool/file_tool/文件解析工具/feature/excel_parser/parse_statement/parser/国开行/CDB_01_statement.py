@@ -8,7 +8,7 @@ from ...entity.statement_parser import StatementParser
 
 
 class CDB01Tags(Enum):
-    """国开行 表头"""
+    """国家开发银行 表头"""
     reference_number = "交易参考号"
     trade_datetime = "交易时间"
     payment_or_receive = "收入/支出标志"
@@ -17,7 +17,7 @@ class CDB01Tags(Enum):
     payer_account_number = "付款账号"
     payer_name = "付款户名"
     abstract = "摘要"
-    # 【国开行】无对应【用途】
+    # 【国家开发银行】无对应【用途】
     trade_amount = "发生额（元）"
     balance = "交易后余额（元）"
 
@@ -25,7 +25,7 @@ class CDB01Tags(Enum):
 class CDB01StatementParser(StatementParser):
 
     def __init__(self, statement_path: str, **kwargs):
-        super().__init__("国开行", statement_path, check_tags=[tag.value for tag in CDB01Tags], **kwargs)
+        super().__init__("国家开发银行", statement_path, check_tags=[tag.value for tag in CDB01Tags], **kwargs)
 
     def parse_statement(self):
         """解析流水"""
@@ -55,6 +55,6 @@ class CDB01StatementParser(StatementParser):
             if self.account_number is None and statement.account_number:
                 self.account_number = statement.account_number
             statement.abstract = data[CDB01Tags.abstract.value]  # 摘要
-            statement.purpose = ""  # 用途(【国开行】无对应用途)
+            statement.purpose = ""  # 用途(【国家开发银行】无对应用途)
             statement.balance = NumberUtil.to_amount(data[CDB01Tags.balance.value])  # 余额
             self.statements.append(statement)

@@ -8,7 +8,7 @@ from ...entity.receipt_parser import ReceiptParser
 class CDBReceiptParser(ReceiptParser):
 
     def __init__(self, receipt_path: str, **kwargs):
-        super().__init__("国开行", receipt_path, **kwargs)
+        super().__init__("国家开发银行", receipt_path, **kwargs)
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
