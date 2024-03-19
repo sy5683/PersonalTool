@@ -13,7 +13,6 @@ class ComputerCleaner(ToolBase):
         ]
 
     def main(self):
-        # 清理文件夹
         pool = futures.ThreadPoolExecutor(len(self.functions), thread_name_prefix='清空文件')
         tasks = []
         for function in self.functions:
