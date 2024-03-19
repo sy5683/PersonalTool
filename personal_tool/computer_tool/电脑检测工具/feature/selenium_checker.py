@@ -31,5 +31,4 @@ class SeleniumChecker:
                 Win32Util.open_file(chrome_driver_path.parent)
             else:
                 logging.info(f"chrome_driver已为最新版本: {chrome_driver_path}")
-                DialogUtil.messagebox("chrome_driver已为最新版本")
-
+                # DialogUtil.messagebox("chrome_driver已为最新版本")
