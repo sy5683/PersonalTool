@@ -10,4 +10,5 @@ class OsCmd:
         cmd_code += " -i https://pypi.tuna.tsinghua.edu.cn/simple"
         cmd_code += f" {requirement_name}"
         cmd_code += f"=={requirement_version}" if requirement_version else ""
+        print(cmd_code)
         os.system(cmd_code)
