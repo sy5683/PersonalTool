@@ -6,7 +6,7 @@ from common_util.system_util.database_util.database_util import DatabaseUtil
 class DatabaseUtilTestCase(TestBase):
 
     def test_get_mysql_connect(self):
-        database_connect = DatabaseUtil.get_database_connect(ip='localhost', port=3306, database_name='Test',
+        database_connect = DatabaseUtil.get_database_connect(ip='localhost', port=5683, database_name='Test',
                                                              username='root', password='ggdd947')
         self.assertNotEqual(database_connect, None)
         table_name = "test"

@@ -1,6 +1,6 @@
 import os
 
-import cx_Oracle
+import oracledb
 
 from .base.database_connect import DatabaseConnect
 
@@ -20,8 +20,8 @@ class OracleConnect(DatabaseConnect):
         """连接数据库"""
         # 设置oracle客户端路径，客户端路径不能为中文
         if os.path.exists(self.oracle_client_path):
-            cx_Oracle.init_oracle_client(lib_dir=self.oracle_client_path)
-        self.connect = cx_Oracle.connect(f"{self.username}/{self.password}@{self.__get_host()}")
+            oracledb.init_oracle_client(lib_dir=self.oracle_client_path)
+        self.connect = oracledb.connect(f"{self.username}/{self.password}@{self.__get_host()}")
         self.cursor = self.connect.cursor()
 
     def __get_host(self) -> str:
