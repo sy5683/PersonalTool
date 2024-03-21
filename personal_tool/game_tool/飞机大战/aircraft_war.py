@@ -1,7 +1,7 @@
 import pygame
 
 from common_core.base.tool_base import ToolBase
-from personal_tool.game_tool.飞机大战.feature.scene.game_scene.game_scene import GameScene
+from feature.scene.game_scene.game_scene import GameScene
 
 
 class AircraftWar(ToolBase):
