@@ -44,10 +44,10 @@ class TimeUtil:
         return CalculateDatetime.get_this_month_last_day(stamp)
 
     @staticmethod
-    def get_year_between_dates(from_date: typing.Union[datetime.datetime, datetime.date],
-                               to_date: typing.Union[datetime.datetime, datetime.date]) -> int:
+    def get_years_between_dates(from_date: typing.Union[datetime.datetime, datetime.date],
+                                to_date: typing.Union[datetime.datetime, datetime.date]) -> int:
         """获取两个日期之间的年份"""
-        return CalculateDatetime.get_year_between_dates(from_date, to_date)
+        return CalculateDatetime.get_years_between_dates(from_date, to_date)
 
     @staticmethod
     def format_time(time_str: str, **kwargs) -> str:

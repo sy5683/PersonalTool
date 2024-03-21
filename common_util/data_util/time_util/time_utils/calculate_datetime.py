@@ -42,7 +42,7 @@ class CalculateDatetime:
         return cls.get_next_month_first_day(stamp) - datetime.timedelta(days=1)
 
     @staticmethod
-    def get_year_between_dates(from_date: typing.Union[datetime.datetime, datetime.date],
-                               to_date: typing.Union[datetime.datetime, datetime.date]) -> int:
+    def get_years_between_dates(from_date: typing.Union[datetime.datetime, datetime.date],
+                                to_date: typing.Union[datetime.datetime, datetime.date]) -> int:
         """获取两个日期之间的年份"""
         return relativedelta(from_date, to_date).years

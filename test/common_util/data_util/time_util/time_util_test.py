@@ -39,12 +39,12 @@ class TimeUtilTestCase(TestBase):
         self.assertNotEqual(datetime_stamp, None)
         print(datetime_stamp)
 
-    def test_get_year_between_dates(self):
+    def test_get_years_between_dates(self):
         from_date = datetime.datetime(2000, 1, 1)
         to_date = datetime.datetime.now()
-        year = TimeUtil.get_year_between_dates(from_date, to_date)
-        self.assertNotEqual(year, None)
-        print(year)
+        years = TimeUtil.get_years_between_dates(from_date, to_date)
+        self.assertNotEqual(years, None)
+        print(years)
 
     def test_format_time(self):
         time_str = TimeUtil.format_time(str(self.stamp))
