@@ -9,6 +9,14 @@ class TimeUtilTestCase(TestBase):
     def setUp(self):
         self.stamp = datetime.datetime.now()
 
+    def test_format_to_datetime(self):
+        datetime_stamp = TimeUtil.format_to_datetime(self.stamp)
+        print(datetime_stamp)
+
+    def test_format_to_str(self):
+        str_stamp = TimeUtil.format_to_str(self.stamp)
+        print(str_stamp)
+
     def test_get_last_month_first_day(self):
         datetime_stamp = TimeUtil.get_last_month_first_day(self.stamp)
         self.assertNotEqual(datetime_stamp, None)
@@ -45,7 +53,3 @@ class TimeUtilTestCase(TestBase):
         years = TimeUtil.get_years_between_dates(from_date, to_date)
         self.assertNotEqual(years, None)
         print(years)
-
-    def test_format_time(self):
-        time_str = TimeUtil.format_time(str(self.stamp))
-        print(time_str)

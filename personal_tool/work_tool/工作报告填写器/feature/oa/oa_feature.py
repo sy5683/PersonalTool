@@ -41,7 +41,7 @@ class OaFeature:
             if not daily_report.today_work:
                 logging.warning(f"{daily_report.date}无日志")
                 break
-            if TimeUtil.format_time(daily_report.date, time_format='%m') != TimeUtil.get_now(time_format='%m'):
+            if TimeUtil.format_to_str(daily_report.date, "%m") != TimeUtil.get_now("%m"):
                 logging.warning(f"当前日志不为当月日志，跳过: {daily_report.date}")
                 continue
             cls._fill_report(daily_report)

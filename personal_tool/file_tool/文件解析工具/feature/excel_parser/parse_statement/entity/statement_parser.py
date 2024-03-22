@@ -33,7 +33,7 @@ class StatementParser(metaclass=abc.ABCMeta):
     @staticmethod
     def _format_date(date_str: str) -> str:
         """格式化交易时间"""
-        return TimeUtil.format_time(date_str, time_format="%Y{Y}%m{m}%d{d}%H{H}%M{M}%S{S}")
+        return TimeUtil.format_to_str(date_str, time_format="%Y{Y}%m{m}%d{d}%H{H}%M{M}%S{S}")
 
     def _get_abc_account_info(self) -> typing.Tuple[str, str]:
         """获取农行开户账号信息（开户名称与开户账号）"""

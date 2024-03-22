@@ -23,8 +23,7 @@ class SeleniumChecker:
             DialogUtil.messagebox(f"chrome_driver下载失败: \n    {e}")
         else:
             # 根据文件的创建日期判断文件是否为新下载文件
-            create_stamp = chrome_driver_path.stat().st_ctime
-            create_datetime = TimeUtil.time_to_datetime(create_stamp)
+            create_datetime = TimeUtil.format_to_datetime(chrome_driver_path.stat().st_ctime)
             if create_datetime.date() == datetime.datetime.now().date():
                 logging.info(f"chrome_driver为当日下载的文件: {chrome_driver_path}")
                 DialogUtil.messagebox("chrome_driver已更新")

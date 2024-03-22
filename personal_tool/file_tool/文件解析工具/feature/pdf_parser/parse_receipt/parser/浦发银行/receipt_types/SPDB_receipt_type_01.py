@@ -17,7 +17,7 @@ class SPDBReceiptType01(SPDBReceiptType):
     def get_receipt(self) -> Receipt:
         """解析回单"""
         receipt = Receipt()
-        receipt.date = TimeUtil.format_time(self.table.get_row_values(6)[1])  # 日期
+        receipt.date = TimeUtil.format_to_str(self.table.get_row_values(6)[1])  # 日期
         name_row_values = self.table.get_row_values(2)
         if re.search("付款人", name_row_values[0]):
             receipt.payer_account_name = name_row_values[2]  # 付款人户名

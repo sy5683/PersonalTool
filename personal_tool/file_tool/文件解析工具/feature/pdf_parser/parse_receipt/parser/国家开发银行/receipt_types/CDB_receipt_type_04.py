@@ -26,7 +26,7 @@ class CDBReceiptType03(CDBReceiptType):
         amount_pattern = re.compile("金额[(（]小写[)）][:：]")
         for word in PdfUtil.merge_words(self.words, 50):
             if date_pattern.match(word.text):
-                receipt.date = TimeUtil.format_time(date_pattern.sub("", word.text))  # 日期
+                receipt.date = TimeUtil.format_to_str(date_pattern.sub("", word.text))  # 日期
             if payer_account_name_pattern.match(word.text):
                 receipt.payer_account_name = payer_account_name_pattern.sub("", word.text)  # 付款人户名
             if payer_account_number_pattern.match(word.text):

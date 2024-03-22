@@ -26,7 +26,7 @@ class CCBReceiptType03(CCBReceiptType):
         payee_account_name_pattern = re.compile("征收机关名称[(（]委托方[)）][:：]")
         amount_pattern = re.compile("小写[(（]合计[)）]金额[:：]")
         for word in words:
-            receipt.date = TimeUtil.format_time(self._get_word("^转账日期[:：](.*?)$"))  # 日期
+            receipt.date = TimeUtil.format_to_str(self._get_word("^转账日期[:：](.*?)$"))  # 日期
             if payer_account_name_pattern.match(word.text):
                 receipt.payer_account_name = payer_account_name_pattern.sub("", word.text)  # 付款人户名
             if payer_account_number_pattern.match(word.text):

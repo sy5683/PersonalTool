@@ -15,7 +15,7 @@ class CBHBReceiptType02(CBHBReceiptType):
     def get_receipt(self) -> Receipt:
         """解析回单"""
         receipt = Receipt()
-        receipt.date = TimeUtil.format_time(self.table.get_row_values(1)[1])  # 日期
+        receipt.date = TimeUtil.format_to_str(self.table.get_row_values(1)[1])  # 日期
         receipt.payer_account_name = self.table.get_row_values(2)[1]  # 付款人户名
         receipt.payer_account_number = self.table.get_row_values(2)[3]  # 付款人账号
         receipt.amount = NumberUtil.to_amount(self.table.get_row_values(5)[3])  # 金额
