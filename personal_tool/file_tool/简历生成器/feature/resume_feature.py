@@ -16,7 +16,7 @@ from .word_feature import WordFeature
 
 class ResumeFeature:
     ImportUtil.import_modules(Path(__file__).parent.joinpath("entity"))  # 使用subclasses之前必须将子类导入
-    _resume_path = None
+    __resume_path = None
 
     @classmethod
     def add_title(cls):
@@ -124,6 +124,6 @@ class ResumeFeature:
 
     @classmethod
     def _get_resume_path(cls) -> str:
-        if cls._resume_path is None:
-            cls._resume_path = os.path.join(tempfile.mkdtemp(), "个人简历.docx")
-        return cls._resume_path
+        if cls.__resume_path is None:
+            cls.__resume_path = os.path.join(tempfile.mkdtemp(), "个人简历.docx")
+        return cls.__resume_path

@@ -7,17 +7,17 @@ from .entity.novel import Novel
 
 
 class NovelFeature:
-    _novel = None
+    __novel = None
 
     @classmethod
     def get_novel(cls, novel_name: str) -> Novel:
         """获取小说对象"""
-        if cls._novel is None:
+        if cls.__novel is None:
             # 取数之前需要将子类导入
             novel_path = cls._get_novel_path(novel_name)
             ImportUtil.import_modules(novel_path)
-            cls._novel = Novel(novel_path)
-        return cls._novel
+            cls.__novel = Novel(novel_path)
+        return cls.__novel
 
     @staticmethod
     def show_outline(novel: Novel):
