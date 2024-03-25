@@ -1,7 +1,0 @@
-唱歌的diffsinger
-
-语音合成的VITS
-
-语义分析 NLP
-
-绘画 midjourney(收费软件)stability diffusion(本地软件)
