@@ -9,6 +9,7 @@ class AircraftWar(ToolBase):
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
+        pygame.display.set_caption("飞机大战")
 
     def main(self):
         game_scene = GameScene()
