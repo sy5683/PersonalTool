@@ -15,6 +15,10 @@ class GameScene(SceneBase):
         self.screen.blit(self.background_image, (0, 0))
 
         while True:
+            # 刷新设置
+            self._update_screen()
+
+            # 事件检测
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
