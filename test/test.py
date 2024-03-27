@@ -2,6 +2,7 @@ import re
 import tempfile
 import time
 import unittest
+from pathlib import Path
 
 import openpyxl
 import win32api
