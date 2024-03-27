@@ -20,6 +20,15 @@ class Test(TestBase):
         """"""
 
     def test_001(self):
+        path = r"E:\Project\Python\StudyRecord\file\text\小说\精校小说\可能是本假银魂.txt"
+        with open(path, "r", encoding='utf-8') as file:
+            for each in file.readlines():
+                if re.match("第(.*?)", each):
+                    if re.match("第(.*?)章", each):
+                        continue
+                    print(each)
+
+    def test_002(self):
         workbook = openpyxl.Workbook()
         # SeleniumUtil.open_url("https://ec.chng.com.cn/channel/home/?SlJfApAfmEBp=1710987207840#/purchase?checked=3")
         content = SeleniumUtil.finds('//div[@class="content"]')[0]
