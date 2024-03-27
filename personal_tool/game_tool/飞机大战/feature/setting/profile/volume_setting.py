@@ -1,4 +1,4 @@
-class VolumeConfig:
+class VolumeSetting:
 
     def __init__(self):
         self.__main_volume = 100

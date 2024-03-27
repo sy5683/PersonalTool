@@ -1,4 +1,4 @@
-class ScreenConfig:
+class ScreenSetting:
 
     def __init__(self):
         self.__full_screen = False

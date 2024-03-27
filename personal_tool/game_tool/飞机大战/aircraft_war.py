@@ -2,7 +2,7 @@ import pygame
 
 from common_core.base.tool_base import ToolBase
 from feature.scene.game_scene.game_scene import GameScene
-from feature.config.config_feature import ConfigFeature
+from feature.setting.setting_feature import SettingFeature
 
 
 class AircraftWar(ToolBase):

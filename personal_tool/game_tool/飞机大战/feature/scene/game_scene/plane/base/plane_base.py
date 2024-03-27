@@ -4,6 +4,7 @@ import typing
 import pygame
 
 from .....file_feature import FileFeature
+from .....setting.setting_feature import SettingFeature
 
 
 class PlaneBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
@@ -23,20 +24,21 @@ class PlaneBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
         # 重置飞机
         self.reset()
 
-    # 构造控制飞机移动的函数
-    def move_up(self):
-        self.rect.top = max(self.rect.top - self.speed, 0)
-
-    def move_down(self):
-        self.rect.bottom = min(self.rect.bottom + self.speed, self.background_height)
-
-    def move_left(self):
-        self.rect.left = max(self.rect.left - self.speed, 0)
-
-    def move_right(self):
-        self.rect.right = min(self.rect.right + self.speed, self.background_width)
+    def move(self):
+        """飞机移动"""
+        key_pressed = pygame.key.get_pressed()
+        key_setting = SettingFeature.get_key_setting()
+        if key_pressed[key_setting.up_key]:
+            self.rect.top = max(self.rect.top - self.speed, 0)
+        if key_pressed[key_setting.down_key]:
+            self.rect.bottom = min(self.rect.bottom + self.speed, self.background_height)
+        if key_pressed[key_setting.left_key]:
+            self.rect.left = max(self.rect.left - self.speed, 0)
+        if key_pressed[key_setting.right_key]:
+            self.rect.right = min(self.rect.right + self.speed, self.background_width)
 
     def reset(self):
         """重置飞机"""
         self.active = True
         self.invincible = True
+        self.rect.left, self.rect.bottom = (self.background_width - self.rect.width) // 2, self.background_height

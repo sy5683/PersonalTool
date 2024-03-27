@@ -3,7 +3,7 @@ import abc
 import pygame
 from PIL import Image
 
-from ...config.config_feature import ConfigFeature
+from ...setting.setting_feature import SettingFeature
 from ...file_feature import FileFeature
 
 
@@ -27,8 +27,8 @@ class SceneBase(metaclass=abc.ABCMeta):
 
     def get_screen(self, change_screen: bool = False) -> pygame.Surface:
         """获取窗口对象"""
-        screen_config = ConfigFeature.get_screen_config()
+        screen_setting = SettingFeature.get_screen_setting()
         if change_screen:
-            screen_config.full_screen = not screen_config.full_screen
-        flags = pygame.FULLSCREEN | pygame.HWSURFACE if screen_config.full_screen else 0
-        return pygame.display.set_mode((self.width, self.height), flags if screen_config.full_screen else 0)
+            screen_setting.full_screen = not screen_setting.full_screen
+        flags = pygame.FULLSCREEN | pygame.HWSURFACE if screen_setting.full_screen else 0
+        return pygame.display.set_mode((self.width, self.height), flags if screen_setting.full_screen else 0)
