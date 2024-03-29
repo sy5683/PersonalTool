@@ -6,7 +6,7 @@ import typing
 from selenium import webdriver
 from selenium.common import InvalidElementStateException, TimeoutException, ElementNotInteractableException, \
     ElementClickInterceptedException
-from selenium.webdriver import Keys
+from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
@@ -28,6 +28,9 @@ class ControlElement:
             element = cls.__format_element(element_or_xpath, wait_seconds=wait_seconds)
             driver.execute_script("(arguments[0]).click()", element)
             time.sleep(0.2)
+        elif click_type == "action":
+            element = cls.__format_element(element_or_xpath, wait_seconds=wait_seconds)
+            ActionChains(ControlBrowser.get_driver(**kwargs)).move_to_element(element).click().perform()
         else:
             for _ in range(wait_seconds):
                 time.sleep(1)
@@ -102,6 +105,11 @@ class ControlElement:
         else:
             logging.error(f"元素输入失败: {element_or_xpath}\n{traceback.format_exc()}")
             raise RuntimeError("元素输入失败")
+
+    @staticmethod
+    def key_press(key_name: str, **kwargs):
+        """模拟按键"""
+        ActionChains(ControlBrowser.get_driver(**kwargs)).key_down(key_name).perform()
 
     @staticmethod
     def __find_with_lambda(find_method, xpath: str, **kwargs) -> typing.Union[WebElement, typing.List[WebElement]]:

@@ -1,5 +1,6 @@
 import typing
 
+from selenium.webdriver import Keys
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 
@@ -68,6 +69,11 @@ class SeleniumUtil:
     def input(element_or_xpath: typing.Union[WebElement, str], value: typing.Union[float, str], **kwargs):
         """输入"""
         ControlElement.input(element_or_xpath, str(value), **kwargs)
+
+    @staticmethod
+    def key_press(key_name: str = Keys.ENTER, **kwargs):
+        """模拟按键"""
+        ControlElement.key_press(key_name, **kwargs)
 
     @staticmethod
     def launch_chrome_debug(debug_port: int = None):

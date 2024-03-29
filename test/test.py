@@ -6,6 +6,7 @@ from pathlib import Path
 
 import openpyxl
 import win32api
+from selenium.webdriver import ActionChains, Keys
 
 from common_core.base.test_base import TestBase
 from common_util.code_util.selenium_util.selenium_util import SeleniumUtil
@@ -20,15 +21,6 @@ class Test(TestBase):
         """"""
 
     def test_001(self):
-        path = r"E:\Project\Python\StudyRecord\file\text\小说\精校小说\可能是本假银魂.txt"
-        with open(path, "r", encoding='utf-8') as file:
-            for each in file.readlines():
-                if re.match("第(.*?)", each):
-                    if re.match("第(.*?)章", each):
-                        continue
-                    print(each)
-
-    def test_002(self):
         workbook = openpyxl.Workbook()
         # SeleniumUtil.open_url("https://ec.chng.com.cn/channel/home/?SlJfApAfmEBp=1710987207840#/purchase?checked=3")
         content = SeleniumUtil.finds('//div[@class="content"]')[0]
@@ -50,3 +42,15 @@ class Test(TestBase):
         workbook.remove(workbook['Sheet'])
         workbook.save("test.xlsx")
         workbook.close()
+
+    def test_002(self):
+        """云驿燃料调运平台"""
+        # SeleniumUtil.click('//a[text()="对账中心"]')
+        # SeleniumUtil.click('//span[text()="资金流水(账务明细)"]')
+        # SeleniumUtil.click('//a[text()="昨日"]')
+        # SeleniumUtil.click('//span[text()="查 询"]')
+        # SeleniumUtil.click('//span[@class="ant-checkbox-inner"]')
+        # SeleniumUtil.click('//span[text()="批量下载回单"]')
+        SeleniumUtil.click('//button/span[text()="下载文件区"]')
+        SeleniumUtil.find('//div/span[text()="下载文件区"]')
+        SeleniumUtil.click('//div[text()="回单"]')
