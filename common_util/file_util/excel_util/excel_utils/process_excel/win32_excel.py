@@ -53,7 +53,7 @@ class Win32Excel:
         image_paths = []
         wb = xlrd.open_workbook(excel_path)
         for index, sheet_name in enumerate(wb.sheet_names()):
-            image_path = os.path.join(save_path, f"{sheet_name}.png")
+            image_path = os.path.join(save_path, f"{Path(excel_path).stem}_{sheet_name}.png")
             excel2img.export_img(excel_path, image_path, page=index + 1)
             image_paths.append(image_path)
         logging.info(f"成功将Excel文件转换为图片: {save_path}")

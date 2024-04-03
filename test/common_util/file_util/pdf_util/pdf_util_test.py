@@ -1,4 +1,5 @@
 from common_core.base.test_base import TestBase
+from common_util.code_util.win32_util.win32_util import Win32Util
 from common_util.data_util.object_util.object_util import ObjectUtil
 from common_util.file_util.pdf_util.pdf_util import PdfUtil
 
@@ -30,7 +31,7 @@ class PdfUtilTestCase(TestBase):
 
     def test_pdf_to_images(self):
         image_paths = PdfUtil.pdf_to_images(self.pdf_path)
-        ObjectUtil.print_object(image_paths)
+        Win32Util.open_file(image_paths[0])
 
     def test_images_to_pdf(self):
         image_paths = [self.image_path]

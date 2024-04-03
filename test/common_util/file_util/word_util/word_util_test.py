@@ -7,7 +7,7 @@ class WordUtilTestCase(TestBase):
     def setUp(self):
         self.word_path = self.get_test_file("测试.docx")
 
-    def test_decompress(self):
+    def test_word_to_excel(self):
         excel_path = WordUtil.word_to_excel(self.word_path)
         print(excel_path)
 

@@ -1,4 +1,5 @@
 from common_core.base.test_base import TestBase
+from common_util.code_util.win32_util.win32_util import Win32Util
 from common_util.data_util.object_util.object_util import ObjectUtil
 from common_util.file_util.excel_util.excel_util import ExcelUtil
 
@@ -9,8 +10,8 @@ class ExcelUtilTestCase(TestBase):
         self.excel_path = self.get_test_file("测试.xls")
 
     def test_excel_to_images(self):
-        images = ExcelUtil.excel_to_images(self.excel_path)
-        ObjectUtil.print_object(images)
+        image_paths = ExcelUtil.excel_to_images(self.excel_path)
+        Win32Util.open_file(image_paths[0])
 
     def test_format_date_data(self):
         date_data = ExcelUtil.format_date_data("2958465")
