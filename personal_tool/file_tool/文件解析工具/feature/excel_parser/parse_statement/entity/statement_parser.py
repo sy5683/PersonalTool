@@ -1,6 +1,6 @@
 import abc
 import logging
-import os.path
+import os
 import re
 import traceback
 import typing

@@ -31,9 +31,7 @@ class Win32Excel:
     def xls_to_xlsx(excel_path: str, save_path: typing.Union[Path, str]) -> str:
         """xls文件转换为xlsx文件"""
         logging.info(f"开始将xls文件转换为xlsx: {excel_path}")
-        _path, suffix = os.path.splitext(excel_path)
-        assert suffix == ".xls", f"待转换excel不为xls文件: {excel_path}"
-        save_path = f"{_path}.xlsx" if save_path is None else str(save_path)
+        save_path = f"{os.path.splitext(excel_path)[0]}.xlsx" if save_path is None else str(save_path)
         assert not os.path.exists(save_path), f"文件已存在，无法转换: {save_path}"
         app = Dispatch("Excel.Application")
         workbook = app.Workbooks.Open(excel_path)
