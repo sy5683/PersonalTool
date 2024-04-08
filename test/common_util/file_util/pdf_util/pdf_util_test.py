@@ -8,7 +8,7 @@ class PdfUtilTestCase(TestBase):
 
     def setUp(self):
         self.image_path = self.get_test_file("测试.png")
-        self.pdf_path = self.get_test_file("水土保持.pdf")
+        self.pdf_path = self.get_test_file("测试.pdf")
 
     def test_get_pdf_profiles(self):
         pdf_profiles = PdfUtil.get_pdf_profiles(self.pdf_path, 20)
