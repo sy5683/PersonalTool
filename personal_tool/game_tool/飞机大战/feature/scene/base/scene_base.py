@@ -27,8 +27,7 @@ class SceneBase(metaclass=abc.ABCMeta):
 
     def get_screen(self, change_screen: bool = False) -> pygame.Surface:
         """获取窗口对象"""
-        screen_setting = SettingFeature.get_screen_setting()
         if change_screen:
-            screen_setting.full_screen = not screen_setting.full_screen
-        flags = pygame.FULLSCREEN | pygame.HWSURFACE if screen_setting.full_screen else 0
-        return pygame.display.set_mode((self.width, self.height), flags if screen_setting.full_screen else 0)
+            SettingFeature.screen_setting.full_screen = not SettingFeature.screen_setting.full_screen
+        flags = pygame.FULLSCREEN | pygame.HWSURFACE if SettingFeature.screen_setting.full_screen else 0
+        return pygame.display.set_mode((self.width, self.height), flags)

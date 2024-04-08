@@ -27,14 +27,13 @@ class PlaneBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
     def move(self):
         """飞机移动"""
         key_pressed = pygame.key.get_pressed()
-        key_setting = SettingFeature.get_key_setting()
-        if key_pressed[key_setting.up_key]:
+        if key_pressed[SettingFeature.key_setting.up_key]:
             self.rect.top = max(self.rect.top - self.speed, 0)
-        if key_pressed[key_setting.down_key]:
+        if key_pressed[SettingFeature.key_setting.down_key]:
             self.rect.bottom = min(self.rect.bottom + self.speed, self.background_height)
-        if key_pressed[key_setting.left_key]:
+        if key_pressed[SettingFeature.key_setting.left_key]:
             self.rect.left = max(self.rect.left - self.speed, 0)
-        if key_pressed[key_setting.right_key]:
+        if key_pressed[SettingFeature.key_setting.right_key]:
             self.rect.right = min(self.rect.right + self.speed, self.background_width)
 
     def reset(self):
