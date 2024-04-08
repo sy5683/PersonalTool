@@ -52,7 +52,12 @@ class Decompress:
                     cls._decompress_all(zip_path, password)
         # 3) 递归遍历解压压缩包
         else:
-            for zip_path in zip_path.glob("*"):
+            zip_paths = list(zip_path.glob("*"))
+            # 待解压文件超过一定数量则一般说明解压完成，如果出现特殊情况也属于超大型压缩包，手动解压更好
+            if len(zip_paths) > 10:
+                logging.info(f"解压完成: {zip_path}")
+                return
+            for zip_path in zip_paths:
                 cls._decompress_all(zip_path, password)
 
     @classmethod
