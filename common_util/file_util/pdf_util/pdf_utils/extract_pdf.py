@@ -19,7 +19,7 @@ class ExtractPdf:
             pdf = fitz.open("pdf", pdf_bytes)
         page_images = []
         for index in range(pdf.page_count):
-            for item_index, item in enumerate(pdf[index].get_images()):
+            for item_index, item in enumerate(pdf[index].__get_images()):
                 image = cls.__recover_pix(pdf, item)
                 if isinstance(image, dict):
                     width, height, data = image['width'], image['height'], image['image']
