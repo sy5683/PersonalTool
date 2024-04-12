@@ -23,7 +23,7 @@ class Crawler001(CrawlerBase):
             while True:
                 while True:
                     element = SeleniumUtil.find('//article[@id="content"]')
-                    contents = [each for each in re.split(r"\s+", element.get_attribute("innerText")) if each]
+                    contents = [each for each in re.split(r"\n", element.get_attribute("innerText")) if each]
                     if contents != temp_contents:
                         temp_contents = contents
                         break
