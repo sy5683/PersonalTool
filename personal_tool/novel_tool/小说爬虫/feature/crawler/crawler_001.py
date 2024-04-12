@@ -16,6 +16,7 @@ class Crawler001(CrawlerBase):
         url_suffix = kwargs['url_suffix']
         SeleniumUtil.open_url(f"https://www.douyinxs.com/{url_suffix.strip('/')}")
         with open(self.save_path, "w+") as file:
+            # file.truncate()  # 清空
             while True:
                 try:
                     next_button = SeleniumUtil.find('//a[@id="next"]')
