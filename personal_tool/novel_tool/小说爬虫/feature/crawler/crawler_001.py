@@ -19,7 +19,6 @@ class Crawler001(CrawlerBase):
         driver = SeleniumUtil.get_driver()
         driver.set_page_load_timeout(5)
         with open(self.save_path, "w+") as file:
-            file.truncate()  # 清空
             temp_contents = []
             while True:
                 while True:
@@ -37,8 +36,10 @@ class Crawler001(CrawlerBase):
                     file.write(f"        {content}\n")
                 if "书末页" in next_button.get_attribute("innerText"):
                     break
-                try:
-                    next_button.click()
-                except TimeoutException:
-                    # 点击下一页或者下一章时，可能因为频率太快导致页面无法加载，会在这里报错，因此在这里捕捉一下并刷新一下即可
-                    driver.refresh()
+                while True:
+                    try:
+                        next_button.click()
+                    except TimeoutException:
+                        # 点击下一页或者下一章时，可能因为频率太快导致页面无法加载，会在这里报错，因此在这里捕捉一下并刷新一下即可
+                        driver.refresh()
+                    break
