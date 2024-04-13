@@ -17,7 +17,7 @@ class Crawler001(CrawlerBase):
         url_suffix = kwargs['url_suffix']
         SeleniumUtil.open_url(f"https://www.douyinxs.com/{url_suffix.strip('/')}")
         driver = SeleniumUtil.get_driver()
-        driver.set_page_load_timeout(5)
+        driver.set_page_load_timeout(10)
         with open(self.save_path, "w+") as file:
             temp_contents = []
             while True:
@@ -36,10 +36,15 @@ class Crawler001(CrawlerBase):
                     file.write(f"        {content}\n")
                 if "书末页" in next_button.get_attribute("innerText"):
                     break
+                # 点击下一页或者下一章时，可能因为频率太快导致页面无法加载，会在这里报错，因此在这里捕捉一下并刷新一下即可
                 while True:
                     try:
                         next_button.click()
                     except TimeoutException:
-                        # 点击下一页或者下一章时，可能因为频率太快导致页面无法加载，会在这里报错，因此在这里捕捉一下并刷新一下即可
-                        driver.refresh()
+                        while True:
+                            try:
+                                driver.refresh()  # 刷新可能也会有问题
+                            except TimeoutException:
+                                pass
+                            break
                     break
