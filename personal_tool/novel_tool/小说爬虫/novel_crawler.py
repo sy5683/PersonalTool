@@ -17,4 +17,4 @@ class NovelCrawler(ToolBase):
 
 if __name__ == '__main__':
     novel_crawler = NovelCrawler()
-    novel_crawler.main(Operations.crawler_001, url_suffix='/bqg/626286/187224006.html')
+    novel_crawler.main(Operations.crawler_001, url_suffix='/bqg/833700/223700742.html')

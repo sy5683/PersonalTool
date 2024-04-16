@@ -33,7 +33,7 @@ class Crawler001(CrawlerBase):
                     file.write(f"\n\n{title}\n")
                     print(title)
                 for content in contents:
-                    file.write(f"        {content}\n")
+                    file.write(f"　　{content}\n")
                 if "书末页" in next_button.get_attribute("innerText"):
                     break
                 # 点击下一页或者下一章时，可能因为频率太快导致页面无法加载，会在这里报错，因此在这里捕捉一下并刷新一下即可
