@@ -79,8 +79,8 @@ class PlaneBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
     def reset(self):
         """重置飞机"""
         self.active = True
-        self.level = 1
         self.invincible = True
+        self.level = 1
         width, height = SettingFeature.screen_setting.screen_size
         self.rect.left, self.rect.bottom = (width - self.rect.width) // 2, height
 
