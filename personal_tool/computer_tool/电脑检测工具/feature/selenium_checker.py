@@ -11,12 +11,12 @@ from common_util.visual_util.dialog_util.dialog_util import DialogUtil
 
 class SeleniumChecker:
 
-    @staticmethod
-    def check_chrome_update():
-        """检测谷歌浏览器是否更新"""
-        logging.info("检测谷歌浏览器是否更新")
-        # 获取chrome_driver路径
+    @classmethod
+    def check_chrome_driver(cls):
+        """检测chrome"""
+        logging.info("检测谷歌浏览器driver是否为最新版本")
         try:
+            # 获取chrome_driver路径
             chrome_driver_path = Path(SeleniumUtil.get_chrome_driver_path())
         except Exception as e:
             logging.error(traceback.format_exc())

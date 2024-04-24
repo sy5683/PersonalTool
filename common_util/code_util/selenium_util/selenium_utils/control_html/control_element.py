@@ -55,13 +55,13 @@ class ControlElement:
     def find(cls, xpath: str, **kwargs) -> WebElement:
         """查找元素"""
         logging.info(f"查找元素: {xpath}")
-        return cls.__find_with_lambda(lambda x: x.find_element(By.XPATH, xpath), xpath, **kwargs)
+        return cls.__find_with_lambda(lambda x: x.find_element(By.XPATH, xpath), **kwargs)
 
     @classmethod
     def finds(cls, xpath: str, **kwargs) -> typing.List[WebElement]:
         """查找元素列表"""
         logging.info(f"查找元素列表: {xpath}")
-        return cls.__find_with_lambda(lambda x: x.find_elements(By.XPATH, xpath), xpath, **kwargs)
+        return cls.__find_with_lambda(lambda x: x.find_elements(By.XPATH, xpath), **kwargs)
 
     @classmethod
     def input(cls, element_or_xpath: typing.Union[WebElement, str], value: str, **kwargs):
@@ -112,14 +112,12 @@ class ControlElement:
         ActionChains(ControlBrowser.get_driver(**kwargs)).key_down(key_name).perform()
 
     @staticmethod
-    def __find_with_lambda(find_method, xpath: str, **kwargs) -> typing.Union[WebElement, typing.List[WebElement]]:
+    def __find_with_lambda(find_method, **kwargs) -> typing.Union[WebElement, typing.List[WebElement]]:
         """显性等待查找元素"""
         element: typing.Union[webdriver, WebElement] = kwargs.get("element")
         wait_seconds = kwargs.get("wait_seconds", SeleniumConfig.wait_seconds)
         if element is None:
             element = kwargs.get("driver", ControlBrowser.get_driver(**kwargs))
-        if isinstance(element, WebElement):
-            assert xpath.startswith("./"), f"WebElement的查询xpath需要以./开头: {xpath}"
         # 注！查询间隔为一秒时，这个方法无法检测等待时间为1秒的元素（检测次数为1，即即时检测，而不是预计的等待一秒后报错，因此这里将间隔时间修改为0.3s）
         return WebDriverWait(element, wait_seconds, 0.3).until(find_method)
 
