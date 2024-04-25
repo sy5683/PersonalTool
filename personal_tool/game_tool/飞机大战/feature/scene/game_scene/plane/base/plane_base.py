@@ -11,18 +11,17 @@ class PlaneBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
 
     def __init__(self, image_names: typing.List[str], bomb_number: int, life_number: int):
         pygame.sprite.Sprite.__init__(self)
+        # 读取飞机图片，mask函数将图片非透明部分设置为mask
         self.images = self.__get_images(image_names)
         self.mask = None
         self.image = self.get_image()
-        # 背景参数变量本地化
-        self.background_width, self.background_height = SettingFeature.screen_setting.screen_size
+        self.rect = self.image.get_rect()
         # 设置飞机参数
         self.active = True  # 存活
         self.bomb_number = bomb_number  # 炸弹数
         self.invincible = False  # 无敌
         self.level = 1  # 等级
         self.life_number = life_number  # 生命数
-        self.rect = self.image.get_rect()  # 坐标
         self.shield = False  # 护盾
         self.speed = 10  # 速度
         # 初始化飞机
