@@ -38,6 +38,7 @@ class OaFeature:
     @classmethod
     def fill_reports(cls, daily_reports: typing.List[DailyReport]):
         """填写报告"""
+        daily_report = DailyReport()
         for daily_report in daily_reports:
             if not daily_report.today_work:
                 logging.warning(f"{daily_report.date}无日志")
@@ -46,7 +47,7 @@ class OaFeature:
                 logging.warning(f"当前日志不为当月日志，跳过: {daily_report.date}")
                 continue
             cls._fill_report(daily_report)
-        else:
+        if daily_report.completion_rate == 100:
             # 提交报告
             SeleniumUtil.click('//input[@type="button" and @value="确定"]')
 
