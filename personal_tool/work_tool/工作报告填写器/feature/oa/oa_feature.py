@@ -14,6 +14,7 @@ class OaFeature:
     @staticmethod
     def login_oa():
         """登录OA"""
+        SeleniumUtil.launch_chrome_debug()
         username = "xiejinsong"
         password = "SYggdd_947"
         SeleniumUtil.open_url("http://10.50.144.123:8989/")

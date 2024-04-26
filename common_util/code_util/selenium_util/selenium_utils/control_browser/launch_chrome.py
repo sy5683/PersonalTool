@@ -228,7 +228,7 @@ class LaunchChrome(LaunchBase):
             # 未启动driver并且默认debug端口正在运行
             if not cls.__driver_map and cls._netstat_debug_port_running(SeleniumConfig.default_debug_port):
                 return SeleniumConfig.default_debug_port
-        return debug_port
+        return debug_port or 9222
 
     @staticmethod
     def __launch_chrome_driver(options: webdriver.ChromeOptions) -> WebDriver:
