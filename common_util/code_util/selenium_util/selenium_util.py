@@ -76,7 +76,7 @@ class SeleniumUtil:
         ControlElement.key_press(key_name, **kwargs)
 
     @staticmethod
-    def launch_chrome_debug(debug_port: int = None):
+    def launch_chrome_debug(debug_port: int = 9222):
         """debug启动谷歌浏览器"""
         LaunchChrome.launch_browser_debug(debug_port)
 
