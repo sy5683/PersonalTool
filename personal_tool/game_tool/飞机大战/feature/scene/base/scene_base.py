@@ -24,6 +24,8 @@ class SceneBase(metaclass=abc.ABCMeta):
         # 背景参数
         self.rect = self.image.get_rect()
         self.speed = 1  # 速度
+        # 功能参数
+        self.delay = 0  # 用于延迟
         # 初始化背景
         self.reset()
 

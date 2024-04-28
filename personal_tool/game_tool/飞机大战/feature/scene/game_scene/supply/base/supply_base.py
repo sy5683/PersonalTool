@@ -26,11 +26,10 @@ class SupplyBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
 
     def move(self):
         """补给掉落"""
-        width, height = SettingFeature.screen_setting.screen_size
-        if self.rect.top < height:
-            self.rect.top += self.speed
+        self.rect.top += self.speed
         # 超过底部则道具失效
-        else:
+        width, height = SettingFeature.screen_setting.screen_size
+        if self.rect.top > height:
             self.active = False
 
     def reset(self):

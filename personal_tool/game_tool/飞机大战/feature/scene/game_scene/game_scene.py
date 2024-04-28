@@ -26,8 +26,6 @@ class GameScene(SceneBase):
         self.supplys = [BombSupply(), MedKitSupply(), StarSupply()]
         # 敌机
         self.enemies = []
-        self.boss = []
-        self.boss_bullets = []
 
     def main(self):
         supply_time = USEREVENT + 2  # 补给计时器
@@ -65,6 +63,17 @@ class GameScene(SceneBase):
             if self.plane.life_number:
                 self.screen.blit(self.plane.get_image(), self.plane.rect)
                 self.plane.move()
+                # 添加子弹到本地缓存列表
+                if not self.delay % 10:
+                    bullet = next(self.plane.get_bullets())
+                    bullet.reset()
+                    self.bullets.append(bullet)
+                # 消除已失效的子弹，防止数据溢出
+                self.bullets = [bullet for bullet in self.bullets if bullet.active]
+                # 绘制飞机子弹
+                for bullet in self.bullets:
+                    self.screen.blit(bullet.image, bullet.rect)
+                    bullet.move()
             # 绘制补给
             for supply in self.supplys:
                 if supply.active:
@@ -80,3 +89,5 @@ class GameScene(SceneBase):
             pygame.display.flip()
             # 刷新频率
             self.clock.tick(60)
+            # 更新延迟
+            self.delay = (self.delay + 1) if self.delay < 99 else 0
