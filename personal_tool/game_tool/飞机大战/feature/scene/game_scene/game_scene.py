@@ -21,8 +21,13 @@ class GameScene(SceneBase):
         self.clouds = []
         # 飞机
         self.plane = Plane01(5, 3)
+        self.bullets = []
         # 补给
         self.supplys = [BombSupply(), MedKitSupply(), StarSupply()]
+        # 敌机
+        self.enemies = []
+        self.boss = []
+        self.boss_bullets = []
 
     def main(self):
         supply_time = USEREVENT + 2  # 补给计时器
@@ -50,7 +55,8 @@ class GameScene(SceneBase):
                     random.choice(self.supplys).reset()
 
             # 绘制背景
-            self.screen.blit(self.image, (0, 0))
+            self.screen.blit(self.image, self.rect)
+            self.move()
             # 绘制起飞坪
             if self.airport.active:
                 self.screen.blit(self.airport.image, self.airport.rect)
@@ -58,7 +64,7 @@ class GameScene(SceneBase):
             # 绘制飞机
             if self.plane.life_number:
                 self.screen.blit(self.plane.get_image(), self.plane.rect)
-                self.plane.move()  # 控制飞机移动
+                self.plane.move()
             # 绘制补给
             for supply in self.supplys:
                 if supply.active:
