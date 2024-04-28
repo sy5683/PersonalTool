@@ -10,11 +10,10 @@ class Airport(BackdropBase):
 
     def move(self):
         """背景起飞坪移动"""
-        width, height = SettingFeature.screen_setting.screen_size
-        if self.rect.top < height:
-            self.rect.top += self.speed
+        self.rect.top += self.speed
         # 超过底部则背景起飞坪失效
-        else:
+        width, height = SettingFeature.screen_setting.screen_size
+        if self.rect.top > height:
             self.active = False
 
     def reset(self):

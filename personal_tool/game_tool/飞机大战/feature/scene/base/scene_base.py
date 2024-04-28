@@ -15,11 +15,19 @@ class SceneBase(metaclass=abc.ABCMeta):
         # 获取背景图片路径
         image_path = FileFeature.get_file_path(image_name)
         # 获取屏幕长宽
-        SettingFeature.screen_setting.screen_size = Image.open(image_path).size[:2]
+        width, height = Image.open(image_path).size[:2]
+        SettingFeature.screen_setting.screen_size = width, height // 2
         # 设置窗口对象
         self.screen = self.get_screen()
         # 读取背景图片
         self.image = FileFeature.load_image(image_path)
+        # 背景参数
+        self.rect = self.image.get_rect()
+        self.speed = 1  # 速度
+        # 功能参数
+        self.delay = 0  # 用于延迟
+        # 初始化背景
+        self.reset()
 
     @abc.abstractmethod
     def main(self):
@@ -33,3 +41,14 @@ class SceneBase(metaclass=abc.ABCMeta):
         flags = pygame.FULLSCREEN | pygame.HWSURFACE if SettingFeature.screen_setting.full_screen else 0
         width, height = SettingFeature.screen_setting.screen_size
         return pygame.display.set_mode((width, height), flags)
+
+    def move(self):
+        """背景移动"""
+        self.rect.top += self.speed
+        if self.rect.top >= 0:
+            self.reset()
+
+    def reset(self):
+        """重置背景"""
+        width, height = SettingFeature.screen_setting.screen_size
+        self.rect.top = -height

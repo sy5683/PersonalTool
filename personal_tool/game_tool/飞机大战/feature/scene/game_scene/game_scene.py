@@ -21,8 +21,11 @@ class GameScene(SceneBase):
         self.clouds = []
         # 飞机
         self.plane = Plane01(5, 3)
+        self.bullets = []
         # 补给
         self.supplys = [BombSupply(), MedKitSupply(), StarSupply()]
+        # 敌机
+        self.enemies = []
 
     def main(self):
         supply_time = USEREVENT + 2  # 补给计时器
@@ -50,7 +53,8 @@ class GameScene(SceneBase):
                     random.choice(self.supplys).reset()
 
             # 绘制背景
-            self.screen.blit(self.image, (0, 0))
+            self.screen.blit(self.image, self.rect)
+            self.move()
             # 绘制起飞坪
             if self.airport.active:
                 self.screen.blit(self.airport.image, self.airport.rect)
@@ -58,7 +62,18 @@ class GameScene(SceneBase):
             # 绘制飞机
             if self.plane.life_number:
                 self.screen.blit(self.plane.get_image(), self.plane.rect)
-                self.plane.move()  # 控制飞机移动
+                self.plane.move()
+                # 添加子弹到本地缓存列表
+                if not self.delay % 10:
+                    bullet = next(self.plane.get_bullets())
+                    bullet.reset()
+                    self.bullets.append(bullet)
+                # 消除已失效的子弹，防止数据溢出
+                self.bullets = [bullet for bullet in self.bullets if bullet.active]
+                # 绘制飞机子弹
+                for bullet in self.bullets:
+                    self.screen.blit(bullet.image, bullet.rect)
+                    bullet.move()
             # 绘制补给
             for supply in self.supplys:
                 if supply.active:
@@ -74,3 +89,5 @@ class GameScene(SceneBase):
             pygame.display.flip()
             # 刷新频率
             self.clock.tick(60)
+            # 更新延迟
+            self.delay = (self.delay + 1) if self.delay < 99 else 0

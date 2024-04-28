@@ -3,6 +3,10 @@ import typing
 
 import pygame
 
+from ...bullet.base.bullet_base import BulletBase
+from ...bullet.bullet_01 import Bullet01
+from ...bullet.bullet_02 import Bullet02
+from ...bullet.bullet_03 import Bullet03
 from .....file_feature import FileFeature
 from .....setting.setting_feature import SettingFeature
 
@@ -51,6 +55,18 @@ class PlaneBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
         self.mask = pygame.mask.from_surface(self.image)
         return self.image
 
+    def get_bullets(self) -> typing.Generator[BulletBase, None, None]:
+        """获取子弹"""
+        if self.level == 1:
+            while True:
+                yield Bullet01(self.rect.midtop)
+        elif self.level == 2:
+            while True:
+                yield Bullet02(self.rect.midtop)
+        else:
+            while True:
+                yield Bullet03(self.rect.midtop)
+
     def level_up(self):
         """升级"""
         if self.level < 3:
@@ -91,7 +107,7 @@ class PlaneBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
             print("使用炸弹")
 
     @staticmethod
-    def __get_images(image_names):
+    def __get_images(image_names) -> typing.Generator[pygame.Surface, None, None]:
         """获取图片迭代器"""
         while True:
             for image_name in image_names:
