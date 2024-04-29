@@ -2,7 +2,6 @@ import random
 import sys
 
 import pygame
-from pygame import USEREVENT
 
 from .backdrop.airport import Airport
 from .plane.plane_01 import Plane01
@@ -22,17 +21,18 @@ class GameScene(SceneBase):
         # 飞机
         self.plane = Plane01(5, 3)
         self.bullets = []
-        # 补给
-        self.supplys = [BombSupply(), MedKitSupply(), StarSupply()]
         # 敌机
         self.enemies = []
+        # 补给
+        self.supplys = [BombSupply(), MedKitSupply(), StarSupply()]
+        # 计时器
+        self.supply_timer = self.get_timer(5)  # 补给计时器
 
     def main(self):
-        supply_time = USEREVENT + 2  # 补给计时器
-        pygame.time.set_timer(supply_time, 7 * 1000)
-
+        # 开始动画
         self.airport.reset()
 
+        # 游戏运行
         while True:
 
             # 事件检测
@@ -49,7 +49,7 @@ class GameScene(SceneBase):
                         self.screen = self.get_screen(True)
 
                 # 随机生成补给
-                if event.type == supply_time:
+                if event.type == self.supply_timer:
                     random.choice(self.supplys).reset()
 
             # 绘制背景
@@ -65,9 +65,10 @@ class GameScene(SceneBase):
                 self.plane.move()
                 # 添加子弹到本地缓存列表
                 if not self.delay % 10:
-                    bullet = next(self.plane.get_bullets())
-                    bullet.reset()
-                    self.bullets.append(bullet)
+                    bullets = next(self.plane.get_bullets())
+                    for bullet in bullets:
+                        bullet.reset()
+                        self.bullets.append(bullet)
                 # 消除已失效的子弹，防止数据溢出
                 self.bullets = [bullet for bullet in self.bullets if bullet.active]
                 # 绘制飞机子弹

@@ -28,6 +28,8 @@ class SceneBase(metaclass=abc.ABCMeta):
         self.delay = 0  # 用于延迟
         # 初始化背景
         self.reset()
+        # 私有参数
+        self.__timer_index = 0
 
     @abc.abstractmethod
     def main(self):
@@ -52,3 +54,10 @@ class SceneBase(metaclass=abc.ABCMeta):
         """重置背景"""
         width, height = SettingFeature.screen_setting.screen_size
         self.rect.top = -height
+
+    def get_timer(self, seconds: int) -> int:
+        """获取计时器"""
+        timer = pygame.USEREVENT + self.__timer_index
+        pygame.time.set_timer(timer, seconds * 1000)
+        self.__timer_index += 1
+        return timer

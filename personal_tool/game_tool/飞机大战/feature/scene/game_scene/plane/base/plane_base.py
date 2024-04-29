@@ -55,17 +55,23 @@ class PlaneBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
         self.mask = pygame.mask.from_surface(self.image)
         return self.image
 
-    def get_bullets(self) -> typing.Generator[BulletBase, None, None]:
-        """获取子弹"""
+    def get_bullets(self) -> typing.Generator[typing.List[BulletBase], None, None]:
+        """根据等级获取子弹"""
         if self.level == 1:
-            while True:
-                yield Bullet01(self.rect.midtop)
+            bullets = [Bullet01(self.rect.midtop)]
         elif self.level == 2:
-            while True:
-                yield Bullet02(self.rect.midtop)
+            bullets = [
+                Bullet02((self.rect.centerx - 33, self.rect.centery)),
+                Bullet02((self.rect.centerx + 33, self.rect.centery))
+            ]
         else:
-            while True:
-                yield Bullet03(self.rect.midtop)
+            bullets = [
+                Bullet03((self.rect.centerx - 33, self.rect.centery)),
+                Bullet03(self.rect.midtop),
+                Bullet03((self.rect.centerx + 33, self.rect.centery))
+            ]
+        while True:
+            yield bullets
 
     def level_up(self):
         """升级"""
