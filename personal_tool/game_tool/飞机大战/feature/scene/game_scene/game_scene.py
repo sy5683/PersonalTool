@@ -1,5 +1,4 @@
 import random
-import sys
 
 import pygame
 
@@ -9,12 +8,13 @@ from .supply.bomb_supply import BombSupply
 from .supply.med_kit_supply import MedKitSupply
 from .supply.star_supply import StarSupply
 from ..base.scene_base import SceneBase
+from ...volume_feature import VolumeFeature
 
 
 class GameScene(SceneBase):
 
     def __init__(self):
-        super().__init__("images\\game_scene\\background.png")
+        super().__init__("game_scene\\background.png", "game_scene\\bgm.ogg")
         # 背景
         self.airport = Airport()
         self.clouds = []
@@ -29,25 +29,28 @@ class GameScene(SceneBase):
         self.supply_timer = self.get_timer(5)  # 补给计时器
 
     def main(self):
+        # 播放背景音乐
+        pygame.mixer.music.play(-1)
+
         # 开始动画
         self.airport.reset()
 
         # 游戏运行
-        while True:
+        while self.running:
+            # 设置背景音量
+            VolumeFeature.set_volume(pygame.mixer.music)
 
             # 事件检测
             for event in pygame.event.get():
                 # 退出游戏
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-
+                    self.running = False
+                    pygame.quit()  # 终止pygame
                 if event.type == pygame.KEYDOWN:
                     # 全屏切换
                     if event.key == pygame.K_F11:
                         # 重新获取窗口对象
                         self.screen = self.get_screen(True)
-
                 # 随机生成补给
                 if event.type == self.supply_timer:
                     random.choice(self.supplys).reset()

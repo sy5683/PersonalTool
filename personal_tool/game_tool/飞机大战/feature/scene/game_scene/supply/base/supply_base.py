@@ -6,6 +6,7 @@ import pygame
 from ...plane.base.plane_base import PlaneBase
 from .....file_feature import FileFeature
 from .....setting.setting_feature import SettingFeature
+from .....volume_feature import VolumeFeature
 
 
 class SupplyBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
@@ -16,6 +17,8 @@ class SupplyBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
         self.image = FileFeature.load_image(image_name)
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
+        # 加载补给音效
+        self.appear_music = FileFeature.load_sound("game_scene\\supply\\appear.wav")
         # 设置补给参数
         self.active = False  # 存活
         self.speed = 3  # 速度
@@ -35,5 +38,8 @@ class SupplyBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
     def reset(self):
         """重置补给"""
         self.active = True
+        # 随机生成出现坐标
         width, height = SettingFeature.screen_setting.screen_size
         self.rect.left, self.rect.bottom = random.randint(0, width - self.rect.width), -1
+        # 播放补给出现音效
+        VolumeFeature.volume_play(self.appear_music)

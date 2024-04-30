@@ -9,7 +9,7 @@ from ...file_feature import FileFeature
 
 class SceneBase(metaclass=abc.ABCMeta):
 
-    def __init__(self, image_name: str, **kwargs):
+    def __init__(self, image_name: str, music_name: str, **kwargs):
         # 初始化刷新频率Clock
         self.clock = pygame.time.Clock()
         # 获取背景图片路径
@@ -21,10 +21,13 @@ class SceneBase(metaclass=abc.ABCMeta):
         self.screen = self.get_screen()
         # 读取背景图片
         self.image = FileFeature.load_image(image_path)
+        # 加载背景音乐
+        FileFeature.load_music(FileFeature.get_file_path(music_name))
         # 背景参数
         self.rect = self.image.get_rect()
         self.speed = 1  # 速度
         # 功能参数
+        self.running = True  # 判断运行
         self.delay = 0  # 用于延迟
         # 初始化背景
         self.reset()
