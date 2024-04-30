@@ -19,9 +19,9 @@ class FileFeature:
         return pygame.font.Font(cls.get_file_path(font_name), font_size)
 
     @classmethod
-    def load_music(cls, music_name: str) -> pygame.mixer.music:
+    def load_music(cls, music_name: str):
         """加载音乐"""
-        return pygame.mixer.music.load(cls.get_file_path(music_name))
+        pygame.mixer.music.load(cls.get_file_path(music_name))
 
     @classmethod
     def load_image(cls, image_name: str) -> pygame.Surface:

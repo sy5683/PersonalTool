@@ -9,6 +9,7 @@ from ...bullet.bullet_02 import Bullet02
 from ...bullet.bullet_03 import Bullet03
 from .....file_feature import FileFeature
 from .....setting.setting_feature import SettingFeature
+from .....volume_feature import VolumeFeature
 
 
 class PlaneBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
@@ -20,6 +21,8 @@ class PlaneBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
         self.mask = None
         self.image = self.get_image()
         self.rect = self.image.get_rect()
+        # 加载飞机音效
+        self.upgrade_music = FileFeature.load_sound("game_scene\\plane\\upgrade.wav")  # 飞机升级
         # 设置飞机参数
         self.active = True  # 存活
         self.bomb_number = bomb_number  # 炸弹数
@@ -55,22 +58,30 @@ class PlaneBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
         self.mask = pygame.mask.from_surface(self.image)
         return self.image
 
-    def get_bullets(self) -> typing.Generator[BulletBase, None, None]:
-        """获取子弹"""
+    def get_bullets(self) -> typing.Generator[typing.List[BulletBase], None, None]:
+        """根据等级获取子弹"""
         if self.level == 1:
-            while True:
-                yield Bullet01(self.rect.midtop)
+            bullets = [Bullet01(self.rect.midtop)]
         elif self.level == 2:
-            while True:
-                yield Bullet02(self.rect.midtop)
+            bullets = [
+                Bullet02((self.rect.centerx - 33, self.rect.centery)),
+                Bullet02((self.rect.centerx + 33, self.rect.centery))
+            ]
         else:
-            while True:
-                yield Bullet03(self.rect.midtop)
+            bullets = [
+                Bullet03((self.rect.centerx - 33, self.rect.centery)),
+                Bullet03(self.rect.midtop),
+                Bullet03((self.rect.centerx + 33, self.rect.centery))
+            ]
+        while True:
+            yield bullets
 
     def level_up(self):
         """升级"""
         if self.level < 3:
             self.level += 1
+            # 播放飞机升级音效
+            VolumeFeature.volume_play(self.upgrade_music)
         else:
             # 当等级为最大值时获得升级补给，则短暂无敌、获得护盾并自动触发一个炸弹效果
             self.invincible = True

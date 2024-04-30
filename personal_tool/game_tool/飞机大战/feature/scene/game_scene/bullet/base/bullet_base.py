@@ -4,6 +4,7 @@ import typing
 import pygame
 
 from .....file_feature import FileFeature
+from .....volume_feature import VolumeFeature
 
 
 class BulletBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
@@ -14,6 +15,8 @@ class BulletBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
         self.image = FileFeature.load_image(image_name)
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
+        # 加载子弹音效
+        self.music = FileFeature.load_sound("game_scene\\bullet\\bullet.wav")
         # 设置子弹参数
         self.active = False  # 存活
         self.speed = speed  # 速度
@@ -29,3 +32,5 @@ class BulletBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
     # 构造重置子弹的函数
     def reset(self):
         self.active = True
+        # 播放子弹音效
+        VolumeFeature.volume_play(self.music)

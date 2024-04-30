@@ -1,8 +1,6 @@
 import random
-import sys
 
 import pygame
-from pygame import USEREVENT
 
 from .backdrop.airport import Airport
 from .plane.plane_01 import Plane01
@@ -10,46 +8,51 @@ from .supply.bomb_supply import BombSupply
 from .supply.med_kit_supply import MedKitSupply
 from .supply.star_supply import StarSupply
 from ..base.scene_base import SceneBase
+from ...volume_feature import VolumeFeature
 
 
 class GameScene(SceneBase):
 
     def __init__(self):
-        super().__init__("images\\game_scene\\background.png")
+        super().__init__("game_scene\\background.png", "game_scene\\bgm.ogg")
         # 背景
         self.airport = Airport()
         self.clouds = []
         # 飞机
         self.plane = Plane01(5, 3)
         self.bullets = []
-        # 补给
-        self.supplys = [BombSupply(), MedKitSupply(), StarSupply()]
         # 敌机
         self.enemies = []
+        # 补给
+        self.supplys = [BombSupply(), MedKitSupply(), StarSupply()]
+        # 计时器
+        self.supply_timer = self.get_timer(5)  # 补给计时器
 
     def main(self):
-        supply_time = USEREVENT + 2  # 补给计时器
-        pygame.time.set_timer(supply_time, 7 * 1000)
+        # 播放背景音乐
+        pygame.mixer.music.play(-1)
 
+        # 开始动画
         self.airport.reset()
 
-        while True:
+        # 游戏运行
+        while self.running:
+            # 设置背景音量
+            VolumeFeature.set_volume(pygame.mixer.music)
 
             # 事件检测
             for event in pygame.event.get():
                 # 退出游戏
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-
+                    self.running = False
+                    pygame.quit()  # 终止pygame
                 if event.type == pygame.KEYDOWN:
                     # 全屏切换
                     if event.key == pygame.K_F11:
                         # 重新获取窗口对象
                         self.screen = self.get_screen(True)
-
                 # 随机生成补给
-                if event.type == supply_time:
+                if event.type == self.supply_timer:
                     random.choice(self.supplys).reset()
 
             # 绘制背景
@@ -65,9 +68,10 @@ class GameScene(SceneBase):
                 self.plane.move()
                 # 添加子弹到本地缓存列表
                 if not self.delay % 10:
-                    bullet = next(self.plane.get_bullets())
-                    bullet.reset()
-                    self.bullets.append(bullet)
+                    bullets = next(self.plane.get_bullets())
+                    for bullet in bullets:
+                        bullet.reset()
+                        self.bullets.append(bullet)
                 # 消除已失效的子弹，防止数据溢出
                 self.bullets = [bullet for bullet in self.bullets if bullet.active]
                 # 绘制飞机子弹

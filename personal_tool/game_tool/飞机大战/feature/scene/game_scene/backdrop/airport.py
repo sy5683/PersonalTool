@@ -5,7 +5,7 @@ from ....setting.setting_feature import SettingFeature
 class Airport(BackdropBase):
 
     def __init__(self):
-        super().__init__("images\\game_scene\\backdrop\\airport.png")
+        super().__init__("game_scene\\backdrop\\airport.png")
         self.speed = 3  # 背景起飞坪速度
 
     def move(self):

@@ -9,7 +9,7 @@ from ...file_feature import FileFeature
 
 class SceneBase(metaclass=abc.ABCMeta):
 
-    def __init__(self, image_name: str, **kwargs):
+    def __init__(self, image_name: str, music_name: str, **kwargs):
         # 初始化刷新频率Clock
         self.clock = pygame.time.Clock()
         # 获取背景图片路径
@@ -21,13 +21,18 @@ class SceneBase(metaclass=abc.ABCMeta):
         self.screen = self.get_screen()
         # 读取背景图片
         self.image = FileFeature.load_image(image_path)
+        # 加载背景音乐
+        FileFeature.load_music(FileFeature.get_file_path(music_name))
         # 背景参数
         self.rect = self.image.get_rect()
         self.speed = 1  # 速度
         # 功能参数
+        self.running = True  # 判断运行
         self.delay = 0  # 用于延迟
         # 初始化背景
         self.reset()
+        # 私有参数
+        self.__timer_index = 0
 
     @abc.abstractmethod
     def main(self):
@@ -52,3 +57,10 @@ class SceneBase(metaclass=abc.ABCMeta):
         """重置背景"""
         width, height = SettingFeature.screen_setting.screen_size
         self.rect.top = -height
+
+    def get_timer(self, seconds: int) -> int:
+        """获取计时器"""
+        timer = pygame.USEREVENT + self.__timer_index
+        pygame.time.set_timer(timer, seconds * 1000)
+        self.__timer_index += 1
+        return timer
