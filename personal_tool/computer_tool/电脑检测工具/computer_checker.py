@@ -1,6 +1,6 @@
 from common_core.base.tool_base import ToolBase
-from feature.selenium_checker import SeleniumChecker
 from feature.browser_checker import BrowserChecker
+from feature.selenium_checker import SeleniumChecker
 
 
 class ComputerChecker(ToolBase):

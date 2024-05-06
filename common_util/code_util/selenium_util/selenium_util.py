@@ -11,6 +11,7 @@ from .selenium_utils.control_html.control_driver import ControlDriver
 from .selenium_utils.control_html.control_element import ControlElement
 from .selenium_utils.control_html.control_iframe import ControlIframe
 from .selenium_utils.control_html.control_window import ControlWindow
+from .selenium_utils.selenium_config import SeleniumConfig
 
 
 class SeleniumUtil:
@@ -76,7 +77,7 @@ class SeleniumUtil:
         ControlElement.key_press(key_name, **kwargs)
 
     @staticmethod
-    def launch_chrome_debug(debug_port: int = 9222):
+    def launch_chrome_debug(debug_port: int = SeleniumConfig.default_debug_port):
         """debug启动谷歌浏览器"""
         LaunchChrome.launch_browser_debug(debug_port)
 
