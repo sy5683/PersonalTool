@@ -57,12 +57,19 @@ class Win32Visual:
         if need_admin_right:
             client.Dispatch("WScript.Shell").SendKeys('%')
         # 全屏显示窗口
+        # 无限制窗口最前时，windows可能因为安全问题会报错并无法最前，因此这里捕捉一下
         try:
-            win32gui.ShowWindow(handle, win32con.SW_SHOWNA)
+            win32gui.BringWindowToTop(handle)
+        except pywintypes.error:
+            pass
+        try:
+            win32gui.ShowWindow(handle, win32con.SW_SHOWNOACTIVATE)
+        except pywintypes.error:
+            pass
+        try:
             win32gui.SetForegroundWindow(handle)
-        except pywintypes.error as e:
-            # 无限制窗口最前时，windows可能因为安全问题会报错并无法最前，因此这里捕捉一下
-            logging.warning(e)
+        except pywintypes.error:
+            pass
         time.sleep(1)
 
     @classmethod
