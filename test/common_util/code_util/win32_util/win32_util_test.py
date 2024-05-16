@@ -8,3 +8,7 @@ class Win32UtilTestCase(TestBase):
         handle = Win32Util.find_handle("SunAwtDialog", "附件上传")
         self.assertNotEqual(handle, None)
         print(handle)
+
+    def test_key_press(self):
+        for each in "1234567890apqrijfowejfofz":
+            Win32Util.key_press(each)

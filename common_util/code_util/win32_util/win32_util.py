@@ -1,6 +1,7 @@
 import typing
 from pathlib import Path
 
+from .win32_utils.win32_control import Win32Control
 from .win32_utils.win32_path import Win32Path
 from .win32_utils.win32_visual import Win32Visual
 
@@ -16,6 +17,11 @@ class Win32Util:
     def find_handles(class_name: str = None, title: str = None, wait_seconds: int = 120) -> typing.List[int]:
         """查找窗口句柄列表"""
         return Win32Visual.find_handles(class_name, title, wait_seconds)
+
+    @staticmethod
+    def key_press(key_name: str):
+        """模拟按键"""
+        Win32Control.key_press(key_name)
 
     @staticmethod
     def open_file(file_path: typing.Union[Path, str]):
