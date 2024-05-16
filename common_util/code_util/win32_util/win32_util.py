@@ -19,9 +19,9 @@ class Win32Util:
         return Win32Visual.find_handles(class_name, title, wait_seconds)
 
     @staticmethod
-    def key_press(key_name: str):
+    def key_press(key_code_or_name: typing.Union[int, str]):
         """模拟按键"""
-        Win32Control.key_press(key_name)
+        Win32Control.key_press(key_code_or_name)
 
     @staticmethod
     def open_file(file_path: typing.Union[Path, str]):

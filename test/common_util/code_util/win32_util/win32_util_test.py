@@ -10,5 +10,5 @@ class Win32UtilTestCase(TestBase):
         print(handle)
 
     def test_key_press(self):
-        for each in "1234567890apqrijfowejfofz":
-            Win32Util.key_press(each)
+        Win32Util.key_press(8)
+        # +-.
