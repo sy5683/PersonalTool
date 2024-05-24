@@ -2,14 +2,14 @@ import concurrent
 from concurrent import futures
 
 from common_core.base.tool_base import ToolBase
-from feature.clean_feature import CleanFeature
+from feature.cleaner.temp_file_cleaner import TempFileCleaner
 
 
 class ComputerCleaner(ToolBase):
 
     def __init__(self):
         self.functions = [
-            CleanFeature.clean_tempdir,  # 清理临时文件夹
+            TempFileCleaner.clean_tempdir,  # 清理临时文件夹
         ]
 
     def main(self):

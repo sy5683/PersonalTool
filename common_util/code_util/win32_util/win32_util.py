@@ -19,6 +19,11 @@ class Win32Util:
         return Win32Visual.find_handles(class_name, title, wait_seconds)
 
     @staticmethod
+    def get_root_paths() -> typing.List[str]:
+        """获取电脑根路径列表"""
+        return Win32Path.get_root_paths()
+
+    @staticmethod
     def key_press(key_code_or_name: typing.Union[int, str]):
         """模拟按键"""
         Win32Control.key_press(key_code_or_name)
