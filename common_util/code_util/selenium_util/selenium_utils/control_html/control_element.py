@@ -54,7 +54,8 @@ class ControlElement:
     @classmethod
     def find(cls, xpath: str, **kwargs) -> WebElement:
         """查找元素"""
-        logging.info(f"查找元素: {xpath}")
+        if not kwargs.get("without_log"):
+            logging.info(f"查找元素: {xpath}")
         return cls.__find_with_lambda(lambda x: x.find_element(By.XPATH, xpath), **kwargs)
 
     @classmethod
