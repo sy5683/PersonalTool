@@ -7,6 +7,7 @@ from ...bullet.base.bullet_base import BulletBase
 from ...bullet.bullet_01 import Bullet01
 from ...bullet.bullet_02 import Bullet02
 from ...bullet.bullet_03 import Bullet03
+from ...enemy.base.enemy_base import EnemyBase
 from .....file_feature import FileFeature
 from .....setting.setting_feature import SettingFeature
 from .....volume_feature import VolumeFeature
@@ -22,9 +23,9 @@ class PlaneBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
         self.image = self.get_image()
         self.rect = self.image.get_rect()
         # 加载飞机音效
-        self.upgrade_music = FileFeature.load_sound("game_scene\\plane\\upgrade.wav")  # 飞机升级
+        self.upgrade_sound = FileFeature.load_sound("game_scene\\plane\\upgrade.wav")  # 飞机升级
         # 设置飞机参数
-        self.active = True  # 存活
+        self.alive = True  # 存活
         self.bomb_number = bomb_number  # 炸弹数
         self.invincible = False  # 无敌
         self.level = 1  # 等级
@@ -37,12 +38,12 @@ class PlaneBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
         self.__max_bomb_number = bomb_number
         self.__max_life_number = life_number
 
-    def add_bomb_number(self):
+    def add_bomb_number(self, enemies: typing.List[EnemyBase]):
         """增加炸弹数"""
         self.bomb_number += 1
         # 当炸弹数为最大值时获得炸弹补给，则自动使用炸弹
         if self.bomb_number > self.__max_bomb_number:
-            self.use_bomb()
+            self.use_bomb(enemies)
 
     def add_life_number(self):
         """增加生命数"""
@@ -76,18 +77,18 @@ class PlaneBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
         while True:
             yield bullets
 
-    def level_up(self):
+    def level_up(self, enemies: typing.List[EnemyBase]):
         """升级"""
         if self.level < 3:
             self.level += 1
             # 播放飞机升级音效
-            VolumeFeature.volume_play(self.upgrade_music)
+            VolumeFeature.volume_play(self.upgrade_sound)
         else:
             # 当等级为最大值时获得升级补给，则短暂无敌、获得护盾并自动触发一个炸弹效果
             self.invincible = True
             self.shield = True
             self.bomb_number += 1
-            self.use_bomb()
+            self.use_bomb(enemies)
 
     def move(self):
         """飞机移动"""
@@ -104,18 +105,20 @@ class PlaneBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
 
     def reset(self):
         """重置飞机"""
-        self.active = True
+        self.alive = True
         self.invincible = True
         self.level = 1
         width, height = SettingFeature.screen_setting.screen_size
         self.rect.left, self.rect.bottom = (width - self.rect.width) // 2, height
 
-    def use_bomb(self):
+    def use_bomb(self, enemies: typing.List[EnemyBase]):
         """使用炸弹"""
         if self.bomb_number:
             self.bomb_number -= 1
-            # TODO
-            print("使用炸弹")
+            # 清空全屏敌机
+            for enemy in enemies:
+                if enemy.rect.bottom > 0:
+                    enemy.alive = False
 
     @staticmethod
     def __get_images(image_names) -> typing.Generator[pygame.Surface, None, None]:

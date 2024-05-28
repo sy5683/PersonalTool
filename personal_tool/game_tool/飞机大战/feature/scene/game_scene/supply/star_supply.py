@@ -10,13 +10,15 @@ class StarSupply(SupplyBase):
 
     def __init__(self):
         super().__init__("game_scene\\supply\\star.png")
-        self.music = FileFeature.load_sound("game_scene\\supply\\get_star.wav")
+        # 加载补给音效
+        self.sound = FileFeature.load_sound("game_scene\\supply\\get_star.wav")  # 获取星星
 
-    def trigger(self, plane: PlaneBase):
+    def trigger(self, plane: PlaneBase, **kwargs):
         """触发"""
         if pygame.sprite.collide_mask(self, plane):
-            self.active = False
+            self.alive = False
             # 播放获取星星音效
-            VolumeFeature.volume_play(self.music)
+            VolumeFeature.volume_play(self.sound)
             # 飞机升级
-            plane.level_up()
+            enemies = kwargs.get("enemies", [])
+            plane.level_up(enemies)

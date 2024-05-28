@@ -16,21 +16,32 @@ class BulletBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         # 加载子弹音效
-        self.music = FileFeature.load_sound("game_scene\\bullet\\bullet.wav")
+        self.sound = FileFeature.load_sound("game_scene\\bullet\\bullet.wav")
         # 设置子弹参数
-        self.active = False  # 存活
+        self.alive = False  # 存活
         self.speed = speed  # 速度
         self.rect.left, self.rect.top = position[0] - self.rect.width // 2, position[1]
+
+    def attack_enemy(self, enemies):
+        """子弹攻击敌机"""
+        # 检测子弹是否击中敌机
+        enemy_hit = pygame.sprite.spritecollide(self, enemies, False, pygame.sprite.collide_mask)
+        if enemy_hit:
+            self.alive = False
+            for enemy in enemy_hit:
+                enemy.hit_points -= 1
+                if enemy.hit_points <= 0:
+                    enemy.alive = False
 
     def move(self):
         """子弹移动"""
         self.rect.bottom -= self.speed
         # 超过顶部则子弹失效
         if self.rect.bottom < 0:
-            self.active = False
+            self.alive = False
 
     # 构造重置子弹的函数
     def reset(self):
-        self.active = True
+        self.alive = True
         # 播放子弹音效
-        VolumeFeature.volume_play(self.music)
+        VolumeFeature.volume_play(self.sound)

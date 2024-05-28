@@ -18,13 +18,13 @@ class SupplyBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         # 加载补给音效
-        self.appear_music = FileFeature.load_sound("game_scene\\supply\\appear.wav")
+        self.appear_sound = FileFeature.load_sound("game_scene\\supply\\appear.wav")  # 补给出现
         # 设置补给参数
-        self.active = False  # 存活
+        self.alive = False  # 存活
         self.speed = 3  # 速度
 
     @abc.abstractmethod
-    def trigger(self, plane: PlaneBase):
+    def trigger(self, plane: PlaneBase, **kwargs):
         """触发"""
 
     def move(self):
@@ -33,13 +33,13 @@ class SupplyBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
         # 超过底部则道具失效
         width, height = SettingFeature.screen_setting.screen_size
         if self.rect.top > height:
-            self.active = False
+            self.alive = False
 
     def reset(self):
         """重置补给"""
-        self.active = True
+        self.alive = True
         # 随机生成出现坐标
         width, height = SettingFeature.screen_setting.screen_size
         self.rect.left, self.rect.bottom = random.randint(0, width - self.rect.width), -1
         # 播放补给出现音效
-        VolumeFeature.volume_play(self.appear_music)
+        VolumeFeature.volume_play(self.appear_sound)

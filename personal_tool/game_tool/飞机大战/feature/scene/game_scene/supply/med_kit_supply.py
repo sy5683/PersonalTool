@@ -10,13 +10,14 @@ class MedKitSupply(SupplyBase):
 
     def __init__(self):
         super().__init__("game_scene\\supply\\med_kit.png")
-        self.music = FileFeature.load_sound("game_scene\\supply\\get_med_kit.wav")
+        # 加载补给音效
+        self.sound = FileFeature.load_sound("game_scene\\supply\\get_med_kit.wav")  # 获取医疗包
 
-    def trigger(self, plane: PlaneBase):
+    def trigger(self, plane: PlaneBase, **kwargs):
         """触发"""
         if pygame.sprite.collide_mask(self, plane):
-            self.active = False
+            self.alive = False
             # 播放获取补给包音效
-            VolumeFeature.volume_play(self.music)
+            VolumeFeature.volume_play(self.sound)
             # 增加飞机生命值
             plane.add_life_number()

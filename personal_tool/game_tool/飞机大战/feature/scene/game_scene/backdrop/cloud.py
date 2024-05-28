@@ -16,10 +16,10 @@ class Cloud(BackdropBase):
         # 超过底部则背景云朵失效
         width, height = SettingFeature.screen_setting.screen_size
         if self.rect.top > height:
-            self.active = False
+            self.alive = False
 
     def reset(self):
         """重置背景云朵"""
-        self.active = True
+        self.alive = True
         width, height = SettingFeature.screen_setting.screen_size
         self.rect.left, self.rect.bottom = random.randint(0, width - self.rect.width), -1

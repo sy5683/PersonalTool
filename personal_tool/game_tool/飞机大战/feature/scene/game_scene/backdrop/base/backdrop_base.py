@@ -14,7 +14,7 @@ class BackdropBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         # 设置背景参数
-        self.active = False  # 存活
+        self.alive = False  # 存活
 
     @abc.abstractmethod
     def move(self):
