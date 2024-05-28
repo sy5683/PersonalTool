@@ -18,7 +18,7 @@ class Crawler001(CrawlerBase):
         SeleniumUtil.open_url(f"https://www.douyinxs.com/{url_suffix.strip('/')}")
         driver = SeleniumUtil.get_driver()
         driver.set_page_load_timeout(10)
-        with open(self.save_path, "w+") as file:
+        with open(self.save_path, "w+", encoding='UTF-8') as file:
             temp_contents = []
             while True:
                 while True:
