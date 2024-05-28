@@ -16,7 +16,7 @@ class BrowserChecker:
         # 死循环保证窗口运行，直到手动关闭窗口终止脚本
         while True:
             try:
-                SeleniumUtil.find('//settings-ui')
+                SeleniumUtil.find('//settings-ui', without_log=True)
             except NoSuchWindowException:
                 time.sleep(3)
                 break
