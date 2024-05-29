@@ -22,8 +22,8 @@ class ParseReceipt:
         if not len(parsers):
             raise ValueError(f"银行回单【{receipt_name}】无法识别")
         elif len(parsers) > 1:
-            raise ValueError(
-                f"银行回单【{receipt_name}】匹配多种格式: %s" % "、".join([each.bank_name for each in parsers]))
+            parsers_types = "、".join([each.bank_name for each in parsers])
+            raise ValueError(f"银行回单【{receipt_name}】匹配多种格式: {parsers_types}")
         else:
             receipt_parser = parsers[0]
             logging.info(f"银行回单【{receipt_name}】的类型为: {receipt_parser.bank_name}回单")

@@ -92,6 +92,7 @@ class ReceiptParser(metaclass=abc.ABCMeta):
         return False
 
     def _parse_receipt(self, receipt_profile: ReceiptProfile, receipt_type_class):
+        """解析回单"""
         receipt_types = []
         for receipt_type_class in receipt_type_class.__subclasses__():
             receipt_type = receipt_type_class(receipt_profile)
