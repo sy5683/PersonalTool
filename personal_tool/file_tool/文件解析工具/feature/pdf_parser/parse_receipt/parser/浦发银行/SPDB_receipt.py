@@ -1,7 +1,3 @@
-import re
-
-import fitz
-
 from common_util.file_util.pdf_util.pdf_util import PdfUtil
 from .receipt_types.SPDB_receipt_type import SPDBReceiptType
 from ...entity.receipt_parser import ReceiptParser
@@ -14,10 +10,7 @@ class SPDBReceiptParser(ReceiptParser):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        with fitz.open(self.receipt_path) as pdf:
-            if not re.search("上海浦东发展银行网上银行电子回单", pdf[0].get_text()):
-                return False
-        return True
+        return self._check_contains("上海浦东发展银行网上银行电子回单")
 
     def parse_receipt(self):
         """解析回单"""

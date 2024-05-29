@@ -1,5 +1,3 @@
-import fitz
-
 from common_util.file_util.pdf_util.pdf_util import PdfUtil
 from .receipt_types.ABC_receipt_type import ABCReceiptType
 from ...entity.receipt_parser import ReceiptParser
@@ -14,10 +12,7 @@ class ABCReceiptParser(ReceiptParser):
         """判断是否为当前格式"""
         if not self._judge_images("ABC_image_01.png", different=0.4):
             return False
-        with fitz.open(self.receipt_path) as pdf:
-            if "网上银行电子回单" not in pdf[0].get_text():
-                return False
-        return True
+        return self._check_contains("网上银行电子回单")
 
     def parse_receipt(self):
         """解析回单"""

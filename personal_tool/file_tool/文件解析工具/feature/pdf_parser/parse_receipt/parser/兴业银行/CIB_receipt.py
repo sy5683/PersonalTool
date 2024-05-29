@@ -1,5 +1,3 @@
-import fitz
-
 from common_util.file_util.pdf_util.pdf_util import PdfUtil
 from .receipt_types.CIB_receipt_type import CIBReceiptType
 from ...entity.receipt_parser import ReceiptParser
@@ -12,12 +10,7 @@ class CIBReceiptParser(ReceiptParser):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        with fitz.open(self.receipt_path) as pdf:
-            if "兴业银行网上回单" in pdf[0].get_text().replace(chr(0xa0), ''):
-                return True
-            if "www.cib.com.cn" in pdf[0].get_text():
-                return True
-        return False
+        return self._check_contains("兴业银行网上回单", "www.cib.com.cn")
 
     def parse_receipt(self):
         """解析回单"""

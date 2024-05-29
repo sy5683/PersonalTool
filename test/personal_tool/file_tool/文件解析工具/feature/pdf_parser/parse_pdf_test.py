@@ -9,7 +9,7 @@ from personal_tool.file_tool.文件解析工具.feature.pdf_parser.parse_pdf imp
 class ParsePdfTestCase(TestBase):
 
     def setUp(self):
-        self.receipt_path = Path(r"E:\Document\公司文档\先一科技\RPA\场景文档\01_银行回单补扫\回单")
+        self.receipt_path = Path(r"E:\Document\公司文档\RPA\场景文档\01_银行回单补扫\回单")
 
     def test_parse_receipt(self):
         receipt_path = self.receipt_path.joinpath("")

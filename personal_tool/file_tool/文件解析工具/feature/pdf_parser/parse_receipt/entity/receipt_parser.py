@@ -1,10 +1,12 @@
 import abc
 import logging
+import re
 import sys
 import typing
 from pathlib import Path
 
 import cv2
+import fitz
 import numpy
 
 from common_util.file_util.file_util.file_util import FileUtil
@@ -30,6 +32,15 @@ class ReceiptParser(metaclass=abc.ABCMeta):
     def parse_receipt(self):
         """解析回单"""
 
+    def _check_contains(self, *values: str) -> bool:
+        """判断pdf中是否包含"""
+        with fitz.open(self.receipt_path) as pdf:
+            pdf_text = re.sub(r"\s+", "", pdf[0].get_text())
+            for value in values:
+                if value in pdf_text:
+                    return True
+        return False
+
     @staticmethod
     def _compare_image(image: numpy.ndarray, judge_image: numpy.ndarray) -> float:
         """对比两张图片的相似度"""
@@ -46,7 +57,8 @@ class ReceiptParser(metaclass=abc.ABCMeta):
         # 缩放一致大小
         image = cv2.resize(image, (width, height), interpolation=cv2.INTER_NEAREST)
         # 求和每个像素点之间的差异，除以255是为了归一化，之后再求整体差异性
-        return numpy.sum(cv2.absdiff(image, judge_image)) / 255 / width / height
+        compare = numpy.sum(cv2.absdiff(image, judge_image)) / 255 / width / height
+        return compare
 
     def _get_judge_images(self, *image_names: str) -> typing.List[numpy.ndarray]:
         """获取判断图片"""
