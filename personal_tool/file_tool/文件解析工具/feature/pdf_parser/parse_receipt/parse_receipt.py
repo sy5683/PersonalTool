@@ -22,7 +22,7 @@ class ParseReceipt:
         if not len(parsers):
             raise ValueError(f"银行回单【{receipt_name}】无法识别")
         elif len(parsers) > 1:
-            parsers_types = "、".join([each.bank_name for each in parsers])
+            parsers_types = "、".join([parser.bank_name for parser in parsers])
             raise ValueError(f"银行回单【{receipt_name}】匹配多种格式: {parsers_types}")
         else:
             receipt_parser = parsers[0]

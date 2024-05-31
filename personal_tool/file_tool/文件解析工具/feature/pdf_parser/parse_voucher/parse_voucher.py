@@ -22,7 +22,7 @@ class ParseVoucher:
         if not len(parsers):
             raise ValueError(f"电子凭证【{voucher_name}】无法识别")
         elif len(parsers) > 1:
-            parsers_types = "、".join([each.voucher_type for each in parsers])
+            parsers_types = "、".join([parser.voucher_type for parser in parsers])
             raise ValueError(f"电子凭证【{voucher_name}】匹配多种格式: {parsers_types}")
         else:
             voucher_parser = parsers[0]
