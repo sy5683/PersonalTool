@@ -37,14 +37,13 @@ class WechatMerchantVoucher(VoucherParser):
             data = dict(zip(tags, row_values))
             voucher = Voucher()
             voucher.date = TimeUtil.format_to_str(data.get("结算日期"))
-            voucher.date = NumberUtil.to_amount(data.get("订单金额(元)"))
-            voucher.date = data.get("订单笔数")
-            voucher.date = NumberUtil.to_amount(data.get("退款金额(元)"))
-            voucher.date = data.get("退款笔数")
-            voucher.date = NumberUtil.to_amount(data.get("手续费(元)"))
-            voucher.date = NumberUtil.to_amount(data.get("入账金额(元)"))
+            voucher.ddje = NumberUtil.to_amount(data.get("订单金额(元)"))
+            voucher.ddbs = data.get("订单笔数")
+            voucher.tkje = NumberUtil.to_amount(data.get("退款金额(元)"))
+            voucher.tkbs = data.get("退款笔数")
+            voucher.sxf = NumberUtil.to_amount(data.get("手续费(元)"))
+            voucher.rzje = NumberUtil.to_amount(data.get("入账金额(元)"))
             self.vouchers.append(voucher)
-
 
     @staticmethod
     def __get_tag_row(table: Table) -> int:
