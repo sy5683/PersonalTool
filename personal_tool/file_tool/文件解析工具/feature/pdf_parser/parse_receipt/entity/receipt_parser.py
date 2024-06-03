@@ -21,9 +21,8 @@ class ReceiptParser(PdfParserBase, metaclass=abc.ABCMeta):
     parser_name = "银行回单"
 
     def __init__(self, bank_name: str, receipt_path: str, **kwargs):
-        self.parser_type = bank_name  # 银行名称
+        super().__init__(bank_name, receipt_path)  # 银行名称
         self.receipt_path = receipt_path  # 回单路径
-        self.pdf_profiles = PdfUtil.get_pdf_profiles(receipt_path)
         self.receipts: typing.List[Receipt] = []
 
     def _check_contains(self, *values: str) -> bool:
@@ -97,10 +96,10 @@ class ReceiptParser(PdfParserBase, metaclass=abc.ABCMeta):
             except Exception:
                 pass
         if not len(receipt_types):
-            raise ValueError(f"{self.bank_name}回单pdf中有无法解析的回单")
+            raise ValueError(f"{self.parser_type}回单pdf中有无法解析的回单")
         elif len(receipt_types) > 1:
-            logging.error(f"{self.bank_name}回单pdf中有匹配多个格式的回单: {receipt_types}")
-            raise ValueError(f"{self.bank_name}回单pdf中有匹配多个格式的回单")
+            logging.error(f"{self.parser_type}回单pdf中有匹配多个格式的回单: {receipt_types}")
+            raise ValueError(f"{self.parser_type}回单pdf中有匹配多个格式的回单")
         else:
             receipt = receipt_types[0].get_receipt()
             if receipt:

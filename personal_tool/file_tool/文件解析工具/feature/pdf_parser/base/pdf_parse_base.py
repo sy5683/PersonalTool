@@ -5,8 +5,8 @@ import os
 
 class PdfParseBase(metaclass=abc.ABCMeta):
 
-    @staticmethod
-    def _parse(pdf_path: str, parser, **kwargs):
+    @classmethod
+    def _parse(cls, pdf_path: str, parser, **kwargs):
         """解析"""
         logging.info(f"解析{parser.parser_name}: {pdf_path}")
         pdf_name = os.path.basename(pdf_path)

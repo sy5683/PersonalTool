@@ -10,7 +10,8 @@ class CIBReceiptParser(ReceiptParser):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        return self._check_contains("兴业银行网上回单", "www.cib.com.cn")
+        return False
+        # return self._check_contains("兴业银行网上回单", "www.cib.com.cn")
 
     def parse(self):
         """解析"""
