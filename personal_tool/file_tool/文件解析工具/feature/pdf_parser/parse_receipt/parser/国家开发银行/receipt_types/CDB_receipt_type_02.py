@@ -17,7 +17,7 @@ class CDBReceiptType02(CDBReceiptType):
         return True
 
     def get_receipt(self) -> Receipt:
-        """解析回单"""
+        """解析"""
         receipt = Receipt()
         receipt.date = TimeUtil.format_to_str(self._get_word(".*年.*月.*日"))  # 日期
         receipt.payee_account_name = self._get_account(self.table.get_row_values(0)[0])  # 收款人户名

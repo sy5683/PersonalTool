@@ -14,23 +14,17 @@ from common_util.file_util.image_util.image_util import ImageUtil
 from common_util.file_util.pdf_util.pdf_util import PdfUtil
 from common_util.file_util.pdf_util.pdf_utils.entity.pdf_profile import ReceiptProfile
 from .receipt import Receipt
+from ...base.pdf_parser_base import PdfParserBase
 
 
-class ReceiptParser(metaclass=abc.ABCMeta):
+class ReceiptParser(PdfParserBase, metaclass=abc.ABCMeta):
+    parser_name = "银行回单"
 
     def __init__(self, bank_name: str, receipt_path: str, **kwargs):
-        self.bank_name = bank_name  # 银行名称
+        self.parser_type = bank_name  # 银行名称
         self.receipt_path = receipt_path  # 回单路径
         self.pdf_profiles = PdfUtil.get_pdf_profiles(receipt_path)
         self.receipts: typing.List[Receipt] = []
-
-    @abc.abstractmethod
-    def judge(self) -> bool:
-        """判断是否为当前格式"""
-
-    @abc.abstractmethod
-    def parse_receipt(self):
-        """解析回单"""
 
     def _check_contains(self, *values: str) -> bool:
         """判断pdf中是否包含"""
@@ -92,7 +86,7 @@ class ReceiptParser(metaclass=abc.ABCMeta):
         return False
 
     def _parse_receipt(self, receipt_profile: ReceiptProfile, receipt_type_class):
-        """解析回单"""
+        """解析"""
         receipt_types = []
         for receipt_type_class in receipt_type_class.__subclasses__():
             receipt_type = receipt_type_class(receipt_profile)

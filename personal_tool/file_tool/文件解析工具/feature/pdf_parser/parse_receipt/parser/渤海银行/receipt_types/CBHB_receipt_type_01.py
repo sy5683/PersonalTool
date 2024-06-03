@@ -16,7 +16,7 @@ class CBHBReceiptType01(CBHBReceiptType):
         return True
 
     def get_receipt(self) -> Receipt:
-        """解析回单"""
+        """解析"""
         receipt = Receipt()
         receipt.date = TimeUtil.format_to_str(self.table.get_row_values(7)[3])  # 日期
         account_row_values = self.table.get_row_values(1)

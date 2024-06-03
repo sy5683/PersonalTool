@@ -16,7 +16,7 @@ class CDBReceiptType03(CDBReceiptType):
         return True
 
     def get_receipt(self) -> Receipt:
-        """解析回单"""
+        """解析"""
         receipt = Receipt()
         date_pattern = re.compile("交易日期[:：]")
         payer_account_name_pattern = re.compile("付款方名称[:：]")

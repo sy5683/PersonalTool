@@ -18,7 +18,7 @@ class ReceiptType(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def get_receipt(self) -> Receipt:
-        """解析回单"""
+        """解析"""
 
     @staticmethod
     def _get_account(value: str) -> str:

@@ -16,6 +16,6 @@ class CIBReceiptType01(CIBReceiptType):
         return False
 
     def get_receipt(self) -> Receipt:
-        """解析回单"""
+        """解析"""
         receipt = Receipt()
         return receipt

@@ -13,7 +13,7 @@ class CEXIMReceiptType01(CEXIMReceiptType):
         return True
 
     def get_receipt(self) -> Receipt:
-        """解析回单"""
+        """解析"""
         receipt = Receipt()
         receipt.date = TimeUtil.format_to_str(self._get_word(".*年.*月.*日"))  # 日期
         name_row_values = self.table.get_row_values(0)

@@ -21,8 +21,8 @@ class AlipayBalanceVoucher(VoucherParser):
                 return True
         return False
 
-    def parse_voucher(self):
-        """解析凭证"""
+    def parse(self):
+        """解析"""
         try:
             table = self.pdf_profiles[0].tables[0]
         except IndexError:

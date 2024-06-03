@@ -11,6 +11,7 @@ class ParsePdfTestCase(TestBase):
     def setUp(self):
         self.receipt_path = Path(r"E:\Document\公司文档\RPA\场景文档\01_银行回单补扫\回单")
         self.voucher_path = Path(r"E:\Document\公司文档\RPA\场景文档\云驿燃料调运平台场景\电子凭证\支付宝")
+        # self.tax_path = Path(r"E:\Document\公司文档\RPA\场景文档\28_公文机器人\05-收入核对")
 
     def test_parse_receipt(self):
         receipt_path = self.receipt_path.joinpath("")

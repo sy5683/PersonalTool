@@ -15,7 +15,7 @@ class ICBCReceiptType01(ICBCReceiptType):
         return True
 
     def get_receipt(self) -> Receipt:
-        """解析回单"""
+        """解析"""
         receipt = Receipt()
         receipt.date = TimeUtil.format_to_str(self._get_word("^日期[:：](.*)$"))  # 日期
         receipt.payer_account_name = self._get_word("^付款人户名[:：](.*?)$")  # 付款人户名

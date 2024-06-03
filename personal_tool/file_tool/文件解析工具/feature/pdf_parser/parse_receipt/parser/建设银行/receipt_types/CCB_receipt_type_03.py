@@ -18,7 +18,7 @@ class CCBReceiptType03(CCBReceiptType):
         return True
 
     def get_receipt(self) -> Receipt:
-        """解析回单"""
+        """解析"""
         receipt = Receipt()
         words = PdfUtil.merge_words(self.table.cells[0].words, 10)
         payer_account_name_pattern = re.compile("付款人全称[:：]")
