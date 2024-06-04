@@ -8,10 +8,10 @@ from .entity.pdf_profile import PdfProfile, ReceiptProfile
 class ProcessPdfProfile:
 
     @classmethod
-    def split_receipt_pdf(cls, pdf_profile: PdfProfile, split_word: str) -> typing.List[ReceiptProfile]:
+    def split_receipt_pdf(cls, pdf_profile: PdfProfile, *split_words: str) -> typing.List[ReceiptProfile]:
         """分割回单pdf"""
         if not pdf_profile.tables:
-            return cls.__split_receipt_without_table(pdf_profile, split_word)
+            return cls.__split_receipt_without_table(pdf_profile, *split_words)
         # 获取回单中所有表格坐标
         table_rects = [table.rect for table in pdf_profile.tables]
         # 根据表格坐标提取表格之间的间隔纵坐标
@@ -76,15 +76,15 @@ class ProcessPdfProfile:
         return new_words
 
     @staticmethod
-    def __split_receipt_without_table(pdf_profile: PdfProfile, split_word: str) -> typing.List[ReceiptProfile]:
+    def __split_receipt_without_table(pdf_profile: PdfProfile, *split_words: str) -> typing.List[ReceiptProfile]:
         """切割没有表格的回单"""
-        if split_word is None:
+        if not split_words:
             return [ReceiptProfile(None, pdf_profile.words)]
         else:
             receipt_profiles = []
             receipt_profile = ReceiptProfile()
             for index, word in enumerate(pdf_profile.words):
-                if re.search(split_word, word.text):
+                if re.search("|".join(split_words), word.text):
                     receipt_profile = ReceiptProfile()
                     receipt_profiles.append(receipt_profile)
                 receipt_profile.words.append(word)

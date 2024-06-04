@@ -10,11 +10,10 @@ class CIBReceiptParser(ReceiptParser):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        return False
-        # return self._check_contains("兴业银行网上回单", "www.cib.com.cn")
+        return self._check_contains("兴业银行网上回单", "www.cib.com.cn")
 
     def parse(self):
         """解析"""
         for pdf_profile in self.pdf_profiles:
-            for receipt_profile in PdfUtil.split_receipt_pdf(pdf_profile):
+            for receipt_profile in PdfUtil.split_receipt_pdf(pdf_profile, "回单编号:"):
                 self._parse_receipt(receipt_profile, CIBReceiptType)

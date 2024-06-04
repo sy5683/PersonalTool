@@ -6,11 +6,11 @@ from .CIB_receipt_type import CIBReceiptType
 from ....entity.receipt import Receipt
 
 
-class CIBReceiptType01(CIBReceiptType):
+class CIBReceiptType02(CIBReceiptType):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        if not re.search("[付收]款回单", self.words[1].text):
+        if not re.search("存款利息单", self.words[1].text):
             return False
         return True
 
@@ -18,9 +18,8 @@ class CIBReceiptType01(CIBReceiptType):
         """解析"""
         receipt = Receipt()
         receipt.date = TimeUtil.format_to_str(self._get_word("交易日期[:：](.*)$"))  # 日期
-        receipt.payer_account_name = self._get_word("付款名称[:：](.*)$")  # 付款人户名
-        receipt.payer_account_number = self._get_word("付款账号[:：](.*)$")  # 付款人账号
-        receipt.payee_account_name = self._get_word("收款名称[:：](.*)$")  # 收款人户名
+        receipt.payer_account_name = self._get_word("付款银行[:：](.*)$")  # 付款人户名
+        receipt.payee_account_name = self._get_word("收款单位[:：](.*)$")  # 收款人户名
         receipt.payee_account_number = self._get_word("收款账号[:：](.*)$")  # 收款人账号
         receipt.amount = NumberUtil.to_amount(self._get_word("^金额[(（]小写[)）][:：](.*?)$"))  # 金额
         return receipt

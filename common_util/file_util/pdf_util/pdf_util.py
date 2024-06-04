@@ -51,6 +51,6 @@ class PdfUtil:
         return ConvertPdf.pdf_to_images(str(pdf_path), save_path, suffix)
 
     @staticmethod
-    def split_receipt_pdf(pdf_profile: PdfProfile, split_word: str = None) -> typing.List[ReceiptProfile]:
+    def split_receipt_pdf(pdf_profile: PdfProfile, *split_words: str) -> typing.List[ReceiptProfile]:
         """分割回单pdf"""
-        return ProcessPdfProfile.split_receipt_pdf(pdf_profile, split_word)
+        return ProcessPdfProfile.split_receipt_pdf(pdf_profile, *split_words)
