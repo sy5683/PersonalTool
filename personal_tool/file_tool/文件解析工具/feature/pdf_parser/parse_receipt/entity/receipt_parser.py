@@ -53,20 +53,18 @@ class ReceiptParser(PdfParserBase, metaclass=abc.ABCMeta):
         compare = numpy.sum(cv2.absdiff(image, judge_image)) / 255 / width / height
         return compare
 
-    def _get_judge_images(self, *image_names: str) -> typing.List[numpy.ndarray]:
+    def _get_judge_images(self) -> typing.List[numpy.ndarray]:
         """获取判断图片"""
         image_dir_path = Path(sys.modules[self.__module__].__file__).parent.joinpath("judge_image")
         FileUtil.make_dir(image_dir_path)
-        judge_images = []
-        for image_name in image_names:
-            image_path = image_dir_path.joinpath(image_name)
-            assert image_path.exists(), f"判断图片不存在: {image_name}"
-            judge_images.append(ImageUtil.read_opencv_image(image_path))
+        judge_images = [ImageUtil.read_opencv_image(image_path) for image_path in image_dir_path.rglob("*.*")]
+        if not judge_images:
+            raise FileNotFoundError("缺少判断图片")
         return judge_images
 
-    def _judge_images(self, *image_names: str, different: float):
+    def _judge_images(self, different: float):
         """比较图片"""
-        judge_images = self._get_judge_images(*image_names)
+        judge_images = self._get_judge_images()
         for image in PdfUtil.get_pdf_images(self.receipt_path):
             if image is None:
                 continue

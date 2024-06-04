@@ -10,7 +10,7 @@ class ABCReceiptParser(ReceiptParser):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        if not self._judge_images("ABC_image_01.png", different=0.4):
+        if not self._judge_images(0.4):
             return False
         return self._check_contains("网上银行电子回单")
 
