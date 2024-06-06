@@ -11,7 +11,7 @@ class DatabaseUtilTestCase(TestBase):
         self.assertNotEqual(database_connect, None)
         table_name = "test"
         with database_connect:
-            database_connect.execute_sql(f"SELECT * FROM {table_name};")
+            database_connect.execute_sql(f"SELECT name AS 名称 FROM {table_name};")
             results = database_connect.get_results()
             ObjectUtil.print_object(results)
 
