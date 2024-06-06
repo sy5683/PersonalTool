@@ -40,9 +40,8 @@ class ConvertTime:
         except (AssertionError, TypeError):
             raise ValueError(f"时间异常，无法格式化: {stamp}")
         if len(datetime_number) == 6:
-            datetime_number += "01000000"  # 补上日期，默认1号
-        else:
-            datetime_number = datetime_number.ljust(14, "0")[:14]  # 补上时间，使其变为14位时间数字
+            datetime_number += "01"  # 补上日期，默认1号
+        datetime_number = datetime_number.ljust(14, "0")[:14]  # 补上时间，使其变为14位时间数字
         return datetime.datetime.strptime(datetime_number, "%Y%m%d%H%M%S")
 
     @staticmethod

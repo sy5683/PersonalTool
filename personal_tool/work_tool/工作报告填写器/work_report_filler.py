@@ -5,6 +5,7 @@ from common_util.data_util.time_util.time_util import TimeUtil
 from feature.config import WorkReportFillerConfig
 from feature.oa.oa_feature import OaFeature
 from feature.work_report.work_report_feature import WorkReportFeature
+from feature.date_feature import DateFeature
 
 
 class WorkReportFiller(ToolBase):
@@ -13,8 +14,8 @@ class WorkReportFiller(ToolBase):
         target_date = TimeUtil.format_to_str(target_date, WorkReportFillerConfig.time_format)
         self.weekly_report = WorkReportFeature.get_weekly_report(target_date)
 
-    def main(self):
-        if TimeUtil.get_now(WorkReportFillerConfig.time_format) in self.weekly_report.date_range:
+    def main(self, filling: bool = True):
+        if filling and DateFeature.get_now_date() in self.weekly_report.date_range:
             # 1.1) 登录OA
             OaFeature.login_oa()
             # 1.2) 切换至日报界面

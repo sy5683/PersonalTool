@@ -23,10 +23,10 @@ class ExcelUtil:
         """excel转图片"""
         return Win32Excel.excel_to_images(str(file_path), save_path)
 
-    @classmethod
-    def format_date_data(cls, date: typing.Union[int, str], time_format: str = '%Y-%m-%d %H:%M:%S') -> str:
+    @staticmethod
+    def format_date_data(date: typing.Union[float, str]) -> str:
         """格式化日期数据"""
-        return FormatExcelData.format_date_data(date, time_format)
+        return FormatExcelData.format_date_data(date)
 
     @staticmethod
     def format_int_data(data: typing.Union[float, str]) -> str:

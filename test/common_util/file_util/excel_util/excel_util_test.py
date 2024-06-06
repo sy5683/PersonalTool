@@ -14,7 +14,7 @@ class ExcelUtilTestCase(TestBase):
         Win32Util.open_file(image_paths[0])
 
     def test_format_date_data(self):
-        date_data = ExcelUtil.format_date_data("2958465")
+        date_data = ExcelUtil.format_date_data("42141.0")
         self.assertNotEqual(date_data, None)
         print(date_data)
 
