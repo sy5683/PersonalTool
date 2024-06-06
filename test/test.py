@@ -10,6 +10,7 @@ import win32api
 from selenium.webdriver import ActionChains, Keys
 
 from common_core.base.test_base import TestBase
+from common_util.code_util.net_util.net_util import NetUtil
 from common_util.code_util.selenium_util.selenium_util import SeleniumUtil
 from common_util.code_util.selenium_util.selenium_utils.selenium_config import SeleniumConfig
 
