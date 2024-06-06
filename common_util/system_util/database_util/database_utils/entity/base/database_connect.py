@@ -1,6 +1,7 @@
 import abc
 import logging
 import traceback
+import typing
 
 
 class DatabaseConnect(metaclass=abc.ABCMeta):
@@ -40,13 +41,10 @@ class DatabaseConnect(metaclass=abc.ABCMeta):
             logging.error(e)
             self.connect.rollback()  # 回滚操作
 
-    def get_result(self) -> any:
+    def get_results(self) -> typing.List[typing.Dict[str, any]]:
         """获取运行结果"""
-        return self.cursor.fetchone()
-
-    def get_results(self) -> any:
-        """获取运行结果"""
-        return self.cursor.fetchall()
+        tags = [column[0] for column in self.cursor.description]
+        return [dict(zip(tags, each)) for each in self.cursor.fetchall()]
 
     @abc.abstractmethod
     def _get_connect(self):
