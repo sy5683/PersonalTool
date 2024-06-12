@@ -21,7 +21,7 @@ class GameScene(SceneBase):
 
     def __init__(self):
         super().__init__("game_scene\\background.png", "game_scene\\bgm.ogg")
-        self.level = 1  # 难度等级
+        self.level = 0  # 难度等级
         self.score = 0  # 得分
         # 背景
         self.airport = Airport()
@@ -71,17 +71,13 @@ class GameScene(SceneBase):
                     random.choice(self.supplys).reset()
 
             # 根据难度设置敌机
-            if self.level == 1 and self.score > 2000:
-                self.level_up()
-            if self.level == 2 and self.score > 10000:
-                self.level_up()
-            if self.level == 3 and self.score > 30000:
-                self.level_up()
-            if self.level == 4 and self.score > 100000:
-                self.level_up()
-            if self.level == 5 and self.score > 500000:
-                self.level_up()
-                # 出现boss
+            target_scores = [2000, 10000, 30000, 100000, 500000]
+            for level, score in enumerate(target_scores):
+                if self.level == level and self.score >= score:
+                    self.level_up()
+                    if level == len(target_scores) - 1:
+                        # TODO 出现boss
+                        pass
 
             # 绘制背景
             self.screen.blit(self.image, self.rect)
@@ -105,8 +101,12 @@ class GameScene(SceneBase):
             # 绘制敌机
             for enemy in self.enemies:
                 enemy: EnemyBase
-                if enemy.alive:
-                    self.screen.blit(enemy.image, enemy.rect)
+                if enemy.hit_points > 0:
+                    if enemy.hit and enemy.hit_image:
+                        self.screen.blit(enemy.hit_image, enemy.rect)
+                        enemy.hit = False
+                    else:
+                        self.screen.blit(enemy.image, enemy.rect)
                     # 绘制血条
                     hit_points_ratio = enemy.hit_points / enemy.max_hit_points
                     if hit_points_ratio < 1:
@@ -118,6 +118,7 @@ class GameScene(SceneBase):
                                          (enemy.rect.left + enemy.rect.width * hit_points_ratio, enemy.rect.top - 5), 2)
                     enemy.move()
                 else:
+                    # TODO 绘制坠毁动画
                     self.score += enemy.score
                     enemy.reset()
             # 绘制飞机子弹

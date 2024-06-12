@@ -115,10 +115,10 @@ class PlaneBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
         """使用炸弹"""
         if self.bomb_number:
             self.bomb_number -= 1
-            # 清空全屏敌机
+            # 所有敌机扣血100点
             for enemy in enemies:
                 if enemy.rect.bottom > 0:
-                    enemy.alive = False
+                    enemy.hit_points -= 10
 
     @staticmethod
     def __get_images(image_names) -> typing.Generator[pygame.Surface, None, None]:

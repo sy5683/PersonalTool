@@ -29,9 +29,8 @@ class BulletBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
         if enemy_hit:
             self.alive = False
             for enemy in enemy_hit:
+                enemy.hit = True
                 enemy.hit_points -= 1
-                if enemy.hit_points <= 0:
-                    enemy.alive = False
 
     def move(self):
         """子弹移动"""
