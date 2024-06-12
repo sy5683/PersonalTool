@@ -15,9 +15,9 @@ class FlaskUtil:
         return cls._get_kwargs().get(key)
 
     @staticmethod
-    def run(app: flask.app):
+    def run(app: flask.app, port: int = 8080):
         """运行接口"""
-        app.run(host="0.0.0.0", port=8080, threaded=True)
+        app.run(host="0.0.0.0", port=port, threaded=True)
 
     @staticmethod
     def _get_kwargs() -> MultiDict[str, str] | ImmutableMultiDict[str, str]:
