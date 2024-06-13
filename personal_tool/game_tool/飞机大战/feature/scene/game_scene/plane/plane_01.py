@@ -1,5 +1,3 @@
-import typing
-
 from .base.plane_base import PlaneBase
 
 

@@ -20,15 +20,14 @@ class SceneBase(metaclass=abc.ABCMeta):
         # 设置窗口对象
         self.screen = self.get_screen()
         # 读取背景图片
-        self.image = FileFeature.load_image(image_path)
+        self.image = FileFeature.get_image(image_path)
         # 加载背景音乐
-        FileFeature.load_music(FileFeature.get_file_path(music_name))
+        FileFeature.load_music(music_name)
         # 背景参数
         self.rect = self.image.get_rect()
         self.speed = 1  # 速度
         # 功能参数
         self.running = True  # 判断运行
-        self.delay = 0  # 用于延迟
         # 初始化背景
         self.reset()
         # 私有参数

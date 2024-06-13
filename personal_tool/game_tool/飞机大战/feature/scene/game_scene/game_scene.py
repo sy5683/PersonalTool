@@ -1,10 +1,8 @@
 import random
-import typing
 
 import pygame
 
 from .backdrop.airport import Airport
-from .bullet.base.bullet_base import BulletBase
 from .enemy.base.enemy_base import EnemyBase
 from .enemy.enemy_01 import Enemy01
 from .enemy.enemy_02 import Enemy02
@@ -14,6 +12,7 @@ from .supply.bomb_supply import BombSupply
 from .supply.med_kit_supply import MedKitSupply
 from .supply.star_supply import StarSupply
 from ..base.scene_base import SceneBase
+from ...cache.cache_feature import CacheFeature
 from ...volume_feature import VolumeFeature
 
 
@@ -41,6 +40,8 @@ class GameScene(SceneBase):
 
         # 开始动画
         self.airport.reset()
+        # 初始化飞机
+        self.plane.reset()
 
         # 游戏开始前进行一些初始化操作
         # 初始化一些敌机
@@ -84,46 +85,25 @@ class GameScene(SceneBase):
             self.move()
             # 绘制起飞坪
             if self.airport.alive:
-                self.screen.blit(self.airport.image, self.airport.rect)
+                self.airport.draw(self.screen)
                 self.airport.move()
             # 绘制飞机
             if self.plane.life_number:
-                self.screen.blit(self.plane.get_image(), self.plane.rect)
+                self.plane.draw(self.screen)
                 self.plane.move()
-                # 添加子弹到本地缓存列表
-                if not self.delay % 10:
-                    bullets = next(self.plane.get_bullets())
-                    for bullet in bullets:
-                        bullet.reset()
-                        self.bullets.append(bullet)
-                # 消除已失效的子弹，防止数据溢出
-                self.bullets: typing.List[BulletBase] = [bullet for bullet in self.bullets if bullet.alive]
             # 绘制敌机
             for enemy in self.enemies:
                 enemy: EnemyBase
                 if enemy.hit_points > 0:
-                    if enemy.hit and enemy.hit_image:
-                        self.screen.blit(enemy.hit_image, enemy.rect)
-                        enemy.hit = False
-                    else:
-                        self.screen.blit(enemy.image, enemy.rect)
-                    # 绘制血条
-                    hit_points_ratio = enemy.hit_points / enemy.max_hit_points
-                    if hit_points_ratio < 1:
-                        pygame.draw.line(self.screen, (0, 0, 0), (enemy.rect.left, enemy.rect.top - 5),
-                                         (enemy.rect.right, enemy.rect.top - 5), 2)
-                        # 血量剩余20%显示绿色，否则显示红色
-                        hit_points_color = (255, 0, 0) if hit_points_ratio < 0.2 else (0, 255, 0)
-                        pygame.draw.line(self.screen, hit_points_color, (enemy.rect.left, enemy.rect.top - 5),
-                                         (enemy.rect.left + enemy.rect.width * hit_points_ratio, enemy.rect.top - 5), 2)
+                    enemy.draw(self.screen)
                     enemy.move()
                 else:
-                    # TODO 绘制坠毁动画
+                    enemy.draw_crash(self.screen)
                     self.score += enemy.score
                     enemy.reset()
             # 绘制飞机子弹
-            for bullet in self.bullets:
-                self.screen.blit(bullet.image, bullet.rect)
+            for bullet in self.plane.get_bullets():
+                bullet.draw(self.screen)
                 bullet.move()
                 bullet.attack_enemy(self.enemies)
             # 绘制补给
@@ -142,11 +122,10 @@ class GameScene(SceneBase):
             # 刷新频率
             self.clock.tick(60)
             # 更新延迟
-            self.delay = (self.delay + 1) if self.delay < 99 else 0
-
-        # 增加敌机
+            CacheFeature.game_cache.delay += 1
 
     def add_enemy(self, enemy, quantity: int):
+        """增加敌机"""
         for _ in range(quantity):
             self.enemies.add(enemy())
 

@@ -20,4 +20,4 @@ class Airport(BackdropBase):
         """重置背景起飞坪"""
         self.alive = True
         width, height = SettingFeature.screen_setting.screen_size
-        self.rect.left, self.rect.bottom = (width - self.rect.width) // 2,  height
+        self.rect.left, self.rect.bottom = (width - self.rect.width) // 2, height

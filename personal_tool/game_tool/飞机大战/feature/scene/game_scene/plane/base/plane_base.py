@@ -8,32 +8,28 @@ from ...bullet.bullet_01 import Bullet01
 from ...bullet.bullet_02 import Bullet02
 from ...bullet.bullet_03 import Bullet03
 from ...enemy.base.enemy_base import EnemyBase
+from ....base.element_base import ElementBase
+from .....cache.cache_feature import CacheFeature
 from .....file_feature import FileFeature
 from .....setting.setting_feature import SettingFeature
 from .....volume_feature import VolumeFeature
 
 
-class PlaneBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
+class PlaneBase(ElementBase, metaclass=abc.ABCMeta):
 
     def __init__(self, image_names: typing.List[str], bomb_number: int, life_number: int):
-        pygame.sprite.Sprite.__init__(self)
-        # 读取飞机图片，mask函数将图片非透明部分设置为mask
-        self.images = self.__get_images(image_names)
-        self.mask = None
-        self.image = self.get_image()
-        self.rect = self.image.get_rect()
+        super().__init__(image_names)
         # 加载飞机音效
         self.upgrade_sound = FileFeature.load_sound("game_scene\\plane\\upgrade.wav")  # 飞机升级
         # 设置飞机参数
         self.alive = True  # 存活
         self.bomb_number = bomb_number  # 炸弹数
+        self.bullets: typing.List[BulletBase] = []
         self.invincible = False  # 无敌
         self.level = 1  # 等级
         self.life_number = life_number  # 生命数
         self.shield = False  # 护盾
         self.speed = 10  # 速度
-        # 初始化飞机
-        self.reset()
         # 私有参数
         self.__max_bomb_number = bomb_number
         self.__max_life_number = life_number
@@ -53,29 +49,15 @@ class PlaneBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
             # 当生命数为最大值时获得医疗包补给，则获得护盾
             self.shield = True
 
-    def get_image(self):
-        """获取图片"""
-        self.image = next(self.images)
-        self.mask = pygame.mask.from_surface(self.image)
-        return self.image
-
-    def get_bullets(self) -> typing.Generator[typing.List[BulletBase], None, None]:
-        """根据等级获取子弹"""
-        if self.level == 1:
-            bullets = [Bullet01(self.rect.midtop)]
-        elif self.level == 2:
-            bullets = [
-                Bullet02((self.rect.centerx - 33, self.rect.centery)),
-                Bullet02((self.rect.centerx + 33, self.rect.centery))
-            ]
-        else:
-            bullets = [
-                Bullet03((self.rect.centerx - 33, self.rect.centery)),
-                Bullet03(self.rect.midtop),
-                Bullet03((self.rect.centerx + 33, self.rect.centery))
-            ]
-        while True:
-            yield bullets
+    def get_bullets(self) -> typing.List[BulletBase]:
+        """获取子弹"""
+        # 添加子弹到本地缓存列表
+        if CacheFeature.game_cache.delay % 10 == 0:
+            for bullet in next(self._get_bullets()):
+                bullet.reset()
+                self.bullets.append(bullet)
+        # 消除已失效的子弹，防止内存溢出
+        return [bullet for bullet in self.bullets if bullet.alive]
 
     def level_up(self, enemies: typing.List[EnemyBase]):
         """升级"""
@@ -120,9 +102,20 @@ class PlaneBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
                 if enemy.rect.bottom > 0:
                     enemy.hit_points -= 10
 
-    @staticmethod
-    def __get_images(image_names) -> typing.Generator[pygame.Surface, None, None]:
-        """获取图片迭代器"""
+    def _get_bullets(self) -> typing.Generator[typing.List[BulletBase], None, None]:
+        """根据等级获取子弹"""
+        if self.level == 1:
+            bullets = [Bullet01(self.rect.midtop)]
+        elif self.level == 2:
+            bullets = [
+                Bullet02((self.rect.centerx - 33, self.rect.centery)),
+                Bullet02((self.rect.centerx + 33, self.rect.centery))
+            ]
+        else:
+            bullets = [
+                Bullet03((self.rect.centerx - 33, self.rect.centery)),
+                Bullet03(self.rect.midtop),
+                Bullet03((self.rect.centerx + 33, self.rect.centery))
+            ]
         while True:
-            for image_name in image_names:
-                yield FileFeature.load_image(image_name)
+            yield bullets

@@ -3,18 +3,15 @@ import typing
 
 import pygame
 
+from ....base.element_base import ElementBase
 from .....file_feature import FileFeature
 from .....volume_feature import VolumeFeature
 
 
-class BulletBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
+class BulletBase(ElementBase, metaclass=abc.ABCMeta):
 
     def __init__(self, image_name: str, speed: int, position: typing.Tuple[int, int]):
-        pygame.sprite.Sprite.__init__(self)
-        # 读取子弹图片，mask函数将图片非透明部分设置为mask
-        self.image = FileFeature.load_image(image_name)
-        self.mask = pygame.mask.from_surface(self.image)
-        self.rect = self.image.get_rect()
+        super().__init__([image_name])
         # 加载子弹音效
         self.sound = FileFeature.load_sound("game_scene\\bullet\\bullet.wav")
         # 设置子弹参数
