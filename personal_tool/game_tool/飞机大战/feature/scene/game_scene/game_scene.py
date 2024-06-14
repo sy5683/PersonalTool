@@ -33,6 +33,7 @@ class GameScene(SceneBase):
         self.supplys = [BombSupply(), MedKitSupply(), StarSupply()]
         # 计时器
         self.supply_timer = self.get_timer(5)  # 补给计时器
+        self.invincible_timer = self.get_timer(3)  # 无敌计时器
 
     def main(self):
         # 播放背景音乐
@@ -67,9 +68,11 @@ class GameScene(SceneBase):
                     if event.key == pygame.K_F11:
                         # 重新获取窗口对象
                         self.screen = self.get_screen(True)
-                # 随机生成补给
+                # 计时器
                 if event.type == self.supply_timer:
-                    random.choice(self.supplys).reset()
+                    random.choice(self.supplys).reset()  # 随机生成补给
+                if event.type == self.invincible_timer:
+                    self.plane.invincible = False  # 结束飞机无敌
 
             # 根据难度设置敌机
             target_scores = [2000, 10000, 30000, 100000, 500000]
@@ -88,9 +91,12 @@ class GameScene(SceneBase):
                 self.airport.draw(self.screen)
                 self.airport.move()
             # 绘制飞机
-            if self.plane.life_number:
+            if self.plane.alive:
                 self.plane.draw(self.screen)
                 self.plane.move()
+            else:
+                self.plane.draw_crash(self.screen)
+                self.plane.reset()
             # 绘制敌机
             for enemy in self.enemies:
                 enemy: EnemyBase
@@ -109,7 +115,7 @@ class GameScene(SceneBase):
             # 绘制补给
             for supply in self.supplys:
                 if supply.alive:
-                    self.screen.blit(supply.image, supply.rect)
+                    supply.draw(self.screen)
                     supply.move()
                     supply.trigger(self.plane, enemies=self.enemies)
 

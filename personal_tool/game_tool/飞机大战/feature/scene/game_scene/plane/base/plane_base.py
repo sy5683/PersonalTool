@@ -33,6 +33,7 @@ class PlaneBase(ElementBase, metaclass=abc.ABCMeta):
         # 私有参数
         self.__max_bomb_number = bomb_number
         self.__max_life_number = life_number
+        self.__switch_invincible = True
 
     def add_bomb_number(self, enemies: typing.List[EnemyBase]):
         """增加炸弹数"""
@@ -49,9 +50,19 @@ class PlaneBase(ElementBase, metaclass=abc.ABCMeta):
             # 当生命数为最大值时获得医疗包补给，则获得护盾
             self.shield = True
 
+    def draw(self, screen: pygame.Surface):
+        """绘制飞机"""
+        if self.invincible and CacheFeature.game_cache.delay % 20 < 10:
+            return
+        screen.blit(self.get_image(), self.rect)
+
+    def draw_crash(self, screen: pygame.Surface):
+        """绘制飞机坠毁"""
+        # TODO 绘制坠毁动画
+
     def get_bullets(self) -> typing.List[BulletBase]:
         """获取子弹"""
-        # 添加子弹到本地缓存列表
+        # 添加子弹到缓存列表
         if CacheFeature.game_cache.delay % 10 == 0:
             for bullet in next(self._get_bullets()):
                 bullet.reset()
