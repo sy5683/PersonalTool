@@ -35,7 +35,7 @@ class PlaneBase(ElementBase, metaclass=abc.ABCMeta):
         self.__max_life_number = life_number
         self.__switch_invincible = True
 
-    def add_bomb_number(self, enemies: typing.List[EnemyBase]):
+    def add_bomb_number(self, enemies):
         """增加炸弹数"""
         self.bomb_number += 1
         # 当炸弹数为最大值时获得炸弹补给，则自动使用炸弹
@@ -70,7 +70,7 @@ class PlaneBase(ElementBase, metaclass=abc.ABCMeta):
         # 消除已失效的子弹，防止内存溢出
         return [bullet for bullet in self.bullets if bullet.alive]
 
-    def level_up(self, enemies: typing.List[EnemyBase]):
+    def level_up(self, enemies):
         """升级"""
         if self.level < 3:
             self.level += 1
@@ -104,12 +104,13 @@ class PlaneBase(ElementBase, metaclass=abc.ABCMeta):
         width, height = SettingFeature.screen_setting.screen_size
         self.rect.left, self.rect.bottom = (width - self.rect.width) // 2, height
 
-    def use_bomb(self, enemies: typing.List[EnemyBase]):
+    def use_bomb(self, enemies):
         """使用炸弹"""
         if self.bomb_number:
             self.bomb_number -= 1
             # 所有敌机扣血100点
             for enemy in enemies:
+                enemy: EnemyBase
                 if enemy.rect.bottom > 0:
                     enemy.hit_points -= 10
 

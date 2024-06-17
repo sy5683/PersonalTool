@@ -8,13 +8,14 @@ from .enemy.boss import Boss
 from .enemy.enemy_01 import Enemy01
 from .enemy.enemy_02 import Enemy02
 from .enemy.enemy_03 import Enemy03
+from .icon.life import Life
+from .icon.score_display import ScoreDisplay
 from .plane.plane_01 import Plane01
 from .supply.bomb_supply import BombSupply
 from .supply.med_kit_supply import MedKitSupply
 from .supply.star_supply import StarSupply
 from ..base.scene_base import SceneBase
 from ...cache.cache_feature import CacheFeature
-from ...file_feature import FileFeature
 from ...volume_feature import VolumeFeature
 
 
@@ -27,11 +28,15 @@ class GameScene(SceneBase):
         self.paused = False  # 暂停
         # 背景
         self.airport = Airport()
+        # 图标
+        self.life = Life()
+        self.score_display = ScoreDisplay()
         # 飞机
         self.plane = Plane01(5, 3)
         self.bullets = []
         # 敌机
         self.enemies = pygame.sprite.Group()
+        self.boss = Boss()
         # 补给
         self.supplys = [BombSupply(), MedKitSupply(), StarSupply()]
         # 计时器
@@ -48,8 +53,8 @@ class GameScene(SceneBase):
         # 初始化飞机
         self.plane.reset()
         # 初始化一些敌机
-        self.add_enemy(Enemy01, 5)
-        self.add_enemy(Enemy02, 1)
+        self.add_enemy(Enemy01(), 5)
+        self.add_enemy(Enemy02(), 1)
         # 在这里将所有敌机重置，因为运行时的重置会触发得分操作，但是很明显，游戏开始前分数应该是0
         for enemy in self.enemies:
             enemy.reset()
@@ -72,6 +77,9 @@ class GameScene(SceneBase):
                         self.screen = self.get_screen(True)
                         # 切换屏幕暂停游戏
                         self.paused = True
+                    # 使用炸弹
+                    if self.plane.bomb_number and event.key == pygame.K_SPACE:
+                        self.plane.use_bomb(self.enemies)
                 # 计时器
                 if event.type == self.supply_timer:
                     random.choice(self.supplys).reset()  # 随机生成补给
@@ -79,14 +87,12 @@ class GameScene(SceneBase):
                     self.plane.invincible = False  # 结束飞机无敌
 
             # 根据难度设置敌机
-            # target_scores = [2000, 10000, 30000, 100000, 500000]
-            target_scores = [100]  # TODO
+            target_scores = [2000, 10000, 30000, 100000, 500000]
             for level, score in enumerate(target_scores):
                 if self.level == level and self.score >= score:
                     self.level_up()
                     if level == len(target_scores) - 1:
-                        self.add_enemy(Boss)
-                        pass
+                        self.add_enemy(self.boss)
 
             # 绘制背景
             self.screen.blit(self.image, self.rect)
@@ -124,10 +130,14 @@ class GameScene(SceneBase):
                     supply.move()
                     supply.trigger(self.plane, enemies=self.enemies)
             # 显示得分
-            self.score_font.render(f"Score: {self.score}")
+            self.score_display.draw(self.screen, self.score)
+            # 显示生命数
+            self.life.draw(self.screen, self.plane.life_number)
 
             # 游戏结束
             if self.plane.life_number == 0:
+                pygame.mixer.music.play(-1)
+                pygame.mixer.stop()
                 break
 
             # 更新界面
@@ -140,15 +150,15 @@ class GameScene(SceneBase):
     def add_enemy(self, enemy, quantity: int = 1):
         """增加敌机"""
         for _ in range(quantity):
-            self.enemies.add(enemy())
+            self.enemies.add(enemy)
 
     def level_up(self):
         """难度升级"""
         self.level += 1
         # 增加敌机
-        self.add_enemy(Enemy01, 5)
-        self.add_enemy(Enemy02, 2)
-        self.add_enemy(Enemy03, 1)
+        self.add_enemy(Enemy01(), 5)
+        self.add_enemy(Enemy02(), 2)
+        self.add_enemy(Enemy03(), 1)
         # 提升敌机速度
         for enemy in self.enemies:
             enemy.speed += 1
