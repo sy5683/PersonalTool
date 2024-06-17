@@ -13,6 +13,11 @@ from common_core.base.test_base import TestBase
 from common_util.code_util.net_util.net_util import NetUtil
 from common_util.code_util.selenium_util.selenium_util import SeleniumUtil
 from common_util.code_util.selenium_util.selenium_utils.selenium_config import SeleniumConfig
+from common_util.data_util.object_util.object_util import ObjectUtil
+from common_util.data_util.textual_util.textual_util import TextualUtil
+from personal_tool.work_tool.主数据客商查询服务.feature.api.qi_cha_cha_feature import QiChaChaFeature
+from personal_tool.work_tool.主数据客商查询服务.feature.customer.factory.customer_info_factory import \
+    CustomerInfoFactory
 
 
 class Test(TestBase):

@@ -4,6 +4,7 @@ import pygame
 
 from .backdrop.airport import Airport
 from .enemy.base.enemy_base import EnemyBase
+from .enemy.boss import Boss
 from .enemy.enemy_01 import Enemy01
 from .enemy.enemy_02 import Enemy02
 from .enemy.enemy_03 import Enemy03
@@ -13,6 +14,7 @@ from .supply.med_kit_supply import MedKitSupply
 from .supply.star_supply import StarSupply
 from ..base.scene_base import SceneBase
 from ...cache.cache_feature import CacheFeature
+from ...file_feature import FileFeature
 from ...volume_feature import VolumeFeature
 
 
@@ -22,6 +24,7 @@ class GameScene(SceneBase):
         super().__init__("game_scene\\background.png", "game_scene\\bgm.ogg")
         self.level = 0  # 难度等级
         self.score = 0  # 得分
+        self.paused = False  # 暂停
         # 背景
         self.airport = Airport()
         # 飞机
@@ -39,12 +42,11 @@ class GameScene(SceneBase):
         # 播放背景音乐
         pygame.mixer.music.play(-1)
 
+        # 游戏开始前进行一些初始化操作
         # 开始动画
         self.airport.reset()
         # 初始化飞机
         self.plane.reset()
-
-        # 游戏开始前进行一些初始化操作
         # 初始化一些敌机
         self.add_enemy(Enemy01, 5)
         self.add_enemy(Enemy02, 1)
@@ -68,6 +70,8 @@ class GameScene(SceneBase):
                     if event.key == pygame.K_F11:
                         # 重新获取窗口对象
                         self.screen = self.get_screen(True)
+                        # 切换屏幕暂停游戏
+                        self.paused = True
                 # 计时器
                 if event.type == self.supply_timer:
                     random.choice(self.supplys).reset()  # 随机生成补给
@@ -75,12 +79,13 @@ class GameScene(SceneBase):
                     self.plane.invincible = False  # 结束飞机无敌
 
             # 根据难度设置敌机
-            target_scores = [2000, 10000, 30000, 100000, 500000]
+            # target_scores = [2000, 10000, 30000, 100000, 500000]
+            target_scores = [100]  # TODO
             for level, score in enumerate(target_scores):
                 if self.level == level and self.score >= score:
                     self.level_up()
                     if level == len(target_scores) - 1:
-                        # TODO 出现boss
+                        self.add_enemy(Boss)
                         pass
 
             # 绘制背景
@@ -118,6 +123,8 @@ class GameScene(SceneBase):
                     supply.draw(self.screen)
                     supply.move()
                     supply.trigger(self.plane, enemies=self.enemies)
+            # 显示得分
+            self.score_font.render(f"Score: {self.score}")
 
             # 游戏结束
             if self.plane.life_number == 0:
@@ -130,7 +137,7 @@ class GameScene(SceneBase):
             # 更新延迟
             CacheFeature.game_cache.delay += 1
 
-    def add_enemy(self, enemy, quantity: int):
+    def add_enemy(self, enemy, quantity: int = 1):
         """增加敌机"""
         for _ in range(quantity):
             self.enemies.add(enemy())

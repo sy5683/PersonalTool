@@ -24,16 +24,15 @@ class EnemyBase(ElementBase, metaclass=abc.ABCMeta):
         """绘制坠毁"""
         # TODO 绘制坠毁动画
 
-    def draw_hit_points_ratio(self, screen: pygame.Surface):
+    def draw_hit_points_ratio(self, screen: pygame.Surface, top: int, width: int):
         """绘制血条"""
         hit_points_ratio = max(self.hit_points / self.__max_hit_points, 0)
         if hit_points_ratio < 1:
-            top = self.rect.top - 5
-            pygame.draw.line(screen, (0, 0, 0), (self.rect.left, top), (self.rect.right, top), 2)
+            pygame.draw.line(screen, (0, 0, 0), (self.rect.left, top), (self.rect.right, top), width)
             # 血量剩余20%显示绿色，否则显示红色
             color = (255, 0, 0) if hit_points_ratio < 0.2 else (0, 255, 0)
             right = self.rect.left + self.rect.width * hit_points_ratio
-            pygame.draw.line(screen, color, (self.rect.left, top), (right, top), 2)
+            pygame.draw.line(screen, color, (self.rect.left, top), (right, top), width)
 
     def move(self):
         """敌机移动"""
