@@ -1,8 +1,6 @@
 import abc
 import typing
 
-import pygame
-
 from ....base.element_base import ElementBase
 from .....file_feature import FileFeature
 from .....volume_feature import VolumeFeature
@@ -18,16 +16,6 @@ class BulletBase(ElementBase, metaclass=abc.ABCMeta):
         self.alive = False  # 存活
         self.speed = speed  # 速度
         self.rect.left, self.rect.top = position[0] - self.rect.width // 2, position[1]
-
-    def attack_enemy(self, enemies):
-        """子弹攻击敌机"""
-        # 检测子弹是否击中敌机
-        enemy_hit = pygame.sprite.spritecollide(self, enemies, False, pygame.sprite.collide_mask)
-        if enemy_hit:
-            self.alive = False
-            for enemy in enemy_hit:
-                enemy.hit = True
-                enemy.hit_points -= 1
 
     def move(self):
         """子弹移动"""

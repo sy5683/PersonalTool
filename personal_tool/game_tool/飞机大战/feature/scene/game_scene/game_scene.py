@@ -8,8 +8,8 @@ from .enemy.boss import Boss
 from .enemy.enemy_01 import Enemy01
 from .enemy.enemy_02 import Enemy02
 from .enemy.enemy_03 import Enemy03
-from .icon.life import Life
-from .icon.score_display import ScoreDisplay
+from .icon.life_icon import LifeIcon
+from .icon.score_icon import ScoreIcon
 from .plane.plane_01 import Plane01
 from .supply.bomb_supply import BombSupply
 from .supply.med_kit_supply import MedKitSupply
@@ -29,8 +29,8 @@ class GameScene(SceneBase):
         # 背景
         self.airport = Airport()
         # 图标
-        self.life = Life()
-        self.score_display = ScoreDisplay()
+        self.life_icon = LifeIcon()
+        self.score_icon = ScoreIcon()
         # 飞机
         self.plane = Plane01(5, 3)
         self.bullets = []
@@ -53,8 +53,8 @@ class GameScene(SceneBase):
         # 初始化飞机
         self.plane.reset()
         # 初始化一些敌机
-        self.add_enemy(Enemy01(), 5)
-        self.add_enemy(Enemy02(), 1)
+        self.add_enemy(Enemy01, 5)
+        self.add_enemy(Enemy02, 1)
         # 在这里将所有敌机重置，因为运行时的重置会触发得分操作，但是很明显，游戏开始前分数应该是0
         for enemy in self.enemies:
             enemy.reset()
@@ -122,17 +122,23 @@ class GameScene(SceneBase):
             for bullet in self.plane.get_bullets():
                 bullet.draw(self.screen)
                 bullet.move()
-                bullet.attack_enemy(self.enemies)
+                # 检测子弹是否击中敌机
+                enemy_hit = pygame.sprite.spritecollide(bullet, self.enemies, False, pygame.sprite.collide_mask)
+                if enemy_hit:
+                    bullet.alive = False
+                    for enemy in enemy_hit:
+                        enemy.hit = True
+                        enemy.hit_points -= 1
             # 绘制补给
             for supply in self.supplys:
                 if supply.alive:
                     supply.draw(self.screen)
                     supply.move()
-                    supply.trigger(self.plane, enemies=self.enemies)
+                    # supply.trigger(self.plane, enemies=self.enemies)  # TODO
             # 显示得分
-            self.score_display.draw(self.screen, self.score)
+            self.score_icon.draw(self.screen, self.score)
             # 显示生命数
-            self.life.draw(self.screen, self.plane.life_number)
+            self.life_icon.draw(self.screen, self.plane.life_number)
 
             # 游戏结束
             if self.plane.life_number == 0:
@@ -150,15 +156,15 @@ class GameScene(SceneBase):
     def add_enemy(self, enemy, quantity: int = 1):
         """增加敌机"""
         for _ in range(quantity):
-            self.enemies.add(enemy)
+            self.enemies.add(enemy if isinstance(enemy, EnemyBase) else enemy())
 
     def level_up(self):
         """难度升级"""
         self.level += 1
         # 增加敌机
-        self.add_enemy(Enemy01(), 5)
-        self.add_enemy(Enemy02(), 2)
-        self.add_enemy(Enemy03(), 1)
+        self.add_enemy(Enemy01, 5)
+        self.add_enemy(Enemy02, 2)
+        self.add_enemy(Enemy03, 1)
         # 提升敌机速度
         for enemy in self.enemies:
             enemy.speed += 1

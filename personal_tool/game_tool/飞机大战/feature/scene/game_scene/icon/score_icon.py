@@ -5,7 +5,7 @@ from .base.icon_base import IconBase
 from ....file_feature import FileFeature
 
 
-class ScoreDisplay(IconBase):
+class ScoreIcon(IconBase):
 
     def __init__(self):
         super().__init__()

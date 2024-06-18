@@ -5,7 +5,7 @@ from ....file_feature import FileFeature
 from ....setting.setting_feature import SettingFeature
 
 
-class Life(IconBase):
+class LifeIcon(IconBase):
 
     def __init__(self):
         super().__init__()

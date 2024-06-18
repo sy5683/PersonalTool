@@ -52,6 +52,7 @@ class PlaneBase(ElementBase, metaclass=abc.ABCMeta):
 
     def draw(self, screen: pygame.Surface):
         """绘制飞机"""
+        # 实现飞机无敌时的闪烁特效
         if self.invincible and CacheFeature.game_cache.delay % 20 < 10:
             return
         screen.blit(self.get_image(), self.rect)
@@ -77,11 +78,10 @@ class PlaneBase(ElementBase, metaclass=abc.ABCMeta):
             # 播放飞机升级音效
             VolumeFeature.volume_play(self.upgrade_sound)
         else:
-            # 当等级为最大值时获得升级补给，则短暂无敌、获得护盾并自动触发一个炸弹效果
+            # 当等级为最大值时获得升级补给，则短暂无敌、获得护盾并增加一个炸弹数
             self.invincible = True
             self.shield = True
-            self.bomb_number += 1
-            self.use_bomb(enemies)
+            self.add_bomb_number(enemies)
 
     def move(self):
         """飞机移动"""
@@ -106,7 +106,7 @@ class PlaneBase(ElementBase, metaclass=abc.ABCMeta):
 
     def use_bomb(self, enemies):
         """使用炸弹"""
-        if self.bomb_number:
+        if self.bomb_number == 0:
             self.bomb_number -= 1
             # 所有敌机扣血100点
             for enemy in enemies:
