@@ -1,9 +1,9 @@
 import abc
 import typing
 
-from ....base.element_base import ElementBase
-from .....file_feature import FileFeature
-from .....volume_feature import VolumeFeature
+from .....base.element_base import ElementBase
+from ......file_feature import FileFeature
+from ......volume_feature import VolumeFeature
 
 
 class BulletBase(ElementBase, metaclass=abc.ABCMeta):
@@ -11,7 +11,7 @@ class BulletBase(ElementBase, metaclass=abc.ABCMeta):
     def __init__(self, image_name: str, speed: int, position: typing.Tuple[int, int]):
         super().__init__([image_name])
         # 加载子弹音效
-        self.sound = FileFeature.load_sound("game_scene\\bullet\\bullet.wav")
+        self.sound = FileFeature.load_sound("game_scene\\plane\\bullet\\bullet.wav")
         # 设置子弹参数
         self.alive = False  # 存活
         self.speed = speed  # 速度

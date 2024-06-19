@@ -3,10 +3,10 @@ import typing
 
 import pygame
 
-from ...bullet.base.bullet_base import BulletBase
-from ...bullet.bullet_01 import Bullet01
-from ...bullet.bullet_02 import Bullet02
-from ...bullet.bullet_03 import Bullet03
+from ..bullet.base.bullet_base import BulletBase
+from ..bullet.bullet_01 import Bullet01
+from ..bullet.bullet_02 import Bullet02
+from ..bullet.bullet_03 import Bullet03
 from ...enemy.base.enemy_base import EnemyBase
 from ....base.element_base import ElementBase
 from .....cache.cache_feature import CacheFeature
