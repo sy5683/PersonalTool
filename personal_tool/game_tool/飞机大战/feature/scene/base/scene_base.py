@@ -20,7 +20,7 @@ class SceneBase(metaclass=abc.ABCMeta):
         # 设置窗口对象
         self.screen = self.get_screen()
         # 读取背景图片
-        self.image = FileFeature.get_image(image_path)
+        self.image = FileFeature.load_image(image_path)
         # 加载背景音乐
         FileFeature.load_music(music_name)
         # 背景参数

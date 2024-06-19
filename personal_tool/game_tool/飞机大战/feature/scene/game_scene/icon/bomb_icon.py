@@ -9,8 +9,8 @@ class BombIcon(IconBase):
 
     def __init__(self):
         super().__init__()
-        self.font = FileFeature.get_font("font\\boldface.ttf", 20)
-        self.image = FileFeature.get_image("game_scene\\icon\\bomb.png")
+        self.font = FileFeature.load_font("font\\boldface.ttf", 20)
+        self.image = FileFeature.load_image("game_scene\\icon\\bomb.png")
         self.rect = self.image.get_rect()
         width, height = SettingFeature.screen_setting.screen_size
         self.rect.left = width - self.rect.width

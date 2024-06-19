@@ -32,4 +32,4 @@ class ElementBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
         """获取图片迭代器"""
         while True:
             for image_name in image_names:
-                yield FileFeature.get_image(image_name)
+                yield FileFeature.load_image(image_name)
