@@ -122,7 +122,7 @@ class GameScene(SceneBase):
             for bullet in self.plane.get_bullets():
                 bullet.draw(self.screen)
                 bullet.move()
-                # 检测子弹是否击中敌机
+                # 检测子弹是否击中敌机  # TODO
                 enemy_hit = pygame.sprite.spritecollide(bullet, self.enemies, False, pygame.sprite.collide_mask)
                 if enemy_hit:
                     bullet.alive = False
@@ -134,7 +134,8 @@ class GameScene(SceneBase):
                 if supply.alive:
                     supply.draw(self.screen)
                     supply.move()
-                    # supply.trigger(self.plane, enemies=self.enemies)  # TODO
+                    if pygame.sprite.collide_mask(supply, self.plane):
+                        supply.trigger(self.plane, self.enemies)
             # 显示得分
             self.score_icon.draw(self.screen, self.score)
             # 显示生命数

@@ -19,7 +19,7 @@ class SupplyBase(ElementBase, metaclass=abc.ABCMeta):
         self.speed = 3  # 速度
 
     @abc.abstractmethod
-    def trigger(self, plane: PlaneBase, **kwargs):
+    def trigger(self, plane: PlaneBase, enemies):
         """触发"""
 
     def move(self):
