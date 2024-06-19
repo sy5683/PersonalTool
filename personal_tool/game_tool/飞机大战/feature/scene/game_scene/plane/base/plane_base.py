@@ -106,13 +106,13 @@ class PlaneBase(ElementBase, metaclass=abc.ABCMeta):
 
     def use_bomb(self, enemies):
         """使用炸弹"""
-        if self.bomb_number == 0:
+        if self.bomb_number > 0:
             self.bomb_number -= 1
             # 所有敌机扣血100点
             for enemy in enemies:
                 enemy: EnemyBase
                 if enemy.rect.bottom > 0:
-                    enemy.hit_points -= 10
+                    enemy.hit_points -= 100
 
     def _get_bullets(self) -> typing.Generator[typing.List[BulletBase], None, None]:
         """根据等级获取子弹"""

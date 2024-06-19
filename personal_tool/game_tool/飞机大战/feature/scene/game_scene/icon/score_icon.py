@@ -9,9 +9,9 @@ class ScoreIcon(IconBase):
 
     def __init__(self):
         super().__init__()
-        self.font = FileFeature.get_font("font/fangsong_GB2312.ttf", 24)
+        self.font = FileFeature.get_font("font\\fangsong_GB2312.ttf", 24)
 
     def draw(self, screen: pygame.Surface, score: int):
         """绘制得分"""
-        text = f"Score: {NumberUtil.to_account(score)[:-3]}"
-        screen.blit(self.font.render(text, True, (255, 255, 255)), (10, 10))
+        score_text = self.font.render(f"Score: {NumberUtil.to_account(score)[:-3]}", True, (255, 255, 255))
+        screen.blit(score_text, (10, 10))

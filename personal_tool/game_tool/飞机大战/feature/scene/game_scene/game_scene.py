@@ -8,7 +8,9 @@ from .enemy.boss import Boss
 from .enemy.enemy_01 import Enemy01
 from .enemy.enemy_02 import Enemy02
 from .enemy.enemy_03 import Enemy03
+from .icon.bomb_icon import BombIcon
 from .icon.life_icon import LifeIcon
+from .icon.paused_icon import PauseIcon
 from .icon.score_icon import ScoreIcon
 from .plane.plane_01 import Plane01
 from .supply.bomb_supply import BombSupply
@@ -29,7 +31,9 @@ class GameScene(SceneBase):
         # 背景
         self.airport = Airport()
         # 图标
+        self.bomb_icon = BombIcon()
         self.life_icon = LifeIcon()
+        self.pause_icon = PauseIcon()
         self.score_icon = ScoreIcon()
         # 飞机
         self.plane = Plane01(5, 3)
@@ -60,16 +64,13 @@ class GameScene(SceneBase):
             enemy.reset()
 
         # 游戏运行
+        pause_pressed = False
         while self.running:
             # 设置背景音量
             VolumeFeature.set_volume(pygame.mixer.music)
 
             # 事件检测
             for event in pygame.event.get():
-                # 退出游戏
-                if event.type == pygame.QUIT:
-                    self.running = False
-                    pygame.quit()  # 终止pygame
                 if event.type == pygame.KEYDOWN:
                     # 全屏切换
                     if event.key == pygame.K_F11:
@@ -80,6 +81,13 @@ class GameScene(SceneBase):
                     # 使用炸弹
                     if self.plane.bomb_number and event.key == pygame.K_SPACE:
                         self.plane.use_bomb(self.enemies)
+                if event.type == pygame.MOUSEMOTION:
+                    # 鼠标移至暂停按钮上
+                    pause_pressed = True if self.pause_icon.rect.collidepoint(event.pos) else False
+                # 退出游戏
+                if event.type == pygame.QUIT:
+                    self.running = False
+                    pygame.quit()  # 终止pygame
                 # 计时器
                 if event.type == self.supply_timer:
                     random.choice(self.supplys).reset()  # 随机生成补给
@@ -88,6 +96,7 @@ class GameScene(SceneBase):
 
             # 根据难度设置敌机
             target_scores = [2000, 10000, 30000, 100000, 500000]
+            target_scores = [100]
             for level, score in enumerate(target_scores):
                 if self.level == level and self.score >= score:
                     self.level_up()
@@ -134,12 +143,18 @@ class GameScene(SceneBase):
                 if supply.alive:
                     supply.draw(self.screen)
                     supply.move()
+                    # 检测补给是否被拾起
                     if pygame.sprite.collide_mask(supply, self.plane):
                         supply.trigger(self.plane, self.enemies)
-            # 显示得分
-            self.score_icon.draw(self.screen, self.score)
-            # 显示生命数
+            # 绘制剩余炸弹数
+            self.bomb_icon.draw(self.screen, self.plane.bomb_number)
+            # 绘制生命数
             self.life_icon.draw(self.screen, self.plane.life_number)
+            # 绘制暂停按钮
+            self.pause_icon.draw(self.screen, pause_pressed)
+            # 绘制得分
+            if self.boss not in self.enemies:
+                self.score_icon.draw(self.screen, self.score)
 
             # 游戏结束
             if self.plane.life_number == 0:
