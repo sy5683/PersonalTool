@@ -1,3 +1,4 @@
+import logging
 import re
 import typing
 from pathlib import Path
@@ -22,11 +23,14 @@ class Crawler001(CrawlerBase):
             temp_contents = []
             while True:
                 while True:
-                    element = SeleniumUtil.find('//article[@id="content"]')
-                    contents = [each for each in re.split(r"\n", element.get_attribute("innerText")) if each]
-                    if contents != temp_contents:
-                        temp_contents = contents
-                        break
+                    try:
+                        element = SeleniumUtil.find('//article[@id="content"]', without_log=True)
+                        contents = [each for each in re.split(r"\n", element.get_attribute("innerText")) if each]
+                        if contents != temp_contents:
+                            temp_contents = contents
+                            break
+                    except Exception as e:
+                        logging.warning(e)
                 next_button = SeleniumUtil.find('//a[@id="next"]')
                 if "下一页" in next_button.get_attribute("innerText"):
                     title = SeleniumUtil.find('//div[@class="bookname"]/h1').get_attribute("innerText")
