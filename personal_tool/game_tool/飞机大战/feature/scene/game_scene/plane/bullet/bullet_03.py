@@ -1,9 +1,10 @@
 import typing
 
-from .base.bullet_base import BulletBase
+from .base.plane_bullet_base import PlaneBulletBase
 
 
-class Bullet03(BulletBase):
+class PlaneBullet03(PlaneBulletBase):
 
     def __init__(self, position: typing.Tuple[int, int]):
-        super().__init__("game_scene\\plane\\bullet\\bullet_03.png", 20, position)
+        image_names = ["game_scene\\plane\\bullet\\bullet_03.png"]
+        super().__init__(image_names, 20, position)

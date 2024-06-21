@@ -6,10 +6,11 @@ from ......file_feature import FileFeature
 from ......volume_feature import VolumeFeature
 
 
-class BulletBase(ElementBase, metaclass=abc.ABCMeta):
+class PlaneBulletBase(ElementBase, metaclass=abc.ABCMeta):
 
-    def __init__(self, image_name: str, speed: int, position: typing.Tuple[int, int]):
-        super().__init__([image_name])
+    def __init__(self, image_names: typing.List[str], speed: typing.Union[int, typing.Tuple[int, int]],
+                 position: typing.Tuple[int, int]):
+        super().__init__(image_names)
         # 加载子弹音效
         self.sound = FileFeature.load_sound("game_scene\\plane\\bullet\\bullet.wav")
         # 设置子弹参数
@@ -24,8 +25,8 @@ class BulletBase(ElementBase, metaclass=abc.ABCMeta):
         if self.rect.bottom < 0:
             self.alive = False
 
-    # 构造重置子弹的函数
     def reset(self):
+        """重置子弹"""
         self.alive = True
         # 播放子弹音效
         VolumeFeature.volume_play(self.sound)

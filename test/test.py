@@ -5,6 +5,7 @@ import time
 import unittest
 from pathlib import Path
 
+import cv2
 import openpyxl
 import win32api
 from selenium.webdriver import ActionChains, Keys
@@ -15,9 +16,7 @@ from common_util.code_util.selenium_util.selenium_util import SeleniumUtil
 from common_util.code_util.selenium_util.selenium_utils.selenium_config import SeleniumConfig
 from common_util.data_util.object_util.object_util import ObjectUtil
 from common_util.data_util.textual_util.textual_util import TextualUtil
-from personal_tool.work_tool.主数据客商查询服务.feature.api.qi_cha_cha_feature import QiChaChaFeature
-from personal_tool.work_tool.主数据客商查询服务.feature.customer.factory.customer_info_factory import \
-    CustomerInfoFactory
+from common_util.file_util.image_util.image_util import ImageUtil
 
 
 class Test(TestBase):

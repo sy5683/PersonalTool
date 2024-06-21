@@ -37,15 +37,15 @@ class GameScene(SceneBase):
         self.score_icon = ScoreIcon()
         # 飞机
         self.plane = Plane01(5, 3)
-        self.bullets = []
         # 敌机
         self.enemies = pygame.sprite.Group()
         self.boss = Boss()
         # 补给
         self.supplys = [BombSupply(), MedKitSupply(), StarSupply()]
         # 计时器
-        self.supply_timer = self.get_timer(5)  # 补给计时器
+        self.boss_attack_timer = self.get_timer(10)  # boss攻击计时器
         self.invincible_timer = self.get_timer(3)  # 无敌计时器
+        self.supply_timer = self.get_timer(5)  # 补给计时器
 
     def main(self):
         # 播放背景音乐
@@ -62,6 +62,8 @@ class GameScene(SceneBase):
         # 在这里将所有敌机重置，因为运行时的重置会触发得分操作，但是很明显，游戏开始前分数应该是0
         for enemy in self.enemies:
             enemy.reset()
+
+        self.add_enemy(self.boss)
 
         # 游戏运行
         pause_pressed = False
@@ -89,14 +91,15 @@ class GameScene(SceneBase):
                     self.running = False
                     pygame.quit()  # 终止pygame
                 # 计时器
-                if event.type == self.supply_timer:
-                    random.choice(self.supplys).reset()  # 随机生成补给
+                if event.type == self.boss_attack_timer:
+                    self.boss.reset_bullets()  # 刷新boss攻击
                 if event.type == self.invincible_timer:
                     self.plane.invincible = False  # 结束飞机无敌
+                if event.type == self.supply_timer:
+                    random.choice(self.supplys).reset()  # 随机生成补给
 
             # 根据难度设置敌机
             target_scores = [2000, 10000, 30000, 100000, 500000]
-            target_scores = [100]
             for level, score in enumerate(target_scores):
                 if self.level == level and self.score >= score:
                     self.level_up()
@@ -138,6 +141,10 @@ class GameScene(SceneBase):
                     for enemy in enemy_hit:
                         enemy.hit = True
                         enemy.hit_points -= 1
+            # 绘制敌机子弹
+            for bullet in self.boss.get_bullets():
+                bullet.draw(self.screen)
+                bullet.move()
             # 绘制补给
             for supply in self.supplys:
                 if supply.alive:

@@ -3,10 +3,10 @@ import typing
 
 import pygame
 
-from ..bullet.base.bullet_base import BulletBase
-from ..bullet.bullet_01 import Bullet01
-from ..bullet.bullet_02 import Bullet02
-from ..bullet.bullet_03 import Bullet03
+from ..bullet.base.plane_bullet_base import PlaneBulletBase
+from ..bullet.bullet_01 import PlaneBullet01
+from ..bullet.bullet_02 import PlaneBullet02
+from ..bullet.bullet_03 import PlaneBullet03
 from ...enemy.base.enemy_base import EnemyBase
 from ....base.element_base import ElementBase
 from .....cache.cache_feature import CacheFeature
@@ -24,7 +24,7 @@ class PlaneBase(ElementBase, metaclass=abc.ABCMeta):
         # 设置飞机参数
         self.alive = True  # 存活
         self.bomb_number = bomb_number  # 炸弹数
-        self.bullets: typing.List[BulletBase] = []
+        self.bullets: typing.List[PlaneBulletBase] = []
         self.invincible = False  # 无敌
         self.level = 1  # 等级
         self.life_number = life_number  # 生命数
@@ -61,7 +61,7 @@ class PlaneBase(ElementBase, metaclass=abc.ABCMeta):
         """绘制飞机坠毁"""
         # TODO 绘制坠毁动画
 
-    def get_bullets(self) -> typing.List[BulletBase]:
+    def get_bullets(self) -> typing.List[PlaneBulletBase]:
         """获取子弹"""
         # 添加子弹到缓存列表
         if CacheFeature.game_cache.delay % 10 == 0:
@@ -114,20 +114,20 @@ class PlaneBase(ElementBase, metaclass=abc.ABCMeta):
                 if enemy.rect.bottom > 0:
                     enemy.hit_points -= 100
 
-    def _get_bullets(self) -> typing.Generator[typing.List[BulletBase], None, None]:
+    def _get_bullets(self) -> typing.Generator[typing.List[PlaneBulletBase], None, None]:
         """根据等级获取子弹"""
         if self.level == 1:
-            bullets = [Bullet01(self.rect.midtop)]
+            bullets = [PlaneBullet01(self.rect.midtop)]
         elif self.level == 2:
             bullets = [
-                Bullet02((self.rect.centerx - 33, self.rect.centery)),
-                Bullet02((self.rect.centerx + 33, self.rect.centery))
+                PlaneBullet02((self.rect.centerx - 33, self.rect.centery)),
+                PlaneBullet02((self.rect.centerx + 33, self.rect.centery))
             ]
         else:
             bullets = [
-                Bullet03((self.rect.centerx - 33, self.rect.centery)),
-                Bullet03(self.rect.midtop),
-                Bullet03((self.rect.centerx + 33, self.rect.centery))
+                PlaneBullet03((self.rect.centerx - 33, self.rect.centery)),
+                PlaneBullet03(self.rect.midtop),
+                PlaneBullet03((self.rect.centerx + 33, self.rect.centery))
             ]
         while True:
             yield bullets
