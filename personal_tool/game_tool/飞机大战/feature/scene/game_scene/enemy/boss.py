@@ -67,7 +67,7 @@ class Boss(EnemyBase):
         # 攻击方式三
         bullets_03 = [BossBullet03((135, self.rect.bottom)), BossBullet03((310, self.rect.bottom))]
         # 攻击方式四
-        bullets_04 = [BossBullet04()] * random.randint(1, 5)
+        bullets_04 = [BossBullet04() for _ in range(random.randint(2, 5))]
         bullets = random.choice([bullets_01, bullets_02, bullets_03, bullets_04])
         while True:
             yield bullets

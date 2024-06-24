@@ -57,9 +57,10 @@ class SceneBase(metaclass=abc.ABCMeta):
         width, height = SettingFeature.screen_setting.screen_size
         self.rect.top = -height
 
-    def get_timer(self, seconds: int) -> int:
+    def get_timer(self, seconds: int = None) -> int:
         """获取计时器"""
         timer = pygame.USEREVENT + self.__timer_index
-        pygame.time.set_timer(timer, seconds * 1000)
+        if seconds:
+            pygame.time.set_timer(timer, seconds * 1000)
         self.__timer_index += 1
         return timer

@@ -44,6 +44,7 @@ class GameScene(SceneBase):
         self.supplys = [BombSupply(), MedKitSupply(), StarSupply()]
         # 计时器
         self.boss_attack_timer = self.get_timer(10)  # boss攻击计时器
+        self.boss_attack_invincible_timer = self.get_timer()  # boss攻击无敌计时器
         self.invincible_timer = self.get_timer(3)  # 无敌计时器
         self.supply_timer = self.get_timer(5)  # 补给计时器
 
@@ -93,6 +94,10 @@ class GameScene(SceneBase):
                 # 计时器
                 if event.type == self.boss_attack_timer:
                     self.boss.reset_bullets()  # 刷新boss攻击
+                    pygame.time.set_timer(self.boss_attack_invincible_timer, 1 * 1000)
+                if event.type == self.boss_attack_invincible_timer:
+                    for bullet in self.boss.get_bullets():
+                        bullet.invincible = False  # 结束Boss子弹无敌
                 if event.type == self.invincible_timer:
                     self.plane.invincible = False  # 结束飞机无敌
                 if event.type == self.supply_timer:
@@ -144,7 +149,8 @@ class GameScene(SceneBase):
             # 绘制敌机子弹
             for bullet in self.boss.get_bullets():
                 bullet.draw(self.screen)
-                bullet.move()
+                if not bullet.invincible:
+                    bullet.move()
             # 绘制补给
             for supply in self.supplys:
                 if supply.alive:
@@ -173,6 +179,8 @@ class GameScene(SceneBase):
             pygame.display.flip()
             # 刷新频率
             self.clock.tick(60)
+            # 更新旋转角度
+            CacheFeature.game_cache.angle -= 20
             # 更新延迟
             CacheFeature.game_cache.delay += 1
 
