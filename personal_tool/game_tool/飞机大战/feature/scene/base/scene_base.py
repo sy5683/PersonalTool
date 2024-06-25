@@ -61,6 +61,11 @@ class SceneBase(metaclass=abc.ABCMeta):
         """获取计时器"""
         timer = pygame.USEREVENT + self.__timer_index
         if seconds:
-            pygame.time.set_timer(timer, seconds * 1000)
+            self.set_timer(timer, seconds)
         self.__timer_index += 1
         return timer
+
+    @staticmethod
+    def set_timer(timer: int, seconds: int):
+        pygame.time.set_timer(timer, seconds * 1000)
+

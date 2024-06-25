@@ -43,8 +43,8 @@ class GameScene(SceneBase):
         # 补给
         self.supplys = [BombSupply(), MedKitSupply(), StarSupply()]
         # 计时器
-        self.boss_attack_timer = self.get_timer(10)  # boss攻击计时器
-        self.boss_attack_invincible_timer = self.get_timer()  # boss攻击无敌计时器
+        self.boss_attack_timer = self.get_timer()  # boss攻击计时器
+        self.boss_attack_remind_timer = self.get_timer()  # boss攻击提醒计时器
         self.invincible_timer = self.get_timer(3)  # 无敌计时器
         self.supply_timer = self.get_timer(5)  # 补给计时器
 
@@ -65,6 +65,7 @@ class GameScene(SceneBase):
             enemy.reset()
 
         self.add_enemy(self.boss)
+        self.set_timer(self.boss_attack_timer, 10)  # 刷新boss攻击计时
 
         # 游戏运行
         pause_pressed = False
@@ -94,8 +95,8 @@ class GameScene(SceneBase):
                 # 计时器
                 if event.type == self.boss_attack_timer:
                     self.boss.reset_bullets()  # 刷新boss攻击
-                    pygame.time.set_timer(self.boss_attack_invincible_timer, 1 * 1000)
-                if event.type == self.boss_attack_invincible_timer:
+                    self.set_timer(self.boss_attack_remind_timer, 1)  # 刷新boss攻击提醒计时
+                if event.type == self.boss_attack_remind_timer:
                     for bullet in self.boss.get_bullets():
                         bullet.invincible = False  # 结束Boss子弹无敌
                 if event.type == self.invincible_timer:
@@ -110,6 +111,7 @@ class GameScene(SceneBase):
                     self.level_up()
                     if level == len(target_scores) - 1:
                         self.add_enemy(self.boss)
+                        self.set_timer(self.boss_attack_timer, 10)  # 刷新boss攻击计时
 
             # 绘制背景
             self.screen.blit(self.image, self.rect)
@@ -122,9 +124,24 @@ class GameScene(SceneBase):
             if self.plane.alive:
                 self.plane.draw(self.screen)
                 self.plane.move()
+                if not self.plane.invincible:
+                    # 检测敌机是否与飞机进行碰撞
+                    enemy_impact = self.plane.impact(self.enemies)
+                    if enemy_impact:
+                        for enemy in enemy_impact:
+                            enemy.hit_points -= 100
+                            self.plane.crash()
+                    # 检测敌机子弹是否击中飞机
+                    plane_hit = self.plane.impact(self.boss.get_bullets())
+                    if plane_hit:
+                        for bullet in plane_hit:
+                            if not bullet.invincible:
+                                bullet.alive = False
+                                self.plane.crash()
             else:
                 self.plane.draw_crash(self.screen)
                 self.plane.reset()
+                self.set_timer(self.invincible_timer, 3)  # 刷新飞机无敌计时
             # 绘制敌机
             for enemy in self.enemies:
                 enemy: EnemyBase
@@ -139,8 +156,8 @@ class GameScene(SceneBase):
             for bullet in self.plane.get_bullets():
                 bullet.draw(self.screen)
                 bullet.move()
-                # 检测子弹是否击中敌机  # TODO
-                enemy_hit = pygame.sprite.spritecollide(bullet, self.enemies, False, pygame.sprite.collide_mask)
+                # 检测子弹是否击中敌机
+                enemy_hit = bullet.impact(self.enemies)
                 if enemy_hit:
                     bullet.alive = False
                     for enemy in enemy_hit:

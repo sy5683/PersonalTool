@@ -27,6 +27,10 @@ class ElementBase(pygame.sprite.Sprite, metaclass=abc.ABCMeta):
         self.mask = pygame.mask.from_surface(self.image)
         return self.image
 
+    def impact(self, elements):
+        """碰撞检测"""
+        return pygame.sprite.spritecollide(self, elements, False, pygame.sprite.collide_mask)
+
     @staticmethod
     def _get_images(image_names: typing.List[str]) -> typing.Generator[pygame.Surface, None, None]:
         """获取图片迭代器"""

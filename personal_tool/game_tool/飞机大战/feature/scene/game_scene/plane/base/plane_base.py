@@ -50,6 +50,14 @@ class PlaneBase(ElementBase, metaclass=abc.ABCMeta):
             # 当生命数为最大值时获得医疗包补给，则获得护盾
             self.shield = True
 
+    def crash(self):
+        """飞机坠毁"""
+        if self.shield:
+            self.shield = False
+        else:
+            self.alive = False
+            self.life_number -= 1
+
     def draw(self, screen: pygame.Surface):
         """绘制飞机"""
         # 实现飞机无敌时的闪烁特效
