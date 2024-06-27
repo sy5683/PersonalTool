@@ -139,7 +139,7 @@ class GameScene(SceneBase):
                                 bullet.alive = False
                                 self.plane.crash()
             else:
-                self.plane.draw_crash(self.screen)
+                VolumeFeature.volume_play(self.plane.destroy_sound)  # 播放飞机坠毁音效
                 self.plane.reset()
                 self.set_timer(self.invincible_timer, 3)  # 刷新飞机无敌计时
             # 绘制敌机
@@ -149,7 +149,6 @@ class GameScene(SceneBase):
                     enemy.draw(self.screen)
                     enemy.move()
                 else:
-                    enemy.draw_crash(self.screen)
                     self.score += enemy.score
                     enemy.reset()
             # 绘制飞机子弹

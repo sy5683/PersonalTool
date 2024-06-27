@@ -20,7 +20,9 @@ class PlaneBase(ElementBase, metaclass=abc.ABCMeta):
     def __init__(self, image_names: typing.List[str], bomb_number: int, life_number: int):
         super().__init__(image_names)
         # 加载飞机音效
+        self.destroy_sound = FileFeature.load_sound("game_scene\\plane\\destroy.wav")  # 飞机坠毁
         self.upgrade_sound = FileFeature.load_sound("game_scene\\plane\\upgrade.wav")  # 飞机升级
+        self.use_bomb_sound = FileFeature.load_sound("game_scene\\plane\\use_bomb.wav")  # 飞机使用炸弹
         # 设置飞机参数
         self.alive = True  # 存活
         self.bomb_number = bomb_number  # 炸弹数
@@ -64,10 +66,6 @@ class PlaneBase(ElementBase, metaclass=abc.ABCMeta):
         if self.invincible and CacheFeature.game_cache.delay % 20 < 10:
             return
         screen.blit(self.get_image(), self.rect)
-
-    def draw_crash(self, screen: pygame.Surface):
-        """绘制飞机坠毁"""
-        # TODO 绘制坠毁动画
 
     def get_bullets(self) -> typing.List[PlaneBulletBase]:
         """获取子弹"""
@@ -115,6 +113,8 @@ class PlaneBase(ElementBase, metaclass=abc.ABCMeta):
     def use_bomb(self, enemies):
         """使用炸弹"""
         if self.bomb_number > 0:
+            # 播放飞机使用炸弹音效
+            VolumeFeature.volume_play(self.use_bomb_sound)
             self.bomb_number -= 1
             # 所有敌机扣血100点
             for enemy in enemies:

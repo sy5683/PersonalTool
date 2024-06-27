@@ -21,10 +21,6 @@ class EnemyBase(ElementBase, metaclass=abc.ABCMeta):
         # 私有参数
         self.__max_hit_points = hit_points  # 最大生命值
 
-    def draw_crash(self, screen: pygame.Surface):
-        """绘制坠毁"""
-        # TODO 绘制坠毁动画
-
     def draw_hit_points_ratio(self, screen: pygame.Surface, top: int, width: int):
         """绘制血条"""
         hit_points_ratio = max(self.hit_points / self.__max_hit_points, 0)

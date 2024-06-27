@@ -7,9 +7,9 @@ from ....volume_feature import VolumeFeature
 class BombSupply(SupplyBase):
 
     def __init__(self):
-        super().__init__("game_scene\\supply\\bomb.png")
+        super().__init__("game_scene\\supply\\bomb\\bomb.png")
         # 加载补给音效
-        self.sound = FileFeature.load_sound("game_scene\\supply\\get_bomb.wav")  # 获取炸弹
+        self.sound = FileFeature.load_sound("game_scene\\supply\\bomb\\get_bomb.wav")  # 获取炸弹
 
     def trigger(self, plane: PlaneBase, enemies):
         """触发"""

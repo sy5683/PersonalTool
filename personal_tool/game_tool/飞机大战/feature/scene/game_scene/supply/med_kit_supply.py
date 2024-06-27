@@ -7,9 +7,9 @@ from ....volume_feature import VolumeFeature
 class MedKitSupply(SupplyBase):
 
     def __init__(self):
-        super().__init__("game_scene\\supply\\med_kit.png")
+        super().__init__("game_scene\\supply\\med_kit\\med_kit.png")
         # 加载补给音效
-        self.sound = FileFeature.load_sound("game_scene\\supply\\get_med_kit.wav")  # 获取医疗包
+        self.sound = FileFeature.load_sound("game_scene\\supply\\med_kit\\get_med_kit.wav")  # 获取医疗包
 
     def trigger(self, plane: PlaneBase, enemies):
         """触发"""

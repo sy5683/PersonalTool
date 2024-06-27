@@ -7,9 +7,9 @@ from ....volume_feature import VolumeFeature
 class StarSupply(SupplyBase):
 
     def __init__(self):
-        super().__init__("game_scene\\supply\\star.png")
+        super().__init__("game_scene\\supply\\star\\star.png")
         # 加载补给音效
-        self.sound = FileFeature.load_sound("game_scene\\supply\\get_star.wav")  # 获取星星
+        self.sound = FileFeature.load_sound("game_scene\\supply\\star\\get_star.wav")  # 获取星星
 
     def trigger(self, plane: PlaneBase, enemies):
         """触发"""
