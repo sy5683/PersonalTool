@@ -26,7 +26,6 @@ class Boss(EnemyBase):
 
     def draw(self, screen: pygame.Surface):
         """绘制Boss"""
-        # TODO hit图片需要做到叠加，而不是替换
         hit_image = FileFeature.load_image("game_scene\\enemy\\boss\\boss_hit.png")
         screen.blit(hit_image if self.hit else self.get_image(), self.rect)
         self.draw_hit_points_ratio(screen, 10, 5)

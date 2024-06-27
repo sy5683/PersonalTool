@@ -16,6 +16,7 @@ class SceneBase(metaclass=abc.ABCMeta):
         image_path = FileFeature.get_file_path(image_name)
         # 获取屏幕长宽
         width, height = Image.open(image_path).size[:2]
+        # 因为需要实现背景移动，因此使用的背景图片为屏幕的两倍
         SettingFeature.screen_setting.screen_size = width, height // 2
         # 设置窗口对象
         self.screen = self.get_screen()
