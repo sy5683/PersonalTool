@@ -1,19 +1,31 @@
 cn2an
+cpca
 excel2img
+Flask
+flask_cors
 natsort
 numpy
-opencv-python
+onnxruntime
+opencv_python
 openpyxl
+oracledb
+paramiko
 Pillow
 psutil
 py7zr
+pygame
+pymysql
 pypinyin
-python-dateutil
-python-docx
-python-magic-bin
+python_dateutil
+python_docx
+python_magic
 pywin32
 rarfile
-requests
+Requests
+screeninfo
+selenium
+webdriver_manager
+Werkzeug
 xlrd==1.2.0
 
 # 需要忽略的依赖
