@@ -1,6 +1,5 @@
 import typing
 
-from selenium.webdriver import Keys
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 
@@ -17,9 +16,9 @@ from .selenium_utils.selenium_config import SeleniumConfig
 class SeleniumUtil:
 
     @staticmethod
-    def click(element_or_xpath: typing.Union[WebElement, str], **kwargs):
+    def click(key: typing.Union[str, WebElement], **kwargs):
         """模拟点击"""
-        ControlElement.click(element_or_xpath, **kwargs)
+        ControlElement.click(key, **kwargs)
 
     @staticmethod
     def close_other_window(window_titles: typing.Union[str, typing.List[str]], **kwargs):
@@ -67,14 +66,9 @@ class SeleniumUtil:
         return ControlBrowser.get_driver(**kwargs)
 
     @staticmethod
-    def input(element_or_xpath: typing.Union[WebElement, str], value: typing.Union[float, str], **kwargs):
+    def input(key: typing.Union[str, WebElement], value: typing.Union[float, str], **kwargs):
         """输入"""
-        ControlElement.input(element_or_xpath, str(value), **kwargs)
-
-    @staticmethod
-    def key_press(key_name: str = Keys.ENTER, **kwargs):
-        """模拟按键"""
-        ControlElement.key_press(key_name, **kwargs)
+        ControlElement.input(key, str(value), **kwargs)
 
     @staticmethod
     def launch_chrome_debug(debug_port: int = SeleniumConfig.default_debug_port):
@@ -87,9 +81,14 @@ class SeleniumUtil:
         cls.get_driver(**kwargs).get(url)
 
     @staticmethod
-    def switch_iframe(element_or_xpath: typing.Union[WebElement, str] = '', **kwargs):
+    def select(key: typing.Union[str, WebElement], value: typing.Union[int, str], **kwargs):
+        """选择下拉选项"""
+        ControlElement.select(key, value, **kwargs)
+
+    @staticmethod
+    def switch_iframe(key: typing.Union[str, WebElement] = '', **kwargs):
         """切换iframe"""
-        ControlIframe.switch_iframe(element_or_xpath, **kwargs)
+        ControlIframe.switch_iframe(key, **kwargs)
 
     @staticmethod
     def switch_window(window_title: str, **kwargs):

@@ -9,6 +9,7 @@ from selenium.common import InvalidElementStateException, TimeoutException, Elem
 from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 from ..control_browser.control_browser import ControlBrowser
@@ -19,23 +20,23 @@ class ControlElement:
     """控制元素"""
 
     @classmethod
-    def click(cls, element_or_xpath: typing.Union[WebElement, str], **kwargs):
+    def click(cls, key: typing.Union[str, WebElement], **kwargs):
         """调用js实现模拟点击"""
         click_type = kwargs.get("click_type", "js")
         driver = kwargs.get("driver", ControlBrowser.get_driver(**kwargs))
         wait_seconds = kwargs.get("wait_seconds", SeleniumConfig.wait_seconds)
         if click_type == "js":
-            element = cls.__format_element(element_or_xpath, wait_seconds=wait_seconds)
+            element = cls.__format_element(key, wait_seconds=wait_seconds)
             driver.execute_script("(arguments[0]).click()", element)
             time.sleep(0.2)
         elif click_type == "action":
-            element = cls.__format_element(element_or_xpath, wait_seconds=wait_seconds)
+            element = cls.__format_element(key, wait_seconds=wait_seconds)
             ActionChains(ControlBrowser.get_driver(**kwargs)).move_to_element(element).click().perform()
         else:
             for _ in range(wait_seconds):
                 time.sleep(1)
                 try:
-                    cls.__format_element(element_or_xpath, wait_seconds=1).click()
+                    cls.__format_element(key, wait_seconds=1).click()
                 except ElementNotInteractableException:
                     continue
                 break
@@ -66,52 +67,74 @@ class ControlElement:
         return cls.__find_with_lambda(lambda x: x.find_elements(By.XPATH, xpath), **kwargs)
 
     @classmethod
-    def input(cls, element_or_xpath: typing.Union[WebElement, str], value: str, **kwargs):
+    def input(cls, key: typing.Union[None, str, WebElement], value: str, **kwargs):
         """输入"""
-        uncheck = kwargs.get("uncheck")
-        element = cls.__format_element(element_or_xpath, **kwargs)
-        logging.info(f"输入元素: {element_or_xpath} 【%s】" %
-                     ("*" * len(value) if cls.__check_element_is_password(element) else value))
-        for _ in range(3):
-            # 先点击元素定位
-            try:
-                element.click()
-            except ElementClickInterceptedException:
-                logging.warning("元素无法点击，请选择正确的元素")
-            time.sleep(0.5)
-            # 使用selenium自带的clear方法
-            try:
-                element.clear()  # 有时候有输入框 element.clear() 方法无效
-            except InvalidElementStateException:
-                logging.warning("元素无法清空，请选择正确的元素")
-            time.sleep(0.5)
-            # 因此再使用手动清空方式
-            for _ in range(len(element.get_attribute("value"))):
-                element.send_keys(Keys.RIGHT)
-                element.send_keys(Keys.BACK_SPACE)
-                time.sleep(0.1)
-            # 模拟全选
-            element.send_keys(Keys.CONTROL, "a")
-            time.sleep(0.2)
-            # 输入元素
-            element.send_keys(value)
-            # 密码无需判断输入结果
-            if cls.__check_element_is_password(element):
-                break
-            # 某些特殊情况无需判断输入结果: 日期格式化、金额会计格式化等
-            if uncheck:
-                break
-            # 判断输入结果是否正确
-            if element.get_attribute("value") == value:
-                break
+        if key is None:
+            if value not in Keys.__dict__.values():
+                raise ValueError("未指定输入对象时，输入值必须为类Keys。")
+            ActionChains(ControlBrowser.get_driver(**kwargs)).key_down(value).perform()
         else:
-            logging.error(f"元素输入失败: {element_or_xpath}\n{traceback.format_exc()}")
-            raise RuntimeError("元素输入失败")
+            element = cls.__format_element(key, **kwargs)
+            logging.info(f"输入元素: {key} 【%s】" % ("*" * len(value) if cls.__check_is_password(element) else value))
+            uncheck = kwargs.get("uncheck")
+            for _ in range(3):
+                # 先点击元素定位
+                cls._clear_element(element)
+                # 模拟全选
+                element.send_keys(Keys.CONTROL, "a")
+                time.sleep(0.2)
+                # 输入元素
+                element.send_keys(value)
+                # 密码无需判断输入结果
+                if cls.__check_is_password(element):
+                    break
+                # 某些特殊情况无需判断输入结果: 日期格式化、金额会计格式化等
+                if uncheck:
+                    break
+                # 判断输入结果是否正确
+                if element.get_attribute("value") == value:
+                    break
+            else:
+                logging.error(f"元素输入失败: {key}\n{traceback.format_exc()}")
+                raise RuntimeError("元素输入失败")
+
+    @classmethod
+    def select(cls, key: typing.Union[str, WebElement], value: typing.Union[int, str], **kwargs):
+        """选择下拉选项"""
+        element = cls.__format_element(key, **kwargs)
+        select = Select(element)  # 实例化Select
+        if isinstance(value, int):
+            select.select_by_index(value)  # 根据项选择下拉选项
+        else:
+            select.select_by_visible_text(value)  # 根据可见文本选择下拉选项
+            # TODO 需要捕捉异常，兼容两种文本情况
+            #  select.select_by_value(value)  # 根据值选择下拉选项
 
     @staticmethod
-    def key_press(key_name: str, **kwargs):
-        """模拟按键"""
-        ActionChains(ControlBrowser.get_driver(**kwargs)).key_down(key_name).perform()
+    def _clear_element(element: WebElement):
+        """清空元素"""
+        # 先点击再删除
+        try:
+            element.click()
+        except ElementClickInterceptedException:
+            logging.warning("元素无法点击，请选择正确的元素")
+        time.sleep(0.5)
+        # 使用selenium自带的clear方法
+        try:
+            element.clear()
+        except InvalidElementStateException:
+            logging.warning("元素无法清空，请选择正确的元素")
+        time.sleep(0.5)
+        # 有时候有输入框 element.clear() 方法无效，因此再使用手动清空方式
+        for _ in range(len(element.get_attribute("value"))):
+            element.send_keys(Keys.RIGHT)
+            element.send_keys(Keys.BACK_SPACE)
+            time.sleep(0.1)
+
+    @staticmethod
+    def __check_is_password(element: WebElement) -> bool:
+        """判断元素是否为密码类"""
+        return element.get_attribute("type") == "password"
 
     @staticmethod
     def __find_with_lambda(find_method, **kwargs) -> typing.Union[WebElement, typing.List[WebElement]]:
@@ -124,10 +147,5 @@ class ControlElement:
         return WebDriverWait(element, wait_seconds, 0.3).until(find_method)
 
     @classmethod
-    def __format_element(cls, element_or_xpath: typing.Union[WebElement, str], **kwargs):
-        return cls.find(xpath=element_or_xpath, **kwargs) if isinstance(element_or_xpath, str) else element_or_xpath
-
-    @staticmethod
-    def __check_element_is_password(element: WebElement) -> bool:
-        """判断元素是否为密码类"""
-        return element.get_attribute("type") == "password"
+    def __format_element(cls, key: typing.Union[str, WebElement], **kwargs):
+        return cls.find(xpath=key, **kwargs) if isinstance(key, str) else key
