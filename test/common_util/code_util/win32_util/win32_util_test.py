@@ -9,6 +9,10 @@ class Win32UtilTestCase(TestBase):
         self.assertNotEqual(handle, None)
         print(handle)
 
-    def test_key_press(self):
-        Win32Util.key_press(8)
-        # +-.
+    def test_get_root_paths(self):
+        root_paths = Win32Util.get_root_paths()
+        self.assertNotEqual(root_paths, None)
+        print(root_paths)
+
+    def test_press_key(self):
+        self.assertEqual(Win32Util.press_key(17, "A"), None)

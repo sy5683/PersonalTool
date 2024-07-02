@@ -15,6 +15,7 @@ psutil
 py7zr
 pygame
 PyMySQL
+pyperclip
 pypinyin
 python-dateutil
 python-docx
@@ -25,11 +26,12 @@ requests
 screeninfo
 selenium
 webdriver-manager==4.0.1
-xlrd==1.2.0
+xlrd
 
 # 需要忽略的依赖
 docx
 fitz
 magic
+pathlib
 werkzeug
 win32gui
