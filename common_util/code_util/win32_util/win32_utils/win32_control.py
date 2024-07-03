@@ -3,6 +3,7 @@ import time
 import typing
 
 import pyperclip
+import pywintypes
 import win32api
 import win32clipboard
 import win32con
@@ -33,14 +34,13 @@ class Win32Control:
     @staticmethod
     def set_clip_board(value: str):
         """设置剪切板"""
-        # noinspection PyBroadException
         try:
             win32clipboard.OpenClipboard()
             win32clipboard.EmptyClipboard()
             win32clipboard.SetClipboardData(win32con.CF_TEXT, value.encode('gbk'))
             win32clipboard.CloseClipboard()
             time.sleep(0.1)
-        except Exception:
+        except pywintypes.error:
             pyperclip.copy(value)
 
     @staticmethod
