@@ -20,6 +20,8 @@ class Boss(EnemyBase):
                        "game_scene\\enemy\\boss\\boss_3.png",
                        "game_scene\\enemy\\boss\\boss_4.png"]
         super().__init__(image_names, 10000, 1, 1000000)
+        # 加载Boss音效
+        self.crash_sound = FileFeature.load_sound("game_scene\\enemy\\boss\\crash.wav")  # 敌机坠毁
         # 设置Boss参数
         self.bullets: typing.List[BossBulletBase] = []
         self.rect.left, self.rect.top = 0, -250

@@ -18,6 +18,7 @@ from .supply.med_kit_supply import MedKitSupply
 from .supply.star_supply import StarSupply
 from ..base.scene_base import SceneBase
 from ...cache.cache_feature import CacheFeature
+from ...database.database_feature import DatabaseFeature
 from ...volume_feature import VolumeFeature
 
 
@@ -149,6 +150,7 @@ class GameScene(SceneBase):
                     enemy.draw(self.screen)
                     enemy.move()
                 else:
+                    VolumeFeature.volume_play(enemy.crash_sound)  # 播放敌机坠毁音效
                     self.score += enemy.score
                     enemy.reset()
             # 绘制飞机子弹
@@ -189,6 +191,8 @@ class GameScene(SceneBase):
             if self.plane.life_number == 0:
                 pygame.mixer.music.play(-1)
                 pygame.mixer.stop()
+                # 保存得分
+                DatabaseFeature.save_score("admin", self.score)
                 break
 
             # 更新界面

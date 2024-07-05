@@ -5,6 +5,7 @@ import typing
 import pygame
 
 from ....base.element_base import ElementBase
+from .....file_feature import FileFeature
 from .....setting.setting_feature import SettingFeature
 
 
@@ -13,6 +14,8 @@ class EnemyBase(ElementBase, metaclass=abc.ABCMeta):
     def __init__(self, image_names: typing.List[str], hit_points: int, speed: typing.Union[int, typing.Tuple[int, int]],
                  score: int):
         super().__init__(image_names)
+        # 加载敌机音效
+        self.crash_sound = FileFeature.load_sound("game_scene\\enemy\\crash.wav")  # 敌机坠毁
         # 设置敌机参数
         self.hit = False  # 是否被击中
         self.hit_points = hit_points  # 生命值
