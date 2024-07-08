@@ -19,11 +19,9 @@ class Win32Util:
         return Win32Visual.find_handles(class_name, title, wait_seconds)
 
     @staticmethod
-    def get_clip_board():
+    def get_clip_board() -> str:
         """获取剪切板内容"""
-
-
-
+        return Win32Control.get_clip_board()
 
     @staticmethod
     def get_root_paths() -> typing.List[str]:
@@ -39,6 +37,11 @@ class Win32Util:
     def press_key(*keys: typing.Union[int, str]):
         """模拟按键"""
         Win32Control.press_key(*keys)
+
+    @staticmethod
+    def set_clip_board(value: str):
+        """设置剪切板"""
+        Win32Control.set_clip_board(value)
 
     @staticmethod
     def show_window(handle: int, need_admin_right: bool = False):

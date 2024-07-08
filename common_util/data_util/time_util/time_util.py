@@ -3,7 +3,6 @@ import typing
 
 from .time_utils.calculate_datetime import CalculateDatetime
 from .time_utils.convert_time import ConvertTime
-from .time_utils.time_config import TimeConfig
 
 
 class TimeUtil:
@@ -15,7 +14,7 @@ class TimeUtil:
 
     @staticmethod
     def format_to_str(stamp: typing.Union[datetime.datetime, datetime.date, float, str],
-                      time_format: str = TimeConfig.default_time_format) -> str:
+                      time_format: str = '%Y-%m-%d %H:%M:%S') -> str:
         """格式时间"""
         return ConvertTime.format_to_str(stamp, time_format)
 
@@ -46,7 +45,7 @@ class TimeUtil:
         return CalculateDatetime.get_next_month_last_day(stamp)
 
     @staticmethod
-    def get_now(time_format: str = TimeConfig.default_time_format) -> str:
+    def get_now(time_format: str = '%Y-%m-%d %H:%M:%S') -> str:
         """获取当前时间"""
         return ConvertTime.format_to_str(datetime.datetime.now(), time_format)
 
