@@ -23,6 +23,7 @@ python-magic-bin
 pywin32
 rarfile
 requests
+rsa
 screeninfo
 selenium
 webdriver-manager==4.0.1
