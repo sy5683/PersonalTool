@@ -2,6 +2,8 @@ from concurrent import futures
 
 from common_core.base.test_base import TestBase
 from common_util.code_util.selenium_util.selenium_util import SeleniumUtil
+from common_util.code_util.selenium_util.selenium_utils.control_browser.browser_type import BrowserType
+from common_util.code_util.selenium_util.selenium_utils.selenium_config import SeleniumConfig
 
 
 class SeleniumUtilTestCase(TestBase):
@@ -23,9 +25,13 @@ class SeleniumUtilTestCase(TestBase):
         # element = SeleniumUtil.find(self.xpath, wait_seconds=30)  # 在指定超时时间内查找元素
         SeleniumUtil.find('./ancestor::div[id="lg"]', element=element)  # 查找父级元素
 
+    def test_launch_chrome_debug(self):
+        self.assertEqual(SeleniumUtil.launch_chrome_debug(), None)
+
     def test_open_url(self):
-        # SeleniumUtil.open_url(self.url)  # 打开url
-        SeleniumUtil.open_url(self.url, debug_port=9223)  # 接管debug浏览器打开url
+        SeleniumConfig.browser_type = BrowserType.edge
+        SeleniumUtil.open_url(self.url)  # 打开url
+        # SeleniumUtil.open_url(self.url, debug_port=9223)  # 接管debug浏览器打开url
 
     def test_thread(self):
         """测试多并发"""

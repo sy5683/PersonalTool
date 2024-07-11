@@ -1,5 +1,5 @@
 from common_core.base.test_base import TestBase
-from common_util.code_util.selenium_util.selenium_utils.control_browser.launch_edge import LaunchEdge
+from common_util.code_util.selenium_util.selenium_utils.control_browser.launch_browser.launch_edge import LaunchEdge
 
 
 class LaunchEdgeTestCase(TestBase):

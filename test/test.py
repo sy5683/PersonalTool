@@ -9,6 +9,7 @@ import cv2
 import openpyxl
 import win32api
 from selenium.webdriver import ActionChains, Keys
+from webdriver_manager.chrome import ChromeDriverManager
 
 from common_core.base.test_base import TestBase
 from common_util.code_util.net_util.net_util import NetUtil

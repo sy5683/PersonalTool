@@ -9,11 +9,11 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 class LaunchBase(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
-    def get_driver(self) -> WebDriver:
+    def get_driver(self, **kwargs) -> WebDriver:
         """获取driver"""
 
     @abc.abstractmethod
-    def close_browser(self):
+    def close_browser(self, **kwargs):
         """关闭浏览器"""
 
     @staticmethod

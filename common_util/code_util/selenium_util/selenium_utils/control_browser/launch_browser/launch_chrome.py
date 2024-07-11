@@ -16,14 +16,14 @@ from selenium.common import InvalidArgumentException, SessionNotCreatedException
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import WebDriver
 
+from .base.launch_base import LaunchBase
 from .download_driver import DownloadDriver
-from .launch_base import LaunchBase
-from ..selenium_config import SeleniumConfig
+from ...selenium_config import SeleniumConfig
 
 
 class LaunchChrome(LaunchBase):
-    __driver_map: typing.Dict[int, WebDriver] = {}
-    __debug_driver_map: typing.Dict[int, WebDriver] = {}
+    _driver_map: typing.Dict[int, WebDriver] = {}
+    _debug_driver_map: typing.Dict[int, WebDriver] = {}
 
     @classmethod
     def get_driver(cls, **kwargs) -> WebDriver:
@@ -32,20 +32,20 @@ class LaunchChrome(LaunchBase):
         if debug_port is None:
             # 获取进程id，并启动谷歌浏览器
             thread_id = threading.current_thread().ident
-            if thread_id not in cls.__driver_map:
-                cls.__driver_map[thread_id] = cls._launch_chrome(**kwargs)
-            return cls.__driver_map[thread_id]
+            if thread_id not in cls._driver_map:
+                cls._driver_map[thread_id] = cls._launch_chrome(**kwargs)
+            return cls._driver_map[thread_id]
         else:
             # 使用debug方式接管谷歌浏览器
-            if debug_port not in cls.__debug_driver_map:
-                cls.__debug_driver_map[debug_port] = cls._take_over_chrome(debug_port)
-            return cls.__debug_driver_map[debug_port]
+            if debug_port not in cls._debug_driver_map:
+                cls._debug_driver_map[debug_port] = cls._take_over_chrome(debug_port)
+            return cls._debug_driver_map[debug_port]
 
     @classmethod
     def launch_browser_debug(cls, debug_port: int):
         """debug启动谷歌浏览器"""
         debug_port = cls.__format_debug_port(debug_port=debug_port)
-        if debug_port in cls.__debug_driver_map:
+        if debug_port in cls._debug_driver_map:
             logging.info(f"Debug端口的谷歌浏览器正在运行: {debug_port}")
             return
         assert debug_port, "端口号不可为0"
@@ -66,9 +66,9 @@ class LaunchChrome(LaunchBase):
         if driver is None:
             debug_port = cls.__format_debug_port(**kwargs)
             if debug_port is None:
-                driver = cls.__driver_map.get(threading.current_thread().ident)
+                driver = cls._driver_map.get(threading.current_thread().ident)
             else:
-                driver = cls.__debug_driver_map.get(debug_port)
+                driver = cls._debug_driver_map.get(debug_port)
         if driver is None:
             return
         # 1) 使用selenium自带的quit方法关闭driver
@@ -84,12 +84,12 @@ class LaunchChrome(LaunchBase):
                 result = cmd.read()
             temp_result = [each for each in result.split('\n')[0].split(' ') if each != '']
             os.system(f"taskkill /f /pid {temp_result[4]}")
-        for thread_id, _driver in list(cls.__driver_map.items()):
+        for thread_id, _driver in list(cls._driver_map.items()):
             if driver == _driver:
-                del cls.__driver_map[thread_id]
-        for _debug_port, _driver in list(cls.__debug_driver_map.items()):
+                del cls._driver_map[thread_id]
+        for _debug_port, _driver in list(cls._debug_driver_map.items()):
             if driver == _driver:
-                del cls.__debug_driver_map[_debug_port]
+                del cls._debug_driver_map[_debug_port]
 
     @classmethod
     def _launch_chrome(cls, **kwargs) -> WebDriver:
@@ -190,7 +190,6 @@ class LaunchChrome(LaunchBase):
                 return chrome_path
         # 3) 某些极个别特殊情况，用户直接解压绿色文件使用谷歌浏览器，这时候注册表没值路径也不确定，因此只能遍历全部文件路径
         for root_path in re.findall(r"(.:\\)", win32api.GetLogicalDriveStrings()):
-            # 使用pathlib的rglob遍历，比for循环遍历更快，代码更简单
             for chrome_path in Path(root_path).rglob("chrome.exe"):
                 return str(chrome_path)
         raise FileExistsError("未找到谷歌浏览器路径")
@@ -226,7 +225,7 @@ class LaunchChrome(LaunchBase):
         debug_port = kwargs.get("debug_port")
         if debug_port is None:
             # 未启动driver并且默认debug端口正在运行
-            if not cls.__driver_map and cls._netstat_debug_port_running(SeleniumConfig.default_debug_port):
+            if not cls._driver_map and cls._netstat_debug_port_running(SeleniumConfig.default_debug_port):
                 return SeleniumConfig.default_debug_port
         return debug_port
 

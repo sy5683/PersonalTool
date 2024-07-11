@@ -13,35 +13,35 @@ from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.edge.webdriver import WebDriver
 from selenium.webdriver.ie.service import Service as IeService
 
+from .base.launch_base import LaunchBase
 from .download_driver import DownloadDriver
-from .launch_base import LaunchBase
-from ..selenium_config import SeleniumConfig
+from ...selenium_config import SeleniumConfig
 
 
 class LaunchEdge(LaunchBase):
-    __driver: typing.Union[WebDriver, None] = None
+    _driver: typing.Union[WebDriver, None] = None
 
     @classmethod
-    def get_driver(cls) -> WebDriver:
+    def get_driver(cls, **kwargs) -> WebDriver:
         """获取driver"""
-        if cls.__driver is None:
+        if cls._driver is None:
             # 1) 启动Edge浏览器
-            cls.__driver = cls._launch_edge()
+            cls._driver = cls._launch_edge()
             # 2.1) 设置默认加载超时时间
-            cls.__driver.set_page_load_timeout(SeleniumConfig.wait_seconds)
+            cls._driver.set_page_load_timeout(SeleniumConfig.wait_seconds)
             # 2.2) 启动后设置浏览器最前端
-            cls.set_browser_front(cls.__driver)
-        return cls.__driver
+            cls.set_browser_front(cls._driver)
+        return cls._driver
 
     @classmethod
     def close_browser(cls, **kwargs):
         """关闭Edge浏览器"""
-        driver = kwargs.get("driver", cls.__driver)
+        driver = kwargs.get("driver", cls._driver)
         if driver is not None:
             # 使用selenium自带的quit方法关闭driver
             driver.quit()
-            if driver == cls.__driver:
-                cls.__driver = None
+            if driver == cls._driver:
+                cls._driver = None
 
     @classmethod
     def _launch_edge(cls) -> WebDriver:
