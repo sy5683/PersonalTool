@@ -148,7 +148,7 @@ class ParsePdf:
                     p = cls.__to_int(*items[1].rect)
                     image = cv2.rectangle(image, (p[0], p[1]), (p[2], p[3]), (0, 0, 0))
                 else:
-                    # print(items[0], items)  # TODO
+                    # print(items[0], items)
                     pass
         # cv2.imshow("show_name", image)
         # cv2.waitKey(0)

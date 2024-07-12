@@ -1,8 +1,7 @@
 import base64
-import typing
+from pathlib import Path
 
 import rsa
-from pathlib import Path
 
 from .convert_crypto import ConvertCrypto
 

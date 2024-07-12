@@ -62,6 +62,7 @@ class Screenshot:
                 mfc_dc.DeleteDC()
                 win32gui.ReleaseDC(handle, handle_dc)
         return images
+
     @staticmethod
     def _get_pil_screenshot_images() -> typing.List[numpy.ndarray]:
         """获取pil的截图图片"""
