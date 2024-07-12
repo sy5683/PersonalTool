@@ -8,7 +8,6 @@ class ABCReceiptType01(ABCReceiptType):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        # TODO 绘制表格时，农行回单会出现因为python库版本问题导致绘制异常的bug
         if "账号" not in self.table.get_row_values(1):
             return False
         return True

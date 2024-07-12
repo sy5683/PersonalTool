@@ -14,7 +14,7 @@ class ParsePdfTestCase(TestBase):
         # self.tax_path = Path(r"E:\Document\公司文档\RPA\场景文档\28_公文机器人\05-收入核对")
 
     def test_parse_receipt(self):
-        receipt_path = self.receipt_path.joinpath("")
+        receipt_path = self.receipt_path.joinpath(r"")
         for pdf_path in self.__get_pdf_path(receipt_path):
             result = ParsePdf.parse_receipt(pdf_path)
             for receipt in result.receipts:
@@ -22,7 +22,7 @@ class ParsePdfTestCase(TestBase):
             print()
 
     def test_parse_voucher(self):
-        voucher_path = self.voucher_path.joinpath("")
+        voucher_path = self.voucher_path.joinpath(r"")
         for pdf_path in self.__get_pdf_path(voucher_path):
             result = ParsePdf.parse_voucher(pdf_path)
             for voucher in result.vouchers:

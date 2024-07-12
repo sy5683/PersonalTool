@@ -84,6 +84,8 @@ class ReceiptParser(PdfParserBase, metaclass=abc.ABCMeta):
 
     def _parse_receipt(self, receipt_profile: ReceiptProfile, receipt_type_class):
         """解析"""
+        if not receipt_profile.table and not receipt_profile.words:
+            return   # 跳过没有表格和文本的页
         receipt_types = []
         for receipt_type_class in receipt_type_class.__subclasses__():
             receipt_type = receipt_type_class(receipt_profile)
