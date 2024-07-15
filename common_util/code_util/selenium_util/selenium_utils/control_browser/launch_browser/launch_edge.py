@@ -111,7 +111,7 @@ class LaunchEdge(LaunchBase):
     def _get_edge_path() -> str:
         """获取Edge浏览器路径"""
         # 1) 通过注册表查找Edge浏览器路径
-        for regedit_dir in [win32con.HKEY_LOCAL_MACHINE, win32con.HKEY_CURRENT_USER]:  # 谷歌浏览器路径注册表一般在这两个位置下固定位置
+        for regedit_dir in [win32con.HKEY_LOCAL_MACHINE, win32con.HKEY_CURRENT_USER]:  # Edge浏览器路径注册表一般在这两个位置下固定位置
             regedit_path = "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\msedge.exe"
             try:
                 key = win32api.RegOpenKey(regedit_dir, regedit_path)
@@ -127,12 +127,12 @@ class LaunchEdge(LaunchBase):
             edge_path = os.path.join(edge_parent_path, "Microsoft\\Edge\\Application\\msedge.exe")
             if os.path.isfile(edge_path):
                 return edge_path
-        # 3) 某些极个别特殊情况，用户直接解压绿色文件使用谷歌浏览器，这时候注册表没值路径也不确定，因此只能遍历全部文件路径
+        # 3) 某些极个别特殊情况，用户直接解压绿色文件使用Edge浏览器，这时候注册表没值路径也不确定，因此只能遍历全部文件路径
         for root_path in re.findall(r"(.:\\)", win32api.GetLogicalDriveStrings()):
             # 使用pathlib的rglob遍历，比for循环遍历更快，代码更简单
             for edge_path in Path(root_path).rglob("msedge.exe"):
                 return str(edge_path)
-        raise FileExistsError("未找到谷歌浏览器路径")
+        raise FileExistsError("未找到Edge浏览器路径")
 
     @staticmethod
     def _get_edge_user_data_path() -> typing.Union[str, None]:
