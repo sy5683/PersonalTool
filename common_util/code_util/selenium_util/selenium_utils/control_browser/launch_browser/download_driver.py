@@ -1,4 +1,5 @@
 import logging
+import re
 from pathlib import Path
 
 from webdriver_manager.chrome import ChromeDriverManager
@@ -52,7 +53,8 @@ class DownloadDriver:
         if "." in check_version:
             check_version = check_version[:check_version.find(".")]
         for driver_path in Path(DEFAULT_USER_HOME_CACHE_PATH).rglob(driver_name):
-            if check_version and check_version not in str(driver_path):
+            relative_path = str(driver_path).replace(DEFAULT_USER_HOME_CACHE_PATH, "")
+            if check_version and not re.search(rf"\\{check_version}\.", relative_path):
                 continue
             return str(driver_path)
         raise FileExistsError
