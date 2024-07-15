@@ -21,6 +21,11 @@ class RequestNet:
     @staticmethod
     def request(method: str, url: str, **kwargs) -> requests.Response:
         """发送请求"""
+        if kwargs.get("headers") is None:
+            kwargs['headers'] = {'Content-Type': "application/json"}
+        if url.startswith("https"):
+            kwargs['verify'] = False  # https 请求需要关闭验证
+        logging.info(f"请求: {url} \n 请求参数: {kwargs}")
         return requests.request(method, url, **kwargs)
 
     @staticmethod
