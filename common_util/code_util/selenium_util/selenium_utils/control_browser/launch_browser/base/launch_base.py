@@ -1,8 +1,7 @@
 import abc
 import time
 
-from selenium import webdriver
-from selenium.common import WebDriverException
+from selenium import webdriver, common
 from selenium.webdriver.chrome.webdriver import WebDriver
 
 
@@ -21,12 +20,12 @@ class LaunchBase(metaclass=abc.ABCMeta):
         """设置浏览器最前端"""
         try:  # 先设置浏览器最小化
             driver.minimize_window()
-        except WebDriverException:
+        except common.WebDriverException:
             pass  # 设置最小化时可能会因为正在操作而失败
         for _ in range(3):
             try:  # 再设置浏览器最大化
                 driver.maximize_window()
                 break
-            except WebDriverException:
+            except common.WebDriverException:
                 # 设置最大化时可能会因为正在操作而失败
                 time.sleep(0.5)

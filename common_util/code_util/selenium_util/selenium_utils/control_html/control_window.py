@@ -3,8 +3,7 @@ import re
 import time
 import typing
 
-from selenium import webdriver
-from selenium.common import NoSuchWindowException, UnexpectedAlertPresentException
+from selenium import webdriver, common
 
 from ..control_browser.control_browser import ControlBrowser
 from ..selenium_config import SeleniumConfig
@@ -21,7 +20,7 @@ class ControlWindow:
         for window_handle in driver.window_handles:
             try:
                 cls.__switch_to_window(driver, window_handle)
-            except NoSuchWindowException:
+            except common.NoSuchWindowException:
                 continue
             title = cls.get_title(driver=driver)
             for window_title in window_titles:
@@ -55,7 +54,7 @@ class ControlWindow:
         driver = kwargs.get("driver", ControlBrowser.get_driver(**kwargs))
         try:
             return driver.title
-        except UnexpectedAlertPresentException:
+        except common.UnexpectedAlertPresentException:
             cls.confirm_alert(driver=driver)
             return driver.title
 
@@ -69,7 +68,7 @@ class ControlWindow:
             for window_handle in driver.window_handles:
                 try:
                     cls.__switch_to_window(driver, window_handle)
-                except NoSuchWindowException:
+                except common.NoSuchWindowException:
                     continue
                 # 校验标题
                 title = cls.get_title(driver=driver)

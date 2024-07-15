@@ -11,8 +11,7 @@ from pathlib import Path
 import pywintypes
 import win32api
 import win32con
-from selenium import webdriver
-from selenium.common import InvalidArgumentException, SessionNotCreatedException
+from selenium import webdriver, common
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import WebDriver
 
@@ -102,7 +101,7 @@ class LaunchChrome(LaunchBase):
             user_data_dir = cls._get_chrome_user_data_path()
             # 1.2) 获取driver
             driver = cls._get_chrome_driver(user_data_dir)
-        except (AssertionError, InvalidArgumentException, SessionNotCreatedException):
+        except (AssertionError, common.InvalidArgumentException, common.SessionNotCreatedException):
             # 2) 重新获取driver，不加载user_data_dir
             driver = cls._get_chrome_driver()
         # 3.1) 设置默认加载超时时间

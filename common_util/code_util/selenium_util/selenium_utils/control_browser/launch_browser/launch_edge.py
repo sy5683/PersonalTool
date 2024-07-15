@@ -7,8 +7,7 @@ from pathlib import Path
 import pywintypes
 import win32api
 import win32con
-from selenium import webdriver
-from selenium.common import InvalidArgumentException
+from selenium import webdriver, common
 from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.edge.webdriver import WebDriver
 from selenium.webdriver.ie.service import Service as IeService
@@ -52,7 +51,7 @@ class LaunchEdge(LaunchBase):
             user_data_dir = cls._get_edge_user_data_path()
             # 1.2) 获取driver
             driver = cls._get_edge_driver(user_data_dir=user_data_dir)
-        except InvalidArgumentException:
+        except common.InvalidArgumentException:
             # 1.3) 重新获取driver，不加载user_data_dir
             driver = cls._get_edge_driver()
         return driver

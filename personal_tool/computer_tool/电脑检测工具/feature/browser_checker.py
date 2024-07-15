@@ -1,7 +1,7 @@
 import logging
 import time
 
-from selenium.common import NoSuchWindowException
+from selenium import common
 
 from common_util.code_util.selenium_util.selenium_util import SeleniumUtil
 
@@ -17,6 +17,6 @@ class BrowserChecker:
         while True:
             try:
                 SeleniumUtil.find('//settings-ui', without_log=True)
-            except NoSuchWindowException:
+            except common.NoSuchWindowException:
                 time.sleep(3)
                 break

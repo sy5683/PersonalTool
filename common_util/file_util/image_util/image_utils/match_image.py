@@ -46,7 +46,7 @@ class MatchImage:
         handle = kwargs.get("handle")
         cut_item = kwargs.get("cut_item", ((0, 0), (1, 1)))
         # 1) 获取桌面图片
-        image = Screenshot.get_screenshot_images()[0]  # TODO
+        image = Screenshot.get_screenshot_images()[0]  # TODO 多屏幕时需要确认屏幕选择逻辑，这里暂时选择默认屏幕
         # 2) 如果需要获取窗口图片，则获取窗口坐标，再从桌面图片中截取
         if handle:
             left, top, right, bottom = cls.__get_window_rect(handle)

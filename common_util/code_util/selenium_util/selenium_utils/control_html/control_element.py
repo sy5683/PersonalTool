@@ -3,9 +3,7 @@ import time
 import traceback
 import typing
 
-from selenium import webdriver
-from selenium.common import InvalidElementStateException, TimeoutException, ElementNotInteractableException, \
-    ElementClickInterceptedException
+from selenium import webdriver, common
 from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
@@ -37,18 +35,18 @@ class ControlElement:
                 time.sleep(1)
                 try:
                     cls.__format_element(key, wait_seconds=1).click()
-                except ElementNotInteractableException:
+                except common.ElementNotInteractableException:
                     continue
                 break
             else:
-                raise ElementNotInteractableException("点击失败")
+                raise common.ElementNotInteractableException("点击失败")
 
     @classmethod
     def exist(cls, xpath: str, **kwargs) -> bool:
         """查找元素"""
         try:
             cls.find(xpath, **kwargs)
-        except TimeoutException:
+        except common.TimeoutException:
             return False
         return True
 
@@ -106,9 +104,10 @@ class ControlElement:
         if isinstance(value, int):
             select.select_by_index(value)  # 根据项选择下拉选项
         else:
-            select.select_by_visible_text(value)  # 根据可见文本选择下拉选项
-            # TODO 需要捕捉异常，兼容两种文本情况
-            #  select.select_by_value(value)  # 根据值选择下拉选项
+            try:
+                select.select_by_visible_text(value)  # 根据可见文本选择下拉选项
+            except common.NoSuchElementException:
+                select.select_by_value(value)  # 根据值选择下拉选项
 
     @staticmethod
     def _clear_element(element: WebElement):
@@ -116,13 +115,13 @@ class ControlElement:
         # 先点击再删除
         try:
             element.click()
-        except ElementClickInterceptedException:
+        except common.ElementClickInterceptedException:
             logging.warning("元素无法点击，请选择正确的元素")
         time.sleep(0.5)
         # 使用selenium自带的clear方法
         try:
             element.clear()
-        except InvalidElementStateException:
+        except common.InvalidElementStateException:
             logging.warning("元素无法清空，请选择正确的元素")
         time.sleep(0.5)
         # 有时候有输入框 element.clear() 方法无效，因此再使用手动清空方式

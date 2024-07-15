@@ -3,7 +3,7 @@ import re
 import typing
 from pathlib import Path
 
-from selenium.common import TimeoutException
+from selenium import common
 
 from common_util.code_util.selenium_util.selenium_util import SeleniumUtil
 from .base.crawler_base import CrawlerBase
@@ -44,11 +44,11 @@ class Crawler001(CrawlerBase):
                 while True:
                     try:
                         next_button.click()
-                    except TimeoutException:
+                    except common.TimeoutException:
                         while True:
                             try:
                                 driver.refresh()  # 刷新可能也会有问题
-                            except TimeoutException:
+                            except common.TimeoutException:
                                 pass
                             break
                     break

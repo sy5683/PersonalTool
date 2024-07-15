@@ -2,7 +2,7 @@ import logging
 import time
 import typing
 
-from selenium.common import TimeoutException
+from selenium import common
 
 from common_util.code_util.selenium_util.selenium_util import SeleniumUtil
 from common_util.data_util.time_util.time_util import TimeUtil
@@ -21,7 +21,7 @@ class OaFeature:
         SeleniumUtil.exist('//form[@autocomplete="off"]')
         try:
             SeleniumUtil.click('//div[@class="username"]/div[@class="img"]', wait_seconds=3)
-        except TimeoutException:
+        except common.TimeoutException:
             pass
         SeleniumUtil.input('//input[@placeholder="用户名"]', username)
         SeleniumUtil.input('//input[@placeholder="密码"]', password)
