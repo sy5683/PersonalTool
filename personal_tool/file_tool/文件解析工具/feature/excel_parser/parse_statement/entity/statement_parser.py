@@ -24,7 +24,7 @@ class StatementParser(metaclass=abc.ABCMeta):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        return True if self.tag_row else False
+        return False if self.tag_row is None else True
 
     @abc.abstractmethod
     def parse_statement(self):
@@ -37,7 +37,7 @@ class StatementParser(metaclass=abc.ABCMeta):
 
     def _get_abc_account_info(self) -> typing.Tuple[str, str]:
         """获取农行开户账号信息（开户名称与开户账号）"""
-        return "", ""  # TODO
+        return "", ""  # TODO 农行流水中没有这些信息，需要根据情况特殊处理
 
     def _get_special_data(self, *check_tags: str, relative_col: int = 1) -> str:
         """
