@@ -8,11 +8,10 @@ import requests
 
 class RequestNet:
 
-    @staticmethod
-    def download(download_url: str, download_path: str, suffix: str, **kwargs) -> str:
+    @classmethod
+    def download(cls, download_url: str, download_path: str, suffix: str, **kwargs) -> str:
         """下载文件"""
-        logging.info(f"下载文件: {download_url}")
-        response = requests.request("GET", download_url, **kwargs)
+        response = cls.request("GET", download_url, **kwargs)
         download_path = str(download_path) or tempfile.mktemp(".%s" % re.sub(r"^\.+", "", suffix))
         with open(download_path, "wb") as file:
             file.write(response.content)
@@ -25,7 +24,7 @@ class RequestNet:
             kwargs['headers'] = {'Content-Type': "application/json"}
         if url.startswith("https"):
             kwargs['verify'] = False  # https 请求需要关闭验证
-        logging.info(f"请求: {url} \n 请求参数: {kwargs}")
+        logging.info(f"请求: {url} \n请求参数: {kwargs}")
         return requests.request(method, url, **kwargs)
 
     @staticmethod
