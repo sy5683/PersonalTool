@@ -36,8 +36,7 @@ class ABC01StatementParser(StatementParser):
         try:
             account_name = self._get_special_data(ABC01SpecialTags.account_name.value, relative_col=2)
             self.account_number = self._get_special_data(ABC01SpecialTags.account_number.value, relative_col=2)
-        except ValueError:  # 无法匹配到指定列时，调用接口获取农行的开户名称与开户账号
-            assert self.company_name, "农行流水需要传入公司名称调用接口获取银行账号"
+        except ValueError:  # 农行流水文件中可能没有这些值，因此需要特殊处理
             account_name, self.account_number = self._get_abc_account_info()
         assert self.account_number, f"银行流水【{self.statement_name}】未取到农行账号"
         for data in ExcelUtil.get_data_list(self.statement_path, tag_row=self.tag_row):
