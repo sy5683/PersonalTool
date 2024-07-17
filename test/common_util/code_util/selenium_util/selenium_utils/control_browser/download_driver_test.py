@@ -9,3 +9,8 @@ class DownloadDriverTestCase(TestBase):
         chrome_driver_path = DownloadDriver.get_chrome_driver_path()
         self.assertNotEqual(chrome_driver_path, None)
         print(chrome_driver_path)
+
+    def test_get_edge_driver_path(self):
+        edge_driver_path = DownloadDriver.get_edge_driver_path()
+        self.assertNotEqual(edge_driver_path, None)
+        print(edge_driver_path)
