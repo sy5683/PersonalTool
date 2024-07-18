@@ -4,10 +4,13 @@ from common_core.base.tool_base import ToolBase
 from common_util.data_util.object_util.object_util import ObjectUtil
 from common_util.file_util.file_util.file_util import FileUtil
 from feature.excel_parser.parse_excel import ParseExcel
+from personal_tool.file_tool.文件解析工具.feature.pdf_parser.parse_pdf import ParsePdf
 
 
 class Operations(Enum):
     parse_statement = ParseExcel.parse_statement
+    parse_receipt = ParsePdf.parse_receipt
+    parse_voucher = ParsePdf.parse_voucher
 
 
 class FileParser(ToolBase):
@@ -23,4 +26,6 @@ class FileParser(ToolBase):
 
 if __name__ == '__main__':
     file_parser = FileParser()
-    file_parser.main(Operations.parse_statement)
+    # file_parser.main(Operations.parse_statement)
+    file_parser.main(Operations.parse_receipt)
+    # file_parser.main(Operations.parse_voucher)
