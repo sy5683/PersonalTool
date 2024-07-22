@@ -7,6 +7,7 @@ from feature.convert_feature import ConvertFeature
 
 
 class Operations(Enum):
+    compress_pdf_size = CompressFeature.compress_pdf_size
     decompress = CompressFeature.decompress
     to_excel = ConvertFeature.to_excel
     to_image = ConvertFeature.to_image
@@ -25,7 +26,8 @@ class FileProcessor(ToolBase):
 
 if __name__ == '__main__':
     file_processor = FileProcessor()
-    file_processor.main(Operations.decompress, password=None)
+    file_processor.main(Operations.compress_pdf_size, dpi=100)
+    # file_processor.main(Operations.decompress, password=None)
     # file_processor.main(Operations.to_excel)
     # file_processor.main(Operations.to_image)
     # file_processor.main(Operations.to_pdf)
