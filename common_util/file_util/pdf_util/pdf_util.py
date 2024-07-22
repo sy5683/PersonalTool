@@ -46,9 +46,9 @@ class PdfUtil:
 
     @staticmethod
     def pdf_to_images(pdf_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None,
-                      suffix: str = 'png') -> typing.List[str]:
+                      suffix: str = 'png', dpi: int = 320) -> typing.List[str]:
         """pdf转图片"""
-        return ConvertPdf.pdf_to_images(str(pdf_path), save_path, suffix)
+        return ConvertPdf.pdf_to_images(str(pdf_path), save_path, suffix, dpi)
 
     @staticmethod
     def split_receipt_pdf(pdf_profile: PdfProfile, *split_words: str) -> typing.List[ReceiptProfile]:

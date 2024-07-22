@@ -13,7 +13,8 @@ class ConvertPdf:
     """转换pdf"""
 
     @classmethod
-    def pdf_to_images(cls, pdf_path: str, save_path: typing.Union[Path, str], suffix: str) -> typing.List[str]:
+    def pdf_to_images(cls, pdf_path: str, save_path: typing.Union[Path, str], suffix: str,
+                      dpi: int) -> typing.List[str]:
         """pdf转图片"""
         logging.info(f"开始将pdf文件转换为图片: {pdf_path}")
         save_path = os.path.splitext(pdf_path)[0] if save_path is None else str(save_path)
@@ -25,7 +26,7 @@ class ConvertPdf:
             pdf_page = pdf[index]
             image_name = f"{Path(pdf_path).stem}_{str(index).zfill(len(str(pdf.page_count)))}"
             image_path = os.path.join(save_path, f"{image_name}.%s" % re.sub(r"^\.+", "", suffix))
-            cls._page_to_image(pdf_page, image_path)
+            cls._page_to_image(pdf_page, image_path, dpi)
             image_paths.append(image_path)
         pdf.close()
         logging.info(f"成功将pdf文件转换为图片: {save_path}")
@@ -60,7 +61,7 @@ class ConvertPdf:
         return save_path
 
     @staticmethod
-    def _page_to_image(page, image_path: str, dpi: int = 320, rotate: float = 0.0):
+    def _page_to_image(page, image_path: str, dpi, rotate: float = 0.0):
         """页面转图片"""
         trans = fitz.Matrix(dpi / 72, dpi / 72).prerotate(rotate)
         image = page.get_pixmap(matrix=trans, alpha=False)
