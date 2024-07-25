@@ -1,3 +1,5 @@
+import logging
+
 from .entity.base.database_connect import DatabaseConnect
 from .entity.mysql_connect import MysqlConnect
 from .entity.oracle_connect import OracleConnect
@@ -26,4 +28,5 @@ class ConnectDatabase:
         if sqlite_path:
             return SqliteConnect(sqlite_path)
         # 判断逻辑无法判断数据库
-        raise ValueError(f"未知的数据库信息: {kwargs}")
+        logging.error(f"入参无法判断需要获取的数据库连接类型: {kwargs}")
+        raise ValueError("未知的数据库入参")
