@@ -1,4 +1,5 @@
 import os
+import re
 
 import oracledb
 
@@ -18,9 +19,12 @@ class OracleConnect(DatabaseConnect):
 
     def _get_connect(self):
         """连接数据库"""
-        # 设置oracle客户端路径，客户端路径不能为中文
-        if os.path.exists(self.oracle_client_path):
-            oracledb.init_oracle_client(lib_dir=self.oracle_client_path)
+        try:
+            assert os.path.exists(self.oracle_client_path), "Oracle数据库客户端路径不存在"
+            assert not re.search("[\u4e00-\u9fa5]+", self.oracle_client_path), "Oracle数据库客户端路径包含中文"
+        except AssertionError as e:
+            raise FileExistsError(f"{e}: {self.oracle_client_path}")
+        oracledb.init_oracle_client(lib_dir=self.oracle_client_path)
         self.connect = oracledb.connect(f"{self.username}/{self.password}@{self.__get_host()}")
         self.cursor = self.connect.cursor()
 
