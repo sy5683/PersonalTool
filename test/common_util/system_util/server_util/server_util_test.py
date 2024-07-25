@@ -5,10 +5,10 @@ from common_util.system_util.server_util.server_util import ServerUtil
 class ServerUtilTestCase(TestBase):
 
     def setUp(self):
-        self.ip = ""
-        self.port = 9222
-        self.username = ""
-        self.password = ""
+        self.ip = "192.168.20.137"
+        self.port = 2121
+        self.username = "admin"
+        self.password = "D1a1d@m@in"
 
     def test_get_ftp_connect(self):
         server_connect = ServerUtil.get_server_connect(ip=self.ip, port=self.port, username=self.username,

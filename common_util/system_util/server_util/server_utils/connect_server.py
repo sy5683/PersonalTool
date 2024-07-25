@@ -8,11 +8,11 @@ class ConnectServer:
     @staticmethod
     def get_server_connect(**kwargs) -> ServerConnect:
         """获取服务器连接"""
-        ip = kwargs.get("ip")
-        port = kwargs.get("port")
-        username = kwargs.get("username")
-        password = kwargs.get("password")
-        server_type = kwargs.get("server_type", "FTP")
+        ip = kwargs.pop("ip")
+        port = kwargs.pop("port")
+        username = kwargs.pop("username")
+        password = kwargs.pop("password")
+        server_type = kwargs.pop("server_type", "FTP")
         if server_type == "FTP":
             return FtpConnect(ip, port, username, password, **kwargs)
         elif server_type == "SFTP":
