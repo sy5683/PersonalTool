@@ -25,7 +25,8 @@ class RequestNet:
         if url.startswith("https"):
             kwargs['verify'] = False  # https 请求需要关闭验证
         logging.info(f"请求: {url} \n请求参数: {kwargs}")
-        return requests.request(method, url, **kwargs)
+        with requests.request(method, url, **kwargs) as response:
+            return response
 
     @staticmethod
     def response_to_result(response: requests.Response) -> dict:
