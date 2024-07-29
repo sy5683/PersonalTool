@@ -29,7 +29,6 @@ class SeleniumUtilTestCase(TestBase):
         self.assertEqual(SeleniumUtil.launch_chrome_debug(), None)
 
     def test_open_url(self):
-        SeleniumConfig.browser_type = BrowserType.edge
         SeleniumUtil.open_url(self.url)  # 打开url
         # SeleniumUtil.open_url(self.url, debug_port=9223)  # 接管debug浏览器打开url
 
