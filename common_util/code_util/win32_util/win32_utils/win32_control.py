@@ -1,15 +1,27 @@
 import logging
 import time
-import typing
 
+import pyautogui
 import pyperclip
 import pywintypes
-import win32api
 import win32clipboard
 import win32con
 
 
 class Win32Control:
+    """鼠标键盘操作选择使用pyautogui而不是win32api，是因为pyautogui可以在Linux中使用"""
+
+    @staticmethod
+    def click_left_mouse(click_time: int):
+        """点击鼠标左键"""
+        pyautogui.click(button='left', clicks=click_time)
+        time.sleep(0.1)
+
+    @staticmethod
+    def click_right_mouse(click_time: int):
+        """点击鼠标右键"""
+        pyautogui.click(button='right', clicks=click_time)
+        time.sleep(0.1)
 
     @staticmethod
     def get_clip_board() -> str:
@@ -20,16 +32,19 @@ class Win32Control:
         time.sleep(0.1)
         return value.decode('GBK')
 
-    @classmethod
-    def press_key(cls, *keys: typing.Union[int, str]):
+    @staticmethod
+    def move_mouse(x: int, y: int):
+        """移动鼠标到指定坐标"""
+        logging.info(f"移动鼠标至: {x}, {y}")
+        pyautogui.moveTo(x, y)
+        time.sleep(0.1)
+
+    @staticmethod
+    def press_key(*key_names: str):
         """模拟按键"""
-        key_codes = [cls.__format_key_code(key) for key in keys]
-        for key_code in key_codes:
-            logging.info(f"模拟按键: {keys}")
-            win32api.keybd_event(key_code, 0, 0, 0)
-        time.sleep(0.2)
-        for key_code in key_codes:
-            win32api.keybd_event(key_code, 0, win32con.KEYEVENTF_KEYUP, 0)
+        logging.info(f"模拟按键: {'+'.join(key_names)}")
+        pyautogui.hotkey(*key_names)
+        time.sleep(0.1)
 
     @staticmethod
     def set_clip_board(value: str):
@@ -42,13 +57,3 @@ class Win32Control:
             time.sleep(0.1)
         except pywintypes.error:
             pyperclip.copy(value)
-
-    @staticmethod
-    def __format_key_code(key: typing.Union[int, str]) -> int:
-        if isinstance(key, int):
-            key_code = key
-        else:
-            key_code = int(ord(key.upper()))
-            # 允许使用按键名称输入的仅数字与字母
-            assert key_code in list(range(48, 58)) + list(range(65, 91)), "暂不支持输入数字与字母之外的字符"
-        return key_code

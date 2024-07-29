@@ -9,6 +9,16 @@ from .win32_utils.win32_visual import Win32Visual
 class Win32Util:
 
     @staticmethod
+    def click_left_mouse(click_time: int = 1):
+        """点击鼠标左键"""
+        Win32Control.click_left_mouse(click_time)
+
+    @staticmethod
+    def click_right_mouse(click_time: int = 1):
+        """点击鼠标右键"""
+        Win32Control.click_right_mouse(click_time)
+
+    @staticmethod
     def find_handle(class_name: str = None, title: str = None, wait_seconds: int = 120) -> int:
         """查找窗口句柄"""
         return Win32Visual.find_handle(class_name, title, wait_seconds)
@@ -27,6 +37,11 @@ class Win32Util:
     def get_root_paths() -> typing.List[str]:
         """获取电脑根路径列表"""
         return Win32Path.get_root_paths()
+
+    @staticmethod
+    def move_mouse(x: int, y: int):
+        """移动鼠标到指定坐标"""
+        Win32Control.move_mouse(x, y)
 
     @staticmethod
     def open_file(file_path: typing.Union[Path, str]):

@@ -15,4 +15,4 @@ class Win32UtilTestCase(TestBase):
         print(root_paths)
 
     def test_press_key(self):
-        self.assertEqual(Win32Util.press_key(17, "A"), None)
+        self.assertEqual(Win32Util.press_key("ctrl", "a"), None)
