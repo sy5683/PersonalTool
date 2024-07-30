@@ -4,9 +4,6 @@ import typing
 
 import pyautogui
 import pyperclip
-import pywintypes
-import win32clipboard
-import win32con
 
 
 class Win32Control:
@@ -27,11 +24,7 @@ class Win32Control:
     @staticmethod
     def get_clip_board() -> str:
         """获取剪切板内容"""
-        win32clipboard.OpenClipboard()
-        value = win32clipboard.GetClipboardData(win32con.CF_TEXT)
-        win32clipboard.CloseClipboard()
-        time.sleep(0.1)
-        return value.decode('GBK')
+        return pyperclip.paste()
 
     @classmethod
     def input(cls, value: str, position: typing.Tuple[int, int], check_input: bool, times: int):
@@ -68,13 +61,4 @@ class Win32Control:
     @staticmethod
     def set_clip_board(value: str = ''):
         """设置剪切板"""
-        try:
-            win32clipboard.OpenClipboard()
-            win32clipboard.EmptyClipboard()
-            win32clipboard.SetClipboardData(win32con.CF_TEXT, value.encode("gbk"))
-        except pywintypes.error:
-            win32clipboard.CloseClipboard()
-            # pywin32==301之后，无法设置纯数字字符串，会报错pywintypes.error: 句柄无效
-            pyperclip.copy(value)
-        else:
-            win32clipboard.CloseClipboard()
+        pyperclip.copy(value)

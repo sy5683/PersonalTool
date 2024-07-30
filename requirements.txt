@@ -13,6 +13,7 @@ paramiko
 pillow
 psutil
 py7zr
+PyAutoGUI
 pygame
 PyMuPDF
 PyMySQL
