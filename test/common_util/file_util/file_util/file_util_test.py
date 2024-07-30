@@ -19,3 +19,8 @@ class FileUtilTestCase(TestBase):
     def test_get_original_type(self):
         file_original_type = FileUtil.get_original_type(self.image_path)
         print(file_original_type)
+
+    def test_get_root_paths(self):
+        root_paths = FileUtil.get_root_paths()
+        self.assertNotEqual(root_paths, None)
+        print(root_paths)

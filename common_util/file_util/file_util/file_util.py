@@ -33,6 +33,11 @@ class FileUtil:
         return ProcessFile.get_original_type(str(file_path))
 
     @staticmethod
+    def get_root_paths() -> typing.List[str]:
+        """获取电脑根路径列表"""
+        return ProcessFile.get_root_paths()
+
+    @staticmethod
     def get_temp_path(file_name: str = '') -> Path:
         """获取临时文件路径"""
         return ProcessTempFile.get_temp_path(file_name)

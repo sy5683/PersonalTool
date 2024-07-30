@@ -39,11 +39,6 @@ class Win32Util:
         return Win32Control.get_clip_board()
 
     @staticmethod
-    def get_root_paths() -> typing.List[str]:
-        """获取电脑根路径列表"""
-        return Win32Path.get_root_paths()
-
-    @staticmethod
     def input(value: str, position: typing.Tuple[int, int] = None, check_input: bool = True, times: int = 1):
         """模拟输入"""
         Win32Control.input(value, position, check_input, times)

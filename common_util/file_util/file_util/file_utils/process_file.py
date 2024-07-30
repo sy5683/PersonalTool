@@ -1,3 +1,4 @@
+import os
 import re
 import time
 import tkinter
@@ -78,6 +79,11 @@ class ProcessFile:
         else:
             print(file_type)
             return "unknown"
+
+    @staticmethod
+    def get_root_paths() -> typing.List[str]:
+        """获取电脑根路径列表"""
+        return [root_dir for root_dir in [f"{chr(65 + index)}:\\" for index in range(26)] if os.path.exists(root_dir)]
 
     @staticmethod
     def make_dir(file_path: Path):

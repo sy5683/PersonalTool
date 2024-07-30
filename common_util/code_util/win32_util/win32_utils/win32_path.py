@@ -1,18 +1,11 @@
 import logging
 import os
-import re
-import typing
 
 import pywintypes
 import win32api
 
 
 class Win32Path:
-
-    @staticmethod
-    def get_root_paths() -> typing.List[str]:
-        """获取电脑根路径列表"""
-        return re.findall(r"(.:\\)", win32api.GetLogicalDriveStrings())
 
     @classmethod
     def open_file(cls, file_path: str):

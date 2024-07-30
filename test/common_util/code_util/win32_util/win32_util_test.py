@@ -9,11 +9,6 @@ class Win32UtilTestCase(TestBase):
         self.assertNotEqual(handle, None)
         print(handle)
 
-    def test_get_root_paths(self):
-        root_paths = Win32Util.get_root_paths()
-        self.assertNotEqual(root_paths, None)
-        print(root_paths)
-
     def test_input(self):
         self.assertEqual(Win32Util.input("123456"), None)
 
