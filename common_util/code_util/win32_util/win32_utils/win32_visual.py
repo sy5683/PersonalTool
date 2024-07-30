@@ -1,26 +1,42 @@
 import logging
 import time
+import traceback
 import typing
 
 import pywintypes
+import win32api
 import win32con
 import win32gui
+import win32process
 from win32com import client
 
 
 class Win32Visual:
 
     @classmethod
+    def close_handle(cls, class_name: str, title: str):
+        """关闭窗口"""
+        try:
+            handler = cls.find_handle(class_name, title, 1)
+            assert handler
+        except AssertionError:
+            return
+        thread_id, process_id = win32process.GetWindowThreadProcessId(handler)
+        if thread_id:
+            # noinspection PyBroadException
+            try:
+                process = win32api.OpenProcess(1, False, process_id)
+                win32api.TerminateProcess(process, 0)
+                win32api.CloseHandle(process)
+            except Exception:
+                logging.error(traceback.format_exc())
+            time.sleep(1)
+
+    @classmethod
     def find_handle(cls, class_name: str, title: str, wait_seconds: int) -> int:
         """查找窗口句柄"""
-        for _ in range(wait_seconds):
-            handles = cls._find_handles(class_name, title)
-            if handles:
-                return handles[0]
-            if wait_seconds > 1:
-                time.sleep(1)
-        logging.warning(f"未找到窗口: class_name={class_name}, title={title}")
-        return 0
+        handles = cls.find_handles(class_name, title, wait_seconds)
+        return handles[0] if handles else 0
 
     @classmethod
     def find_handles(cls, class_name: str, title: str, wait_seconds: int) -> typing.List[int]:
@@ -33,18 +49,6 @@ class Win32Visual:
                 time.sleep(1)
         logging.warning(f"未找到窗口: class_name={class_name}, title={title}")
         return []
-
-    @classmethod
-    def wait_handle_disappear(cls, class_name: str, title: str, wait_seconds: int) -> bool:
-        """等待窗口消失"""
-        for _ in range(wait_seconds):
-            handles = cls._find_handles(class_name, title)
-            if not handles:
-                return True
-            if wait_seconds > 1:
-                time.sleep(1)
-        logging.warning(f"窗口存在超时: class_name={class_name}, title={title}")
-        return False
 
     @staticmethod
     def show_window(handle: int, need_admin_right: bool):
@@ -91,6 +95,18 @@ class Win32Visual:
         time.sleep(1)  # 演示等待一秒
         # 点击打开按钮
         win32gui.SendMessage(dialog, win32con.WM_COMMAND, 1, button)
+
+    @classmethod
+    def wait_handle_disappear(cls, class_name: str, title: str, wait_seconds: int) -> bool:
+        """等待窗口消失"""
+        for _ in range(wait_seconds):
+            handles = cls._find_handles(class_name, title)
+            if not handles:
+                return True
+            if wait_seconds > 1:
+                time.sleep(1)
+        logging.warning(f"窗口存在超时: class_name={class_name}, title={title}")
+        return False
 
     @staticmethod
     def _find_handles(class_name: str, title: str) -> typing.List[int]:

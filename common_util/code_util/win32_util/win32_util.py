@@ -19,6 +19,11 @@ class Win32Util:
         Win32Control.click_right_mouse(click_time)
 
     @staticmethod
+    def close_handle(class_name: str, title: str):
+        """关闭窗口"""
+        Win32Visual.close_handle(class_name, title)
+
+    @staticmethod
     def find_handle(class_name: str = None, title: str = None, wait_seconds: int = 120) -> int:
         """查找窗口句柄"""
         return Win32Visual.find_handle(class_name, title, wait_seconds)
@@ -37,6 +42,11 @@ class Win32Util:
     def get_root_paths() -> typing.List[str]:
         """获取电脑根路径列表"""
         return Win32Path.get_root_paths()
+
+    @staticmethod
+    def input(value: str, position: typing.Tuple[int, int] = None, check_input: bool = True, times: int = 1):
+        """模拟输入"""
+        Win32Control.input(value, position, check_input, times)
 
     @staticmethod
     def move_mouse(x: int, y: int):

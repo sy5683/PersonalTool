@@ -14,5 +14,8 @@ class Win32UtilTestCase(TestBase):
         self.assertNotEqual(root_paths, None)
         print(root_paths)
 
+    def test_input(self):
+        self.assertEqual(Win32Util.input("123456"), None)
+
     def test_press_key(self):
         self.assertEqual(Win32Util.press_key("ctrl", "a"), None)
