@@ -15,13 +15,13 @@ class ProcessList:
         return [listing[index:index + cut_len] for index in range(0, len(listing), cut_len)]
 
     @staticmethod
-    def duplicate_remove(listing: list, sort: bool) -> list:
+    def deduplicate(listing: list, sort: bool) -> list:
         """列表去重"""
-        duplicate_listing = list(set(listing))
+        deduplicate_listing = list(set(listing))
         if not sort:
             # set会重新排序列表，可以使用sort(.index)来保持原始顺序
-            duplicate_listing.sort(key=listing.index)
-        return duplicate_listing
+            deduplicate_listing.sort(key=listing.index)
+        return deduplicate_listing
 
     @staticmethod
     def get_combinations(listing: list, max_len: int) -> typing.List[tuple]:

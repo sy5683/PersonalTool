@@ -16,9 +16,9 @@ class ListUtil:
         return ProcessList.cut_list(listing, cut_len)
 
     @staticmethod
-    def duplicate_remove(listing: list, sort: bool = False) -> list:
+    def deduplicate(listing: list, sort: bool = False) -> list:
         """列表去重"""
-        return ProcessList.duplicate_remove(listing, sort)
+        return ProcessList.deduplicate(listing, sort)
 
     @staticmethod
     def get_combinations(listing: list, max_len: int = 3) -> typing.List[tuple]:

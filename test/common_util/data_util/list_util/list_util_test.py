@@ -9,6 +9,11 @@ class ListUtilTestCase(TestBase):
         self.assertNotEqual(errors, None)
         print(errors)
 
+    def test_deduplicate(self):
+        deduplicate_listing = ListUtil.deduplicate([1, 5, 5, 7, 3, 1, 6])
+        self.assertNotEqual(deduplicate_listing, None)
+        print(deduplicate_listing)
+
     def test_get_combinations(self):
         combinations = ListUtil.get_combinations([1, 2, 3, 4])
         self.assertNotEqual(combinations, None)
