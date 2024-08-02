@@ -1,5 +1,3 @@
-import re
-
 from common_util.data_util.time_util.time_util import TimeUtil
 from .CDB_receipt_type import CDBReceiptType
 from ....entity.receipt import Receipt
