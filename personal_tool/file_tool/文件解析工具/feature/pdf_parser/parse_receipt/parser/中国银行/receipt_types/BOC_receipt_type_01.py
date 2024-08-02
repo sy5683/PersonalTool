@@ -24,8 +24,10 @@ class BOCReceiptType01(BOCReceiptType):
         date_pattern = re.compile("日期[:：]")
         payer_account_name_pattern = re.compile("付款人名称[:：]")
         payer_account_number_pattern = re.compile("付款人账号[:：]")
+        payer_account_bank_pattern = re.compile("付款人开户行[:：]")
         payee_account_name_pattern = re.compile("收款人名称[:：]")
         payee_account_number_pattern = re.compile("收款人账号[:：]")
+        payee_account_bank_pattern = re.compile("收款人开户行[:：]")
         amount_pattern = re.compile("金额[:：]")
         for word in PdfUtil.merge_words(self.table.cells[0].words, 10):
             if date_pattern.match(word.text):
@@ -34,10 +36,14 @@ class BOCReceiptType01(BOCReceiptType):
                 receipt.payer_account_name = payer_account_name_pattern.sub("", word.text)  # 付款人户名
             if payer_account_number_pattern.match(word.text):
                 receipt.payer_account_number = payer_account_number_pattern.sub("", word.text)  # 付款人账号
+            if payer_account_bank_pattern.match(word.text):
+                receipt.payer_account_bank = payer_account_bank_pattern.sub("", word.text)  # 付款人开户银行
             if payee_account_name_pattern.match(word.text):
                 receipt.payee_account_name = payee_account_name_pattern.sub("", word.text)  # 收款人户名
             if payee_account_number_pattern.match(word.text):
                 receipt.payee_account_number = payee_account_number_pattern.sub("", word.text)  # 收款人账号
+            if payee_account_bank_pattern.match(word.text):
+                receipt.payee_account_bank = payee_account_bank_pattern.sub("", word.text)  # 收款人开户银行
             if amount_pattern.match(word.text):
                 receipt.amount = NumberUtil.to_amount(amount_pattern.sub("", word.text))  # 金额
         return receipt

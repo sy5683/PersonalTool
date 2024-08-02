@@ -20,7 +20,9 @@ class CIBReceiptType01(CIBReceiptType):
         receipt.date = TimeUtil.format_to_str(self._get_word("交易日期[:：](.*)$"))  # 日期
         receipt.payer_account_name = self._get_word("付款名称[:：](.*)$")  # 付款人户名
         receipt.payer_account_number = self._get_word("付款账号[:：](.*)$")  # 付款人账号
+        receipt.payer_account_bank = self._get_word("付款行[:：](.*)$")  # 付款人开户银行
         receipt.payee_account_name = self._get_word("收款名称[:：](.*)$")  # 收款人户名
         receipt.payee_account_number = self._get_word("收款账号[:：](.*)$")  # 收款人账号
+        receipt.payee_account_bank = self._get_word("收款行[:：](.*)$")  # 收款人开户银行
         receipt.amount = NumberUtil.to_amount(self._get_word("^金额[(（]小写[)）][:：](.*?)$"))  # 金额
         return receipt

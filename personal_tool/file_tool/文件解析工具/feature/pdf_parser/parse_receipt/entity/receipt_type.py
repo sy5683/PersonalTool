@@ -32,11 +32,15 @@ class ReceiptType(metaclass=abc.ABCMeta):
                 return NumberUtil.to_amount(row_values[value_index])
         raise ValueError("格式异常，回单无法提取金额")
 
-    def _get_word(self, pattern: str) -> str:
-        for word in self.words:
-            if re.search(pattern, word.text):
-                return re.findall(pattern, word.text)[0]
+    @staticmethod
+    def _get_bank(value: str) -> str:
+        return re.sub("开户行|[:：]", "", value)
 
     @staticmethod
     def _get_name(value: str) -> str:
         return re.sub("全称|户名|[:：]|付款账户名称|收款账户名称", "", value)
+
+    def _get_word(self, pattern: str) -> str:
+        for word in self.words:
+            if re.search(pattern, word.text):
+                return re.findall(pattern, word.text)[0]

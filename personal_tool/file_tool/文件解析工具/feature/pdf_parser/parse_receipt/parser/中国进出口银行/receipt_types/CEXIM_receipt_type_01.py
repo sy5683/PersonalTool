@@ -18,15 +18,20 @@ class CEXIMReceiptType01(CEXIMReceiptType):
         receipt.date = TimeUtil.format_to_str(self._get_word(".*年.*月.*日"))  # 日期
         name_row_values = self.table.get_row_values(0)
         number_row_values = self.table.get_row_values(1)
+        bank_row_values = self.table.get_row_values(2)
         if name_row_values[0] == "付款人":
             receipt.payer_account_name = name_row_values[2]  # 付款人户名
             receipt.payer_account_number = number_row_values[1]  # 付款人账号
+            receipt.payer_account_bank = bank_row_values[1]  # 付款人开户银行
             receipt.payee_account_name = name_row_values[5]  # 收款人户名
             receipt.payee_account_number = number_row_values[3]  # 收款人账号
+            receipt.payee_account_bank = bank_row_values[3]  # 收款人开户银行
         elif name_row_values[0] == "收款人":
             receipt.payer_account_name = name_row_values[5]  # 付款人户名
             receipt.payer_account_number = number_row_values[3]  # 付款人账号
+            receipt.payer_account_bank = bank_row_values[3]  # 付款人开户银行
             receipt.payee_account_name = name_row_values[2]  # 收款人户名
             receipt.payee_account_number = number_row_values[1]  # 收款人账号
+            receipt.payee_account_bank = bank_row_values[1]  # 收款人开户银行
         receipt.amount = NumberUtil.to_amount(self.table.get_cell(3, 1).get_value())  # 金额
         return receipt
