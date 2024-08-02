@@ -21,7 +21,7 @@ class ReceiptParser(PdfParserBase, metaclass=abc.ABCMeta):
     parser_name = "银行回单"
 
     def __init__(self, bank_name: str, receipt_path: str, **kwargs):
-        super().__init__(bank_name, receipt_path)  # 银行名称
+        super().__init__(bank_name, receipt_path, **kwargs)  # 银行名称
         self.receipt_path = receipt_path  # 回单路径
         self.receipts: typing.List[Receipt] = []
 

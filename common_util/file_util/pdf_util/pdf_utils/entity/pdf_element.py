@@ -1,4 +1,5 @@
 import abc
+import re
 import typing
 
 
@@ -30,7 +31,10 @@ class Cell(PdfElement):
         self.col = None
 
     def get_value(self, interval: str = '') -> str:
-        return interval.join([word.text for word in self.words])
+        value = interval.join([word.text for word in self.words])
+        if not interval:
+            value = re.sub(r"\s+", "", value)
+        return value
 
 
 class Table(PdfElement):

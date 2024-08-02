@@ -186,7 +186,7 @@ class ParsePdf:
             # 旋转后矩形点位置发生改变，需要还原
             p3 = min(p1[0], p2[0]), min(p1[1], p2[1])  # 左上
             p4 = max(p1[0], p2[0]), max(p1[1], p2[1])  # 右下
-            text = re.sub(r"\s+", "", pdf_word[4])
+            text = pdf_word[4]
             if not text:
                 continue
             words.append(Word((p3[0], p3[1], p4[0], p4[1]), text))
