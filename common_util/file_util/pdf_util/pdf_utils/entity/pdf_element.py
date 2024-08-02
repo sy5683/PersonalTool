@@ -29,8 +29,8 @@ class Cell(PdfElement):
         self.row = None
         self.col = None
 
-    def get_value(self) -> str:
-        return "".join([word.text for word in self.words])
+    def get_value(self, interval: str = '') -> str:
+        return interval.join([word.text for word in self.words])
 
 
 class Table(PdfElement):

@@ -14,7 +14,7 @@ class BOCReceiptType01(BOCReceiptType):
         if self.table.max_rows != 1 or self.table.max_cols != 1:
             return False
         if not re.search("国内支付业务[付收]款回单|客户[借贷]记回单|客户[付收]费回单|利息收入回单",
-                         self.table.get_row_values(0)[0]):
+                         self.table.get_cell(0, 0).get_value()):
             return False
         return True
 

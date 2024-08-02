@@ -18,7 +18,7 @@ class CEXIMReceiptType02(CEXIMReceiptType):
         """解析"""
         receipt = Receipt()
         receipt.date = TimeUtil.format_to_str(self._get_word(".*年.*月.*日"))  # 日期
-        receipt.payer_account_name = self._get_name(self.table.get_row_values(0)[0])  # 付款人户名
-        receipt.payer_account_number = self._get_account(self.table.get_row_values(0)[1])  # 付款人账号
+        receipt.payer_account_name = self._get_name(self.table.get_cell(0, 0).get_value())  # 付款人户名
+        receipt.payer_account_number = self._get_account(self.table.get_cell(0, 1).get_value())  # 付款人账号
         receipt.amount = self._get_amount(0, 2)  # 金额
         return receipt

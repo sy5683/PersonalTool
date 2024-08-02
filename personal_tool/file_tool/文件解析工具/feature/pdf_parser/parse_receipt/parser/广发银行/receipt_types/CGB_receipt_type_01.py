@@ -15,17 +15,18 @@ class CGBReceiptType01(CGBReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
-        receipt.date = TimeUtil.format_to_str(self.table.get_row_values(7)[1])  # 日期
+        receipt.date = TimeUtil.format_to_str(self.table.get_cell(7, 1).get_value())  # 日期
         name_row_values = self.table.get_row_values(0)
+        number_row_values = self.table.get_row_values(1)
         if name_row_values[0] == "付款人":
             receipt.payer_account_name = name_row_values[2]  # 付款人户名
-            receipt.payer_account_number = self.table.get_row_values(1)[1]  # 付款人账号
+            receipt.payer_account_number = number_row_values[1]  # 付款人账号
             receipt.payee_account_name = name_row_values[5]  # 收款人户名
-            receipt.payee_account_number = self.table.get_row_values(1)[3]  # 收款人账号
+            receipt.payee_account_number = number_row_values[3]  # 收款人账号
         elif name_row_values[0] == "收款人":
             receipt.payer_account_name = name_row_values[5]  # 付款人户名
-            receipt.payer_account_number = self.table.get_row_values(1)[3]  # 付款人账号
+            receipt.payer_account_number = number_row_values[3]  # 付款人账号
             receipt.payee_account_name = name_row_values[2]  # 收款人户名
-            receipt.payee_account_number = self.table.get_row_values(1)[1]  # 收款人账号
-        receipt.amount = NumberUtil.to_amount(self.table.get_row_values(4)[1])  # 金额
+            receipt.payee_account_number = number_row_values[1]  # 收款人账号
+        receipt.amount = NumberUtil.to_amount(self.table.get_cell(4, 1).get_value())  # 金额
         return receipt

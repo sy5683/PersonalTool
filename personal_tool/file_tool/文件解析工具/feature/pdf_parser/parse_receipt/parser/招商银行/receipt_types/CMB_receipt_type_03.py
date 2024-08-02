@@ -13,7 +13,7 @@ class CMBReceiptType03(CMBReceiptType):
         """判断是否为当前格式"""
         if self.table.max_rows not in [1, 2] or self.table.max_cols != 1:
             return False
-        if not re.search("入账回单", self.table.get_row_values(0)[0]):
+        if not re.search("入账回单", self.table.get_cell(0, 0).get_value()):
             return False
         return True
 

@@ -18,17 +18,18 @@ class CBHBReceiptType01(CBHBReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
-        receipt.date = TimeUtil.format_to_str(self.table.get_row_values(7)[3])  # 日期
+        receipt.date = TimeUtil.format_to_str(self.table.get_cell(7, 3).get_value())  # 日期
         account_row_values = self.table.get_row_values(1)
+        name_row_values = self.table.get_row_values(2)
         if re.search("付款方", account_row_values[0]):
-            receipt.payer_account_name = self.table.get_row_values(2)[1]  # 付款人户名
+            receipt.payer_account_name = name_row_values[1]  # 付款人户名
             receipt.payer_account_number = account_row_values[2]  # 付款人账号
-            receipt.payee_account_name = self.table.get_row_values(2)[3]  # 收款人户名
+            receipt.payee_account_name = name_row_values[3]  # 收款人户名
             receipt.payee_account_number = account_row_values[5]  # 收款人账号
         elif re.search("收款方", account_row_values[0]):
-            receipt.payer_account_name = self.table.get_row_values(2)[3]  # 付款人户名
+            receipt.payer_account_name = name_row_values[3]  # 付款人户名
             receipt.payer_account_number = account_row_values[5]  # 付款人账号
-            receipt.payee_account_name = self.table.get_row_values(2)[1]  # 收款人户名
+            receipt.payee_account_name = name_row_values[1]  # 收款人户名
             receipt.payee_account_number = account_row_values[2]  # 收款人账号
-        receipt.amount = NumberUtil.to_amount(self.table.get_row_values(5)[1])  # 金额
+        receipt.amount = NumberUtil.to_amount(self.table.get_cell(5, 1).get_value())  # 金额
         return receipt

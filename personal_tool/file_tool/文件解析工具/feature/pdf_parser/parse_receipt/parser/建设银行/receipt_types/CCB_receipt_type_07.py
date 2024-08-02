@@ -1,5 +1,3 @@
-import re
-
 from common_util.data_util.number_util.number_util import NumberUtil
 from common_util.data_util.time_util.time_util import TimeUtil
 from .CCB_receipt_type import CCBReceiptType
@@ -23,16 +21,17 @@ class CCBReceiptType07(CCBReceiptType):
         """解析"""
         receipt = Receipt()
         receipt.date = TimeUtil.format_to_str(self._get_word(".*年.*月.*日"))  # 日期
-        account_row_values = self.table.get_row_values(1)
-        if account_row_values[0] == "付款账号":
-            receipt.payer_account_name = self._get_name(self.table.get_row_values(2)[1])  # 付款人户名
-            receipt.payer_account_number = account_row_values[1]  # 付款人账号
-            receipt.payee_account_name = self._get_name(self.table.get_row_values(2)[3])  # 收款人户名
-            receipt.payee_account_number = account_row_values[3]  # 收款人账号
-        elif account_row_values[0] == "收款账号":
-            receipt.payer_account_name = self._get_name(self.table.get_row_values(2)[3])  # 付款人户名
-            receipt.payer_account_number = account_row_values[3]  # 付款人账号
-            receipt.payee_account_name = self._get_name(self.table.get_row_values(2)[1])  # 收款人户名
-            receipt.payee_account_number = account_row_values[1]  # 收款人账号
-        receipt.amount = NumberUtil.to_amount(self.table.get_row_values(5)[3])  # 金额
+        number_row_values = self.table.get_row_values(1)
+        name_row_values = self.table.get_row_values(2)
+        if number_row_values[0] == "付款账号":
+            receipt.payer_account_name = self._get_name(name_row_values[1])  # 付款人户名
+            receipt.payer_account_number = number_row_values[1]  # 付款人账号
+            receipt.payee_account_name = self._get_name(name_row_values[3])  # 收款人户名
+            receipt.payee_account_number = number_row_values[3]  # 收款人账号
+        elif number_row_values[0] == "收款账号":
+            receipt.payer_account_name = self._get_name(name_row_values[3])  # 付款人户名
+            receipt.payer_account_number = number_row_values[3]  # 付款人账号
+            receipt.payee_account_name = self._get_name(name_row_values[1])  # 收款人户名
+            receipt.payee_account_number = number_row_values[1]  # 收款人账号
+        receipt.amount = NumberUtil.to_amount(self.table.get_cell(5, 3).get_value())  # 金额
         return receipt
