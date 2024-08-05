@@ -20,19 +20,14 @@ class CCBReceiptType03(CCBReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
-        words = PdfUtil.merge_words(self.table.cells[0].words, 10)
-        payer_account_name_pattern = re.compile("付款人全称[:：]")
-        payer_account_number_pattern = re.compile("付款人账号[:：]")
-        payee_account_name_pattern = re.compile("征收机关名称[(（]委托方[)）][:：]")
-        amount_pattern = re.compile("小写[(（]合计[)）]金额[:：]")
-        for word in words:
-            receipt.date = TimeUtil.format_to_str(self._get_word("^转账日期[:：](.*?)$"))  # 日期
-            if payer_account_name_pattern.match(word.text):
-                receipt.payer_account_name = payer_account_name_pattern.sub("", word.text)  # 付款人户名
-            if payer_account_number_pattern.match(word.text):
-                receipt.payer_account_number = payer_account_number_pattern.sub("", word.text)  # 付款人账号
-            if payee_account_name_pattern.match(word.text):
-                receipt.payee_account_name = payee_account_name_pattern.sub("", word.text)  # 收款人户名
-            if amount_pattern.match(word.text):
-                receipt.amount = NumberUtil.to_amount(amount_pattern.sub("", word.text))  # 金额
+        # 中国银行这个格式的回单数据全在一个大的表格单元格中，重新加载其为word数据后使用word方法解析
+        self.words += PdfUtil.merge_words(self.table.cells[0].words, 10)
+        receipt.date = TimeUtil.format_to_str(self._get_word("^转账日期[:：](.*?)$"))  # 日期
+        receipt.receipt_number = self._get_word(r"^凭证字号[:：](.*?)$")  # 回单编号
+        receipt.serial_number = self._get_word("^缴款书交易流水号[:：](.*?)$")  # 流水号
+        receipt.payer_account_name = self._get_word("^付款人全称[:：](.*?)$")  # 付款人户名
+        receipt.payer_account_number = self._get_word("^付款人账号[:：](.*?)$")  # 付款人账号
+        receipt.payer_account_bank = self._get_word("^付款人开户银行[:：](.*?)$")  # 付款人开户银行
+        receipt.payee_account_name = self._get_word("^征收机关名称[(（]委托方[)）][:：](.*?)$")  # 收款人户名
+        receipt.amount = NumberUtil.to_amount(self._get_word("^小写[(（]合计[)）]金额[:：](.*?)$"))  # 金额
         return receipt

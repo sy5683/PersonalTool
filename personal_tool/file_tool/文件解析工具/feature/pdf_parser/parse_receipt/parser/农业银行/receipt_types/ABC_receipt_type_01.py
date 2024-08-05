@@ -1,3 +1,5 @@
+import re
+
 from common_util.data_util.number_util.number_util import NumberUtil
 from common_util.data_util.time_util.time_util import TimeUtil
 from .ABC_receipt_type import ABCReceiptType
@@ -15,23 +17,25 @@ class ABCReceiptType01(ABCReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
-        receipt.date = TimeUtil.format_to_str(self.table.get_cell(7, 1).get_value())  # 日期
-        number_row_values = self.table.get_row_values(1)
-        name_row_values = self.table.get_row_values(2)
-        bank_row_values = self.table.get_row_values(3)
-        if number_row_values[0] == "付款方":
-            receipt.payer_account_name = name_row_values[1]  # 付款人户名
-            receipt.payer_account_number = number_row_values[2]  # 付款人账号
-            receipt.payer_account_bank = bank_row_values[1]  # 付款人开户银行
-            receipt.payee_account_name = name_row_values[3]  # 收款人户名
-            receipt.payee_account_number = number_row_values[5]  # 收款人账号
-            receipt.payee_account_bank = bank_row_values[3]  # 收款人开户银行
-        elif number_row_values[0] == "收款方":
-            receipt.payer_account_name = name_row_values[3]  # 付款人户名
-            receipt.payer_account_number = number_row_values[5]  # 付款人账号
-            receipt.payer_account_bank = bank_row_values[3]  # 付款人开户银行
-            receipt.payee_account_name = name_row_values[1]  # 收款人户名
-            receipt.payee_account_number = number_row_values[2]  # 收款人账号
-            receipt.payee_account_bank = bank_row_values[1]  # 收款人开户银行
-        receipt.amount = NumberUtil.to_amount(self.table.get_cell(4, 1).get_value())  # 金额
+        receipt.date = TimeUtil.format_to_str(self._get_cell_relative("^交易时间$").get_value())  # 日期
+        receipt.receipt_number = re.findall(r"[a-zA-Z\d+]+", self.table.get_cell(0, 0).get_value())[0]  # 回单编号
+        receipt.serial_number = self._get_cell_relative("^凭证号$").get_value()  # 流水号
+        number_row_cells = self.table.get_row_cells(1)
+        name_row_cells = self.table.get_row_cells(2)
+        bank_row_cells = self.table.get_row_cells(3)
+        if number_row_cells[0].get_value() == "付款方":
+            receipt.payer_account_name = name_row_cells[1].get_value()  # 付款人户名
+            receipt.payer_account_number = number_row_cells[2].get_value()  # 付款人账号
+            receipt.payer_account_bank = bank_row_cells[1].get_value()  # 付款人开户银行
+            receipt.payee_account_name = name_row_cells[3].get_value()  # 收款人户名
+            receipt.payee_account_number = number_row_cells[5].get_value()  # 收款人账号
+            receipt.payee_account_bank = bank_row_cells[3].get_value()  # 收款人开户银行
+        elif number_row_cells[0].get_value() == "收款方":
+            receipt.payer_account_name = name_row_cells[3].get_value()  # 付款人户名
+            receipt.payer_account_number = number_row_cells[5].get_value()  # 付款人账号
+            receipt.payer_account_bank = bank_row_cells[3].get_value()  # 付款人开户银行
+            receipt.payee_account_name = name_row_cells[1].get_value()  # 收款人户名
+            receipt.payee_account_number = number_row_cells[2].get_value()  # 收款人账号
+            receipt.payee_account_bank = bank_row_cells[1].get_value()  # 收款人开户银行
+        receipt.amount = NumberUtil.to_amount(self._get_cell_relative("^金额[(（]小写[)）]$").get_value())  # 金额
         return receipt

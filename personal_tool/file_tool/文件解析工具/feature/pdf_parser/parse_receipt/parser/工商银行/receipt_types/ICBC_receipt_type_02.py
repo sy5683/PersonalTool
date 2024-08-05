@@ -17,10 +17,14 @@ class ICBCReceiptType01(ICBCReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
-        receipt.date = TimeUtil.format_to_str(self._get_word("^日期[:：](.*)$"))  # 日期
+        receipt.date = TimeUtil.format_to_str(self._get_word("^日期[:：](.*?)$"))  # 日期
+        receipt.receipt_number = self._get_word("^回单编号[:：](.*?)$")  # 回单编号
+        receipt.serial_number = self._get_word("^流水号[:：](.*?)$")  # 流水号
         receipt.payer_account_name = self._get_word("^付款人户名[:：](.*?)$")  # 付款人户名
         receipt.payer_account_number = self._get_word("^付款人[帐账]号[:：](.*?)$")  # 付款人账号
+        receipt.payer_account_bank = self._get_word("^付款人开户行[:：](.*?)$")  # 付款人开户银行
         receipt.payee_account_name = self._get_word("^收款人户名[:：](.*?)$")  # 收款人户名
         receipt.payee_account_number = self._get_word("^收款人[帐账]号[:：](.*?)$")  # 收款人账号
+        receipt.payee_account_bank = self._get_word("^收款人开户行[:：](.*?)$")  # 收款人开户银行
         receipt.amount = NumberUtil.to_amount(self._get_word("^小写[:：](.*?)$"))  # 金额
         return receipt

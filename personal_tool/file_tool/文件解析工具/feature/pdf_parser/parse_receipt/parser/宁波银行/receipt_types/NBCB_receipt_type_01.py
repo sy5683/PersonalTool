@@ -18,9 +18,9 @@ class NBCBReceiptType01(NBCBReceiptType):
         """解析"""
         receipt = Receipt()
         receipt.serial_number = self.table.get_cell(5, 3).get_value()  # 流水号
-        receipt.date = TimeUtil.format_to_str(self._get_word(".*年.*月.*日"))  # 日期
+        receipt.date = TimeUtil.format_to_str(self._get_word("^.*年.*月.*日$"))  # 日期
         business_type = self.table.get_cell(5, 1).get_value()  # 业务种类
-        # TODO 根据业务种类判断收付款类型
+        # TODO 根据业务种类判断收付款类型，判断逻辑待定
         # 备注信息
         remarks = self.table.get_cell(6, 1).get_value("\t").replace("：", ":")
         payer_account_name_pattern = re.compile("付款人户名[:：]")

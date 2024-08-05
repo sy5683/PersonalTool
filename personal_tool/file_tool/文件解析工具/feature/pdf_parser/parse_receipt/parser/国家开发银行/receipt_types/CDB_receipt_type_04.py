@@ -18,29 +18,15 @@ class CDBReceiptType03(CDBReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
-        date_pattern = re.compile("交易日期[:：]")
-        payer_account_name_pattern = re.compile("付款方名称[:：]")
-        payer_account_number_pattern = re.compile("付款方账号[:：]")
-        payer_account_bank_pattern = re.compile("付款方开户行[:：]")
-        payee_account_name_pattern = re.compile("收款方名称[:：]")
-        payee_account_number_pattern = re.compile("收款方账号[:：]")
-        payee_account_bank_pattern = re.compile("收款方开户行[:：]")
-        amount_pattern = re.compile("金额[(（]小写[)）][:：]")
-        for word in PdfUtil.merge_words(self.words, 50):
-            if date_pattern.match(word.text):
-                receipt.date = TimeUtil.format_to_str(date_pattern.sub("", word.text))  # 日期
-            if payer_account_name_pattern.match(word.text):
-                receipt.payer_account_name = payer_account_name_pattern.sub("", word.text)  # 付款人户名
-            if payer_account_number_pattern.match(word.text):
-                receipt.payer_account_number = payer_account_number_pattern.sub("", word.text)  # 付款人账号
-            if payer_account_bank_pattern.match(word.text):
-                receipt.payer_account_bank = payer_account_bank_pattern.sub("", word.text)  # 付款人开户银行
-            if payee_account_name_pattern.match(word.text):
-                receipt.payee_account_name = payee_account_name_pattern.sub("", word.text)  # 收款人户名
-            if payee_account_number_pattern.match(word.text):
-                receipt.payee_account_number = payee_account_number_pattern.sub("", word.text)  # 收款人账号
-            if payee_account_bank_pattern.match(word.text):
-                receipt.payee_account_bank = payee_account_bank_pattern.sub("", word.text)  # 收款人开户银行
-            if amount_pattern.match(word.text):
-                receipt.amount = NumberUtil.to_amount(amount_pattern.sub("", word.text))  # 金额
+        # 国开行这个格式的回单间隔稍微大一点，重新合并word数据后再解析
+        self.words = PdfUtil.merge_words(self.words, 50)
+        receipt.date = TimeUtil.format_to_str(self._get_word("^交易日期[:：](.*?)$"))  # 日期
+        receipt.serial_number = self._get_word("^电子回单号[(（]流水号[)）][:：](.*?)$")  # 流水号
+        receipt.payer_account_name = self._get_word("^付款方名称[:：](.*?)$")  # 付款人户名
+        receipt.payer_account_number = self._get_word("^付款方账号[:：](.*?)$")  # 付款人账号
+        receipt.payer_account_bank = self._get_word("^付款方开户行[:：](.*?)$")  # 付款人开户银行
+        receipt.payee_account_name = self._get_word("^收款方名称[:：](.*?)$")  # 收款人户名
+        receipt.payee_account_number = self._get_word("^收款方账号[:：](.*?)$")  # 收款人账号
+        receipt.payee_account_bank = self._get_word("^收款方开户行[:：](.*?)$")  # 收款人开户银行
+        receipt.amount = NumberUtil.to_amount(self._get_word("^金额[(（]小写[)）][:：](.*?)$"))  # 金额
         return receipt

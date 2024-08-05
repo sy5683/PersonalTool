@@ -52,6 +52,7 @@ class Table(PdfElement):
             if row != cell.row:
                 continue
             return cell
+        raise IndexError(f"未找到指定坐标的表格单元格: {row, col}")
 
     def get_col_cells(self, col: int) -> typing.List[Cell]:
         return [cell for cell in self.cells if cell.col == col]

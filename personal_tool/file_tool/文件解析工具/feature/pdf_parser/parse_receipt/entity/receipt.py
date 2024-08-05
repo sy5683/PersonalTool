@@ -1,8 +1,9 @@
 class Receipt:
 
     def __init__(self):
-        self.serial_number = None  # 流水号
         self.date = None  # 日期
+        self.receipt_number = None  # 回单编号
+        self.serial_number = None  # 流水号
         self.payer_account_name = None  # 付款人户名
         self.payer_account_number = None  # 付款人账号
         self.payer_account_bank = None  # 付款人开户银行
