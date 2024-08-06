@@ -20,18 +20,13 @@ class CMBReceiptType01(CMBReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
-        words = PdfUtil.merge_words(self.table.cells[0].words, 10)
-        date_pattern = re.compile("日期[:：]")
-        payer_account_name_pattern = re.compile("户名[:：]")
-        payer_account_number_pattern = re.compile("账号[:：]")
-        amount_pattern = re.compile("扣收金额[(（]小写[)）][:：]")
-        for word in words:
-            if date_pattern.match(word.text):
-                receipt.date = TimeUtil.format_to_str(date_pattern.sub("", word.text))  # 日期
-            if payer_account_name_pattern.match(word.text):
-                receipt.payer_account_name = payer_account_name_pattern.sub("", word.text)  # 付款人户名
-            if payer_account_number_pattern.match(word.text):
-                receipt.payer_account_number = payer_account_number_pattern.sub("", word.text)  # 付款人账号
-            if amount_pattern.match(word.text):
-                receipt.amount = NumberUtil.to_amount(amount_pattern.sub("", word.text))  # 金额
+        # 招商银行数据全在一个大的表格单元格中，重新加载其为word数据后使用word方法解析
+        self.words += PdfUtil.merge_words(self.table.cells[0].words, 10)
+        receipt.date = TimeUtil.format_to_str(self._get_word("^日期[:：](.*?)$"))  # 日期
+        receipt.receipt_number = self._get_word(r"回单编号[:：](.*?)$")  # 回单编号
+        receipt.serial_number = self._get_word(r"^[a-zA-Z\d+]+$")  # 流水号
+        receipt.payer_account_name = self._get_word("^户名[:：](.*?)$")  # 付款人户名
+        receipt.payer_account_number = self._get_word("^账号[:：](.*?)$")  # 付款人账号
+        receipt.payer_account_bank = self._get_word("^开户行[:：](.*?)$")  # 付款人开户银行
+        receipt.amount = NumberUtil.to_amount(self._get_word("^扣收金额[(（]小写[)）][:：](.*?)$"))  # 金额
         return receipt

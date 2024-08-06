@@ -1,3 +1,5 @@
+import re
+
 from common_util.data_util.number_util.number_util import NumberUtil
 from common_util.data_util.time_util.time_util import TimeUtil
 from .ICBC_receipt_type import ICBCReceiptType
@@ -21,14 +23,14 @@ class ICBCReceiptType01(ICBCReceiptType):
         name_row_cells = self.table.get_row_cells(0)
         number_row_cells = self.table.get_row_cells(1)
         bank_row_cells = self.table.get_row_cells(2)
-        if name_row_cells[0].get_value() == "付款人":
+        if re.search("付款人", name_row_cells[0].get_value()):
             receipt.payer_account_name = name_row_cells[2].get_value()  # 付款人户名
             receipt.payer_account_number = number_row_cells[1].get_value()  # 付款人账号
             receipt.payer_account_bank = bank_row_cells[1].get_value()  # 付款人开户银行
             receipt.payee_account_name = name_row_cells[5].get_value()  # 收款人户名
             receipt.payee_account_number = number_row_cells[3].get_value()  # 收款人账号
             receipt.payee_account_bank = bank_row_cells[3].get_value()  # 收款人开户银行
-        elif name_row_cells[0].get_value() == "收款人":
+        elif re.search("收款人", name_row_cells[0].get_value()):
             receipt.payer_account_name = name_row_cells[5].get_value()  # 付款人户名
             receipt.payer_account_number = number_row_cells[3].get_value()  # 付款人账号
             receipt.payer_account_bank = bank_row_cells[3].get_value()  # 付款人开户银行

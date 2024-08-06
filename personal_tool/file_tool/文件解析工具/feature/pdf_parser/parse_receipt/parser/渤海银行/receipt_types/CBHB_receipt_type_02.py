@@ -15,8 +15,10 @@ class CBHBReceiptType02(CBHBReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
-        receipt.date = TimeUtil.format_to_str(self.table.get_cell(1, 1).get_value())  # 日期
-        receipt.payer_account_name = self.table.get_cell(2, 1).get_value()  # 付款人户名
-        receipt.payer_account_number = self.table.get_cell(2, 3).get_value()  # 付款人账号
-        receipt.amount = NumberUtil.to_amount(self.table.get_cell(5, 3).get_value())  # 金额
+        receipt.date = TimeUtil.format_to_str(self._get_cell_relative("^交易日期[:：]$").get_value())  # 日期
+        receipt.serial_number = self._get_cell_relative(r"^渠道流水号[:：]$").get_value()  # 流水号
+        receipt.payer_account_name = self._get_cell_relative("^付款人名称[:：]$").get_value()  # 付款人户名
+        receipt.payer_account_number = self._get_cell_relative("^付款人账号[:：]$").get_value()  # 付款人账号
+        receipt.payer_account_bank = self._get_cell_relative("^付款人开户行[:：]$").get_value()  # 付款人开户银行
+        receipt.amount = NumberUtil.to_amount(self._get_cell_relative("^小写金额[:：]$").get_value())  # 金额
         return receipt
