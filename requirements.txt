@@ -15,7 +15,7 @@ psutil
 py7zr
 PyAutoGUI
 pygame
-PyMuPDF
+PyMuPDF==1.18.19
 PyMySQL
 pyperclip
 pypinyin
