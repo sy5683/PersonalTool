@@ -89,7 +89,7 @@ class ParsePdf:
         #         word.update_rect((word.rect[0], word.rect[1] - height, word.rect[2], word.rect[3] - height))
         #     while 0 > word.rect[1]:
         #         word.update_rect((word.rect[0], word.rect[1] + height, word.rect[2], word.rect[3] + height))
-        # PyMuPDF==1.18.13的文字坐标不会根据pdf的切割重新计算，因此我们只需要将超出页面部分的文字清掉
+        # PyMuPDF==1.18.13的文字坐标不会根据pdf的切割重新计算，因此我们只需要将超出页面部分的文字清掉即可
         return [word for word in words if 0 <= word.rect[0] <= width and 0 <= word.rect[1] <= height]
 
     @classmethod
