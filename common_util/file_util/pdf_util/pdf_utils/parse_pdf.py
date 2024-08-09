@@ -156,7 +156,7 @@ class ParsePdf:
         # 使用漫水填充算法，将周围变为黑色，这样可以去掉单独的线条
         cv2.floodFill(image, None, (1, 1), (0, 0, 0), flags=cv2.FLOODFILL_FIXED_RANGE)
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
-        image = cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel, iterations=2)
+        image = cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel, iterations=1)
         return image
 
     @classmethod
