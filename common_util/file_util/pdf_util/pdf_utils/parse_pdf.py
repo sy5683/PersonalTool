@@ -79,21 +79,18 @@ class ParsePdf:
     def _format_out_words(words: typing.List[Word], table_image: numpy.ndarray) -> typing.List[Word]:
         """处理超出页面大小的文字坐标"""
         height, width = table_image.shape[:2]
-        new_word = []
-        for word in words:
-            if not (0 < word.rect[0] < width and 0 < word.rect[1] < width):
-                continue
-            # # PyMuPDF==1.24.7的文字坐标会根据pdf的切割重新计算，因此我们这边也要重新处理
-            # while width < word.rect[0]:
-            #     word.update_rect((word.rect[0] - width, word.rect[1], word.rect[2] - width, word.rect[3]))
-            # while 0 > word.rect[0]:
-            #     word.update_rect((word.rect[0] + width, word.rect[1], word.rect[2] + width, word.rect[3]))
-            # while height < word.rect[1]:
-            #     word.update_rect((word.rect[0], word.rect[1] - height, word.rect[2], word.rect[3] - height))
-            # while 0 > word.rect[1]:
-            #     word.update_rect((word.rect[0], word.rect[1] + height, word.rect[2], word.rect[3] + height))
-            new_word.append(word)
-        return new_word
+        # PyMuPDF==1.24.7的文字坐标会根据pdf的切割重新计算，因此我们这边也要重新处理
+        # for word in words:
+        #     while width < word.rect[0]:
+        #         word.update_rect((word.rect[0] - width, word.rect[1], word.rect[2] - width, word.rect[3]))
+        #     while 0 > word.rect[0]:
+        #         word.update_rect((word.rect[0] + width, word.rect[1], word.rect[2] + width, word.rect[3]))
+        #     while height < word.rect[1]:
+        #         word.update_rect((word.rect[0], word.rect[1] - height, word.rect[2], word.rect[3] - height))
+        #     while 0 > word.rect[1]:
+        #         word.update_rect((word.rect[0], word.rect[1] + height, word.rect[2], word.rect[3] + height))
+        # PyMuPDF==1.18.13的文字坐标不会根据pdf的切割重新计算，因此我们只需要将超出页面部分的文字清掉
+        return [word for word in words if 0 <= word.rect[0] <= width and 0 <= word.rect[1] <= height]
 
     @classmethod
     def _get_table_cells(cls, table_image: numpy.ndarray, words: typing.List[Word], threshold: int = 3):
