@@ -23,6 +23,11 @@ class ImageUtilTestCase(TestBase):
         x, y = ImageUtil.get_image_pos(self.template_image_path, handle=handle)
         print(x, y)
 
+    def test_rotate_image(self):
+        image = ImageUtil.read_opencv_image(self.image_path)
+        rotate_image = ImageUtil.rotate_image(image, 45)
+        ImageUtil.save_opencv_image(rotate_image, self.save_image_path)
+
     def test_screenshot(self):
         image_paths = ImageUtil.screenshot(self.save_image_path)
         self.assertNotEqual(image_paths, None)

@@ -43,7 +43,7 @@ class ImageUtil:
         return ProcessOpenCVImage.remove_border(image, color)
 
     @staticmethod
-    def rotate_image(image: numpy.ndarray, angle: int, times: int) -> numpy.ndarray:
+    def rotate_image(image: numpy.ndarray, angle: int, times: int = 1) -> numpy.ndarray:
         """图片旋转"""
         return ProcessOpenCVImage.rotate_image(image, angle, times)
 
