@@ -2,6 +2,7 @@ import json
 import logging
 import re
 import tempfile
+from json import JSONDecodeError
 
 import requests
 
@@ -29,6 +30,15 @@ class RequestNet:
             return response
 
     @staticmethod
-    def response_to_result(response: requests.Response) -> dict:
+    def response_to_result(response: requests.Response, *keys) -> dict:
         """将requests请求返回的response转为可以阅读的结构化字典result"""
-        return json.loads(response.text)
+        try:
+            result = json.loads(response.text)
+        except JSONDecodeError:
+            raise ValueError(f"接口调用返回数据不为格式化字典数据: {response.text}")
+        for key in keys:
+            try:
+                result = result[key]
+            except (KeyError, TypeError):
+                raise KeyError(f"接口数据异常，无法定位指定键【{key}】: {result}")
+        return result
