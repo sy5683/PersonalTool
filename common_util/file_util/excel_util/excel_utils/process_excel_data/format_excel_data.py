@@ -14,13 +14,11 @@ class FormatExcelData:
         然后通过计算，将一串数字显示为目标日期
         因此在取的时候，需要对其进行转换
         """
-        date = str(date)
-        if isinstance(date, str):
-            date = cls.format_int_data(date)
-            if date.isdigit():
-                date = int(date)
-        if isinstance(date, int):
-            date = cls._format_excel_date_number(date)
+        # 1) 去除日期数据的小数点数据
+        date = cls.format_int_data(str(date))
+        # 2) 格式化完成后如果数据仍为纯数字，则说明日期为excel特殊存储的日期
+        if date.isdigit():
+            date = cls._format_excel_date_number(int(date))
         return date
 
     @staticmethod
@@ -43,6 +41,7 @@ class FormatExcelData:
         # noinspection PyBroadException
         try:
             stamp = xlrd.xldate_as_datetime(date_number, 0)
+            # 为了统一格式方便后续处理，这里将日期格式化为年月日时分秒格式的字符串
             return stamp.strftime("%Y-%m-%d %H:%M:%S")
         except OverflowError:
             return str(date_number)  # 如果数据异常无法进行转换，则返回原样
