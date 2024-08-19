@@ -25,36 +25,38 @@ class MatchImage:
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         for _ in range(wait_seconds):
             # 2) 获取指定句柄图片或桌面图片
-            window_image = cls._get_window_image(**kwargs)
-            window_image = cv2.cvtColor(window_image, cv2.COLOR_BGR2RGB)
-            # 3) 匹配图片获取坐标
-            # 使用标准相关系数匹配,1表示完美匹配,-1表示糟糕的匹配,0表示没有任何相关性
-            result = cv2.matchTemplate(window_image, image, cv2.TM_CCOEFF_NORMED)
-            # 使用函数minMaxLoc,确定匹配结果矩阵的最大值和最小值(val)，以及它们的位置(loc)
-            min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
-            if max_val > similarity:
-                x, y = max_loc[:2]
-                # 根据模板图片长宽计算出中心坐标
-                height, width = image.shape[:2]
-                return x + width // 2, y + height // 2
+            for window_image in cls._get_window_images(**kwargs):
+                window_image = cv2.cvtColor(window_image, cv2.COLOR_BGR2RGB)
+                # 3) 匹配图片获取坐标
+                # 使用标准相关系数匹配,1表示完美匹配,-1表示糟糕的匹配,0表示没有任何相关性
+                result = cv2.matchTemplate(window_image, image, cv2.TM_CCOEFF_NORMED)
+                # 使用函数minMaxLoc,确定匹配结果矩阵的最大值和最小值(val)，以及它们的位置(loc)
+                min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+                if max_val > similarity:
+                    x, y = max_loc[:2]
+                    # 根据模板图片长宽计算出中心坐标
+                    height, width = image.shape[:2]
+                    return x + width // 2, y + height // 2
             time.sleep(1)
         raise Exception(f"无法匹配到模板: {name}")
 
     @classmethod
-    def _get_window_image(cls, **kwargs) -> numpy.ndarray:
+    def _get_window_images(cls, **kwargs) -> typing.List[numpy.ndarray]:
         """获取窗口图片"""
         handle = kwargs.get("handle")
         cut_item = kwargs.get("cut_item", ((0, 0), (1, 1)))
+        images = []
         # 1) 获取桌面图片
-        image = Screenshot.get_screenshot_images()[0]  # TODO 多屏幕时需要确认屏幕选择逻辑，这里暂时选择默认屏幕
-        # 2) 如果需要获取窗口图片，则获取窗口坐标，再从桌面图片中截取
-        if handle:
-            left, top, right, bottom = cls.__get_window_rect(handle)
-            image = image[top:bottom, left:right]
-        # 3) 有时为了出现多个定位时的准确度，需要对图片进行裁剪
-        if cut_item != ((0, 0), (1, 1)):
-            image = cls.__cut_image(image, cut_item)
-        return image
+        for image in Screenshot.get_screenshot_images():
+            # 2) 如果需要获取窗口图片，则获取窗口坐标，再从桌面图片中截取
+            if handle:
+                left, top, right, bottom = cls.__get_window_rect(handle)
+                image = image[top:bottom, left:right]
+            # 3) 有时为了出现多个定位时的准确度，需要对图片进行裁剪
+            if cut_item != ((0, 0), (1, 1)):
+                image = cls.__cut_image(image, cut_item)
+            images.append(image)
+        return images
 
     @staticmethod
     def __cut_image(image: numpy.ndarray,
