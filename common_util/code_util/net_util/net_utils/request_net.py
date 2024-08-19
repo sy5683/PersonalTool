@@ -1,6 +1,5 @@
 import json
 import logging
-import re
 import tempfile
 from json import JSONDecodeError
 
@@ -13,7 +12,7 @@ class RequestNet:
     def download(cls, download_url: str, download_path: str, suffix: str, **kwargs) -> str:
         """下载文件"""
         response = cls.request("GET", download_url, **kwargs)
-        download_path = str(download_path) or tempfile.mktemp(".%s" % re.sub(r"^\.+", "", suffix))
+        download_path = tempfile.mktemp(".%s" % suffix.strip(".")) if download_path is None else str(download_path)
         with open(download_path, "wb") as file:
             file.write(response.content)
         return download_path
