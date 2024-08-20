@@ -10,8 +10,8 @@ class FCReceiptParser(ReceiptParser):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        # if self._judge_images("FC_image_01.png", different=0.3):
-        #     return False
+        if self._judge_images(0.3):
+            return True
         return False
 
     def parse(self):
