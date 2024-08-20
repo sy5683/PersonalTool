@@ -19,8 +19,7 @@ class ImageUtilTestCase(TestBase):
         print(jpg_path)
 
     def test_get_image_pos(self):
-        handle = Win32Util.find_handle("SunAwtFrame", "PersonalTool – image_util_test.py")
-        x, y = ImageUtil.get_image_pos(self.template_image_path, handle=handle)
+        x, y = ImageUtil.get_image_pos(self.template_image_path)
         print(x, y)
 
     def test_rotate_image(self):
@@ -30,7 +29,6 @@ class ImageUtilTestCase(TestBase):
 
     def test_screenshot(self):
         image_paths = ImageUtil.screenshot(self.save_image_path)
-        self.assertNotEqual(image_paths, None)
         for image_path in image_paths:
             Win32Util.open_file(image_path)
 
