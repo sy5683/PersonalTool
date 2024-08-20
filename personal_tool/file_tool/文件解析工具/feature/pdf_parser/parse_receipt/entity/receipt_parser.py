@@ -68,11 +68,11 @@ class ReceiptParser(PdfParserBase, metaclass=abc.ABCMeta):
         for index, image in enumerate(PdfUtil.get_pdf_images(self.receipt_path)):
             if image is None:
                 continue
-            # ImageUtil.save_opencv_image(image, f"E:\\Download\\{index}.png")
             if len(image.shape) == 2:
                 image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
             if image.shape[2] == 4:
                 image = cv2.cvtColor(image, cv2.COLOR_RGBA2BGR)
+            # ImageUtil.save_opencv_image(image, f"D:\\{index}.png")
             for judge_image in judge_images:
                 if self._compare_image(image, judge_image) < different:
                     return True

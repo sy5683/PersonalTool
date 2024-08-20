@@ -20,7 +20,7 @@ class CCBReceiptType03(CCBReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
-        # 中国银行这个格式的回单数据全在一个大的表格单元格中，重新加载其为word数据后使用word方法解析
+        # 建设银行这个格式的回单数据全在一个大的表格单元格中，重新加载其为word数据后使用word方法解析
         self.words += PdfUtil.merge_words(self.table.cells[0].words, 10)
         receipt.date = TimeUtil.format_to_str(self._get_word("^转账日期[:：](.*?)$"))  # 日期
         receipt.receipt_number = self._get_word(r"^凭证字号[:：](.*?)$")  # 回单编号
