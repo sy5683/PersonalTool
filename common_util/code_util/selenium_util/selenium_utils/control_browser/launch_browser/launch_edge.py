@@ -74,8 +74,8 @@ class LaunchEdge(LaunchBase):
         service = IeService(executable_path=driver_path)
         return webdriver.Ie(options=options, service=service)
 
-    @staticmethod
-    def _get_edge_driver(user_data_dir: str = None) -> WebDriver:
+    @classmethod
+    def _get_edge_driver(cls, user_data_dir: str = None) -> WebDriver:
         """获取edge_driver"""
         # 1.1) 获取Edge浏览器设置
         options = webdriver.EdgeOptions()
@@ -103,9 +103,7 @@ class LaunchEdge(LaunchBase):
         if user_data_dir and os.path.exists(user_data_dir):
             options.add_argument(f"--user-data-dir={user_data_dir}")
         # 2) 启动Edge浏览器
-        driver_path = DownloadDriver.get_edge_driver_path()
-        service = EdgeService(executable_path=driver_path)
-        return webdriver.Edge(options=options, service=service)
+        return cls.__launch_edge_driver(options)
 
     @staticmethod
     def _get_edge_path() -> str:
@@ -142,3 +140,11 @@ class LaunchEdge(LaunchBase):
         if os.path.exists(user_data_path):
             return user_data_path
         return None
+
+    @staticmethod
+    def __launch_edge_driver(options: webdriver.EdgeOptions) -> WebDriver:
+        """启动Edge浏览器driver"""
+        driver_path = DownloadDriver.get_edge_driver_path()
+        service = EdgeService(executable_path=driver_path)
+        return webdriver.Edge(options=options, service=service)
+
