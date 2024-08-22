@@ -70,9 +70,7 @@ class LaunchEdge(LaunchBase):
         options.attach_to_edge_chrome = True
         options.edge_executable_path = cls._get_edge_path()
         # 2) 启动IE浏览器
-        driver_path = DownloadDriver.get_ie_driver_path()
-        service = IeService(executable_path=driver_path)
-        return webdriver.Ie(options=options, service=service)
+        return cls.__launch_ie_driver(options)
 
     @classmethod
     def _get_edge_driver(cls, user_data_dir: str = None) -> WebDriver:
@@ -148,3 +146,9 @@ class LaunchEdge(LaunchBase):
         service = EdgeService(executable_path=driver_path)
         return webdriver.Edge(options=options, service=service)
 
+    @staticmethod
+    def __launch_ie_driver(options: webdriver.IeOptions) -> WebDriver:
+        """启动IE浏览器driver"""
+        driver_path = DownloadDriver.get_ie_driver_path()
+        service = IeService(executable_path=driver_path)
+        return webdriver.Ie(options=options, service=service)
