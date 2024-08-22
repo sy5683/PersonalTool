@@ -75,10 +75,10 @@ class SeleniumUtil:
         """debug启动谷歌浏览器"""
         LaunchChrome.launch_browser_debug(debug_port)
 
-    @classmethod
-    def open_url(cls, url: str, **kwargs):
+    @staticmethod
+    def open_url(url: str, **kwargs):
         """打开url"""
-        cls.get_driver(**kwargs).get(url)
+        ControlBrowser.open_url(url, **kwargs)
 
     @staticmethod
     def select(key: typing.Union[str, WebElement], value: typing.Union[int, str], **kwargs):

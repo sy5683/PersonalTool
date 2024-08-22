@@ -1,3 +1,4 @@
+import logging
 import typing
 
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -13,14 +14,24 @@ from ..selenium_config import SeleniumConfig
 class ControlBrowser:
 
     @classmethod
+    def close_browser(cls, **kwargs):
+        """关闭浏览器"""
+        cls._get_launch_class().close_browser(**kwargs)
+
+    @classmethod
     def get_driver(cls, **kwargs) -> WebDriver:
         """获取driver"""
         return cls._get_launch_class().get_driver(**kwargs)
 
     @classmethod
-    def close_browser(cls, **kwargs):
-        """关闭浏览器"""
-        cls._get_launch_class().close_browser(**kwargs)
+    def open_url(cls, url: str, **kwargs):
+        """打开url"""
+        for _ in range(3):
+            try:
+                cls.get_driver(**kwargs).get(url)
+            except OSError:
+                # selenium驱动升级会导致driver失效，会报错OSError
+                logging.warning("selenium启动异常，重新启动")
 
     @staticmethod
     def _get_launch_class() -> typing.Type[LaunchBase]:
