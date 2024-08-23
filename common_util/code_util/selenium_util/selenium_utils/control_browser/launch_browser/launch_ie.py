@@ -56,8 +56,8 @@ class LaunchIe(LaunchBase):
             __set_regedit_value(f"Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\{each}",
                                 "2500", 3)
 
-    @staticmethod
-    def _launch_ie(**kwargs) -> WebDriver:
+    @classmethod
+    def _launch_ie(cls, **kwargs) -> WebDriver:
         """启动IE浏览器"""
         logging.info("启动IE浏览器")
         # 2.1) 获取IE浏览器设置
@@ -69,6 +69,11 @@ class LaunchIe(LaunchBase):
         # 2.4) 设置忽略私密链接警告，但IE驱动程序不允许绕过不安全(自签名)SSL证书，因此这个方法相当于无效
         # options.set_capability("acceptInsecureCerts", True)
         # 3) 启动IE浏览器
+        return cls.__launch_ie_driver(options, **kwargs)
+
+    @staticmethod
+    def __launch_ie_driver(options: webdriver.IeOptions, **kwargs) -> WebDriver:
+        """启动IE浏览器driver"""
         driver_path = kwargs.get("driver_path", DownloadDriver.get_ie_driver_path())
         service = Service(executable_path=driver_path)
         return webdriver.Ie(options=options, service=service)
