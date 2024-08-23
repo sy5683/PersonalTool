@@ -100,10 +100,10 @@ class LaunchChrome(LaunchBase):
             # 1.1) 获取谷歌浏览器用户缓存路径
             user_data_dir = cls._get_chrome_user_data_path()
             # 1.2) 获取driver
-            driver = cls._get_chrome_driver(user_data_dir)
+            driver = cls._get_chrome_driver(user_data_dir, **kwargs)
         except (AssertionError, common.InvalidArgumentException, common.SessionNotCreatedException):
             # 2) 重新获取driver，不加载user_data_dir
-            driver = cls._get_chrome_driver()
+            driver = cls._get_chrome_driver(**kwargs)
         # 3.1) 设置默认加载超时时间
         driver.set_page_load_timeout(SeleniumConfig.wait_seconds)
         # 3.2) 启动后设置浏览器最前端
@@ -111,7 +111,7 @@ class LaunchChrome(LaunchBase):
         return driver
 
     @classmethod
-    def _take_over_chrome(cls, debug_port: int) -> WebDriver:
+    def _take_over_chrome(cls, debug_port: int, **kwargs) -> WebDriver:
         """接管谷歌浏览器"""
         assert cls._netstat_debug_port_running(debug_port), f"当前端口并未启动，无法接管谷歌浏览器: {debug_port}"
         logging.info(f"接管已debug运行的谷歌浏览器，端口: {debug_port}")
@@ -120,7 +120,7 @@ class LaunchChrome(LaunchBase):
         # 1.2) 添加debug地址
         options.debugger_address = f"127.0.0.1:{debug_port}"  # 地址为本地，只需要指定端口
         # 2) 接管谷歌浏览器
-        driver = cls.__launch_chrome_driver(options)
+        driver = cls.__launch_chrome_driver(options, **kwargs)
         # 3.1) 设置默认加载超时时间
         driver.set_page_load_timeout(SeleniumConfig.wait_seconds)
         # 3.2) 启动后设置浏览器最前端
@@ -130,7 +130,7 @@ class LaunchChrome(LaunchBase):
         return driver
 
     @classmethod
-    def _get_chrome_driver(cls, user_data_dir: str = None) -> WebDriver:
+    def _get_chrome_driver(cls, user_data_dir: str = None, **kwargs) -> WebDriver:
         """获取chrome_driver"""
         # 1.1) 获取谷歌浏览器设置
         options = webdriver.ChromeOptions()
@@ -165,7 +165,7 @@ class LaunchChrome(LaunchBase):
         if user_data_dir and os.path.exists(user_data_dir):
             options.add_argument(f"--user-data-dir={user_data_dir}")
         # 2) 启动谷歌浏览器
-        return cls.__launch_chrome_driver(options)
+        return cls.__launch_chrome_driver(options, **kwargs)
 
     @staticmethod
     def _get_chrome_path() -> str:
@@ -229,8 +229,8 @@ class LaunchChrome(LaunchBase):
         return debug_port
 
     @staticmethod
-    def __launch_chrome_driver(options: webdriver.ChromeOptions) -> WebDriver:
+    def __launch_chrome_driver(options: webdriver.ChromeOptions, **kwargs) -> WebDriver:
         """启动谷歌浏览器driver"""
-        driver_path = DownloadDriver.get_chrome_driver_path()
+        driver_path = kwargs.get("driver_path", DownloadDriver.get_chrome_driver_path())
         service = Service(executable_path=driver_path)
         return webdriver.Chrome(options=options, service=service)

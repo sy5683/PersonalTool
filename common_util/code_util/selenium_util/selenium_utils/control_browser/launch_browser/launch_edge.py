@@ -25,7 +25,7 @@ class LaunchEdge(LaunchBase):
         """获取driver"""
         if cls._driver is None:
             # 1) 启动Edge浏览器
-            cls._driver = cls._launch_edge()
+            cls._driver = cls._launch_edge(**kwargs)
             # 2.1) 设置默认加载超时时间
             cls._driver.set_page_load_timeout(SeleniumConfig.wait_seconds)
             # 2.2) 启动后设置浏览器最前端
@@ -43,21 +43,21 @@ class LaunchEdge(LaunchBase):
                 cls._driver = None
 
     @classmethod
-    def _launch_edge(cls) -> WebDriver:
+    def _launch_edge(cls, **kwargs) -> WebDriver:
         """启动Edge浏览器"""
         logging.info("启动Edge浏览器")
         try:
             # 1.1) 获取Edge浏览器用户缓存路径
             user_data_dir = cls._get_edge_user_data_path()
             # 1.2) 获取driver
-            driver = cls._get_edge_driver(user_data_dir=user_data_dir)
+            driver = cls._get_edge_driver(user_data_dir=user_data_dir, **kwargs)
         except common.InvalidArgumentException:
             # 1.3) 重新获取driver，不加载user_data_dir
-            driver = cls._get_edge_driver()
+            driver = cls._get_edge_driver(**kwargs)
         return driver
 
     @classmethod
-    def _launch_edge_with_ie(cls) -> WebDriver:
+    def _launch_edge_with_ie(cls, **kwargs) -> WebDriver:
         """ie模式启动Edge浏览器"""
         logging.info("ie模式启动Edge浏览器")
         # 1.1) 获取IE浏览器设置
@@ -70,10 +70,10 @@ class LaunchEdge(LaunchBase):
         options.attach_to_edge_chrome = True
         options.edge_executable_path = cls._get_edge_path()
         # 2) 启动IE浏览器
-        return cls.__launch_ie_driver(options)
+        return cls.__launch_ie_driver(options, **kwargs)
 
     @classmethod
-    def _get_edge_driver(cls, user_data_dir: str = None) -> WebDriver:
+    def _get_edge_driver(cls, user_data_dir: str = None, **kwargs) -> WebDriver:
         """获取edge_driver"""
         # 1.1) 获取Edge浏览器设置
         options = webdriver.EdgeOptions()
@@ -101,7 +101,7 @@ class LaunchEdge(LaunchBase):
         if user_data_dir and os.path.exists(user_data_dir):
             options.add_argument(f"--user-data-dir={user_data_dir}")
         # 2) 启动Edge浏览器
-        return cls.__launch_edge_driver(options)
+        return cls.__launch_edge_driver(options, **kwargs)
 
     @staticmethod
     def _get_edge_path() -> str:
@@ -140,15 +140,15 @@ class LaunchEdge(LaunchBase):
         return None
 
     @staticmethod
-    def __launch_edge_driver(options: webdriver.EdgeOptions) -> WebDriver:
+    def __launch_edge_driver(options: webdriver.EdgeOptions, **kwargs) -> WebDriver:
         """启动Edge浏览器driver"""
-        driver_path = DownloadDriver.get_edge_driver_path()
+        driver_path = kwargs.get("driver_path", DownloadDriver.get_edge_driver_path())
         service = EdgeService(executable_path=driver_path)
         return webdriver.Edge(options=options, service=service)
 
     @staticmethod
-    def __launch_ie_driver(options: webdriver.IeOptions) -> WebDriver:
+    def __launch_ie_driver(options: webdriver.IeOptions, **kwargs) -> WebDriver:
         """启动IE浏览器driver"""
-        driver_path = DownloadDriver.get_ie_driver_path()
+        driver_path = kwargs.get("driver_path", DownloadDriver.get_ie_driver_path())
         service = IeService(executable_path=driver_path)
         return webdriver.Ie(options=options, service=service)

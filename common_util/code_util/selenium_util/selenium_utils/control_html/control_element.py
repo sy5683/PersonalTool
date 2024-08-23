@@ -2,6 +2,7 @@ import logging
 import time
 import traceback
 import typing
+from enum import Enum
 
 from selenium import webdriver, common
 from selenium.webdriver import ActionChains, Keys
