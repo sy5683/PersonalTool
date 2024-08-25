@@ -1,5 +1,6 @@
 import json
 import os
+import random
 import re
 import tempfile
 import time
@@ -9,6 +10,7 @@ from pathlib import Path
 import cv2
 import openpyxl
 import win32api
+from bs4 import BeautifulSoup
 from selenium.webdriver import ActionChains, Keys
 from webdriver_manager.chrome import ChromeDriverManager
 

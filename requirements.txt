@@ -1,3 +1,4 @@
+beautifulsoup4
 cn2an
 cpca
 excel2img
