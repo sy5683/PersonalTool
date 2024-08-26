@@ -48,7 +48,13 @@ class ParseExcel:
                             row_tags_map[index][col] = last_col_tag  # 直接更新表头map，刷新数据
                     else:  # 如果某一列的表头为正常情况，那么这一列之后的表头都不再处理
                         break
-            tags.append("".join([row_tags[col] for row_tags in row_tags_map]))  # 重新从表头map中取数，确保数据
+            # 重新从表头map中取数，确保数据唯一，多的数据依次往后添加编号
+            add_num = 0
+            tag = _temp_tag = "".join([row_tags[col] for row_tags in row_tags_map])
+            while tag in tags:
+                add_num += 1
+                tag = f"{_temp_tag}_{add_num}"
+            tags.append(tag)
         return tags
 
     @staticmethod
