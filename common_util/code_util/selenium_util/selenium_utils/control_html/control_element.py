@@ -24,16 +24,17 @@ class ControlElement:
         driver = kwargs.get("driver", ControlBrowser.get_driver(**kwargs))
         wait_seconds = kwargs.get("wait_seconds", SeleniumConfig.wait_seconds)
         if click_type == "js":
-            element = cls.__format_element(key, wait_seconds=wait_seconds)
+            element = cls.__format_element(key, **kwargs)
             driver.execute_script("(arguments[0]).click()", element)
         elif click_type == "action":
-            element = cls.__format_element(key, wait_seconds=wait_seconds)
+            element = cls.__format_element(key, **kwargs)
             ActionChains(ControlBrowser.get_driver(**kwargs)).move_to_element(element).click().perform()
         else:
+            kwargs['wait_seconds'] = 1
             for _ in range(wait_seconds):
                 time.sleep(0.2)
                 try:
-                    cls.__format_element(key, wait_seconds=1).click()
+                    cls.__format_element(key, **kwargs).click()
                 except common.ElementNotInteractableException:
                     continue
                 break
