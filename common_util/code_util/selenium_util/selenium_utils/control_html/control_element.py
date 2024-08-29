@@ -2,7 +2,6 @@ import logging
 import time
 import traceback
 import typing
-from enum import Enum
 
 from selenium import webdriver, common
 from selenium.webdriver import ActionChains, Keys
@@ -27,13 +26,12 @@ class ControlElement:
         if click_type == "js":
             element = cls.__format_element(key, wait_seconds=wait_seconds)
             driver.execute_script("(arguments[0]).click()", element)
-            time.sleep(0.2)
         elif click_type == "action":
             element = cls.__format_element(key, wait_seconds=wait_seconds)
             ActionChains(ControlBrowser.get_driver(**kwargs)).move_to_element(element).click().perform()
         else:
             for _ in range(wait_seconds):
-                time.sleep(1)
+                time.sleep(0.2)
                 try:
                     cls.__format_element(key, wait_seconds=1).click()
                 except common.ElementNotInteractableException:
@@ -64,6 +62,17 @@ class ControlElement:
         if not kwargs.get("without_log"):
             logging.info(f"查找元素列表: {xpath}")
         return cls.__find_with_lambda(lambda x: x.find_elements(By.XPATH, xpath), **kwargs)
+
+    @classmethod
+    def get_attribute(cls, key: typing.Union[str, WebElement], attribute_type: str, **kwargs) -> str:
+        """
+        获取元素内容
+        :param key:
+        :param attribute_type: 常用的值有: id, class, value, innerText
+        :param kwargs:
+        :return:
+        """
+        return cls.__format_element(key, **kwargs).get_attribute(attribute_type)
 
     @classmethod
     def input(cls, key: typing.Union[None, str, WebElement], value: str, **kwargs):

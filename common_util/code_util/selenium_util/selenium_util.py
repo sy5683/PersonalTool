@@ -56,6 +56,11 @@ class SeleniumUtil:
         return ControlElement.finds(xpath, **kwargs)
 
     @staticmethod
+    def get_attribute(key: typing.Union[str, WebElement], attribute_type: str, **kwargs) -> str:
+        """获取元素内容"""
+        return ControlElement.get_attribute(key, attribute_type, **kwargs)
+
+    @staticmethod
     def get_chrome_driver_path() -> str:
         """获取chrome_driver路径"""
         return DownloadDriver.get_chrome_driver_path()
@@ -66,7 +71,7 @@ class SeleniumUtil:
         return ControlBrowser.get_driver(**kwargs)
 
     @staticmethod
-    def input(key: typing.Union[str, WebElement], value: typing.Union[float, str], **kwargs):
+    def input(key: typing.Union[None, str, WebElement], value: typing.Union[float, str], **kwargs):
         """输入"""
         ControlElement.input(key, str(value), **kwargs)
 
