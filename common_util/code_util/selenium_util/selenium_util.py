@@ -99,3 +99,8 @@ class SeleniumUtil:
     def switch_window(window_title: str, **kwargs):
         """切换窗口"""
         ControlWindow.switch_window(window_title, **kwargs)
+
+    @staticmethod
+    def wait_disappear(key: typing.Union[str, WebElement], **kwargs) -> bool:
+        """等待元素消失"""
+        return ControlElement.wait_disappear(key, **kwargs)

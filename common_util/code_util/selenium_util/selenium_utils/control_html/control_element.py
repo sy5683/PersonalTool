@@ -120,6 +120,27 @@ class ControlElement:
             except common.NoSuchElementException:
                 select.select_by_value(value)  # 根据值选择下拉选项
 
+    @classmethod
+    def wait_disappear(cls, key: typing.Union[str, WebElement], **kwargs) -> bool:
+        """
+        等待元素消失
+        需要注意的是，检测元素消失的前提是这个元素已经出现
+        使用时需要注意，不要在做完上一个操作之后立马调用这个方法，不然可能会出现【要检测消失的元素还未出现，这个方法就已经判断该元素已消失】
+        在使用时需要根据具体情况在前面加一定时间的强制等待
+        """
+        wait_seconds = kwargs.get("wait_seconds", SeleniumConfig.wait_seconds)
+        kwargs['wait_seconds'] = 1
+        time.sleep(1)
+        for _ in range(wait_seconds):
+            try:
+                element = cls.__format_element(key, **kwargs)
+                print(element.text)  # 这一行是为了检测入参为WebElement的元素
+            except (common.exceptions.NoSuchElementException, common.exceptions.TimeoutException):
+                return True
+            finally:
+                time.sleep(1)
+        return False
+
     @staticmethod
     def _clear_element(element: WebElement):
         """清空元素"""
