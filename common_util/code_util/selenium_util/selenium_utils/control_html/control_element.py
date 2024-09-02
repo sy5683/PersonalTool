@@ -130,7 +130,7 @@ class ControlElement:
         """
         wait_seconds = kwargs.get("wait_seconds", SeleniumConfig.wait_seconds)
         kwargs['wait_seconds'] = 1
-        time.sleep(1)  # 等待元素均加载
+        time.sleep(1)  # 等待元素加载
         for _ in range(wait_seconds):
             try:
                 element = cls.__format_element(key, **kwargs)
