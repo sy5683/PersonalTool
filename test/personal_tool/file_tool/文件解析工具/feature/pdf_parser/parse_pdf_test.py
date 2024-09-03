@@ -14,7 +14,7 @@ class ParsePdfTestCase(TestBase):
         # self.tax_path = Path(r"E:\Document\公司文档\RPA\场景文档\28_公文机器人\05-收入核对")
 
     def test_parse_receipt(self):
-        receipt_path = self.receipt_path.joinpath(r"财务公司")
+        receipt_path = self.receipt_path.joinpath(r"")
         for pdf_path in self.__get_pdf_path(receipt_path):
             result = ParsePdf.parse_receipt(pdf_path)
             for receipt in result.receipts:

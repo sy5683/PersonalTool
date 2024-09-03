@@ -12,9 +12,9 @@ class CDBReceiptType01(CDBReceiptType):
         """判断是否为当前格式"""
         if self.table.max_cols != 6:
             return False
-        if not {"付款人", "收款人", "全称"} < set(self.table.get_row_values(0)):
-            return False
-        return True
+        if {"付款人", "收款人", "全称"} < set(self.table.get_row_values(0)):
+            return True
+        return False
 
     def get_receipt(self) -> Receipt:
         """解析"""

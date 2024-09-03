@@ -10,9 +10,9 @@ class SPDBReceiptType01(SPDBReceiptType):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        if not {"付款人", "收款人", "账户名称"} < set(self.table.get_row_values(2)):
-            return False
-        return True
+        if {"付款人", "收款人", "账户名称"} < set(self.table.get_row_values(2)):
+            return True
+        return False
 
     def get_receipt(self) -> Receipt:
         """解析"""

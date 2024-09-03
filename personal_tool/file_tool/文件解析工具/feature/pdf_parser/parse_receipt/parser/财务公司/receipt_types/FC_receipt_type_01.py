@@ -10,9 +10,9 @@ class FCReceiptType01(FCReceiptType):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        if not {"付款人", "收款人", "全称"} < set(self.table.get_row_values(0)):
-            return False
-        return True
+        if {"付款人", "收款人", "全称"} < set(self.table.get_row_values(0)):
+            return True
+        return False
 
     def get_receipt(self) -> Receipt:
         """解析"""

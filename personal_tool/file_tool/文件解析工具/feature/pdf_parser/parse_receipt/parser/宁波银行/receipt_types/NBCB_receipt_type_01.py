@@ -10,9 +10,9 @@ class NBCBReceiptType01(NBCBReceiptType):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        if not {"账号", "户名", "开户银行", "交易金额", "回单种类", "业务种类"} < set(self.table.get_col_values(0)):
-            return False
-        return True
+        if {"账号", "户名", "开户银行", "交易金额", "回单种类", "业务种类"} < set(self.table.get_col_values(0)):
+            return True
+        return False
 
     def get_receipt(self) -> Receipt:
         """解析"""

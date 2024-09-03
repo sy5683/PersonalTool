@@ -10,14 +10,14 @@ class CCBReceiptType06(CCBReceiptType):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
+        if len(self.table.get_row_values(5)) != 4:
+            return False
         for key in ["申请客户名称", "业务编号"]:
             if key not in "".join(self.table.get_row_values(0)):
                 return False
-        if not {"付款账号", "收款账号"} < set(self.table.get_row_values(1)):
-            return False
-        if len(self.table.get_row_values(5)) != 4:
-            return False
-        return True
+        if {"付款账号", "收款账号"} < set(self.table.get_row_values(1)):
+            return True
+        return False
 
     def get_receipt(self) -> Receipt:
         """解析"""
