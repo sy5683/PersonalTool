@@ -42,10 +42,11 @@ class ControlElement:
                 raise common.ElementNotInteractableException("点击失败")
 
     @classmethod
-    def exist(cls, xpath: str, **kwargs) -> bool:
+    def exist(cls, key: typing.Union[str, WebElement], **kwargs) -> bool:
         """查找元素"""
         try:
-            cls.find(xpath, **kwargs)
+            element = cls.__format_element(key, **kwargs)
+            print(element.text)  # 这一行是为了检测入参为WebElement的元素
         except common.TimeoutException:
             return False
         return True
@@ -132,13 +133,9 @@ class ControlElement:
         kwargs['wait_seconds'] = 1
         time.sleep(1)  # 等待元素加载
         for _ in range(wait_seconds):
-            try:
-                element = cls.__format_element(key, **kwargs)
-                print(element.text)  # 这一行是为了检测入参为WebElement的元素
-            except (common.exceptions.NoSuchElementException, common.exceptions.TimeoutException):
+            if cls.exist(key, **kwargs):
                 return True
-            finally:
-                time.sleep(1)
+            time.sleep(1)
         return False
 
     @staticmethod

@@ -41,9 +41,9 @@ class SeleniumUtil:
         ControlDriver.execute_js(js, **kwargs)
 
     @staticmethod
-    def exist(xpath: str, **kwargs) -> bool:
+    def exist(key: typing.Union[str, WebElement], **kwargs) -> bool:
         """查找元素"""
-        return ControlElement.exist(xpath, **kwargs)
+        return ControlElement.exist(key, **kwargs)
 
     @staticmethod
     def find(xpath: str, **kwargs) -> WebElement:
