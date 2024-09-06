@@ -6,23 +6,22 @@ import typing
 from selenium import webdriver, common
 
 from ..control_browser.control_browser import ControlBrowser
-from ..selenium_config import SeleniumConfig
+from ..entity.selenium_config import SeleniumConfig
 
 
 class ControlWindow:
-    """控制窗口"""
 
     @classmethod
-    def close_other_window(cls, window_titles: typing.Union[str, typing.List[str]], **kwargs):
+    def close_other_window(cls, selenium_config: SeleniumConfig, window_titles: typing.Union[str, typing.List[str]]):
         """关闭其他窗口"""
-        driver = kwargs.get("driver", ControlBrowser.get_driver(**kwargs))
+        driver = ControlBrowser.get_driver(selenium_config)
         window_titles = [window_titles] if isinstance(window_titles, str) else window_titles
         for window_handle in driver.window_handles:
             try:
                 cls.__switch_to_window(driver, window_handle)
             except common.NoSuchWindowException:
                 continue
-            title = cls.get_title(driver=driver)
+            title = cls.get_title(selenium_config)
             for window_title in window_titles:
                 if window_title and re.search(window_title, title):
                     break
@@ -32,12 +31,12 @@ class ControlWindow:
                 logging.info(f"关闭窗口: {title}")
                 driver.close()
         # 关闭完窗口之后还需要重新切换一下窗口
-        cls.switch_window(window_titles[-1])
+        cls.switch_window(selenium_config, window_titles[-1])
 
     @classmethod
-    def confirm_alert(cls, **kwargs):
+    def confirm_alert(cls, selenium_config: SeleniumConfig):
         """确定alert弹窗"""
-        driver = kwargs.get("driver", ControlBrowser.get_driver(**kwargs))
+        driver = ControlBrowser.get_driver(selenium_config)
         # 遍历页面，关闭弹窗
         for window_handle in driver.window_handles:
             # noinspection PyBroadException
@@ -49,21 +48,20 @@ class ControlWindow:
                 pass
 
     @classmethod
-    def get_title(cls, **kwargs) -> str:
+    def get_title(cls, selenium_config: SeleniumConfig) -> str:
         """获取标题"""
-        driver = kwargs.get("driver", ControlBrowser.get_driver(**kwargs))
+        driver = ControlBrowser.get_driver(selenium_config)
         try:
             return driver.title
         except common.UnexpectedAlertPresentException:
-            cls.confirm_alert(driver=driver)
+            cls.confirm_alert(selenium_config)
             return driver.title
 
     @classmethod
-    def switch_window(cls, window_title: str, **kwargs):
+    def switch_window(cls, selenium_config: SeleniumConfig, window_title: str):
         """切换窗口"""
-        driver = kwargs.get("driver", ControlBrowser.get_driver(**kwargs))
-        wait_seconds = kwargs.get("wait_seconds", SeleniumConfig.default_debug_port)
-        for _ in range(max((wait_seconds // len(driver.window_handles)), 1)):
+        driver = ControlBrowser.get_driver(selenium_config)
+        for _ in range(max((selenium_config.wait_seconds // len(driver.window_handles)), 1)):
             target_handles = []
             for window_handle in driver.window_handles:
                 try:
@@ -71,7 +69,7 @@ class ControlWindow:
                 except common.NoSuchWindowException:
                     continue
                 # 校验标题
-                title = cls.get_title(driver=driver)
+                title = cls.get_title(selenium_config)
                 if window_title and not re.search(window_title, title):
                     continue
                 elif not window_title and window_title != title:

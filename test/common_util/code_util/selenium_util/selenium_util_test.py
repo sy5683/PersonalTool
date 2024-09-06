@@ -2,8 +2,8 @@ from concurrent import futures
 
 from common_core.base.test_base import TestBase
 from common_util.code_util.selenium_util.selenium_util import SeleniumUtil
-from common_util.code_util.selenium_util.selenium_utils.control_browser.browser_type import BrowserType
-from common_util.code_util.selenium_util.selenium_utils.selenium_config import SeleniumConfig
+from common_util.code_util.selenium_util.selenium_utils.entity.selenium_config import SeleniumConfig
+from common_util.code_util.selenium_util.selenium_utils.enum.operate_type import OperateType
 
 
 class SeleniumUtilTestCase(TestBase):
@@ -14,32 +14,32 @@ class SeleniumUtilTestCase(TestBase):
         self.title = "百度一下"
 
     def test_close_other_window(self):
-        SeleniumUtil.close_other_window(window_titles=self.title)  # 关闭其他页签
+        SeleniumUtil.close_other_window(SeleniumConfig(), self.title)  # 关闭其他页签
 
     def test_click(self):
-        # SeleniumUtil.click(self.xpath)  # 模拟点击，默认使用js点击
-        SeleniumUtil.click(self.xpath, click_type='selenium')  # 使用selenium的点击方法
+        # SeleniumUtil.click(SeleniumConfig(xpath=self.xpath))  # 模拟点击，默认使用js点击
+        SeleniumUtil.click(SeleniumConfig(xpath=self.xpath, operate_type=OperateType.selenium))  # 使用selenium的点击方法
 
     def test_find(self):
-        element = SeleniumUtil.find(self.xpath)  # 查找元素
-        # element = SeleniumUtil.find(self.xpath, wait_seconds=30)  # 在指定超时时间内查找元素
-        SeleniumUtil.find('./ancestor::div[id="lg"]', element=element)  # 查找父级元素
+        element = SeleniumUtil.find(SeleniumConfig(xpath=self.xpath))  # 查找元素
+        # element = SeleniumUtil.find(SeleniumConfig(xpath=self.xpath, wait_seconds=30))  # 在指定超时时间内查找元素
+        SeleniumUtil.find(SeleniumConfig(xpath='./ancestor::div[@id="lg"]', element=element))  # 查找父级元素
 
     def test_launch_chrome_debug(self):
         self.assertEqual(SeleniumUtil.launch_chrome_debug(), None)
 
     def test_open_url(self):
-        SeleniumConfig.browser_type = BrowserType.edge
-        SeleniumUtil.open_url(self.url, driver_path=SeleniumUtil.get_chrome_driver_path())  # 打开url
-        # # SeleniumUtil.open_url(self.url, debug_port=9223)  # 接管debug浏览器打开url
+        SeleniumUtil.open_url(SeleniumConfig(driver_path=SeleniumUtil.get_chrome_driver_path()), self.url)  # 打开url
+        # SeleniumUtil.open_url(SeleniumConfig(debug_port=9223), self.url)  # 接管debug浏览器打开url
 
     def test_thread(self):
         """测试多并发"""
 
         def _launch_driver():
-            SeleniumUtil.open_url(self.url, use_user_data=False)  # 多并发时不能使用user_data
-            print(SeleniumUtil.find('//input[@id="su"]', wait_seconds=20))
-            SeleniumUtil.close_browser(driver=SeleniumUtil.get_driver())
+            SeleniumUtil.open_url(SeleniumConfig(use_user_data=False), self.url)  # 多并发时不能使用user_data
+            print(SeleniumUtil.find(SeleniumConfig(xpath='//input[@id="su"]', wait_seconds=20)))
+            driver = SeleniumUtil.get_driver(SeleniumConfig())
+            SeleniumUtil.close_browser(SeleniumConfig(driver=driver))
 
         pool = futures.ThreadPoolExecutor(3, thread_name_prefix='test')
         tasks = []

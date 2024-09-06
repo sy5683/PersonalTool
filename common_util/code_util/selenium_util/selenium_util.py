@@ -10,55 +10,55 @@ from .selenium_utils.control_html.control_driver import ControlDriver
 from .selenium_utils.control_html.control_element import ControlElement
 from .selenium_utils.control_html.control_iframe import ControlIframe
 from .selenium_utils.control_html.control_window import ControlWindow
-from .selenium_utils.selenium_config import SeleniumConfig
+from .selenium_utils.entity.selenium_config import SeleniumConfig
 
 
 class SeleniumUtil:
 
     @staticmethod
-    def click(key: typing.Union[str, WebElement], **kwargs):
+    def click(selenium_config: SeleniumConfig):
         """模拟点击"""
-        ControlElement.click(key, **kwargs)
+        ControlElement.click(selenium_config)
 
     @staticmethod
-    def close_other_window(window_titles: typing.Union[str, typing.List[str]], **kwargs):
+    def close_other_window(selenium_config: SeleniumConfig, window_titles: typing.Union[str, typing.List[str]]):
         """关闭其他窗口"""
-        ControlWindow.close_other_window(window_titles, **kwargs)
+        ControlWindow.close_other_window(selenium_config, window_titles)
 
     @staticmethod
-    def close_browser(**kwargs):
+    def close_browser(selenium_config: SeleniumConfig):
         """关闭浏览器"""
-        ControlBrowser.close_browser(**kwargs)
+        ControlBrowser.close_browser(selenium_config)
 
     @staticmethod
-    def confirm_alert(**kwargs):
+    def confirm_alert(selenium_config: SeleniumConfig):
         """确定alert弹窗"""
-        ControlWindow.confirm_alert(**kwargs)
+        ControlWindow.confirm_alert(selenium_config)
 
     @staticmethod
-    def execute_js(js: str, **kwargs):
+    def execute_js(selenium_config: SeleniumConfig, js: str):
         """执行js代码"""
-        ControlDriver.execute_js(js, **kwargs)
+        ControlDriver.execute_js(selenium_config, js)
 
     @staticmethod
-    def exist(key: typing.Union[str, WebElement], **kwargs) -> bool:
+    def exist(selenium_config: SeleniumConfig) -> bool:
         """查找元素"""
-        return ControlElement.exist(key, **kwargs)
+        return ControlElement.exist(selenium_config)
 
     @staticmethod
-    def find(xpath: str, **kwargs) -> WebElement:
+    def find(selenium_config: SeleniumConfig) -> WebElement:
         """查找元素"""
-        return ControlElement.find(xpath, **kwargs)
+        return ControlElement.find(selenium_config)
 
     @staticmethod
-    def finds(xpath: str, **kwargs) -> typing.List[WebElement]:
+    def finds(selenium_config: SeleniumConfig) -> typing.List[WebElement]:
         """查找元素列表"""
-        return ControlElement.finds(xpath, **kwargs)
+        return ControlElement.finds(selenium_config)
 
     @staticmethod
-    def get_attribute(key: typing.Union[str, WebElement], attribute_type: str, **kwargs) -> str:
+    def get_attribute(selenium_config: SeleniumConfig, attribute_type: str) -> str:
         """获取元素内容"""
-        return ControlElement.get_attribute(key, attribute_type, **kwargs)
+        return ControlElement.get_attribute(selenium_config, attribute_type)
 
     @staticmethod
     def get_chrome_driver_path() -> str:
@@ -66,41 +66,41 @@ class SeleniumUtil:
         return DownloadDriver.get_chrome_driver_path()
 
     @staticmethod
-    def get_driver(**kwargs) -> WebDriver:
+    def get_driver(selenium_config: SeleniumConfig) -> WebDriver:
         """获取driver"""
-        return ControlBrowser.get_driver(**kwargs)
+        return ControlBrowser.get_driver(selenium_config)
 
     @staticmethod
-    def input(key: typing.Union[None, str, WebElement], value: typing.Union[float, str], **kwargs):
+    def input(selenium_config: SeleniumConfig, value: typing.Union[float, str]):
         """输入"""
-        ControlElement.input(key, str(value), **kwargs)
+        ControlElement.input(selenium_config, str(value))
 
     @staticmethod
-    def launch_chrome_debug(debug_port: int = SeleniumConfig.default_debug_port):
+    def launch_chrome_debug(debug_port: int = None):
         """debug启动谷歌浏览器"""
-        LaunchChrome.launch_browser_debug(debug_port)
+        LaunchChrome.launch_browser_debug(SeleniumConfig(debug_port=debug_port))
 
     @staticmethod
-    def open_url(url: str, **kwargs):
+    def open_url(selenium_config: SeleniumConfig, url: str):
         """打开url"""
-        ControlBrowser.open_url(url, **kwargs)
+        ControlDriver.open_url(selenium_config, url)
 
     @staticmethod
-    def select(key: typing.Union[str, WebElement], value: typing.Union[int, str], **kwargs):
+    def select(selenium_config: SeleniumConfig, value: typing.Union[int, str]):
         """选择下拉选项"""
-        ControlElement.select(key, value, **kwargs)
+        ControlElement.select(selenium_config, value)
 
     @staticmethod
-    def switch_iframe(key: typing.Union[str, WebElement] = '', **kwargs):
+    def switch_iframe(selenium_config: SeleniumConfig):
         """切换iframe"""
-        ControlIframe.switch_iframe(key, **kwargs)
+        ControlIframe.switch_iframe(selenium_config)
 
     @staticmethod
-    def switch_window(window_title: str, **kwargs):
+    def switch_window(selenium_config: SeleniumConfig, window_title: str):
         """切换窗口"""
-        ControlWindow.switch_window(window_title, **kwargs)
+        ControlWindow.switch_window(selenium_config, window_title)
 
     @staticmethod
-    def wait_disappear(key: typing.Union[str, WebElement], **kwargs) -> bool:
+    def wait_disappear(selenium_config: SeleniumConfig) -> bool:
         """等待元素消失"""
-        return ControlElement.wait_disappear(key, **kwargs)
+        return ControlElement.wait_disappear(selenium_config)

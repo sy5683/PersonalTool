@@ -1,4 +1,6 @@
 import logging
+import threading
+import time
 import typing
 
 import win32api
@@ -9,35 +11,43 @@ from selenium.webdriver.ie.webdriver import WebDriver
 
 from .base.launch_base import LaunchBase
 from .download_driver import DownloadDriver
-from ...selenium_config import SeleniumConfig
+from ...entity.selenium_config import SeleniumConfig
 
 
 class LaunchIe(LaunchBase):
-    _driver: typing.Union[WebDriver, None] = None
+    _driver_map: typing.Dict[int, WebDriver] = {}
 
     @classmethod
-    def get_driver(cls, **kwargs) -> WebDriver:
-        """获取driver"""
-        if cls._driver is None:
-            # 1) 启动IE浏览器需要初始化其对应的参数与缩放比例
-            cls._set_ie_setting()
-            # 2) 启动IE浏览器
-            cls._driver = cls._launch_ie(**kwargs)
-            # 3.1) 设置默认加载超时时间
-            cls._driver.set_page_load_timeout(SeleniumConfig.wait_seconds)
-            # 3.2) 启动后设置浏览器最前端
-            cls.set_browser_front(cls._driver)
-        return cls._driver
-
-    @classmethod
-    def close_browser(cls, **kwargs):
+    def close_browser(cls, selenium_config: SeleniumConfig):
         """关闭IE浏览器"""
-        driver = kwargs.get("driver", cls._driver)
-        if driver is not None:
-            # 使用selenium自带的quit方法关闭driver
-            driver.quit()
-            if driver == cls._driver:
-                cls._driver = None
+        # 1) 确认参数、缓存中的driver是否存在，不存在则返回
+        driver = selenium_config.driver
+        if driver is None:
+            driver = cls._driver_map.get(threading.current_thread().ident)
+        if driver is None:
+            return
+        # 2) 使用selenium自带的quit方法关闭driver
+        driver.quit()
+        time.sleep(1)
+        # 3) 清除缓存
+        selenium_config.driver = None
+        for key, _driver in list(cls._driver_map.items()):
+            if driver == _driver:
+                del cls._driver_map[key]
+
+    @classmethod
+    def get_driver(cls, selenium_config: SeleniumConfig) -> WebDriver:
+        """获取driver"""
+        # 1) 返回参数中传入的driver
+        if selenium_config.driver:
+            return selenium_config.driver
+        # 2) 启动IE浏览器需要初始化其对应的参数与缩放比例
+        cls._set_ie_setting()
+        # 3) 获取进程id，并启动IE浏览器
+        thread_id = threading.current_thread().ident
+        if thread_id not in cls._driver_map:
+            cls._driver_map[thread_id] = cls._launch_ie(selenium_config)
+        return cls._driver_map[thread_id]
 
     @staticmethod
     def _set_ie_setting():
@@ -57,23 +67,37 @@ class LaunchIe(LaunchBase):
                                 "2500", 3)
 
     @classmethod
-    def _launch_ie(cls, **kwargs) -> WebDriver:
+    def _launch_ie(cls, selenium_config: SeleniumConfig) -> WebDriver:
         """启动IE浏览器"""
         logging.info("启动IE浏览器")
-        # 2.1) 获取IE浏览器设置
+        # 1.1) 获取IE浏览器设置
         options = webdriver.IeOptions()
-        # 2.2) IE浏览器无法设置静默运行
-        # 2.3) 设置ip代理
-        if SeleniumConfig.proxy_ip:
-            options.add_argument(f"--proxy-server={SeleniumConfig.proxy_ip}")
-        # 2.4) 设置忽略私密链接警告，但IE驱动程序不允许绕过不安全(自签名)SSL证书，因此这个方法相当于无效
+        # 1.2.1) IE浏览器无法设置静默运行
+        # 1.2.2) 设置ip代理
+        if selenium_config.proxy_ip:
+            options.add_argument(f"--proxy-server={selenium_config.proxy_ip}")
+        # 1.3.1) 设置忽略私密链接警告，但IE驱动程序不允许绕过不安全(自签名)SSL证书，因此这个方法相当于无效
         # options.set_capability("acceptInsecureCerts", True)
-        # 3) 启动IE浏览器
-        return cls.__launch_ie_driver(options, **kwargs)
+        # 2) 启动IE浏览器
+        driver = cls._launch_ie_driver(selenium_config, options)
+        # 3.1) 设置默认加载超时时间
+        driver.set_page_load_timeout(selenium_config.wait_seconds)
+        # 3.2) 启动后设置浏览器最前端
+        cls.set_browser_front(driver)
+        return driver
 
-    @staticmethod
-    def __launch_ie_driver(options: webdriver.IeOptions, **kwargs) -> WebDriver:
+    @classmethod
+    def _launch_ie_driver(cls, selenium_config: SeleniumConfig, options: webdriver.IeOptions) -> WebDriver:
         """启动IE浏览器driver"""
-        driver_path = kwargs.get("driver_path", DownloadDriver.get_ie_driver_path())
+        driver_path = cls.__get_driver_path(selenium_config)
         service = Service(executable_path=driver_path)
         return webdriver.Ie(options=options, service=service)
+
+    @staticmethod
+    def __get_driver_path(selenium_config: SeleniumConfig) -> str:
+        """获取driver路径"""
+        # 使用参数中的driver_path
+        if selenium_config.driver_path:
+            return selenium_config.driver_path
+        # 自动获取下载的driver_path路径
+        return DownloadDriver.get_ie_driver_path()

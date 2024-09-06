@@ -4,16 +4,20 @@ import time
 from selenium import webdriver, common
 from selenium.webdriver.chrome.webdriver import WebDriver
 
+from ....entity.selenium_config import SeleniumConfig
+
 
 class LaunchBase(metaclass=abc.ABCMeta):
 
+    @classmethod
     @abc.abstractmethod
-    def get_driver(self, **kwargs) -> WebDriver:
-        """获取driver"""
-
-    @abc.abstractmethod
-    def close_browser(self, **kwargs):
+    def close_browser(cls, selenium_config: SeleniumConfig):
         """关闭浏览器"""
+
+    @classmethod
+    @abc.abstractmethod
+    def get_driver(cls, selenium_config: SeleniumConfig) -> WebDriver:
+        """获取driver"""
 
     @staticmethod
     def set_browser_front(driver: webdriver):
