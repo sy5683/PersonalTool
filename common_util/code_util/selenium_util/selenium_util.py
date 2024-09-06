@@ -76,6 +76,11 @@ class SeleniumUtil:
         return DownloadDriver.get_edge_driver_path()
 
     @staticmethod
+    def get_ie_driver_path() -> str:
+        """获取ie_driver路径"""
+        return DownloadDriver.get_ie_driver_path()
+
+    @staticmethod
     def input(selenium_config: SeleniumConfig, value: typing.Union[float, str]):
         """输入"""
         ControlElement.input(selenium_config, str(value))
