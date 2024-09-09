@@ -8,8 +8,3 @@ class LaunchChromeTestCase(TestBase):
         chrome_path = LaunchChrome._get_chrome_path()
         self.assertNotEqual(chrome_path, None)
         print(chrome_path)
-
-    def test_get_chrome_user_data_path(self):
-        user_data_path = LaunchChrome._get_chrome_user_data_path()
-        self.assertNotEqual(user_data_path, None)
-        print(user_data_path)

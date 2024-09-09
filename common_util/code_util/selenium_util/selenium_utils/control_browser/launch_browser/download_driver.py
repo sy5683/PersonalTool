@@ -11,11 +11,20 @@ from webdriver_manager.microsoft import EdgeChromiumDriverManager, IEDriverManag
 class DownloadDriver:
 
     @classmethod
+    def get_chrome_version(cls) -> str:
+        """获取谷歌浏览器版本"""
+        return ChromeDriverManager().driver.get_browser_version_from_os()
+
+    @classmethod
+    def get_edge_version(cls) -> str:
+        """获取Edge浏览器版本"""
+        return EdgeChromiumDriverManager().driver.get_browser_version_from_os()
+
+    @classmethod
     def get_chrome_driver_path(cls) -> str:
         """获取chrome_driver路径"""
-        chrome_driver_manager = ChromeDriverManager()
         # 1) 获取谷歌浏览器版本
-        chrome_version = chrome_driver_manager.driver.get_browser_version_from_os()
+        chrome_version = cls.get_chrome_version()
         logging.info(f"Chrome浏览器版本: {chrome_version}")
         # 2) 根据默认下载路径遍历文件，获取指定版本的chrome_driver文件
         try:
@@ -24,7 +33,7 @@ class DownloadDriver:
             logging.warning("本地缓存中没有指定版本的谷歌浏览器驱动")
         # 3) 未找到指定版本的chrome_driver文件，则调用下载方法
         try:
-            return chrome_driver_manager.install()
+            return ChromeDriverManager().install()
         except ConnectionError:
             logging.warning(f"webdriver_manager下载谷歌浏览器驱动失败: {traceback.format_exc()}")
         raise Exception("谷歌浏览器驱动下载失败")
@@ -32,9 +41,8 @@ class DownloadDriver:
     @classmethod
     def get_edge_driver_path(cls) -> str:
         """获取edge_driver路径"""
-        edge_driver_manager = EdgeChromiumDriverManager()
         # 1) 获取Edge浏览器版本
-        edge_version = edge_driver_manager.driver.get_browser_version_from_os()
+        edge_version = cls.get_edge_version()
         logging.info(f"Edge浏览器版本: {edge_version}")
         # 2) 根据默认下载路径遍历文件，获取指定版本的edge_driver文件
         try:
@@ -43,7 +51,7 @@ class DownloadDriver:
             logging.warning("本地缓存中没有指定版本的Edge浏览器驱动")
         # 3) 未找到指定版本的edge_driver文件，则调用下载方法
         try:
-            return edge_driver_manager.install()
+            return EdgeChromiumDriverManager().install()
         except ConnectionError:
             logging.warning(f"webdriver_manager下载Edge浏览器驱动失败: {traceback.format_exc()}")
         raise ConnectionError("Edge浏览器驱动下载失败")

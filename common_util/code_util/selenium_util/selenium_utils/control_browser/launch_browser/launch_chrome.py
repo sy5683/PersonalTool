@@ -107,8 +107,9 @@ class LaunchChrome(LaunchBase):
         options.add_experimental_option('useAutomationExtension', False)
         # 1.4.1) 伪装浏览器请求头
         options.add_argument('lang=zh-CN,zh,zh-TW,en-US,en')
+        chrome_version = DownloadDriver.get_chrome_version()
         options.add_argument(
-            'user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36')
+            f'user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version} Safari/537.36')
         # 1.4.2) 去掉webdriver痕迹
         options.add_argument("disable-blink-features=AutomationControlled")
         # 1.5) 取消提示和默认下载路径在同一个参数中配置
