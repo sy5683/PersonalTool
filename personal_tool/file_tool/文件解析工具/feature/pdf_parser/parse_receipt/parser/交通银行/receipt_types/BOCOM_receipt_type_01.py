@@ -24,7 +24,7 @@ class BOCOMReceiptType01(BOCOMReceiptType):
         # 交通银行这个格式的回单数据全在一个大的表格单元格中，重新加载其为word数据后使用word方法解析
         self.words += PdfUtil.merge_words(self.table.cells[0].words, 20)
         receipt.date = TimeUtil.format_to_str(self._get_word("记账日期[:：](.*?)$"))  # 日期
-        receipt.receipt_number = self._get_word("^回单编号[:：](.*?)(回单类型|$)")   # 回单编号
+        receipt.receipt_number = self._get_word("^回单编号[:：](.*?)(回单类型|$)")  # 回单编号
         receipt.serial_number = self._get_word("^会计流水号[:：](.*?)$")  # 流水号
         receipt.payer_account_name = self.__get_data("^付款人名称")  # 付款人户名
         receipt.payer_account_number = self.__get_data("^付款人账号")  # 付款人账号
@@ -45,4 +45,3 @@ class BOCOMReceiptType01(BOCOMReceiptType):
                 if not re.search("[:：]", last_word):
                     return last_word  # 上一个word的值中必须没有冒号
         return self._get_words(f"{pattern}[:：](.*?)$")[index]
-
