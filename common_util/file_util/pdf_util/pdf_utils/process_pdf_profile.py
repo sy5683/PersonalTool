@@ -61,15 +61,15 @@ class ProcessPdfProfile:
             if index == 0:
                 new_words.append(word)
                 continue
-            for new_word in new_words:
-                if ((abs(word.rect[0] - new_word.rect[2]) > threshold)
-                        or (abs(new_word.rect[0] - word.rect[2]) < threshold)):
+            for last_word in new_words:
+                if ((abs(word.rect[0] - last_word.rect[2]) > threshold)
+                        or (abs(last_word.rect[0] - word.rect[2]) < threshold)):
                     continue
-                if word.rect[1] > new_word.rect[3]:
+                if word.rect[1] > last_word.rect[3]:
                     continue
-                new_word.update_rect((min(word.rect[0], new_word.rect[0]), min(word.rect[1], new_word.rect[1]),
-                                      max(word.rect[2], new_word.rect[2]), max(word.rect[3], new_word.rect[3])))
-                new_word.text += word.text
+                last_word.update_rect((min(word.rect[0], last_word.rect[0]), min(word.rect[1], last_word.rect[1]),
+                                       max(word.rect[2], last_word.rect[2]), max(word.rect[3], last_word.rect[3])))
+                last_word.text += word.text
                 break
             else:
                 new_words.append(word)

@@ -97,7 +97,6 @@ class ReceiptParser(PdfParserBase, metaclass=abc.ABCMeta):
             except Exception:
                 pass
         if not len(receipt_types):
-            logging.error(f"{self.parser_type}回单pdf中有无法解析的回单: {receipt_profile.words[0].text}")
             raise ValueError(f"{self.parser_type}回单pdf中有无法解析的回单")
         elif len(receipt_types) > 1:
             logging.error(f"{self.parser_type}回单pdf中有匹配多个格式的回单: {receipt_types}")
