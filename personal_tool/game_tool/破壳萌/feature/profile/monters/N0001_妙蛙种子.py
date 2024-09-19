@@ -1,10 +1,11 @@
-from ..entity.monster import Monster
+from ...entity.monster import Monster
 
 
 class N0001(Monster):
 
     def __init__(self):
         super().__init__(1, "妙蛙种子")
+        self.types = []
         self.HP = 45
         self.ATK = 49
         self.DEF = 49
