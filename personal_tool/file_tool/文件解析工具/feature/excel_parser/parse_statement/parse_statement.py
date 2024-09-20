@@ -28,10 +28,10 @@ class ParseStatement:
                 raise ValueError(f"银行流水【{statement_name}】无法识别")
             elif len(parsers) > 1:
                 raise ValueError(
-                    f"银行流水【{statement_name}】匹配多种格式: %s" % "、".join([each.bank_name for each in parsers]))
+                    f"银行流水【{statement_name}】匹配多种格式: %s" % "、".join([each.__str__() for each in parsers]))
             else:
                 statement_parser = parsers[0]
-                logging.info(f"银行流水【{statement_name}】的类型为: {statement_parser.bank_name}流水")
+                logging.info(f"银行流水【{statement_name}】的类型为: {statement_parser}")
                 statement_parser.parse_statement()  # 调用解析流水方法
                 return statement_parser
         except xlrd.XLRDError:

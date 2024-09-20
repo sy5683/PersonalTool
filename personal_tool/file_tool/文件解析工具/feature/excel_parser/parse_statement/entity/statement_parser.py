@@ -22,6 +22,10 @@ class StatementParser(metaclass=abc.ABCMeta):
         self.account_number = None  # 银行账号
         self.statements: typing.List[Statement] = []  # 流水数据
 
+    def __str__(self) -> str:
+        types = re.search(r"\d+", self.__class__.__name__).group()
+        return f"{self.bank_name}_{types}"
+
     def judge(self) -> bool:
         """判断是否为当前格式"""
         return False if self.tag_row is None else True
