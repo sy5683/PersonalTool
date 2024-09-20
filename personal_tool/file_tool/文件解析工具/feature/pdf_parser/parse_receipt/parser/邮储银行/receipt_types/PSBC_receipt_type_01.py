@@ -39,5 +39,6 @@ class PSBCReceiptType01(PSBCReceiptType):
             receipt.payee_account_name = name_row_cells[2].get_value()  # 收款人户名
             receipt.payee_account_number = number_row_cells[1].get_value()  # 收款人账号
             receipt.payee_account_bank = bank_row_cells[1].get_value()  # 收款人开户银行
-        receipt.amount = NumberUtil.to_amount(self._get_cell_relative("^(收入|支出)金额[(（]小写[)）]$").get_value())  # 金额
+        receipt.amount = NumberUtil.to_amount(
+            self._get_cell_relative("^(收入|支出)金额[(（]小写[)）]$").get_value())  # 金额
         return receipt
