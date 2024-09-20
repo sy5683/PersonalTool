@@ -8,9 +8,14 @@ from .receipt import Receipt
 
 class ReceiptType(metaclass=abc.ABCMeta):
 
-    def __init__(self, receipt_profile: ReceiptProfile):
+    def __init__(self, bank_name: str, receipt_profile: ReceiptProfile):
+        self.bank_name = bank_name
         self.table = receipt_profile.table
         self.words = receipt_profile.words
+
+    def __str__(self):
+        types = re.search(r"\d+", self.__class__.__name__).group()
+        return f"{self.bank_name}_{types}"
 
     @abc.abstractmethod
     def judge(self) -> bool:
