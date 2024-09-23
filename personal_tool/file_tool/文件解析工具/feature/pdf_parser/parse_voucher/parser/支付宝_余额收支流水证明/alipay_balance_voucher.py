@@ -15,7 +15,7 @@ class AlipayBalanceVoucher(VoucherParser):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        with fitz.open(self.voucher_path) as pdf:
+        with fitz.open(self.pdf_path) as pdf:
             pdf_text = re.sub(r"\s+", "", pdf[0].get_text())
             if re.search("^支付宝", pdf_text) and "余额收支流水证明" in pdf_text:
                 return True

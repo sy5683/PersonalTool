@@ -22,12 +22,11 @@ class ReceiptParser(PdfParserBase, metaclass=abc.ABCMeta):
 
     def __init__(self, bank_name: str, receipt_path: str, **kwargs):
         super().__init__(bank_name, receipt_path, **kwargs)  # 银行名称
-        self.receipt_path = receipt_path  # 回单路径
         self.receipts: typing.List[Receipt] = []
 
     def _check_contains(self, *values: str) -> bool:
         """判断pdf中是否包含"""
-        with fitz.open(self.receipt_path) as pdf:
+        with fitz.open(self.pdf_path) as pdf:
             pdf_text = re.sub(r"\s+", "", pdf[0].get_text())
             for value in values:
                 if value in pdf_text:
@@ -65,7 +64,7 @@ class ReceiptParser(PdfParserBase, metaclass=abc.ABCMeta):
     def _judge_images(self, different: float):
         """比较图片"""
         judge_images = self._get_judge_images()
-        for index, image in enumerate(PdfUtil.get_pdf_images(self.receipt_path)):
+        for index, image in enumerate(PdfUtil.get_pdf_images(self.pdf_path)):
             if image is None:
                 continue
             if len(image.shape) == 2:
@@ -86,7 +85,7 @@ class ReceiptParser(PdfParserBase, metaclass=abc.ABCMeta):
     def _parse_receipt(self, receipt_profile: ReceiptProfile, receipt_type_class):
         """解析"""
         if not receipt_profile.table and not receipt_profile.words:
-            return   # 跳过没有表格和文本的页
+            return  # 跳过没有表格和文本的页
         receipt_types = []
         for receipt_type_class in receipt_type_class.__subclasses__():
             receipt_type = receipt_type_class(receipt_profile)
@@ -99,7 +98,8 @@ class ReceiptParser(PdfParserBase, metaclass=abc.ABCMeta):
         if not len(receipt_types):
             raise ValueError(f"{self.parser_type}回单pdf中有无法解析的回单")
         elif len(receipt_types) > 1:
-            logging.error(f"{self.parser_type}回单pdf中有匹配多个格式的回单: {[each.__str__() for each in receipt_types]}")
+            logging.error(
+                f"{self.parser_type}回单pdf中有匹配多个格式的回单: {[each.__str__() for each in receipt_types]}")
             raise ValueError(f"{self.parser_type}回单pdf中有匹配多个格式的回单")
         else:
             receipt = receipt_types[0].get_receipt()
