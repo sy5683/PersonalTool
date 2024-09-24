@@ -1,12 +1,10 @@
 import abc
 import logging
-import re
 import sys
 import typing
 from pathlib import Path
 
 import cv2
-import fitz
 import numpy
 
 from common_util.file_util.file_util.file_util import FileUtil
@@ -23,15 +21,6 @@ class ReceiptParser(PdfParserBase, metaclass=abc.ABCMeta):
     def __init__(self, bank_name: str, receipt_path: str, **kwargs):
         super().__init__(bank_name, receipt_path, **kwargs)  # 银行名称
         self.receipts: typing.List[Receipt] = []
-
-    def _check_contains(self, *values: str) -> bool:
-        """判断pdf中是否包含"""
-        with fitz.open(self.pdf_path) as pdf:
-            pdf_text = re.sub(r"\s+", "", pdf[0].get_text())
-            for value in values:
-                if value in pdf_text:
-                    return True
-        return False
 
     @staticmethod
     def _compare_image(image: numpy.ndarray, judge_image: numpy.ndarray) -> float:

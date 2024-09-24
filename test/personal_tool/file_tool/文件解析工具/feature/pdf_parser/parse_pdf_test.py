@@ -10,6 +10,7 @@ class ParsePdfTestCase(TestBase):
 
     def setUp(self):
         self.declaration_path = Path(r"E:\Document\公司文档\RPA\场景文档\28_公文机器人\05-收入核对\申报表")
+        self.invoice_path = Path(r"E:\Document\公司文档\RPA\场景文档\duty_paid_path")
         self.receipt_path = Path(r"E:\Document\公司文档\RPA\场景文档\01_银行回单补扫\回单")
         self.voucher_path = Path(r"E:\Document\公司文档\RPA\场景文档\云驿燃料调运平台场景\电子凭证\支付宝")
 
@@ -18,6 +19,12 @@ class ParsePdfTestCase(TestBase):
             result = ParsePdf.parse_declaration(declaration_path)
             for declaration in result.declarations:
                 print(declaration.__dict__)
+
+    def test_parse_invoice(self):
+        for invoice_path in self.__get_pdf_path(self.invoice_path.joinpath(r"")):
+            result = ParsePdf.parse_invoice(invoice_path)
+            for receipt in result.invoices:
+                print(receipt.__dict__)
 
     def test_parse_receipt(self):
         for receipt_path in self.__get_pdf_path(self.receipt_path.joinpath(r"")):

@@ -1,7 +1,3 @@
-import re
-
-import fitz
-
 from common_util.data_util.number_util.number_util import NumberUtil
 from ...entity.declaration import Declaration
 from ...entity.declaration_parser import DeclarationParser
@@ -14,11 +10,7 @@ class ResourceTaxDeclaration(DeclarationParser):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        with fitz.open(self.pdf_path) as pdf:
-            pdf_text = re.sub(r"\s+", "", pdf[0].get_text())
-            if re.search("财产和行为税纳税申报表", pdf_text):
-                return True
-        return False
+        return self._check_contains("财产和行为税纳税申报表")
 
     def parse(self):
         """解析"""

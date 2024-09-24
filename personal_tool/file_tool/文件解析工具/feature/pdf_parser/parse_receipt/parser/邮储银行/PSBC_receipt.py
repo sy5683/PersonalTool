@@ -10,9 +10,7 @@ class PSBCReceiptParser(ReceiptParser):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        if self._judge_images(0.1):
-            return True
-        return False
+        return self._judge_images(0.1)
 
     def parse(self):
         """解析"""

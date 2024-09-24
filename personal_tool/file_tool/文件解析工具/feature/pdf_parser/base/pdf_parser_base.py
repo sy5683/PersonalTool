@@ -1,4 +1,7 @@
 import abc
+import re
+
+import fitz
 
 from common_util.file_util.pdf_util.pdf_util import PdfUtil
 
@@ -17,3 +20,12 @@ class PdfParserBase(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def parse(self):
         """解析"""
+
+    def _check_contains(self, *values: str) -> bool:
+        """判断pdf中是否包含"""
+        with fitz.open(self.pdf_path) as pdf:
+            pdf_text = re.sub(r"\s+", "", pdf[0].get_text())
+            for value in values:
+                if value in pdf_text:
+                    return True
+        return False

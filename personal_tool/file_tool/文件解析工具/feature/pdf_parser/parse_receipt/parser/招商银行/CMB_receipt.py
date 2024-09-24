@@ -10,9 +10,7 @@ class CMBReceiptParser(ReceiptParser):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        if not self._judge_images(0.3):
-            return False
-        return True
+        return self._judge_images(0.3)
 
     def parse(self):
         """解析"""

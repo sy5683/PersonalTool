@@ -1,8 +1,5 @@
 import logging
 
-import fitz
-import re
-
 from common_util.data_util.number_util.number_util import NumberUtil
 from common_util.file_util.pdf_util.pdf_util import PdfUtil
 from ...entity.declaration import Declaration
@@ -16,11 +13,7 @@ class ValueAddTaxDeclaration(DeclarationParser):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        with fitz.open(self.pdf_path) as pdf:
-            pdf_text = re.sub(r"\s+", "", pdf[0].get_text())
-            if re.search("增值税及附加税费申报表", pdf_text):
-                return True
-        return False
+        return self._check_contains("增值税及附加税费申报表")
 
     def parse(self):
         """解析"""
