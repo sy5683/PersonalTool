@@ -8,6 +8,21 @@ from .entity.pdf_profile import PdfProfile, ReceiptProfile
 class ProcessPdfProfile:
 
     @classmethod
+    def filter_word(cls, words: typing.List[Word], pattern: typing.Union[str, typing.Pattern[str]],
+                    index: int) -> typing.Union[str, None]:
+        """筛选文字"""
+        try:
+            return cls.filter_words(words, pattern)[index]
+        except IndexError:
+            return None
+
+    @staticmethod
+    def filter_words(words: typing.List[Word], pattern: typing.Union[str, typing.Pattern[str]]) -> typing.List[str]:
+        """筛选文字列表"""
+        pattern = re.compile(pattern) if isinstance(pattern, str) else pattern
+        return [pattern.search(word.text).group(1) for word in words if pattern.search(word.text)]
+
+    @classmethod
     def split_receipt_pdf(cls, pdf_profile: PdfProfile, *split_words: str) -> typing.List[ReceiptProfile]:
         """分割回单pdf"""
         if not pdf_profile.tables:

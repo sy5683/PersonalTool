@@ -52,6 +52,18 @@ class Table(PdfElement):
             return cell
         raise IndexError(f"未找到指定坐标的表格单元格: {row, col}")
 
+    def get_cell_relative(self, pattern: str, relative: int = 1) -> Cell:
+        """
+        根据相对坐标获取单元格的值，主要是用于上侧单元格行数不确定的情况
+        只用于左侧单元格是键，右侧单元格是值的情况，relative用于右侧偏移单元格数量
+        """
+        for row in range(self.max_rows):
+            row_cells = self.get_row_cells(row)
+            for col, row_cell in enumerate(row_cells):
+                if re.search(pattern, row_cell.get_value()):
+                    return row_cells[col + relative]
+        raise ValueError(f"未找到指定值的单元格: {pattern}")
+
     def get_col_cells(self, col: int) -> typing.List[Cell]:
         return [cell for cell in self.cells if cell.col == col]
 

@@ -1,3 +1,4 @@
+import re
 import typing
 from pathlib import Path
 
@@ -12,6 +13,17 @@ from .pdf_utils.process_pdf_profile import ProcessPdfProfile
 
 
 class PdfUtil:
+
+    @staticmethod
+    def filter_word(words: typing.List[Word], pattern: typing.Union[str, typing.Pattern[str]],
+                    index: int = 0) -> typing.Union[str, None]:
+        """筛选文字"""
+        return ProcessPdfProfile.filter_word(words, pattern, index)
+
+    @staticmethod
+    def filter_words(words: typing.List[Word], pattern: typing.Union[str, typing.Pattern[str]]) -> typing.List[str]:
+        """筛选文字列表"""
+        return ProcessPdfProfile.filter_words(words, pattern)
 
     @staticmethod
     def get_pdf_images(pdf_path: str) -> typing.List[numpy.ndarray]:

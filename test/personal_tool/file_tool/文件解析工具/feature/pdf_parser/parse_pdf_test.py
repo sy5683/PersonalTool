@@ -14,7 +14,7 @@ class ParsePdfTestCase(TestBase):
         self.voucher_path = Path(r"E:\Document\公司文档\RPA\场景文档\云驿燃料调运平台场景\电子凭证\支付宝")
 
     def test_parse_declaration(self):
-        for declaration_path in self.__get_pdf_path(self.declaration_path.joinpath("test")):
+        for declaration_path in self.__get_pdf_path(self.declaration_path.joinpath("")):
             result = ParsePdf.parse_declaration(declaration_path)
             for declaration in result.declarations:
                 print(declaration.__dict__)
