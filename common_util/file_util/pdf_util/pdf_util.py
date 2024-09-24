@@ -1,4 +1,3 @@
-import re
 import typing
 from pathlib import Path
 
@@ -63,6 +62,6 @@ class PdfUtil:
         return ConvertPdf.pdf_to_images(str(pdf_path), save_path, suffix, dpi)
 
     @staticmethod
-    def split_receipt_pdf(pdf_profile: PdfProfile, *split_words: str) -> typing.List[ReceiptProfile]:
-        """分割回单pdf"""
-        return ProcessPdfProfile.split_receipt_pdf(pdf_profile, *split_words)
+    def split_pdf(pdf_profile: PdfProfile, *split_words: str) -> typing.List[ReceiptProfile]:
+        """分割pdf"""
+        return ProcessPdfProfile.split_pdf(pdf_profile, *split_words)

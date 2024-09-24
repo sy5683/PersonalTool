@@ -15,5 +15,5 @@ class FCReceiptParser(ReceiptParser):
     def parse(self):
         """解析"""
         for pdf_profile in self.pdf_profiles:
-            for receipt_profile in PdfUtil.split_receipt_pdf(pdf_profile):
+            for receipt_profile in PdfUtil.split_pdf(pdf_profile):
                 self._parse_receipt(receipt_profile, FCReceiptType)
