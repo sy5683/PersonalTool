@@ -12,12 +12,10 @@ class ParseExcelTestCase(TestBase):
         self.statement_path = Path(r"E:\Document\公司文档\RPA\场景文档\02_银行对账\银行流水")
 
     def test_parse_statement(self):
-        statement_path = self.statement_path.joinpath("")
-        for excel_path in self.__get_excel_path(statement_path):
+        for excel_path in self.__get_excel_path(self.statement_path.joinpath("")):
             statement_parser = ParseExcel.parse_statement(excel_path)
             for statement in statement_parser.statements:
                 print(statement.__dict__)
-            print()
 
     @staticmethod
     def __get_excel_path(pdf_path: Path) -> typing.List[Path]:
