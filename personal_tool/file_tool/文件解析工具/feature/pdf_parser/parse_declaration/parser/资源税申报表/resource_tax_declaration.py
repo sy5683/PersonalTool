@@ -29,16 +29,16 @@ class ResourceTaxDeclaration(DeclarationParser):
             table = profile.tables[0]
         except IndexError:
             raise ValueError("无法在商户结算记录中提取出表格数据")
-        declaration = Declaration()
-        declaration.declaration_type = self.parser_type  # 申报表类型
         for row in range(table.max_rows):
             row_values = table.get_row_values(row)
-            try:  # 当前只计算资源税的合计
+            try:  # 当前只计算资源税的数据
                 assert row_values[1] == "资源税"
             except (AssertionError, IndexError):
                 continue
+            declaration = Declaration()
+            declaration.declaration_type = self.parser_type  # 申报表类型
             declaration.from_date = row_values[3]  # 税款所属时间起
             declaration.to_date = row_values[4]  # 税款所属时间止
-            declaration.revenue += NumberUtil.to_amount(row_values[5])  # 申报表收入
-            declaration.tax_amount += NumberUtil.to_amount(row_values[7])  # 申报表税额
-        self.declarations.append(declaration)
+            declaration.revenue = NumberUtil.to_amount(row_values[5])  # 申报表收入
+            declaration.tax_amount = NumberUtil.to_amount(row_values[7])  # 申报表税额
+            self.declarations.append(declaration)
