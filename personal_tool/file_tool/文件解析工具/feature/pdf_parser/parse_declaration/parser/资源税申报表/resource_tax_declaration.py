@@ -33,8 +33,9 @@ class ResourceTaxDeclaration(DeclarationParser):
         declaration.declaration_type = self.parser_type  # 申报表类型
         for row in range(table.max_rows):
             row_values = table.get_row_values(row)
-            # 当前只计算资源税的合计
-            if row_values[1] != "资源税":
+            try:  # 当前只计算资源税的合计
+                assert row_values[1] == "资源税"
+            except (AssertionError, IndexError):
                 continue
             declaration.from_date = row_values[3]  # 税款所属时间起
             declaration.to_date = row_values[4]  # 税款所属时间止

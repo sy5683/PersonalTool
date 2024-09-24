@@ -21,4 +21,4 @@ class ParseExcelTestCase(TestBase):
 
     @staticmethod
     def __get_excel_path(pdf_path: Path) -> typing.List[Path]:
-        return [each for each in pdf_path.rglob("*") if re.search("xls", each.suffix)]
+        return [each for each in pdf_path.rglob("*") if re.search("xls", each.suffix.lower())]
