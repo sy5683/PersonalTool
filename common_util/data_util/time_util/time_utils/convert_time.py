@@ -21,6 +21,8 @@ class ConvertTime:
         try:
             stamp = cls.format_to_datetime(stamp)
             return cls._datetime_to_str(stamp, time_format)
+        except AttributeError:  # 日期为空时
+            return ""
         except Exception as e:
             logging.warning(e)
             return ""
