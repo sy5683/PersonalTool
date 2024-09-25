@@ -10,7 +10,7 @@ class ParsePdfTestCase(TestBase):
 
     def setUp(self):
         self.declaration_path = Path(r"E:\Document\公司文档\RPA\场景文档\28_公文机器人\05-收入核对\申报表")
-        self.invoice_path = Path(r"E:\Document\公司文档\RPA\场景文档\duty_paid_path")
+        self.invoice_path = Path(r"E:\Document\公司文档\RPA\场景文档\21_制单机器人\4制单机器人_税费缴纳")
         self.receipt_path = Path(r"E:\Document\公司文档\RPA\场景文档\01_银行回单补扫\回单")
         self.voucher_path = Path(r"E:\Document\公司文档\RPA\场景文档\云驿燃料调运平台场景\电子凭证\支付宝")
 

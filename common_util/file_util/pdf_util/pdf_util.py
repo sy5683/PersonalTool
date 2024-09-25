@@ -5,7 +5,7 @@ import numpy
 
 from .pdf_utils.convert_pdf import ConvertPdf
 from .pdf_utils.entity.pdf_element import Table, Word
-from .pdf_utils.entity.pdf_profile import PdfProfile, ReceiptProfile
+from .pdf_utils.entity.pdf_profile import PdfProfile, TableProfile
 from .pdf_utils.extract_pdf import ExtractPdf
 from .pdf_utils.parse_pdf import ParsePdf
 from .pdf_utils.process_pdf_profile import ProcessPdfProfile
@@ -62,6 +62,6 @@ class PdfUtil:
         return ConvertPdf.pdf_to_images(str(pdf_path), save_path, suffix, dpi)
 
     @staticmethod
-    def split_pdf(pdf_profile: PdfProfile, *split_words: str) -> typing.List[ReceiptProfile]:
+    def split_pdf(pdf_profile: PdfProfile, *split_words: str) -> typing.List[TableProfile]:
         """分割pdf"""
         return ProcessPdfProfile.split_pdf(pdf_profile, *split_words)

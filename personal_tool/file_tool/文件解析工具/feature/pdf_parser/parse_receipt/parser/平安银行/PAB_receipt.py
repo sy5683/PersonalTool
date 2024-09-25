@@ -15,5 +15,5 @@ class PABReceiptParser(ReceiptParser):
     def parse(self):
         """解析"""
         for pdf_profile in self.pdf_profiles:
-            for receipt_profile in PdfUtil.split_pdf(pdf_profile, "bank.pingan.com"):
-                self._parse_receipt(receipt_profile, PABReceiptType)
+            for profile in PdfUtil.split_pdf(pdf_profile, "bank.pingan.com"):
+                self._parse_receipt(profile, PABReceiptType)

@@ -15,5 +15,5 @@ class ICBCReceiptParser(ReceiptParser):
     def parse(self):
         """解析"""
         for pdf_profile in self.pdf_profiles:
-            for receipt_profile in PdfUtil.split_pdf(pdf_profile):
-                self._parse_receipt(receipt_profile, CCBReceiptType)
+            for profile in PdfUtil.split_pdf(pdf_profile):
+                self._parse_receipt(profile, CCBReceiptType)

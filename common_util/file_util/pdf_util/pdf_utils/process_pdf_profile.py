@@ -2,7 +2,7 @@ import re
 import typing
 
 from .entity.pdf_element import Word
-from .entity.pdf_profile import PdfProfile, ReceiptProfile
+from .entity.pdf_profile import PdfProfile, TableProfile
 
 
 class ProcessPdfProfile:
@@ -23,8 +23,8 @@ class ProcessPdfProfile:
         return [pattern.search(word.text).group(1) for word in words if pattern.search(word.text)]
 
     @classmethod
-    def split_pdf(cls, pdf_profile: PdfProfile, *split_words: str) -> typing.List[ReceiptProfile]:
-        """分割pdfpdf"""
+    def split_pdf(cls, pdf_profile: PdfProfile, *split_words: str) -> typing.List[TableProfile]:
+        """分割pdf"""
         if not pdf_profile.tables:
             return cls.__split_pdf_without_table(pdf_profile, *split_words)
         # 获取pdf中所有表格坐标
@@ -52,21 +52,21 @@ class ProcessPdfProfile:
             if split_y:
                 split_ys.append(split_y)
         if not any(split_ys):
-            return [ReceiptProfile(table) for table in pdf_profile.tables]
+            return [TableProfile(table) for table in pdf_profile.tables]
         split_ys = [0] + split_ys + [999999]
         # 根据纵坐标分割pdf
-        receipt_profiles = []
+        profiles = []
         for index in range(1, len(split_ys)):
-            receipt_profile = ReceiptProfile()
+            profile = TableProfile()
             for table in pdf_profile.tables:
                 if table.rect[1] > split_ys[index - 1] and table.rect[3] < split_ys[index]:
-                    assert receipt_profile.table is None, "异常格式，一个pdf判断出来多个表格"
-                    receipt_profile.table = table
+                    assert profile.table is None, "异常格式，一个pdf判断出来多个表格"
+                    profile.table = table
             for word in pdf_profile.words:
                 if word.rect[1] > split_ys[index - 1] and word.rect[3] < split_ys[index]:
-                    receipt_profile.words.append(word)
-            receipt_profiles.append(receipt_profile)
-        return receipt_profiles
+                    profile.words.append(word)
+            profiles.append(profile)
+        return profiles
 
     @classmethod
     def merge_words(cls, words: typing.List[Word], threshold: int) -> typing.List[Word]:
@@ -91,24 +91,24 @@ class ProcessPdfProfile:
         return new_words
 
     @staticmethod
-    def __split_pdf_without_table(pdf_profile: PdfProfile, *split_words: str) -> typing.List[ReceiptProfile]:
+    def __split_pdf_without_table(pdf_profile: PdfProfile, *split_words: str) -> typing.List[TableProfile]:
         """切割没有表格的pdf"""
         if not split_words:
-            return [ReceiptProfile(None, pdf_profile.words)]
+            return [TableProfile(None, pdf_profile.words)]
         else:
-            receipt_profiles = []
-            receipt_profile = ReceiptProfile()
+            profiles = []
+            profile = TableProfile()
             for index, word in enumerate(pdf_profile.words):
                 if re.search("|".join(split_words), word.text):
-                    receipt_profile = ReceiptProfile()
-                    receipt_profiles.append(receipt_profile)
-                receipt_profile.words.append(word)
-            return [receipt_profile for receipt_profile in receipt_profiles if len(receipt_profile.words) != 1]
+                    profile = TableProfile()
+                    profiles.append(profile)
+                profile.words.append(word)
+            return [profile for profile in profiles if len(profile.words) != 1]
 
     @staticmethod
-    def __split_pdf_without_word(pdf_profile: PdfProfile) -> typing.List[ReceiptProfile]:
+    def __split_pdf_without_word(pdf_profile: PdfProfile) -> typing.List[TableProfile]:
         """切割没有表格外文字的pdf"""
         if len(pdf_profile.tables) > 1:
-            return [ReceiptProfile(table) for table in pdf_profile.tables]
+            return [TableProfile(table) for table in pdf_profile.tables]
         else:
-            return [ReceiptProfile(pdf_profile.tables[0], pdf_profile.words)]
+            return [TableProfile(pdf_profile.tables[0], pdf_profile.words)]

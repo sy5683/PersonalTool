@@ -16,7 +16,7 @@ class ICBCReceiptParser(ReceiptParser):
     def parse(self):
         """解析"""
         for pdf_profile in self.pdf_profiles:
-            for receipt_profile in PdfUtil.split_pdf(pdf_profile):
-                if not receipt_profile.table and len(receipt_profile.words) < 6:
+            for profile in PdfUtil.split_pdf(pdf_profile):
+                if not profile.table and len(profile.words) < 6:
                     continue
-                self._parse_receipt(receipt_profile, ICBCReceiptType)
+                self._parse_receipt(profile, ICBCReceiptType)
