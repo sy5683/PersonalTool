@@ -154,11 +154,8 @@ class ParsePdf:
                     pass
         # cv2.imshow("show_name", image)
         # cv2.waitKey(0)
-        # 使用漫水填充算法，将周围变为黑色，这样可以去掉单独的线条
-        cv2.floodFill(image, None, (1, 1), (0, 0, 0), flags=cv2.FLOODFILL_FIXED_RANGE)
-        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
-        image = cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel, iterations=1)
-        return image
+        # 使用漫水填充算法，去掉单独的线条
+        return cls.__flood_fill(image)
 
     @classmethod
     def _get_tables(cls, table_image: numpy.ndarray) -> typing.List[Table]:
@@ -214,6 +211,13 @@ class ParsePdf:
     def __check_inside(point: typing.Tuple[float, float], rect: typing.Tuple[float, float, float, float]):
         """判断点是否在框内"""
         return rect[0] <= point[0] <= rect[2] and rect[1] <= point[1] <= rect[3]
+
+    @staticmethod
+    def __flood_fill(image: numpy.ndarray) -> numpy.ndarray:
+        """漫水填充算法，将周围变为黑色，这样可以去掉单独的线条"""
+        cv2.floodFill(image, None, (1, 1), (0, 0, 0), flags=cv2.FLOODFILL_FIXED_RANGE)
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+        return cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel, iterations=1)
 
     @staticmethod
     def __merge_words(words: typing.List[Word], threshold_x: int) -> typing.List[Word]:

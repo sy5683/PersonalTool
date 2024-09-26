@@ -34,6 +34,20 @@ class InvoiceType(metaclass=abc.ABCMeta):
         """
         return self.table.get_cell_relative(pattern, relative)
 
+    def _get_details(self, tag_row: int) -> typing.List[dict]:
+        """获取多行明细。发票中一般是一行表头，然后下面的单元格中写入多行数据。因此这里将方法分离出来实现复用"""
+        details = []
+        tags = self.table.get_row_values(tag_row)
+        for detail_index, cell in enumerate(self.table.get_row_cells(tag_row + 1)):
+            for index, value in enumerate(re.split(r"\s+", cell.get_value("\t"))):
+                try:
+                    data = details[index]
+                except IndexError:
+                    data = dict(zip(tags, [""] * len(tags)))
+                    details.append(data)
+                data[list(data.keys())[detail_index]] = value
+        return details
+
     def _get_word(self, pattern: str) -> typing.Union[str, None]:
         """获取表格外的指定文字"""
         return PdfUtil.filter_word(self.words, pattern)
