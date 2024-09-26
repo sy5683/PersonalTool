@@ -1,3 +1,5 @@
+import re
+
 from common_util.data_util.number_util.number_util import NumberUtil
 from common_util.data_util.time_util.time_util import TimeUtil
 from .CCB_receipt_type import CCBReceiptType
@@ -9,7 +11,7 @@ class CCBReceiptType05(CCBReceiptType):
     def judge(self) -> bool:
         """判断是否为当前格式"""
         for key in ["项目名称", "工本费/转账汇款手续费/手续费", "金额"]:
-            if key not in "".join(self.table.get_row_values(1)):
+            if not re.search(key, "".join(self.table.get_row_values(1))):
                 return False
         return True
 

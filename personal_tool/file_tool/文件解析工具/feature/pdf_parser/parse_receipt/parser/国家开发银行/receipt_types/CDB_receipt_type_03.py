@@ -13,7 +13,7 @@ class CDBReceiptType03(CDBReceiptType):
         if self.table.get_row_values(0)[0] != "国家开发银行网上银行电子回执":
             return False
         for key in ["付款人", "收款人", "全称"]:
-            if key not in "".join(self.table.get_row_values(2)):
+            if not re.search(key, "".join(self.table.get_row_values(2))):
                 return False
         return True
 

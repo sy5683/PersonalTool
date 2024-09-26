@@ -11,7 +11,7 @@ class CBHBReceiptType01(CBHBReceiptType):
     def judge(self) -> bool:
         """判断是否为当前格式"""
         for key in ["付款方", "收款方", "账号"]:
-            if key not in "".join(self.table.get_row_values(1)):
+            if not re.search(key, "".join(self.table.get_row_values(1))):
                 return False
         return True
 

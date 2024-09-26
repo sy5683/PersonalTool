@@ -1,3 +1,5 @@
+import re
+
 from common_util.data_util.number_util.number_util import NumberUtil
 from common_util.data_util.time_util.time_util import TimeUtil
 from .CCB_receipt_type import CCBReceiptType
@@ -9,7 +11,7 @@ class CCBReceiptType04(CCBReceiptType):
     def judge(self) -> bool:
         """判断是否为当前格式"""
         for key in ["计息项目", "起息日", "结息日", "本金/积数", "利率", "利息"]:
-            if key not in "".join(self.table.get_row_values(1)):
+            if not re.search(key, "".join(self.table.get_row_values(1))):
                 return False
         return True
 

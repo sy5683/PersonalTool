@@ -1,3 +1,5 @@
+import re
+
 from common_util.data_util.number_util.number_util import NumberUtil
 from common_util.data_util.time_util.time_util import TimeUtil
 from .FC_receipt_type import FCReceiptType
@@ -9,7 +11,7 @@ class FCReceiptType01(FCReceiptType):
     def judge(self) -> bool:
         """判断是否为当前格式"""
         for key in ["类型", "起息日期", "终息日期", "天数", "平均余额", "利率", "利息"]:
-            if key not in "".join(self.table.get_row_values(0)):
+            if not re.search(key, "".join(self.table.get_row_values(0))):
                 return False
         return True
 

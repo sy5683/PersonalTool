@@ -13,7 +13,7 @@ class CCBReceiptType06(CCBReceiptType):
         if len(self.table.get_row_values(5)) != 4:
             return False
         for key in ["申请客户名称", "业务编号"]:
-            if key not in "".join(self.table.get_row_values(0)):
+            if not re.search(key, "".join(self.table.get_row_values(0))):
                 return False
         if {"付款账号", "收款账号"} < set(self.table.get_row_values(1)):
             return True
