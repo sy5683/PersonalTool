@@ -18,29 +18,47 @@ class ParsePdf:
         pdf_profiles = []
         with fitz.open(pdf_path) as pdf:
             for index in range(pdf.page_count):
-                pdf_profile = PdfProfile()
                 pdf_page = pdf[index]
-                # 1.1) 获取pdf文字
+                # 1) 获取pdf文字
                 words = cls._get_words(pdf_page)
                 if not words:
                     continue
-                # 1.2) 获取表格图像
+                # 2) 获取表格图像
                 table_image = cls._get_table_image(pdf_page)
-                # 1.3) 获取表格列表
-                tables = cls._get_tables(table_image)
-                # 2.1) 处理超出页面大小的文字坐标
-                words = cls._format_out_words(words, table_image)
-                # 3.1) 获取表格单元格列表
-                cells = cls._get_table_cells(table_image, words)
-                # 3.3) 将单元格合并至表格中
-                cls._group_table_cells(tables, cells)
-                pdf_profile.tables += tables
-                # 4.1) 合并相近文字
-                words = cls.__merge_words(words, threshold_x)
-                # 4.2) 过滤表格中的文字
-                pdf_profile.words += cls._filter_word_in_table(tables, words)
+                # 3) 获取pdf_profile对象
+                pdf_profile = cls._get_pdf_profile(table_image, words, threshold_x)
+                # 4) 当这个页面提取出来的表格与其单元格只有一个，且表格外没有文字时，说明这个pdf最外层很可能包裹着一层边框
+                if len(pdf_profile.tables) == 1 and len(pdf_profile.words) == 0 \
+                        and pdf_profile.tables[0].max_cols == 1 and pdf_profile.tables[0].max_rows == 1:
+                    # 4.1) 定位白边，再次使用漫水填充算法，实现去除最外层边框的功能
+                    edges_y, edges_x = numpy.where(table_image >= 255)
+                    # 注意，因为很可能只是误判断，这里使用临时对象重新存储图片，然后对图片在进行一次判断才可确认是否需要去除边框
+                    temp_table_image = cls.__flood_fill(table_image, (min(edges_x), min(edges_y)))
+                    contours, hierarchy = cv2.findContours(table_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                    # 4.2) 当从新的图片中提取出来的边缘大于1，则说明图片存在边框，需要重新取数
+                    if len(contours) > 1:
+                        pdf_profile = cls._get_pdf_profile(temp_table_image, words, threshold_x)
                 pdf_profiles.append(pdf_profile)
         return pdf_profiles
+
+    @classmethod
+    def _get_pdf_profile(cls, table_image: numpy.ndarray, words: typing.List[Word], threshold_x: int) -> PdfProfile:
+        """获取pdf_profile对象"""
+        pdf_profile = PdfProfile()
+        # 1.3) 获取表格列表
+        tables = cls._get_tables(table_image)
+        # 2.1) 处理超出页面大小的文字坐标
+        words = cls._format_out_words(words, table_image)
+        # 3.1) 获取表格单元格列表
+        cells = cls._get_table_cells(table_image, words)
+        # 3.3) 将单元格合并至表格中
+        cls._group_table_cells(tables, cells)
+        pdf_profile.tables += tables
+        # 4.1) 合并相近文字
+        words = cls.__merge_words(words, threshold_x)
+        # 4.2) 过滤表格中的文字
+        pdf_profile.words += cls._filter_word_in_table(tables, words)
+        return pdf_profile
 
     @classmethod
     def get_pdf_tables(cls, pdf_path: str) -> typing.List[Table]:
@@ -155,7 +173,7 @@ class ParsePdf:
         # cv2.imshow("show_name", image)
         # cv2.waitKey(0)
         # 使用漫水填充算法，去掉单独的线条
-        return cls.__flood_fill(image)
+        return cls.__flood_fill(image, (1, 1))
 
     @classmethod
     def _get_tables(cls, table_image: numpy.ndarray) -> typing.List[Table]:
@@ -213,9 +231,9 @@ class ParsePdf:
         return rect[0] <= point[0] <= rect[2] and rect[1] <= point[1] <= rect[3]
 
     @staticmethod
-    def __flood_fill(image: numpy.ndarray) -> numpy.ndarray:
+    def __flood_fill(image: numpy.ndarray, point: typing.Tuple[int, int]) -> numpy.ndarray:
         """漫水填充算法，将周围变为黑色，这样可以去掉单独的线条"""
-        cv2.floodFill(image, None, (1, 1), (0, 0, 0), flags=cv2.FLOODFILL_FIXED_RANGE)
+        cv2.floodFill(image, None, point, (0, 0, 0), flags=cv2.FLOODFILL_FIXED_RANGE)
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
         return cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel, iterations=1)
 
