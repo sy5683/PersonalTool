@@ -48,9 +48,9 @@ class ICBC03StatementParser(StatementParser):
             statement.abstract = f"{data[ICBC03Tags.abstract.value]}；{data[ICBC03Tags.remark.value]}".strip("；")  # 摘要
             statement.purpose = data[ICBC03Tags.purpose.value]  # 用途
             if data[ICBC03Tags.loan_symbol.value] == "借":
-                statement.receive_amount = NumberUtil.to_amount(data[ICBC03Tags.amount.value])  # 收款金额
-            else:
                 statement.payment_amount = NumberUtil.to_amount(data[ICBC03Tags.amount.value])  # 付款金额
+            else:
+                statement.receive_amount = NumberUtil.to_amount(data[ICBC03Tags.amount.value])  # 收款金额
             if not statement.payment_amount and not statement.receive_amount:
                 continue
             statement.balance = NumberUtil.to_amount(data[ICBC03Tags.balance.value])  # 余额
