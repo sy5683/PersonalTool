@@ -14,6 +14,7 @@ class BrowserBackuper:
         if not os.path.exists(user_data_path):
             logging.warning("未找到谷歌浏览器User Data文件路径")
             return
+        logging.info(f"谷歌浏览器书签路径: {user_data_path}")
         # 保存文件
         for bookmark_name in ["Bookmarks", "Bookmarks.bak"]:
             bookmark_path = os.path.join(user_data_path, bookmark_name)
