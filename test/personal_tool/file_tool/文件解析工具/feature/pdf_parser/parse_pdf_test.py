@@ -16,26 +16,26 @@ class ParsePdfTestCase(TestBase):
 
     def test_parse_declaration(self):
         for declaration_path in self.__get_pdf_path(self.declaration_path.joinpath("")):
-            result = ParsePdf.parse_declaration(declaration_path)
-            for declaration in result.declarations:
+            parser = ParsePdf.parse_declaration(declaration_path)
+            for declaration in parser.declarations:
                 print(declaration.__dict__)
 
     def test_parse_invoice(self):
         for invoice_path in self.__get_pdf_path(self.invoice_path.joinpath(r"")):
-            result = ParsePdf.parse_invoice(invoice_path)
-            for receipt in result.invoices:
+            parser = ParsePdf.parse_invoice(invoice_path)
+            for receipt in parser.invoices:
                 print(receipt.__dict__)
 
     def test_parse_receipt(self):
         for receipt_path in self.__get_pdf_path(self.receipt_path.joinpath(r"")):
-            result = ParsePdf.parse_receipt(receipt_path)
-            for receipt in result.receipts:
+            parser = ParsePdf.parse_receipt(receipt_path)
+            for receipt in parser.receipts:
                 print(receipt.__dict__)
 
     def test_parse_voucher(self):
         for voucher_path in self.__get_pdf_path(self.voucher_path.joinpath(r"")):
-            result = ParsePdf.parse_voucher(voucher_path)
-            for voucher in result.vouchers:
+            parser = ParsePdf.parse_voucher(voucher_path)
+            for voucher in parser.vouchers:
                 print(voucher.__dict__)
 
     @staticmethod

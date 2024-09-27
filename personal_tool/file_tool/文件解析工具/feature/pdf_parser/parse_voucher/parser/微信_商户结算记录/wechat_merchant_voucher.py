@@ -1,7 +1,7 @@
 from common_util.data_util.number_util.number_util import NumberUtil
 from common_util.data_util.time_util.time_util import TimeUtil
 from common_util.file_util.pdf_util.pdf_utils.entity.pdf_element import Table
-from ...entity.voucher import Voucher
+from .entity.settlement_record import SettlementRecord
 from ...entity.voucher_parser import VoucherParser
 
 
@@ -27,14 +27,14 @@ class WechatMerchantVoucher(VoucherParser):
             if "合计" in row_values:
                 break
             data = dict(zip(tags, row_values))
-            voucher = Voucher()
+            voucher = SettlementRecord()
             voucher.date = TimeUtil.format_to_str(data.get("结算日期"))
-            voucher.ddje = NumberUtil.to_amount(data.get("订单金额(元)"))
-            voucher.ddbs = data.get("订单笔数")
-            voucher.tkje = NumberUtil.to_amount(data.get("退款金额(元)"))
-            voucher.tkbs = data.get("退款笔数")
-            voucher.sxf = NumberUtil.to_amount(data.get("手续费(元)"))
-            voucher.rzje = NumberUtil.to_amount(data.get("入账金额(元)"))
+            voucher.order_amount = NumberUtil.to_amount(data.get("订单金额(元)"))
+            voucher.order_quantity = data.get("订单笔数")
+            voucher.refund_amount = NumberUtil.to_amount(data.get("退款金额(元)"))
+            voucher.refund_quantity = data.get("退款笔数")
+            voucher.commission = NumberUtil.to_amount(data.get("手续费(元)"))
+            voucher.entry_amount = NumberUtil.to_amount(data.get("入账金额(元)"))
             self.vouchers.append(voucher)
 
     @staticmethod
