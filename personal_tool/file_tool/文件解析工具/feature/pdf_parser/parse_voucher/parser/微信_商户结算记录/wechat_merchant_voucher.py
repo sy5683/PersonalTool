@@ -24,11 +24,11 @@ class WechatMerchantVoucher(VoucherParser):
         tags = table.get_row_values(tag_row)
         for row in range(tag_row + 1, table.max_rows):
             row_values = table.get_row_values(row)
-            if "合计" in row_values:
-                break
             data = dict(zip(tags, row_values))
             voucher = SettlementRecord()
             voucher.date = TimeUtil.format_to_str(data.get("结算日期"))
+            if not voucher.date:
+                continue  # 跳过日期行不正确的数据（如：合计行）
             voucher.order_amount = NumberUtil.to_amount(data.get("订单金额(元)"))
             voucher.order_quantity = data.get("订单笔数")
             voucher.refund_amount = NumberUtil.to_amount(data.get("退款金额(元)"))
