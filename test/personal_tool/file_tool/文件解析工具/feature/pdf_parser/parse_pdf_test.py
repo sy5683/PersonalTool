@@ -33,7 +33,7 @@ class ParsePdfTestCase(TestBase):
                 print(receipt.__dict__)
 
     def test_parse_voucher(self):
-        for voucher_path in self.__get_pdf_path(self.voucher_path.joinpath(r"微信")):
+        for voucher_path in self.__get_pdf_path(self.voucher_path.joinpath(r"")):
             parser = ParsePdf.parse_voucher(voucher_path)
             for voucher in parser.vouchers:
                 print(voucher.__dict__)
