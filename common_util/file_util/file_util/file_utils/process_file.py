@@ -1,5 +1,6 @@
 import os
 import re
+import shutil
 import time
 import tkinter
 import typing
@@ -11,6 +12,14 @@ import magic
 
 class ProcessFile:
     """处理文件"""
+
+    @staticmethod
+    def delete_file(file_path: Path):
+        """删除文件"""
+        if file_path.is_dir():
+            shutil.rmtree(file_path)
+        else:
+            os.remove(file_path)
 
     @classmethod
     def format_path(cls, file_path: Path) -> Path:

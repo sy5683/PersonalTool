@@ -8,6 +8,11 @@ from .file_utils.process_temp_file import ProcessTempFile
 class FileUtil:
 
     @staticmethod
+    def delete_file(file_path: typing.Union[Path, str]):
+        """删除文件"""
+        ProcessFile.delete_file(Path(file_path))
+
+    @staticmethod
     def format_path(file_path: typing.Union[Path, str]) -> Path:
         """格式化路径"""
         return ProcessFile.format_path(Path(file_path))
