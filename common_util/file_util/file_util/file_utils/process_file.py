@@ -16,10 +16,14 @@ class ProcessFile:
     @staticmethod
     def delete_file(file_path: Path):
         """删除文件"""
-        if file_path.is_dir():
-            shutil.rmtree(file_path)
-        else:
-            os.remove(file_path)
+        try:
+            if file_path.is_dir():
+                shutil.rmtree(file_path)
+            else:
+                os.remove(file_path)
+        except PermissionError:
+            pass
+
 
     @classmethod
     def format_path(cls, file_path: Path) -> Path:
