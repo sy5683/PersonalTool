@@ -2,7 +2,7 @@ import logging
 import tempfile
 from pathlib import Path
 
-from ..clean_feature import CleanFeature
+from common_util.file_util.file_util.file_util import FileUtil
 
 
 class TempFileCleaner:
@@ -13,4 +13,4 @@ class TempFileCleaner:
         tempdir_path = tempfile.gettempdir()
         logging.info(f"清理临时文件夹: {tempdir_path}")
         for file_path in Path(tempdir_path).glob("*"):
-            CleanFeature.delete_file(file_path)
+            FileUtil.delete_file(file_path)
