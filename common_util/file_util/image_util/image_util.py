@@ -32,6 +32,12 @@ class ImageUtil:
         return ProcessOpenCVImage.image_to_transparent(image, mask_image)
 
     @staticmethod
+    def re_scale(image_path: typing.Union[Path, str], new_size: typing.Tuple[int, int],
+                 save_path: typing.Union[Path, str] = None, resize: bool = False) -> str:
+        """转换图片比例"""
+        return ProcessPILImage.re_scale(str(image_path), new_size, save_path, resize)
+
+    @staticmethod
     def read_opencv_image(image_path: typing.Union[Path, str]) -> numpy.ndarray:
         """读取图片"""
         return ProcessOpenCVImage.read_image(str(image_path))
@@ -56,8 +62,3 @@ class ImageUtil:
     def screenshot(save_path: typing.Union[Path, str] = None) -> typing.List[str]:
         """截图"""
         return Screenshot.screenshot(save_path)
-
-    @staticmethod
-    def to_a4_size(image_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None) -> str:
-        """将图片转换为A4比例"""
-        return ProcessPILImage.to_a4_size(str(image_path), save_path)

@@ -36,19 +36,22 @@ class ProcessPILImage:
         return save_path
 
     @classmethod
-    def to_a4_size(cls, image_path: str, save_path: typing.Union[Path, str]) -> str:
-        """将图片转换为A4比例"""
-        image = Image.open(image_path)
-        printer_width, printer_height = (210, 297)  # A4宽高比
-        width, height = new_width, new_height = image.size
-        if width > height:
-            new_height = width * printer_width // printer_height
-        else:
-            new_width = height * printer_width // printer_height
-        new_image = cls._create_image((new_width, new_height))
-        cls._paste_image_center(new_image, image)
+    def re_scale(cls, image_path: str, new_size: typing.Tuple[int, int], save_path: typing.Union[Path, str],
+                 resize: bool) -> str:
+        """转换图片比例"""
+        new_width, new_height = new_size
+        with Image.open(image_path) as image:
+            width, height = _new_width, _new_height = image.size
+            if width / height > new_width / new_height:
+                _new_height = width * new_height // new_width
+            else:
+                _new_width = height * new_width // new_height
+            new_image = cls._create_image((_new_width, _new_height))
+            cls._paste_image_center(new_image, image)
+        if resize:
+            new_image = new_image.resize(new_size)
         _image_path, suffix = os.path.splitext(image_path)
-        save_path = f"{_image_path}(A4){suffix}" if save_path is None else str(save_path)
+        save_path = f"{_image_path}{new_size}{suffix}" if save_path is None else str(save_path)
         new_image.save(save_path)
         return save_path
 

@@ -22,6 +22,11 @@ class ImageUtilTestCase(TestBase):
         x, y = ImageUtil.get_image_pos(self.template_image_path)
         print(x, y)
 
+    def test_re_scale(self):
+        new_size = (210, 297)  # A4宽高比
+        image_path = ImageUtil.re_scale(self.image_path, new_size, self.save_image_path)
+        print(image_path)
+
     def test_rotate_image(self):
         image = ImageUtil.read_opencv_image(self.image_path)
         rotate_image = ImageUtil.rotate_image(image, 45)
@@ -31,7 +36,3 @@ class ImageUtilTestCase(TestBase):
         image_paths = ImageUtil.screenshot(self.save_image_path)
         for image_path in image_paths:
             Win32Util.open_file(image_path)
-
-    def test_to_a4_size(self):
-        image_path = ImageUtil.to_a4_size(self.image_path)
-        print(image_path)
