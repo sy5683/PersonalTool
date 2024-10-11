@@ -1,7 +1,6 @@
 import abc
 
 import pygame
-from PIL import Image
 
 from ...setting.setting_feature import SettingFeature
 from ...file_feature import FileFeature
@@ -13,11 +12,8 @@ class SceneBase(metaclass=abc.ABCMeta):
         # 初始化刷新频率Clock
         self.clock = pygame.time.Clock()
         # 获取背景图片路径
+        # 因为需要实现背景移动，因此使用的背景图片高度为屏幕的两倍
         image_path = FileFeature.get_file_path(image_name)
-        # 获取屏幕长宽
-        width, height = Image.open(image_path).size[:2]
-        # 因为需要实现背景移动，因此使用的背景图片为屏幕的两倍
-        SettingFeature.screen_setting.screen_size = width, height // 2
         # 设置窗口对象
         self.screen = self.get_screen()
         # 读取背景图片

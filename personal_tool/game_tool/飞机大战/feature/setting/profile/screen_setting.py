@@ -5,7 +5,7 @@ class ScreenSetting:
 
     def __init__(self):
         self.__full_screen = False
-        self.__screen_size = None
+        self.__screen_size = (480, 700)
 
     @property
     def full_screen(self) -> bool:

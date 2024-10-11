@@ -1,5 +1,3 @@
-import typing
-
 import pygame
 
 from .setting.setting_feature import SettingFeature
@@ -8,7 +6,7 @@ from .setting.setting_feature import SettingFeature
 class VolumeFeature:
 
     @staticmethod
-    def set_volume(volume: typing.Union[pygame.mixer.music, pygame.mixer.Sound]):
+    def set_volume(volume: pygame.mixer.music or pygame.mixer.Sound):
         """设置音量"""
         volume.set_volume(round(SettingFeature.volume_setting.main_volume / 100, 2))
 
