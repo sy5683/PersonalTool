@@ -20,10 +20,10 @@ class ProcessFile:
             if file_path.is_dir():
                 shutil.rmtree(file_path)
             else:
+                os.chmod(file_path, 0o777)  # 修改只读文件权限
                 os.remove(file_path)
         except PermissionError:
             pass
-
 
     @classmethod
     def format_path(cls, file_path: Path) -> Path:
