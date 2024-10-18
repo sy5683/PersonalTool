@@ -7,6 +7,7 @@ import tempfile
 import time
 import typing
 import unittest
+import winreg
 from pathlib import Path
 
 import cv2
