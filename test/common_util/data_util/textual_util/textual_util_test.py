@@ -6,8 +6,8 @@ class TextualUtilTestCase(TestBase):
 
     def setUp(self):
         # self.textual = "\u738A\u70E8"
-        # self.textual = "\\u738A\\u70E8"
-        self.textual = "\xe7\x8e\x8a\xe7\x83\xa8"
+        self.textual = "\\u738A\\u70E8"
+        # self.textual = "\xe7\x8e\x8a\xe7\x83\xa8"
         # self.textual = b"\\xe7\\x8e\\x8a\\xe7\\x83\\xa8"
 
     def test_textual_decode(self):
