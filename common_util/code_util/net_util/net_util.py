@@ -19,6 +19,6 @@ class NetUtil:
         return RequestNet.request(method, url, **kwargs)
 
     @staticmethod
-    def response_to_result(response: requests.Response, *keys) -> dict:
+    def response_to_result(response: requests.Response, *keys: str) -> dict:
         """将requests请求返回的response转为可以阅读的结构化字典result"""
         return RequestNet.response_to_result(response, *keys)
