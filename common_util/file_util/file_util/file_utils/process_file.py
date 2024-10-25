@@ -62,9 +62,10 @@ class ProcessFile:
     def get_file_size(file_path: Path) -> float:
         """获取文件大小"""
         if file_path.is_dir():
-            return sum(each.stat().st_size for each in Path(file_path).glob('**/*') if each.is_file())
+            file_size = sum(each.stat().st_size for each in Path(file_path).glob("**/*") if each.is_file())
         else:
-            return file_path.stat().st_size
+            file_size = file_path.stat().st_size
+        return file_size  # 返回值为KB，需要其他单位可以在这里除以1024进行处理
 
     @staticmethod
     def get_original_type(file_path: str) -> str:
