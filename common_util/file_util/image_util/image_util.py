@@ -12,6 +12,11 @@ from .image_utils.screenshot import Screenshot
 class ImageUtil:
 
     @staticmethod
+    def compare_image(image: numpy.ndarray, judge_image: numpy.ndarray) -> float:
+        """对比两张图片的相似度"""
+        return ProcessOpenCVImage.compare_image(image, judge_image)
+
+    @staticmethod
     def convert_to_jpg_by_opencv(image_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None) -> str:
         """通过opencv将图片转换为jpg图片"""
         return ProcessOpenCVImage.convert_to_jpg(str(image_path), save_path)
