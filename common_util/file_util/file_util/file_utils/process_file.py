@@ -59,6 +59,14 @@ class ProcessFile:
         return filedialog.askopenfilenames()
 
     @staticmethod
+    def get_file_size(file_path: Path) -> float:
+        """获取文件大小"""
+        if file_path.is_dir():
+            return sum(each.stat().st_size for each in Path(file_path).glob('**/*') if each.is_file())
+        else:
+            return file_path.stat().st_size
+
+    @staticmethod
     def get_original_type(file_path: str) -> str:
         """获取文件原始类型"""
         # 根据文件读取出来的二进制数据开头判断文件类型

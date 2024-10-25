@@ -24,6 +24,7 @@ from common_util.code_util.selenium_util.selenium_util import SeleniumUtil
 from common_util.code_util.selenium_util.selenium_utils.entity.selenium_config import SeleniumConfig
 from common_util.data_util.object_util.object_util import ObjectUtil
 from common_util.data_util.textual_util.textual_util import TextualUtil
+from common_util.file_util.file_util.file_util import FileUtil
 from common_util.file_util.image_util.image_util import ImageUtil
 from common_util.file_util.json_util.json_util import JsonUtil
 

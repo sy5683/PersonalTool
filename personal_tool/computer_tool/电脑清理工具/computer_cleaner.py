@@ -9,7 +9,6 @@ class ComputerCleaner(ToolBase):
 
     def __init__(self):
         self.functions = [
-            FileCleaner.clean_cache,  # 清理缓存
             FileCleaner.clean_tempdir,  # 清理临时文件夹
         ]
 

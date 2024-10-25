@@ -33,6 +33,11 @@ class FileUtil:
         return ProcessFile.get_file_paths()
 
     @staticmethod
+    def get_file_size(file_path: typing.Union[Path, str]) -> float:
+        """获取文件大小"""
+        return ProcessFile.get_file_size(Path(file_path))
+
+    @staticmethod
     def get_original_type(file_path: typing.Union[Path, str]) -> str:
         """获取文件原始类型"""
         return ProcessFile.get_original_type(str(file_path))

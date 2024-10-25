@@ -10,15 +10,9 @@ class FileCleaner:
     """文件清理工具"""
 
     @classmethod
-    def clean_cache(cls):
-        """清理缓存"""
-        cls._clean_dir(r"C:\Windows\Prefetch", "缓存")
-
-    @classmethod
     def clean_tempdir(cls):
         """清理临时文件夹"""
-        cls._clean_dir(tempfile.gettempdir(), "临时文件夹")
-        cls._clean_dir(r"C:\Windows\Temp", "临时文件夹")
+        cls._clean_dir(tempfile.gettempdir(), "临时文件夹")  # C:\Users\20727\AppData\Local\Temp
 
     @staticmethod
     def _clean_dir(dir_path: typing.Union[Path, str], name: str = ''):
