@@ -11,6 +11,7 @@ import winreg
 from pathlib import Path
 
 import cv2
+import numpy
 import openpyxl
 import win32api
 from PIL import Image
