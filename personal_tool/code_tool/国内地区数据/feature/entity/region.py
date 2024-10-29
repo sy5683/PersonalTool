@@ -8,6 +8,9 @@ class RegionBase:
         self.code = code
         self.name = name
 
+    def __str__(self) -> str:
+        return f"【{self.code}】{self.name}"
+
 
 class District(RegionBase):
     """区/县"""
