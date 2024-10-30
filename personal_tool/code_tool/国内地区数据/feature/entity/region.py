@@ -4,9 +4,10 @@ import typing
 class RegionBase:
     """地区基类"""
 
-    def __init__(self, code: str, name: str):
-        self.code = code
-        self.name = name
+    def __init__(self, code: str, name: str, detail: str = None):
+        self.code = code  # 地区编码
+        self.name = name  # 地区名称
+        self.detail = detail if detail else name  # 详细信息
 
     def __str__(self) -> str:
         return f"【{self.code}】{self.name}"
@@ -15,15 +16,15 @@ class RegionBase:
 class District(RegionBase):
     """区/县"""
 
-    def __init__(self, code: str, name: str):
-        super().__init__(code, name)
+    def __init__(self, code: str, name: str, detail: str):
+        super().__init__(code, name, detail)
 
 
 class City(RegionBase):
     """市"""
 
-    def __init__(self, code: str, name: str):
-        super().__init__(code, name)
+    def __init__(self, code: str, name: str, detail: str):
+        super().__init__(code, name, detail)
         self.districts: typing.List[District] = []
 
 

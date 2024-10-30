@@ -27,14 +27,14 @@ class RegionFactory:
             if re.search("00$", code):
                 province = country.get_province(code)
                 if province:
-                    province.cities.append(City(code, name))
+                    province.cities.append(City(code, name, f"{province.name}{name}"))
                     region_data.remove([code, name])
         # 提取县/区级行政区划数据
         for code, name in region_data[::]:
             province = country.get_province(code)
             city = province.get_city(code)
             if city:
-                city.districts.append(District(code, name))
+                city.districts.append(District(code, name, f"{province.name}{city.name}{name}"))
             else:
-                province.cities.append(District(code, name))
+                province.cities.append(District(code, name, f"{province.name}{name}"))
         return country

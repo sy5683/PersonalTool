@@ -10,26 +10,25 @@ from .factory.region_factory import RegionFactory
 class RegionFeature:
 
     @classmethod
-    def get_detail_regions(cls, region_info: str) -> typing.List[str]:
+    def get_detail_regions(cls, region_info: str) -> typing.List[RegionBase]:
         """获取详细地区数据"""
         country = cls.get_country()
-        detail_regions = []
-        if region_info:
-            for province in country.provinces:
-                if cls._check_by_info(province, region_info):
-                    detail_regions.append(province.name)
-                for city in province.cities:
-                    if cls._check_by_info(city, region_info):
-                        detail_regions.append(province.name + city.name)
-                    try:
-                        for district in city.districts:
-                            if cls._check_by_info(district, region_info):
-                                detail_regions.append(province.name + city.name + district.name)
-                    except AttributeError:
-                        pass
-        for detail_region in detail_regions:
-            print(detail_region)
-        return detail_regions
+        regions = []
+        for province in country.provinces:
+            if cls._check_by_info(province, region_info):
+                regions.append(province)
+            for city in province.cities:
+                if cls._check_by_info(city, region_info):
+                    regions.append(city)
+                try:
+                    for district in city.districts:
+                        if cls._check_by_info(district, region_info):
+                            regions.append(district)
+                except AttributeError:
+                    pass
+        for region in regions:
+            print(region.detail)
+        return regions
 
     @classmethod
     def get_country(cls) -> Country:
@@ -48,10 +47,11 @@ class RegionFeature:
     @staticmethod
     def _check_by_info(region: RegionBase, region_info: str) -> bool:
         """根据地区信息判断是否为目标地区"""
-        if region_info.isdigit():
-            if re.search(region_info, region.code):
-                return True
-        else:
-            if re.search(region_info, region.name):
-                return True
+        if region_info:
+            if region_info.isdigit():
+                if re.search(region_info, region.code):
+                    return True
+            else:
+                if re.search(region_info, region.name):
+                    return True
         return False
