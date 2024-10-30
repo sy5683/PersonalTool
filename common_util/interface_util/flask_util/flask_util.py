@@ -9,7 +9,7 @@ from .entity.flask_response import FlaskResponse
 class FlaskUtil:
 
     @staticmethod
-    def get_app(name: str) -> flask.Flask:
+    def get_app(name: str) -> flask.app:
         """获取app服务"""
 
         class _Flask(flask.Flask):
