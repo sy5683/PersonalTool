@@ -191,6 +191,7 @@ class LaunchChrome(LaunchBase):
         cls.set_browser_front(driver)
         # 4) 接管切换浏览器页签至最后一个
         driver.switch_to.window(driver.window_handles[-1])
+        time.sleep(1)  # 接管切换浏览器之后必须强制等待1秒，否则会出现操作无效的问题
         return driver
 
     @classmethod
