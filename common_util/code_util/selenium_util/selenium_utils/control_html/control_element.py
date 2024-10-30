@@ -22,7 +22,7 @@ class ControlElement:
     def click(cls, selenium_config: SeleniumConfig):
         """模拟点击"""
         if selenium_config.operate_type == OperateType.action:
-            ActionChains(cls.__get_driver(selenium_config)).move_to_element(cls.find(selenium_config)).click().perform()
+            cls.get_action(selenium_config).move_to_element(cls.find(selenium_config)).click().perform()
         elif selenium_config.operate_type == OperateType.js:
             cls.__get_driver(selenium_config).execute_script("(arguments[0]).click()", cls.find(selenium_config))
         else:
@@ -67,6 +67,11 @@ class ControlElement:
         return cls.__find(selenium_config, lambda x: x.find_elements(By.XPATH, selenium_config.xpath))
 
     @classmethod
+    def get_action(cls, selenium_config: SeleniumConfig) -> ActionChains:
+        """获取模拟操作动作"""
+        return ActionChains(cls.__get_driver(selenium_config))
+
+    @classmethod
     def get_attribute(cls, selenium_config: SeleniumConfig, attribute_type: str) -> str:
         """
         获取元素内容
@@ -86,7 +91,7 @@ class ControlElement:
             # 参数无法定位
             if value not in Keys.__dict__.values():
                 raise ValueError("未指定输入对象时，输入值必须为类Keys。")
-            ActionChains(cls.__get_driver(selenium_config)).key_down(value).perform()
+            cls.get_action(selenium_config).key_down(value).perform()
         else:
             logging.info("输入元素: %s" % ("*" * len(value) if cls.__check_is_password(element) else value))
             for _ in range(3):

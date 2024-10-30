@@ -21,4 +21,3 @@ class TextualUtil:
     def spilt_address(address: str) -> typing.Tuple[str, str, str, str]:
         """将地址分割为省、市、区、地址"""
         return ProcessChinese.spilt_address(address)
-

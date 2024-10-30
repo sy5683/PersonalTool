@@ -1,5 +1,6 @@
 import typing
 
+from selenium.webdriver import ActionChains
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 
@@ -54,6 +55,11 @@ class SeleniumUtil:
     def finds(selenium_config: SeleniumConfig) -> typing.List[WebElement]:
         """查找元素列表"""
         return ControlElement.finds(selenium_config)
+
+    @staticmethod
+    def get_action(selenium_config: SeleniumConfig) -> ActionChains:
+        """获取模拟操作动作"""
+        return ControlElement.get_action(selenium_config)
 
     @staticmethod
     def get_attribute(selenium_config: SeleniumConfig, attribute_type: str) -> str:
