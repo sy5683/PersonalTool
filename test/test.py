@@ -37,3 +37,10 @@ class Test(TestBase):
 
     def test_(self):
         """"""
+
+    def test_001(self):
+        from common_util.code_util.crypto_util.crypto_util import CryptoUtil
+        print(CryptoUtil.rsa_encrypt(""))
+
+    def test_002(self):
+        """"""

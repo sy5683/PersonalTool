@@ -4,6 +4,7 @@ import typing
 
 from selenium import common
 
+from common_util.code_util.crypto_util.crypto_util import CryptoUtil
 from common_util.code_util.selenium_util.selenium_util import SeleniumUtil
 from common_util.code_util.selenium_util.selenium_utils.entity.selenium_config import SeleniumConfig
 from common_util.data_util.time_util.time_util import TimeUtil
@@ -17,7 +18,7 @@ class OaFeature:
         """登录OA"""
         SeleniumUtil.launch_chrome_debug(9222)
         username = "xiejinsong"
-        password = "SYggdd_947"
+        password = CryptoUtil.rsa_decrypt("AQCJVwQJnjNmTAzSAVNY1i2/ACY3wdrSFGxqvfmKsFU=")
         SeleniumUtil.open_url(SeleniumConfig(), "http://10.50.144.123:8989/")
         SeleniumUtil.exist(SeleniumConfig(xpath='//form[@autocomplete="off"]'))
         try:
@@ -27,7 +28,7 @@ class OaFeature:
         SeleniumUtil.input(SeleniumConfig(xpath='//input[@placeholder="用户名"]'), username)
         SeleniumUtil.input(SeleniumConfig(xpath='//input[@placeholder="密码"]'), password)
         SeleniumUtil.click(SeleniumConfig(xpath='//button/span[text()="登录"]'))
-        SeleniumUtil.find(SeleniumConfig(xpath=f'//div[@id="navbar-header"]'))
+        SeleniumUtil.find(SeleniumConfig(xpath='//div[@class="contentMune"]'))
 
     @staticmethod
     def switch_in_report_page():
@@ -40,15 +41,17 @@ class OaFeature:
     def fill_reports(cls, daily_reports: typing.List[DailyReport]):
         """填写报告"""
         daily_report = DailyReport()
+        click_confirm = True
         for daily_report in daily_reports:
             if not daily_report.today_work:
                 logging.warning(f"{daily_report.date}无日志")
                 break
             if TimeUtil.format_to_str(daily_report.date, "%m") != TimeUtil.get_now("%m"):
                 logging.warning(f"当前日志不为当月日志，跳过: {daily_report.date}")
+                click_confirm = False  # 当出现这种情况时，填写完成日志后无需提交报告
                 continue
             cls._fill_report(daily_report)
-        if daily_report.completion_rate == 100:
+        if click_confirm and daily_report.completion_rate == 100:
             # 提交报告
             SeleniumUtil.click(SeleniumConfig(xpath='//input[@type="button" and @value="确定"]'))
 
