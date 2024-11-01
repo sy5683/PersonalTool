@@ -9,8 +9,7 @@ class FlaskResponse(object):
         self.message = message
 
     def to_dict(self):
-        return {
-            'code': self.code,
-            'data': self.data,
-            'message': self.message
-        }
+        if not self.code:
+            return {'code': self.code, 'data': self.data}
+        else:
+            return {'code': self.code, 'error_message': self.message}
