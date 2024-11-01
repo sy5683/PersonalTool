@@ -1,19 +1,13 @@
-from pathlib import Path
-
-from common_util.interface_util.flask_util.flask_util import FlaskUtil
+from common_core.base.service_base import ServiceBase
 from feature.region_service import RegionService
 
 
-class DomesticRegionDataService:
+class DomesticRegionDataService(ServiceBase):
 
-    def __init__(self):
-        self.app = FlaskUtil.get_app(Path(__file__).parent.name)
-
-    def main(self):
+    def set_route(self):
+        # 设置地区接口
         RegionService.set_route(self.app)
-        FlaskUtil.run(self.app)
 
 
 if __name__ == '__main__':
-    domestic_region_data_service = DomesticRegionDataService()
-    domestic_region_data_service.main()
+    DomesticRegionDataService().run()

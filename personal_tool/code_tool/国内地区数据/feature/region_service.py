@@ -10,6 +10,8 @@ class RegionService:
 
     @staticmethod
     def set_route(app: flask.app):
+        """设置接口"""
+
         # 获取详细地区数据
         @app.route("/get_detail_regions", methods=["GET", "POST"])
         def get_detail_regions() -> typing.List[str]:
