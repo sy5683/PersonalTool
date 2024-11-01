@@ -1,3 +1,5 @@
+import typing
+
 import flask
 from flask import typing as ft, Response
 from werkzeug.datastructures import MultiDict, ImmutableMultiDict
@@ -33,7 +35,7 @@ class FlaskUtil:
         return app
 
     @classmethod
-    def get_kwarg(cls, key: str):
+    def get_kwarg(cls, key: str) -> typing.Any:
         """获取参数"""
         return cls._get_kwargs().get(key)
 

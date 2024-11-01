@@ -1,4 +1,5 @@
 import re
+import typing
 
 
 class ConvertAmount:
@@ -14,7 +15,7 @@ class ConvertAmount:
             raise ValueError(f"金额异常: {amount}")
 
     @classmethod
-    def to_amount(cls, amount: any) -> float:
+    def to_amount(cls, amount: typing.Any) -> float:
         """提取金额转换为浮点数"""
         amount_str = cls._get_amount_str(amount)
         if not amount_str or amount_str == "-":
@@ -25,7 +26,7 @@ class ConvertAmount:
             raise ValueError(f"金额异常: {amount_str}")
 
     @staticmethod
-    def _get_amount_str(amount: any) -> str:
+    def _get_amount_str(amount: typing.Any) -> str:
         """提取金额中的目标字符串"""
         amount_str = ""
         for each in re.findall(r"^-|\d+|\.+", str(amount)):

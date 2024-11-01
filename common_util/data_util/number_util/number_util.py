@@ -1,3 +1,5 @@
+import typing
+
 from .number_utils.calculate_float import CalculateFloat
 from .number_utils.convert_amount import ConvertAmount
 
@@ -30,6 +32,6 @@ class NumberUtil:
         return ConvertAmount.to_account(amount)
 
     @staticmethod
-    def to_amount(amount: any) -> float:
+    def to_amount(amount: typing.Any) -> float:
         """提取金额转换为浮点数"""
         return ConvertAmount.to_amount(amount)
