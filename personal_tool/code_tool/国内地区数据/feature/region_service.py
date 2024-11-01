@@ -7,13 +7,13 @@ from .region_feature import RegionFeature
 
 
 class RegionService:
+    service_name = "region_service"
 
-    @staticmethod
-    def set_route(app: flask.app):
+    @classmethod
+    def set_route(cls, app: flask.app):
         """设置接口"""
-
         # 获取详细地区数据
-        @app.route("/get_detail_regions", methods=["GET", "POST"])
+        @app.route(f"/{cls.service_name}/get_detail_regions", methods=["GET", "POST"])
         def get_detail_regions() -> typing.List[str]:
             region_info = FlaskUtil.get_kwarg("region_info")
             regions = RegionFeature.get_detail_regions(region_info)
