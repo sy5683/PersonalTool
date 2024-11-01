@@ -1,9 +1,6 @@
-import typing
-
-
 class FlaskResponse(object):
 
-    def __init__(self, code: int = 0, data: typing.Any = '', message: str = ''):
+    def __init__(self, code: int = 0, data: any = '', message: str = ''):
         self.code = code
         self.data = data
         self.message = message
