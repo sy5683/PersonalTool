@@ -1,5 +1,7 @@
 import hashlib
 
+from .crypto_config import CryptoConfig
+
 
 class Md5Crypto:
 
@@ -7,5 +9,5 @@ class Md5Crypto:
     def md5_encrypt(plaintext: str) -> str:
         """md5加密"""
         md5 = hashlib.md5()
-        md5.update(plaintext.encode('utf8'))
+        md5.update(plaintext.encode(CryptoConfig.encode_type))
         return md5.hexdigest()
