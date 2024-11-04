@@ -20,7 +20,7 @@ class SeleniumChecker:
             chrome_driver_path = Path(SeleniumUtil.get_chrome_driver_path())
         except Exception as e:
             logging.error(traceback.format_exc())
-            DialogUtil.messagebox(f"chrome_driver下载失败: \n    {e}")
+            DialogUtil.messagebox(f"chrome_driver下载失败:\n{e}")
         else:
             # 根据文件的创建日期判断文件是否为新下载文件
             create_datetime = TimeUtil.format_to_datetime(chrome_driver_path.stat().st_ctime)
