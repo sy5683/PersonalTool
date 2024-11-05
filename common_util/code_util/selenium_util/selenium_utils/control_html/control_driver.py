@@ -11,7 +11,7 @@ class ControlDriver:
         """执行js代码"""
         driver = ControlBrowser.get_driver(selenium_config)
         driver.execute_script(js)
-        time.sleep(1)  # 执行结束之后等待一秒
+        time.sleep(0.5)  # 执行结束之后等待一会
 
     @staticmethod
     def open_url(selenium_config: SeleniumConfig, url: str):
@@ -19,6 +19,5 @@ class ControlDriver:
         for _ in range(3):
             try:
                 return ControlBrowser.get_driver(selenium_config).get(url)
-            except OSError:
-                # selenium驱动升级会导致driver失效，会报错OSError
+            except OSError:  # selenium驱动升级会导致driver失效，会报错OSError
                 selenium_config.info("selenium启动异常，重新启动")

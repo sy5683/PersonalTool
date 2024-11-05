@@ -28,6 +28,7 @@ class ControlElement:
         else:
             wait_seconds = selenium_config.wait_seconds
             selenium_config.wait_seconds = 1
+            selenium_config.without_log = True
             for _ in range(wait_seconds):
                 try:
                     cls.find(selenium_config).click()
