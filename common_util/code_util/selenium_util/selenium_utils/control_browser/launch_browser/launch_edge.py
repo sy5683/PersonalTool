@@ -6,12 +6,11 @@ import time
 import typing
 from pathlib import Path
 
-import pywintypes
-import win32api
 import win32con
 from selenium import webdriver, common
 from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.edge.webdriver import WebDriver
+from win32api import GetLogicalDriveStrings, RegOpenKey, RegQueryValueEx
 
 from .base.launch_base import LaunchBase
 from .download_driver import DownloadDriver
@@ -32,7 +31,7 @@ class LaunchEdge(LaunchBase):
             return
         # 2) 使用selenium自带的quit方法关闭driver
         driver.quit()
-        time.sleep(1)
+        time.sleep(1)  # 等待一秒，确认等待操作执行完成
         # 3) 清除缓存
         selenium_config.driver = None
         for key, _driver in list(cls._driver_map.items()):
@@ -95,10 +94,11 @@ class LaunchEdge(LaunchBase):
         # 1) 通过注册表查找Edge浏览器路径
         for regedit_dir in [win32con.HKEY_LOCAL_MACHINE, win32con.HKEY_CURRENT_USER]:  # Edge浏览器路径注册表一般在这两个位置下固定位置
             regedit_path = "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\msedge.exe"
+            # noinspection PyBroadException
             try:
-                key = win32api.RegOpenKey(regedit_dir, regedit_path)
-                edge_path, _ = win32api.RegQueryValueEx(key, "path")
-            except pywintypes.error:
+                key = RegOpenKey(regedit_dir, regedit_path)
+                edge_path, _ = RegQueryValueEx(key, "path")
+            except Exception:
                 continue
             edge_path = os.path.join(edge_path, "msedge.exe")
             if os.path.isfile(edge_path):
@@ -110,11 +110,11 @@ class LaunchEdge(LaunchBase):
             if os.path.isfile(edge_path):
                 return edge_path
         # 3) 某些极个别特殊情况，用户直接解压绿色文件使用Edge浏览器，这时候注册表没值路径也不确定，因此只能遍历全部文件路径
-        for root_path in re.findall(r"(.:\\)", win32api.GetLogicalDriveStrings()):
-            # 使用pathlib的rglob遍历，比for循环遍历更快，代码更简单
+        for root_path in re.findall(r"(.:\\)", GetLogicalDriveStrings()):
             for edge_path in Path(root_path).rglob("msedge.exe"):
                 return str(edge_path)
-        raise FileExistsError("未找到Edge浏览器路径")
+        # 4) 几种方式都未找到Edge浏览器文件路径，抛出异常
+        raise FileExistsError("未找到Edge浏览器")
 
     @classmethod
     def _launch_edge(cls, selenium_config: SeleniumConfig) -> WebDriver:
@@ -123,7 +123,7 @@ class LaunchEdge(LaunchBase):
         try:
             assert selenium_config.use_user_data
             # 1.1) 获取Edge浏览器用户缓存路径
-            user_data_dir = cls.__get_edge_user_data_path()
+            user_data_dir = cls.__get_user_data_path()
             # 1.2) 获取driver
             driver = cls._get_edge_driver(selenium_config, user_data_dir)
         except (AssertionError, common.InvalidArgumentException, common.SessionNotCreatedException):
@@ -157,24 +157,23 @@ class LaunchEdge(LaunchBase):
         cls.set_browser_front(driver)
         return driver
 
-
     @staticmethod
     def __get_driver_path(selenium_config: SeleniumConfig) -> str:
         """获取driver路径"""
-        # 使用参数中的driver_path
+        # 1) 使用参数中的driver_path
         if selenium_config.driver_path:
             return selenium_config.driver_path
-        # 自动获取下载的driver_path路径
+        # 2) 自动获取下载的driver_path路径
         return DownloadDriver.get_edge_driver_path()
 
     @staticmethod
-    def __get_edge_user_data_path() -> typing.Union[str, None]:
+    def __get_user_data_path() -> typing.Union[str, None]:
         """获取Edge浏览器用户缓存User Data路径"""
-        # 查找User Data文件默认路径
+        # 1) 查找User Data文件默认路径
         user_data_path = os.path.join(os.path.expanduser('~'), "AppData\\Local\\Microsoft\\Edge\\User Data\\Default")
         if os.path.exists(user_data_path):
             return user_data_path
-        # 返回空值
+        # 2) 返回空值
         return None
 
     @classmethod

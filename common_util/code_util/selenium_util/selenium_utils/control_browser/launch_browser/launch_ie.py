@@ -3,11 +3,11 @@ import threading
 import time
 import typing
 
-import win32api
 import win32con
 from selenium import webdriver
 from selenium.webdriver.ie.service import Service
 from selenium.webdriver.ie.webdriver import WebDriver
+from win32api import RegCloseKey, RegOpenKey, RegSetValueEx
 
 from .base.launch_base import LaunchBase
 from .download_driver import DownloadDriver
@@ -28,7 +28,7 @@ class LaunchIe(LaunchBase):
             return
         # 2) 使用selenium自带的quit方法关闭driver
         driver.quit()
-        time.sleep(1)
+        time.sleep(1)  # 等待一秒，确认等待操作执行完成
         # 3) 清除缓存
         selenium_config.driver = None
         for key, _driver in list(cls._driver_map.items()):
@@ -53,18 +53,18 @@ class LaunchIe(LaunchBase):
     def _set_ie_setting():
         """设置IE浏览器，这些设置是selenium启动IE浏览器的必要条件"""
 
-        def __set_regedit_value(regedit_path: str, regedit_key: str, regedit_value: int):
-            key = win32api.RegOpenKey(win32con.HKEY_CURRENT_USER, regedit_path, 0, win32con.KEY_ALL_ACCESS)
-            win32api.RegSetValueEx(key, regedit_key, 0, win32con.REG_DWORD, regedit_value)
-            win32api.RegCloseKey(key)
+        def set_regedit_value(regedit_path: str, regedit_key: str, regedit_value: int):
+            key = RegOpenKey(win32con.HKEY_CURRENT_USER, regedit_path, 0, win32con.KEY_ALL_ACCESS)
+            RegSetValueEx(key, regedit_key, 0, win32con.REG_DWORD, regedit_value)
+            RegCloseKey(key)
 
         # 1) 设置浏览器缩放为100%
-        __set_regedit_value("Software\\Microsoft\\Internet Explorer\\Zoom", "ZoomFactor", 100000)
+        set_regedit_value("Software\\Microsoft\\Internet Explorer\\Zoom", "ZoomFactor", 100000)
         # 2) 设置浏览器所有保护模式统一开启或关闭
         for each in range(1, 5):
-            # 最后一个参数: 0: 开启, 3: 关闭
-            __set_regedit_value(f"Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\{each}",
-                                "2500", 3)
+            # 最后一个参数: 0->开启, 3->关闭
+            set_regedit_value(f"Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\{each}", "2500",
+                              3)
 
     @classmethod
     def _launch_ie(cls, selenium_config: SeleniumConfig) -> WebDriver:
@@ -96,8 +96,8 @@ class LaunchIe(LaunchBase):
     @staticmethod
     def __get_driver_path(selenium_config: SeleniumConfig) -> str:
         """获取driver路径"""
-        # 使用参数中的driver_path
+        # 1) 使用参数中的driver_path
         if selenium_config.driver_path:
             return selenium_config.driver_path
-        # 自动获取下载的driver_path路径
+        # 2) 自动获取下载的driver_path路径
         return DownloadDriver.get_ie_driver_path()

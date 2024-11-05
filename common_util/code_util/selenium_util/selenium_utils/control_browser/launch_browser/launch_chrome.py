@@ -8,12 +8,11 @@ import traceback
 import typing
 from pathlib import Path
 
-import pywintypes
-import win32api
 import win32con
 from selenium import webdriver, common
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import WebDriver
+from win32api import GetLogicalDriveStrings, RegOpenKey, RegQueryValueEx
 
 from .base.launch_base import LaunchBase
 from .download_driver import DownloadDriver
@@ -35,7 +34,7 @@ class LaunchChrome(LaunchBase):
             return
         # 2) 使用selenium自带的quit方法关闭driver
         driver.quit()
-        time.sleep(1)
+        time.sleep(1)  # 等待一秒，确认等待操作执行完成
         # 3) 因为经常出现quit之后cmd窗口未关的情况，因此这里使用命令行直接关闭进程
         if selenium_config.close_task:
             os.system(f"taskkill /f /im {os.path.basename(cls.__get_driver_path(selenium_config))}")
@@ -134,10 +133,11 @@ class LaunchChrome(LaunchBase):
         # 1) 通过注册表查找谷歌浏览器路径
         for regedit_dir in [win32con.HKEY_LOCAL_MACHINE, win32con.HKEY_CURRENT_USER]:  # 谷歌浏览器路径注册表一般在这两个位置下固定位置
             regedit_path = "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\chrome.exe"
+            # noinspection PyBroadException
             try:
-                key = win32api.RegOpenKey(regedit_dir, regedit_path)
-                chrome_path, _ = win32api.RegQueryValueEx(key, "path")
-            except pywintypes.error:
+                key = RegOpenKey(regedit_dir, regedit_path)
+                chrome_path, _ = RegQueryValueEx(key, "path")
+            except Exception:
                 continue
             chrome_path = os.path.join(chrome_path, "chrome.exe")
             if os.path.isfile(chrome_path):
@@ -149,10 +149,11 @@ class LaunchChrome(LaunchBase):
             if os.path.isfile(chrome_path):
                 return chrome_path
         # 3) 某些极个别特殊情况，用户直接解压绿色文件使用谷歌浏览器，这时候注册表没值路径也不确定，因此只能遍历全部文件路径
-        for root_path in re.findall(r"(.:\\)", win32api.GetLogicalDriveStrings()):
+        for root_path in re.findall(r"(.:\\)", GetLogicalDriveStrings()):
             for chrome_path in Path(root_path).rglob("chrome.exe"):
                 return str(chrome_path)
-        raise FileExistsError("未找到谷歌浏览器路径")
+        # 4) 几种方式都未找到谷歌浏览器文件路径，抛出异常
+        raise FileExistsError("未找到Chrome浏览器")
 
     @classmethod
     def _launch_chrome(cls, selenium_config: SeleniumConfig) -> WebDriver:
@@ -161,7 +162,7 @@ class LaunchChrome(LaunchBase):
         try:
             assert selenium_config.use_user_data
             # 1.1) 获取谷歌浏览器用户缓存路径
-            user_data_dir = cls.__get_chrome_user_data_path()
+            user_data_dir = cls.__get_user_data_path()
             # 1.2) 获取driver
             driver = cls._get_chrome_driver(selenium_config, user_data_dir)
         except (AssertionError, common.InvalidArgumentException, common.SessionNotCreatedException):
@@ -191,7 +192,7 @@ class LaunchChrome(LaunchBase):
         cls.set_browser_front(driver)
         # 4) 接管切换浏览器页签至最后一个
         driver.switch_to.window(driver.window_handles[-1])
-        time.sleep(1)  # 接管切换浏览器之后必须强制等待1秒，否则会出现操作无效的问题
+        time.sleep(0.5)  # 接管切换浏览器之后必须强制等待一会，否则会出现操作无效的问题
         return driver
 
     @classmethod
@@ -202,37 +203,37 @@ class LaunchChrome(LaunchBase):
             return selenium_config.debug_port
         # 2) 返回默认的debug_port
         default_debug_port = 9222
-        # 如果需要返回默认的debug_port，则无需进行判断debug_port是否正在运行，直接返回
+        # 2.1) 如果需要返回默认的debug_port，则无需进行判断debug_port是否正在运行，直接返回
         if return_default:
             return default_debug_port
-        # 检测默认的debug_port是否正在运行，如果正在运行，则返回默认的debug_port
+        # 2.2) 检测默认的debug_port是否正在运行，如果正在运行，则返回默认的debug_port
         if cls.__netstat_debug_port_running(default_debug_port):
             return default_debug_port
         # 3) 返回空值
         return None
 
-    @classmethod
-    def __get_chrome_user_data_path(cls) -> typing.Union[str, None]:
-        """获取谷歌浏览器用户缓存User Data路径"""
-        # 查找User Data文件默认路径
-        user_data_path = os.path.join(os.path.expanduser('~'), "AppData\\Local\\Google\\Chrome\\User Data\\Default")
-        if os.path.exists(user_data_path):
-            return user_data_path
-        # 有的User Data文件放在谷歌浏览器同级目录中
-        user_data_path = os.path.join(os.path.dirname(cls._get_chrome_path()), "User Data\\Default")
-        if os.path.exists(user_data_path):
-            return user_data_path
-        # 返回空值
-        return None
-
     @staticmethod
     def __get_driver_path(selenium_config: SeleniumConfig) -> str:
         """获取driver路径"""
-        # 使用参数中的driver_path
+        # 1) 使用参数中的driver_path
         if selenium_config.driver_path:
             return selenium_config.driver_path
-        # 自动获取下载的driver_path路径
+        # 2) 自动获取下载的driver_path路径
         return DownloadDriver.get_chrome_driver_path()
+
+    @classmethod
+    def __get_user_data_path(cls) -> typing.Union[str, None]:
+        """获取谷歌浏览器用户缓存User Data路径"""
+        # 1) 查找User Data文件默认路径
+        user_data_path = os.path.join(os.path.expanduser('~'), "AppData\\Local\\Google\\Chrome\\User Data\\Default")
+        if os.path.exists(user_data_path):
+            return user_data_path
+        # 2) 有的User Data文件放在谷歌浏览器同级目录中
+        user_data_path = os.path.join(os.path.dirname(cls._get_chrome_path()), "User Data\\Default")
+        if os.path.exists(user_data_path):
+            return user_data_path
+        # 3) 返回空值
+        return None
 
     @classmethod
     def __launch_chrome_driver(cls, selenium_config: SeleniumConfig, options: webdriver.ChromeOptions) -> WebDriver:

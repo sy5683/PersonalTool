@@ -14,8 +14,10 @@ class ControlAlert:
         for window_handle in driver.window_handles:
             # noinspection PyBroadException
             try:
+                # 每个操作结束后需要等待一会，否则会出现无法正确执行操作的问题
                 driver.switch_to.window(window_handle)
                 time.sleep(0.5)
                 driver.switch_to.alert.accept()
+                time.sleep(0.5)
             except Exception:
                 pass

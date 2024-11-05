@@ -2,7 +2,7 @@ from pathlib import Path
 
 
 class CryptoConfig:
-    encode_type = "UTF-8"
+    encoding_type = "UTF-8"
 
     @staticmethod
     def get_key_path(file_name: str) -> Path:
