@@ -20,12 +20,21 @@ class ProcessPdfProfile:
     def filter_words(words: typing.List[Word], pattern: typing.Union[str, typing.Pattern[str]]) -> typing.List[str]:
         """筛选文字列表"""
         pattern = re.compile(pattern) if isinstance(pattern, str) else pattern
-        return [pattern.search(word.text).group(1) for word in words if pattern.search(word.text)]
+        word_texts = []
+        for word in words:
+            word_search = pattern.search(word.text)
+            if word_search:
+                word_texts.append(word_search.group(1) if "(.*?)" in pattern.pattern else word_search.group(0))
+        return word_texts
 
     @classmethod
     def split_pdf(cls, pdf_profile: PdfProfile, *split_words: str) -> typing.List[TableProfile]:
         """分割pdf"""
         if not pdf_profile.tables:
+            # 当没有表格且文字少于一定数量时，说明该页面为无效的空白页面
+            if len(pdf_profile.words) < 5:
+                return []
+            # 当没有表格时，切割没有表格的pdf
             return cls.__split_pdf_without_table(pdf_profile, *split_words)
         # 获取pdf中所有表格坐标
         table_rects = [table.rect for table in pdf_profile.tables]
