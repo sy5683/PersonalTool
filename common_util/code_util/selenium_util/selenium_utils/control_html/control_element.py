@@ -74,12 +74,7 @@ class ControlElement:
 
     @classmethod
     def get_attribute(cls, selenium_config: SeleniumConfig, attribute_type: str) -> str:
-        """
-        获取元素内容
-        :param selenium_config:
-        :param attribute_type: 常用的值有: id, class, value, innerText
-        :return:
-        """
+        """获取元素内容"""
         return cls.find(selenium_config).get_attribute(attribute_type)
 
     @classmethod

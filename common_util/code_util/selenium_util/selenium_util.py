@@ -63,7 +63,7 @@ class SeleniumUtil:
 
     @staticmethod
     def get_attribute(selenium_config: SeleniumConfig, attribute_type: str) -> str:
-        """获取元素内容"""
+        """获取元素内容，常用的值有: id, class, value, innerText"""
         return ControlElement.get_attribute(selenium_config, attribute_type)
 
     @staticmethod
