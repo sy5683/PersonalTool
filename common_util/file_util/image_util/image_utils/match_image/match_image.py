@@ -1,14 +1,14 @@
-import ctypes
+import abc
+import os
 import time
 import typing
-from ctypes import wintypes
 from pathlib import Path
 
 import cv2
 import numpy
 
-from .process_opencv_image import ProcessOpenCVImage
-from .screenshot import Screenshot
+from ..process_opencv_image import ProcessOpenCVImage
+from ..screenshot import Screenshot
 
 
 class MatchImage:
@@ -41,6 +41,12 @@ class MatchImage:
         raise Exception(f"无法匹配到模板: {name}")
 
     @classmethod
+    @abc.abstractmethod
+    def get_window_rect(cls, handle: int) -> typing.Tuple[int, int, int, int]:
+        """获取窗口坐标"""
+        return cls.__get_subclass().get_window_rect(handle)
+
+    @classmethod
     def _get_window_images(cls, **kwargs) -> typing.List[numpy.ndarray]:
         """获取窗口图片"""
         handle = kwargs.get("handle")
@@ -50,7 +56,7 @@ class MatchImage:
         for image in Screenshot.get_screenshot_images():
             # 2) 如果需要获取窗口图片，则获取窗口坐标，再从桌面图片中截取
             if handle:
-                left, top, right, bottom = cls.__get_window_rect(handle)
+                left, top, right, bottom = cls.get_window_rect(handle)
                 image = image[top:bottom, left:right]
             # 3) 有时为了出现多个定位时的准确度，需要对图片进行裁剪
             if cut_item != ((0, 0), (1, 1)):
@@ -70,9 +76,11 @@ class MatchImage:
         return image[top:bottom, left:right]
 
     @staticmethod
-    def __get_window_rect(handle: int) -> typing.Tuple[int, int, int, int]:
-        """获取窗口坐标"""
-        rect = wintypes.RECT()
-        ctypes.windll.dwmapi.DwmGetWindowAttribute(ctypes.wintypes.HWND(handle), ctypes.wintypes.DWORD(9),
-                                                   ctypes.byref(rect), ctypes.sizeof(rect))
-        return rect.left, rect.top, rect.right, rect.bottom
+    def __get_subclass():
+        if os.name == "nt":
+            from .match_image_windows import MatchImageWindows
+            return MatchImageWindows
+        elif os.name == 'posix':
+            from .match_image_linux import MatchImageLinux
+            return MatchImageLinux
+        raise Exception(f"未知的操作系统类型: {os.name}")
