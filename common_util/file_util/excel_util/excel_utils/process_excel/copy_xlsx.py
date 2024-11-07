@@ -7,7 +7,6 @@ from openpyxl.worksheet.worksheet import Worksheet
 
 
 class CopyXlsx:
-    """复制xlsx"""
 
     @classmethod
     def copy_sheet(cls, worksheet: Worksheet, copy_worksheet: Worksheet):

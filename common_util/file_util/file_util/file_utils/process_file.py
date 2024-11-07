@@ -11,7 +11,6 @@ import magic
 
 
 class ProcessFile:
-    """处理文件"""
 
     @staticmethod
     def delete_file(file_path: Path):

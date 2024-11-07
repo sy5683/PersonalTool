@@ -8,7 +8,6 @@ from .process_word import ProcessWord
 
 
 class ReplaceDocx:
-    """替换word"""
 
     @classmethod
     def replace_paragraph(cls, paragraph: Paragraph, replace_from: str, replace_to: str):

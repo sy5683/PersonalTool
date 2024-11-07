@@ -10,7 +10,6 @@ from .entity.pdf_profile import PdfProfile
 
 
 class ParsePdf:
-    """解析pdf"""
 
     @classmethod
     def get_pdf_profiles(cls, pdf_path: str, threshold_x: int) -> typing.List[PdfProfile]:

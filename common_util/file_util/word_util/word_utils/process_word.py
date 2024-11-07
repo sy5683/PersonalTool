@@ -6,7 +6,6 @@ from docx.text.run import Run
 
 
 class ProcessWord:
-    """处理word"""
 
     @classmethod
     def set_run(cls, run: Run, bold: bool, font_size: int, font_type: str):

@@ -10,7 +10,6 @@ from PIL import Image
 
 
 class ConvertPdf:
-    """转换pdf"""
 
     @classmethod
     def pdf_to_images(cls, pdf_path: str, save_path: typing.Union[Path, str], suffix: str,

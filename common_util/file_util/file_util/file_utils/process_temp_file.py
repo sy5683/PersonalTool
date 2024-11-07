@@ -5,7 +5,6 @@ from .process_file import ProcessFile
 
 
 class ProcessTempFile:
-    """处理临时文件"""
     __temp_dir_path = None
 
     @classmethod

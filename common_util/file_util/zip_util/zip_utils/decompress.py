@@ -11,7 +11,6 @@ import rarfile
 
 
 class Decompress:
-    """解压"""
 
     @classmethod
     def decompress(cls, file_path: Path, password: str) -> typing.Generator[Path, None, None]:

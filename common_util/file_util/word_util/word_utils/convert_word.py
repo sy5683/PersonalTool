@@ -9,7 +9,6 @@ from win32com.client import constants, gencache
 
 
 class ConvertWord:
-    """转换word"""
 
     @staticmethod
     def word_to_excel(word_path: str, save_path: typing.Union[Path, str]) -> str:

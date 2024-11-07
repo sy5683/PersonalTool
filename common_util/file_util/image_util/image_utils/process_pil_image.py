@@ -6,7 +6,6 @@ from PIL import Image
 
 
 class ProcessPILImage:
-    """处理pil图片"""
 
     @classmethod
     def add_border(cls, image: Image, border_size: int, color: typing.Tuple[int, int, int]) -> Image:

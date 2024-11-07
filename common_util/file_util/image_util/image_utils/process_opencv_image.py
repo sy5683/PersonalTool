@@ -8,7 +8,6 @@ import numpy
 
 
 class ProcessOpenCVImage:
-    """处理opencv图片"""
 
     @staticmethod
     def compare_image(image: numpy.ndarray, judge_image: numpy.ndarray) -> float:
