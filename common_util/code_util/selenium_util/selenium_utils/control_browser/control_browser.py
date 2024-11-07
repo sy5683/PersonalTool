@@ -3,9 +3,9 @@ import typing
 from selenium.webdriver.chrome.webdriver import WebDriver
 
 from .launch_browser.base.launch_base import LaunchBase
-from .launch_browser.launch_chrome import LaunchChrome
-from .launch_browser.launch_edge import LaunchEdge
-from .launch_browser.launch_ie import LaunchIe
+from .launch_browser.launch_chrome.launch_chrome import LaunchChrome
+from .launch_browser.launch_edge.launch_edge import LaunchEdge
+from .launch_browser.launch_ie.launch_ie import LaunchIe
 from ..entity.selenium_config import SeleniumConfig
 from ..enum.browser_type import BrowserType
 

@@ -25,7 +25,7 @@ class DownloadDriver:
         """获取chrome_driver路径"""
         # 1) 获取谷歌浏览器版本
         chrome_version = cls.get_chrome_version()
-        logging.info(f"Chrome浏览器版本: {chrome_version}")
+        logging.info(f"谷歌浏览器版本: {chrome_version}")
         # 2) 根据默认下载路径遍历文件，获取指定版本的chrome_driver文件
         try:
             return cls._get_driver_in_manager_path("chromedriver.exe", chrome_version)
