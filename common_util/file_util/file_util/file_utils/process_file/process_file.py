@@ -1,3 +1,4 @@
+import abc
 import os
 import re
 import shutil
@@ -52,7 +53,7 @@ class ProcessFile:
         return filedialog.askopenfilename()
 
     @staticmethod
-    def get_file_paths() -> typing.Tuple[str, ...]:
+    def get_file_paths() -> typing.Literal[""] | typing.Tuple[str, ...]:
         """获取文件路径列表"""
         tkinter.Tk().withdraw()  # 隐藏tk窗口
         return filedialog.askopenfilenames()
@@ -101,10 +102,11 @@ class ProcessFile:
             print(file_type)
             return "unknown"
 
-    @staticmethod
-    def get_root_paths() -> typing.List[str]:
+    @classmethod
+    @abc.abstractmethod
+    def get_root_paths(cls) -> typing.List[str]:
         """获取电脑根路径列表"""
-        return [root_dir for root_dir in [f"{chr(65 + index)}:\\" for index in range(26)] if os.path.exists(root_dir)]
+        return cls.__get_subclass().get_root_paths()
 
     @staticmethod
     def make_dir(file_path: Path):
@@ -131,3 +133,13 @@ class ProcessFile:
                 if wait_seconds > 1:
                     time.sleep(1)
         return False
+
+    @staticmethod
+    def __get_subclass():
+        if os.name == "nt":
+            from .process_file_windows import ProcessFileWindows
+            return ProcessFileWindows
+        elif os.name == 'posix':
+            from .process_file_linux import ProcessFileLinux
+            return ProcessFileLinux
+        raise Exception(f"未知的操作系统类型: {os.name}")

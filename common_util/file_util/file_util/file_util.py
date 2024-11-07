@@ -1,7 +1,7 @@
 import typing
 from pathlib import Path
 
-from .file_utils.process_file import ProcessFile
+from .file_utils.process_file.process_file import ProcessFile
 from .file_utils.process_temp_file import ProcessTempFile
 
 
@@ -28,7 +28,7 @@ class FileUtil:
         return ProcessFile.get_file_path()
 
     @staticmethod
-    def get_file_paths() -> typing.Tuple[str, ...]:
+    def get_file_paths() -> typing.Literal[""] | typing.Tuple[str, ...]:
         """获取文件路径列表"""
         return ProcessFile.get_file_paths()
 

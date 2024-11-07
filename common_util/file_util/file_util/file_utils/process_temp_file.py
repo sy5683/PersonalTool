@@ -1,7 +1,7 @@
 import tempfile
 from pathlib import Path
 
-from .process_file import ProcessFile
+from .process_file.process_file import ProcessFile
 
 
 class ProcessTempFile:
