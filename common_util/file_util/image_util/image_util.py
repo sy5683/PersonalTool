@@ -6,7 +6,7 @@ import numpy
 from .image_utils.match_image.match_image import MatchImage
 from .image_utils.process_opencv_image import ProcessOpenCVImage
 from .image_utils.process_pil_image import ProcessPILImage
-from .image_utils.screenshot import Screenshot
+from .image_utils.screenshot.screenshot import Screenshot
 
 
 class ImageUtil:

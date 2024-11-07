@@ -8,7 +8,7 @@ import cv2
 import numpy
 
 from ..process_opencv_image import ProcessOpenCVImage
-from ..screenshot import Screenshot
+from ..screenshot.screenshot import Screenshot
 
 
 class MatchImage:
