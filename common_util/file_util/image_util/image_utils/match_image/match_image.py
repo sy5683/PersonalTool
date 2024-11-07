@@ -42,9 +42,9 @@ class MatchImage:
 
     @classmethod
     @abc.abstractmethod
-    def get_window_rect(cls, handle: int) -> typing.Tuple[int, int, int, int]:
+    def _get_window_rect(cls, handle: int) -> typing.Tuple[int, int, int, int]:
         """获取窗口坐标"""
-        return cls.__get_subclass().get_window_rect(handle)
+        return cls.__get_subclass()._get_window_rect(handle)
 
     @classmethod
     def _get_window_images(cls, **kwargs) -> typing.List[numpy.ndarray]:
@@ -56,7 +56,7 @@ class MatchImage:
         for image in Screenshot.get_screenshot_images():
             # 2) 如果需要获取窗口图片，则获取窗口坐标，再从桌面图片中截取
             if handle:
-                left, top, right, bottom = cls.get_window_rect(handle)
+                left, top, right, bottom = cls._get_window_rect(handle)
                 image = image[top:bottom, left:right]
             # 3) 有时为了出现多个定位时的准确度，需要对图片进行裁剪
             if cut_item != ((0, 0), (1, 1)):
