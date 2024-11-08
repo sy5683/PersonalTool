@@ -1,9 +1,9 @@
 import threading
 import time
 
-import win32api
 import win32con
 import win32gui
+from win32api import MessageBox
 
 
 class Win32Dialog:
@@ -26,4 +26,4 @@ class Win32Dialog:
                 time.sleep(1)
 
         threading.Thread(target=set_top_dialog, args=(), daemon=True).start()
-        win32api.MessageBox(0, message, title, win32con.MB_OK)
+        MessageBox(0, message, title, win32con.MB_OK)
