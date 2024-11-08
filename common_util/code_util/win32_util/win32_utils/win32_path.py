@@ -2,7 +2,7 @@ import logging
 import os
 
 import pywintypes
-import win32api
+from win32api import ShellExecute
 
 
 class Win32Path:
@@ -19,6 +19,6 @@ class Win32Path:
     def _open_file(file_path: str):
         """打开文件"""
         try:
-            win32api.ShellExecute(0, "open", file_path, "", "", 1)
+            ShellExecute(0, "open", file_path, "", "", 1)
         except pywintypes.error:
             raise FileExistsError(f"文件不存在: {file_path}")

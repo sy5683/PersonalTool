@@ -4,10 +4,10 @@ import traceback
 import typing
 
 import pywintypes
-import win32api
 import win32con
 import win32gui
 import win32process
+from win32api import CloseHandle, OpenProcess, TerminateProcess
 from win32com import client
 
 
@@ -25,9 +25,9 @@ class Win32Visual:
         if thread_id:
             # noinspection PyBroadException
             try:
-                process = win32api.OpenProcess(1, False, process_id)
-                win32api.TerminateProcess(process, 0)
-                win32api.CloseHandle(process)
+                process = OpenProcess(1, False, process_id)
+                TerminateProcess(process, 0)
+                CloseHandle(process)
             except Exception:
                 logging.error(traceback.format_exc())
             time.sleep(1)
@@ -64,7 +64,7 @@ class Win32Visual:
         # 无限制窗口最前时，windows可能因为安全问题会报错并无法最前，因此这里捕捉一下
         try:
             win32gui.BringWindowToTop(handle)
-        except pywintypes.error:
+        except Exception:
             pass
         try:
             win32gui.ShowWindow(handle, win32con.SW_SHOWNOACTIVATE)
