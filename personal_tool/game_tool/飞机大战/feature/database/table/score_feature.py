@@ -25,5 +25,5 @@ class ScoreFeature:
         """保存得分"""
         database_connect = DatabaseConnectFeature.get_sqlite_connect()
         with database_connect:
-            database_connect.execute_sql(f"INSERT INTO {cls._table_name} (username, score, save_time) "
-                                         f"VALUES ('{username}', '{score}', '{TimeUtil.get_now()}')")
+            database_connect.execute_sql(f"INSERT INTO {cls._table_name} (username, score, save_time)"
+                                         f" VALUES ('{username}', '{score}', '{TimeUtil.get_now()}')")
