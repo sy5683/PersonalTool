@@ -12,7 +12,7 @@ class ScoreFeature:
     @classmethod
     def get_scores(cls, username: str) -> typing.List[Score]:
         """获取得分列表"""
-        database_connect = DatabaseConnectFeature.get_database_connect()
+        database_connect = DatabaseConnectFeature.get_sqlite_connect()
         with database_connect:
             database_connect.execute_sql(
                 f"SELECT * FROM {cls._table_name}%s;" % (f"WHERE username='{username}'" if username else ""))
@@ -23,7 +23,7 @@ class ScoreFeature:
     @classmethod
     def save_score(cls, username: str, score: int):
         """保存得分"""
-        database_connect = DatabaseConnectFeature.get_database_connect()
+        database_connect = DatabaseConnectFeature.get_sqlite_connect()
         with database_connect:
             database_connect.execute_sql(f"INSERT INTO {cls._table_name} (username, score, save_time) "
                                          f"VALUES ('{username}', '{score}', '{TimeUtil.get_now()}')")

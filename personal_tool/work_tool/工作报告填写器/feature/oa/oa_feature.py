@@ -16,7 +16,10 @@ class OaFeature:
     @staticmethod
     def login_oa():
         """登录OA"""
-        SeleniumUtil.launch_chrome_debug(9222)
+        try:
+            SeleniumUtil.launch_chrome_debug(9222)
+        except AssertionError as e:
+            logging.warning(e)
         username = "xiejinsong"
         password = CryptoUtil.rsa_decrypt("AQCJVwQJnjNmTAzSAVNY1i2/ACY3wdrSFGxqvfmKsFU=")
         SeleniumUtil.open_url(SeleniumConfig(), "http://10.50.144.123:8989/")
@@ -59,7 +62,7 @@ class OaFeature:
     def _fill_report(daily_report: DailyReport):
         """填写报告"""
         logging.info(f"填写日报: {daily_report.date}")
-        SeleniumUtil.switch_iframe(SeleniumConfig(xpath='//iframe[@class="J_iframe  mainShow"]'))
+        SeleniumUtil.switch_iframe(SeleniumConfig(xpath='//iframe[contains(@class, "J_iframe")]'))
         SeleniumUtil.click(SeleniumConfig(xpath='//a[text()="填写进度"]'))
         SeleniumUtil.switch_iframe(SeleniumConfig())
         SeleniumUtil.switch_iframe(SeleniumConfig(xpath='//iframe[@name="t_dialog2"]'))
