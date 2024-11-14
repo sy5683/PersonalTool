@@ -2,6 +2,6 @@ from enum import Enum
 
 
 class OperateType(Enum):
-    action = ""
-    js = ""
-    selenium = ""
+    action = "action"
+    js = "js"
+    selenium = "selenium"
