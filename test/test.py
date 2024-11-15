@@ -16,6 +16,7 @@ import openpyxl
 import win32api
 from PIL import Image
 from bs4 import BeautifulSoup
+from selenium import common
 from selenium.webdriver import ActionChains, Keys
 from webdriver_manager.chrome import ChromeDriverManager
 
@@ -41,6 +42,3 @@ class Test(TestBase):
     def test_001(self):
         from common_util.code_util.crypto_util.crypto_util import CryptoUtil
         print(CryptoUtil.rsa_encrypt(""))
-
-    def test_002(self):
-        """"""

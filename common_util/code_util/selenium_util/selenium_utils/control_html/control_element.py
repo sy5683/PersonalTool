@@ -148,7 +148,7 @@ class ControlElement:
         # 先点击再删除
         try:
             element.click()
-        except common.ElementClickInterceptedException:
+        except (common.ElementClickInterceptedException, common.ElementNotInteractableException):
             logging.warning("元素无法点击，请选择正确的元素")
         time.sleep(0.5)
         # 使用selenium自带的clear方法
