@@ -81,7 +81,7 @@ class ControlElement:
     def input(cls, selenium_config: SeleniumConfig, value: str):
         """输入"""
         try:
-            assert selenium_config.operate_type == OperateType.action
+            assert selenium_config.operate_type != OperateType.action
             element = cls.find(selenium_config)
         except (AssertionError, AttributeError):
             # 参数无法定位
