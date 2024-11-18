@@ -45,11 +45,11 @@ class Crawler001(CrawlerBase):
                 while True:
                     try:
                         next_button.click()
-                    except common.TimeoutException:
+                    except common.exceptions.TimeoutException:
                         while True:
                             try:
                                 driver.refresh()  # 刷新可能也会有问题
-                            except common.TimeoutException:
+                            except common.exceptions.TimeoutException:
                                 pass
                             break
                     break
