@@ -6,6 +6,7 @@ import typing
 from pathlib import Path
 
 from common_util.code_util.win32_util.win32_util import Win32Util
+from common_util.file_util.file_util.file_util import FileUtil
 
 
 class PackTool:
@@ -28,6 +29,10 @@ class PackTool:
             util_path = self.__to_project_path(relative_util_path)
             copy_util_path = self.__to_copy_path(f"{self.tool_name}\\{relative_util_path}")
             shutil.copytree(util_path, copy_util_path)
+        # 4) 删除一些无用文件
+        for file_name in ["__pycache__"]:
+            for file_path in Path(self.__to_copy_path()).rglob(file_name):
+                FileUtil.delete_file(file_path)
         Win32Util.open_file(self.__to_copy_path())
 
     def _get_tool_path(self) -> Path:
