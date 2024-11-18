@@ -1,5 +1,6 @@
 import typing
 
+from pathlib import Path
 from selenium.webdriver import ActionChains
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
@@ -100,6 +101,16 @@ class SeleniumUtil:
     def open_url(selenium_config: SeleniumConfig, url: str):
         """打开url"""
         ControlDriver.open_url(selenium_config, url)
+
+    @staticmethod
+    def refresh(selenium_config: SeleniumConfig):
+        """刷新"""
+        ControlDriver.refresh(selenium_config)
+
+    @staticmethod
+    def screenshot(selenium_config: SeleniumConfig, save_path: typing.Union[Path, str] = None) -> str:
+        """截图"""
+        return ControlDriver.screenshot(selenium_config, save_path)
 
     @staticmethod
     def select(selenium_config: SeleniumConfig, value: typing.Union[int, str]):
