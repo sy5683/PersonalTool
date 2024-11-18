@@ -19,7 +19,7 @@ class ControlWindow:
         for window_handle in driver.window_handles:
             try:
                 cls.__switch_to_window(driver, window_handle)
-            except common.NoSuchWindowException:
+            except common.exceptions.NoSuchWindowException:
                 continue
             title = cls.get_title(selenium_config)
             for window_title in window_titles:
@@ -66,7 +66,7 @@ class ControlWindow:
             for window_handle in driver.window_handles:
                 try:
                     cls.__switch_to_window(driver, window_handle)
-                except common.NoSuchWindowException:
+                except common.exceptions.NoSuchWindowException:
                     continue
                 # 校验标题
                 title = cls.get_title(selenium_config)
@@ -85,10 +85,10 @@ class ControlWindow:
                 logging.warning("指定的窗口数量为空，重新查询")
             else:
                 cls.__switch_to_window(driver, target_handles[-1])
-                raise Exception(f"出现多个包含 {window_title} 的目标窗口")
+                raise common.exceptions.NoSuchWindowException(f"出现多个包含 {window_title} 的目标窗口")
         else:
             cls.__switch_to_window(driver, driver.window_handles[-1])  # 切换至最新窗口
-            raise Exception(f"未找到目标窗口: {window_title}")
+            raise common.exceptions.NoSuchWindowException(f"未找到目标窗口: {window_title}")
 
     @staticmethod
     def __switch_to_window(driver: webdriver, window_handle: str):
