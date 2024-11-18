@@ -26,7 +26,7 @@ class OaFeature:
         SeleniumUtil.exist(SeleniumConfig(xpath='//form[@autocomplete="off"]'))
         try:
             SeleniumUtil.click(SeleniumConfig(xpath='//div[@class="username"]/div[@class="img"]', wait_seconds=3))
-        except common.TimeoutException:
+        except common.exceptions.TimeoutException:
             pass
         SeleniumUtil.input(SeleniumConfig(xpath='//input[@placeholder="用户名"]'), username)
         SeleniumUtil.input(SeleniumConfig(xpath='//input[@placeholder="密码"]'), password)
