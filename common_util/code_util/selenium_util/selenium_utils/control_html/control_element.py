@@ -32,19 +32,20 @@ class ControlElement:
             for _ in range(wait_seconds):
                 try:
                     cls.find(selenium_config).click()
-                except common.ElementNotInteractableException:
+                except (common.exceptions.ElementNotInteractableException, common.exceptions.TimeoutException):
                     continue
                 break
             else:
-                raise common.ElementNotInteractableException("点击失败")
+                raise common.exceptions.ElementNotInteractableException("点击失败")
 
     @classmethod
     def exist(cls, selenium_config: SeleniumConfig) -> bool:
         """查找元素是否存在"""
+        # noinspection PyBroadException
         try:
-            element = cls.find(selenium_config) if selenium_config.element is None else selenium_config.element
-            print(element.text)  # 这一行是为了检测入参为WebElement的元素
-        except (AttributeError, common.TimeoutException):
+            element = cls.find(selenium_config)
+            print([element.text])  # 这一行是为了检测入参为WebElement的元素
+        except Exception:
             return False
         return True
 
@@ -137,7 +138,7 @@ class ControlElement:
         selenium_config.wait_seconds = 1
         time.sleep(1)  # 等待元素加载
         for _ in range(wait_seconds):
-            if cls.exist(selenium_config):
+            if not cls.exist(selenium_config):
                 return True
             time.sleep(1)
         return False
@@ -148,7 +149,7 @@ class ControlElement:
         # 先点击再删除
         try:
             element.click()
-        except (common.ElementClickInterceptedException, common.ElementNotInteractableException):
+        except (common.exceptions.ElementClickInterceptedException, common.exceptions.ElementNotInteractableException):
             logging.warning("元素无法点击，请选择正确的元素")
         time.sleep(0.5)
         # 使用selenium自带的clear方法
