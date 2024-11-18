@@ -88,7 +88,7 @@ class LaunchIe(LaunchBase):
         if os.name == "nt":
             from .launch_ie_windows import LaunchIeWindows
             return LaunchIeWindows
-        elif os.name == 'posix':
+        elif os.name == "posix":
             from .launch_ie_linux import LaunchIeLinux
             return LaunchIeLinux
         raise Exception(f"未知的操作系统类型: {os.name}")

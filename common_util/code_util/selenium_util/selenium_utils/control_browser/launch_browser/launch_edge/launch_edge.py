@@ -94,7 +94,8 @@ class LaunchEdge(LaunchBase):
             user_data_dir = cls.__get_user_data_path()
             # 1.2) 获取driver
             driver = cls._get_edge_driver(selenium_config, user_data_dir)
-        except (AssertionError, common.InvalidArgumentException, common.SessionNotCreatedException):
+        except (AssertionError, common.exceptions.InvalidArgumentException,
+                common.exceptions.SessionNotCreatedException):
             # 1.3) 重新获取driver，不加载user_data_dir
             driver = cls._get_edge_driver(selenium_config)
         # 3.1) 设置默认加载超时时间
@@ -156,7 +157,7 @@ class LaunchEdge(LaunchBase):
         if os.name == "nt":
             from .launch_edge_windows import LaunchEdgeWindows
             return LaunchEdgeWindows
-        elif os.name == 'posix':
+        elif os.name == "posix":
             from .launch_edge_linux import LaunchEdgeLinux
             return LaunchEdgeLinux
         raise Exception(f"未知的操作系统类型: {os.name}")
