@@ -1,4 +1,5 @@
 import logging
+import os
 import re
 import traceback
 from pathlib import Path
@@ -26,9 +27,15 @@ class DownloadDriver:
         # 1) 获取谷歌浏览器版本
         chrome_version = cls.get_chrome_version()
         logging.info(f"谷歌浏览器版本: {chrome_version}")
+        if chrome_version is None:
+            raise FileExistsError("未安装谷歌浏览器")
         # 2) 根据默认下载路径遍历文件，获取指定版本的chrome_driver文件
         try:
-            return cls._get_driver_in_manager_path("chromedriver.exe", chrome_version)
+            if os.name == "nt":
+                return cls._get_driver_in_manager_path("chromedriver.exe", chrome_version)
+            elif os.name == "posix":
+                return cls._get_driver_in_manager_path("chromedriver", chrome_version)
+            raise FileExistsError
         except FileExistsError:
             logging.warning("本地缓存中没有指定版本的谷歌浏览器驱动")
         # 3) 未找到指定版本的chrome_driver文件，则调用下载方法
@@ -44,9 +51,15 @@ class DownloadDriver:
         # 1) 获取Edge浏览器版本
         edge_version = cls.get_edge_version()
         logging.info(f"Edge浏览器版本: {edge_version}")
+        if edge_version is None:
+            raise FileExistsError("未安装Edge浏览器")
         # 2) 根据默认下载路径遍历文件，获取指定版本的edge_driver文件
         try:
-            return cls._get_driver_in_manager_path("msedgedriver.exe", edge_version)
+            if os.name == "nt":
+                return cls._get_driver_in_manager_path("msedgedriver.exe", edge_version)
+            elif os.name == "posix":
+                return cls._get_driver_in_manager_path("msedgedriver", edge_version)
+            raise FileExistsError
         except FileExistsError:
             logging.warning("本地缓存中没有指定版本的Edge浏览器驱动")
         # 3) 未找到指定版本的edge_driver文件，则调用下载方法
@@ -61,7 +74,11 @@ class DownloadDriver:
         """获取ie_driver路径"""
         # 1) 根据默认下载路径遍历文件，获取ie_driver文件
         try:
-            return cls._get_driver_in_manager_path("IEDriverServer.exe")
+            if os.name == "nt":
+                return cls._get_driver_in_manager_path("IEDriverServer.exe")
+            elif os.name == "posix":
+                return cls._get_driver_in_manager_path("IEDriverServer")
+            raise FileExistsError
         except FileExistsError:
             logging.warning("本地缓存中没有指定版本的IE浏览器驱动")
         # 2) 未找到指定版本的chrome_driver文件，则调用下载方法
