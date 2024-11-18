@@ -24,6 +24,7 @@ class SeleniumConfig:
                  operate_type: OperateType = OperateType.js,
                  proxy_ip: str = None,
                  use_user_data: bool = True,
+                 user_data_dir: str = None,
                  xpath: str = '',
                  wait_seconds: int = 120,
                  without_log: bool = False
@@ -40,6 +41,7 @@ class SeleniumConfig:
         self.operate_type = operate_type  # 操作方式，主要有js、selenium，默认为js，用于点击
         self.proxy_ip = proxy_ip  # 代理ip
         self.use_user_data = use_user_data  # 浏览器启动是否使用user_data，默认为是
+        self.user_data_dir = user_data_dir  # user_data目录
         self.xpath = xpath  # 元素定位的xpath
         self.wait_seconds = wait_seconds  # 等待时间，默认为120秒
         self.without_log = without_log  # 是否不打印日志

@@ -1,11 +1,23 @@
 import os
+import subprocess
 from pathlib import Path
 
-
+from common_util.code_util.selenium_util.selenium_utils.entity.selenium_config import SeleniumConfig
 from .launch_chrome import LaunchChrome
 
 
 class LaunchChromeLinux(LaunchChrome):
+
+    @classmethod
+    def _close_browser_by_cmd(cls, selenium_config: SeleniumConfig):
+        """命令行关闭浏览器"""
+        # 1) 使用命令行直接关闭进程
+        if selenium_config.close_task:
+            processes = subprocess.check_output(['pgrep', 'chrome']).strip().split()
+            for pid in processes:
+                subprocess.run(['kill', pid])
+        # 2) 如果控制debug接管的浏览器，使用driver.quit()仅会关闭selenium，因此需要将端口也进行处理
+        # TODO 暂时不考虑这个
 
     @classmethod
     def _get_chrome_path(cls) -> str:

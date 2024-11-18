@@ -33,16 +33,8 @@ class LaunchChrome(LaunchBase):
         driver.quit()
         time.sleep(1)  # 等待一秒，确认等待操作执行完成
         # 3) 因为经常出现quit之后cmd窗口未关的情况，因此这里使用命令行直接关闭进程
-        if selenium_config.close_task:
-            os.system(f"taskkill /f /im {os.path.basename(cls.__get_driver_path(selenium_config))}")
-        # 4) 如果控制debug接管的浏览器，使用driver.quit()仅会关闭selenium，因此需要将端口也进行处理
-        debug_port = cls.__get_debug_port(selenium_config)
-        if debug_port and cls.__netstat_debug_port_running(debug_port):
-            with os.popen(f'netstat -aon|findstr "{debug_port}"') as cmd:
-                result = cmd.read()
-            temp_result = [each for each in result.split('\n')[0].split(' ') if each != '']
-            os.system(f"taskkill /f /pid {temp_result[4]}")
-        # 5) 清除缓存
+        cls._close_browser_by_cmd(selenium_config)
+        # 4) 清除缓存
         selenium_config.driver = None
         for key, _driver in list(cls._driver_map.items()):
             if driver == _driver:
@@ -86,26 +78,33 @@ class LaunchChrome(LaunchBase):
         time.sleep(1)  # 等待一秒，确认端口正常启动
 
     @classmethod
+    @abc.abstractmethod
+    def _close_browser_by_cmd(cls, selenium_config: SeleniumConfig):
+        """命令行关闭浏览器"""
+        return cls.__get_subclass()._close_browser_by_cmd(selenium_config)
+
+    @classmethod
     def _get_chrome_driver(cls, selenium_config: SeleniumConfig, user_data_dir: str = None) -> WebDriver:
         """获取chrome_driver"""
         # 1.1) 获取谷歌浏览器设置
         options = webdriver.ChromeOptions()
+        options.add_argument("--no-sandbox")  # 解决DevToolActivePort文件不存在的报错
         # 1.2.1) 设置静默运行
         if selenium_config.headless:
-            options.add_argument('--headless')
+            options.add_argument("--headless")
         # 1.2.2) 设置ip代理
         if selenium_config.proxy_ip:
             options.add_argument(f"--proxy-server={selenium_config.proxy_ip}")
         # 1.3.1) 设置忽略私密链接警告
-        options.add_argument('--ignore-certificate-errors')
+        options.add_argument("--ignore-certificate-errors")
         # 1.3.2) 设置取消提示受自动控制
-        options.add_experimental_option('excludeSwitches', ['enable-automation'])
-        options.add_experimental_option('useAutomationExtension', False)
+        options.add_experimental_option("excludeSwitches", ['enable-automation'])
+        options.add_experimental_option("useAutomationExtension", False)
         # 1.4.1) 伪装浏览器请求头
-        options.add_argument('lang=zh-CN,zh,zh-TW,en-US,en')
+        options.add_argument("lang=zh-CN,zh,zh-TW,en-US,en")
         chrome_version = DownloadDriver.get_chrome_version()
         options.add_argument(
-            f'user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version} Safari/537.36')
+            f"user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version} Safari/537.36")
         # 1.4.2) 去掉webdriver痕迹
         options.add_argument("disable-blink-features=AutomationControlled")
         # 1.5) 取消提示和默认下载路径在同一个参数中配置
@@ -117,7 +116,7 @@ class LaunchChrome(LaunchBase):
         logging.info(f"浏览器下载路径为: {selenium_config.download_path}")
         if os.path.exists(selenium_config.download_path):
             prefs.update({'download.default_directory': selenium_config.download_path})
-        options.add_experimental_option('prefs', prefs)
+        options.add_experimental_option("prefs", prefs)
         # 1.6) 设置读取用户缓存目录
         if user_data_dir and os.path.exists(user_data_dir):
             options.add_argument(f"--user-data-dir={user_data_dir}")
@@ -137,10 +136,11 @@ class LaunchChrome(LaunchBase):
         try:
             assert selenium_config.use_user_data
             # 1.1) 获取谷歌浏览器用户缓存路径
-            user_data_dir = cls.__get_user_data_path()
+            user_data_dir = cls.__get_user_data_path() if selenium_config.user_data_dir is None else selenium_config.user_data_dir
             # 1.2) 获取driver
             driver = cls._get_chrome_driver(selenium_config, user_data_dir)
-        except (AssertionError, common.InvalidArgumentException, common.SessionNotCreatedException):
+        except (AssertionError, common.exceptions.InvalidArgumentException,
+                common.exceptions.SessionNotCreatedException):
             # 2) 重新获取driver，不加载user_data_dir
             driver = cls._get_chrome_driver(selenium_config)
         # 3.1) 设置默认加载超时时间
@@ -200,7 +200,7 @@ class LaunchChrome(LaunchBase):
     def __get_user_data_path(cls) -> typing.Union[str, None]:
         """获取谷歌浏览器用户缓存User Data路径"""
         # 1) 查找User Data文件默认路径
-        user_data_path = os.path.join(os.path.expanduser('~'), "AppData\\Local\\Google\\Chrome\\User Data\\Default")
+        user_data_path = os.path.join(os.path.expanduser("~"), "AppData\\Local\\Google\\Chrome\\User Data\\Default")
         if os.path.exists(user_data_path):
             return user_data_path
         # 2) 有的User Data文件放在谷歌浏览器同级目录中
@@ -234,7 +234,7 @@ class LaunchChrome(LaunchBase):
         if os.name == "nt":
             from .launch_chrome_windows import LaunchChromeWindows
             return LaunchChromeWindows
-        elif os.name == 'posix':
+        elif os.name == "posix":
             from .launch_chrome_linux import LaunchChromeLinux
             return LaunchChromeLinux
         raise Exception(f"未知的操作系统类型: {os.name}")

@@ -5,10 +5,25 @@ from pathlib import Path
 import win32con
 from win32api import GetLogicalDriveStrings, RegOpenKey, RegQueryValueEx
 
+from common_util.code_util.selenium_util.selenium_utils.entity.selenium_config import SeleniumConfig
 from .launch_chrome import LaunchChrome
 
 
 class LaunchChromeWindows(LaunchChrome):
+
+    @classmethod
+    def _close_browser_by_cmd(cls, selenium_config: SeleniumConfig):
+        """命令行关闭浏览器"""
+        # 1) 使用命令行直接关闭进程
+        if selenium_config.close_task:
+            os.system(f"taskkill /f /im {os.path.basename(cls.__get_driver_path(selenium_config))}")
+        # 2) 如果控制debug接管的浏览器，使用driver.quit()仅会关闭selenium，因此需要将端口也进行处理
+        debug_port = cls.__get_debug_port(selenium_config)
+        if debug_port and cls.__netstat_debug_port_running(debug_port):
+            with os.popen(f'netstat -aon|findstr "{debug_port}"') as cmd:
+                result = cmd.read()
+            temp_result = [each for each in result.split('\n')[0].split(' ') if each != '']
+            os.system(f"taskkill /f /pid {temp_result[4]}")
 
     @classmethod
     def _get_chrome_path(cls) -> str:
