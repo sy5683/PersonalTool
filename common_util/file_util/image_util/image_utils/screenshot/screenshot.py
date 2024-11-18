@@ -44,7 +44,7 @@ class Screenshot:
         if os.name == "nt":
             from .screenshot_windows import ScreenshotWindows
             return ScreenshotWindows
-        elif os.name == 'posix':
+        elif os.name == "posix":
             from .screenshot_linux import ScreenshotLinux
             return ScreenshotLinux
         raise Exception(f"未知的操作系统类型: {os.name}")
