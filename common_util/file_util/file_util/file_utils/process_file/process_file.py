@@ -3,10 +3,8 @@ import os
 import re
 import shutil
 import time
-import tkinter
 import typing
 from pathlib import Path
-from tkinter import filedialog
 
 import magic
 
@@ -40,23 +38,20 @@ class ProcessFile:
         cls.make_dir(file_path)
         return file_path
 
-    @staticmethod
-    def get_directory_path() -> str:
+    @classmethod
+    def get_directory_path(cls) -> str:
         """获取文件夹路径"""
-        tkinter.Tk().withdraw()  # 隐藏tk窗口
-        return filedialog.askdirectory()
+        return cls.__get_subclass().get_directory_path()
 
-    @staticmethod
-    def get_file_path() -> str:
+    @classmethod
+    def get_file_path(cls) -> str:
         """获取文件路径"""
-        tkinter.Tk().withdraw()  # 隐藏tk窗口
-        return filedialog.askopenfilename()
+        return cls.__get_subclass().get_file_path()
 
-    @staticmethod
-    def get_file_paths() -> typing.Literal[""] | typing.Tuple[str, ...]:
+    @classmethod
+    def get_file_paths(cls) -> typing.Literal[""] | typing.Tuple[str, ...]:
         """获取文件路径列表"""
-        tkinter.Tk().withdraw()  # 隐藏tk窗口
-        return filedialog.askopenfilenames()
+        return cls.__get_subclass().get_file_paths()
 
     @staticmethod
     def get_file_size(file_path: Path) -> float:
@@ -139,7 +134,7 @@ class ProcessFile:
         if os.name == "nt":
             from .process_file_windows import ProcessFileWindows
             return ProcessFileWindows
-        elif os.name == 'posix':
+        elif os.name == "posix":
             from .process_file_linux import ProcessFileLinux
             return ProcessFileLinux
         raise Exception(f"未知的操作系统类型: {os.name}")
