@@ -80,6 +80,8 @@ class ControlWindow:
                 cls.__switch_to_window(driver, target_handles[0])
                 break
             elif not target_handles:
+                if selenium_config.without_log:
+                    continue
                 logging.warning("指定的窗口数量为空，重新查询")
             else:
                 cls.__switch_to_window(driver, target_handles[-1])
