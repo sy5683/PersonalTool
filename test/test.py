@@ -1,5 +1,6 @@
 import collections
 import json
+import logging
 import os
 import random
 import re
@@ -24,6 +25,7 @@ from common_core.base.test_base import TestBase
 from common_util.code_util.net_util.net_util import NetUtil
 from common_util.code_util.selenium_util.selenium_util import SeleniumUtil
 from common_util.code_util.selenium_util.selenium_utils.entity.selenium_config import SeleniumConfig
+from common_util.code_util.selenium_util.selenium_utils.enum.operate_type import OperateType
 from common_util.data_util.object_util.object_util import ObjectUtil
 from common_util.data_util.textual_util.textual_util import TextualUtil
 from common_util.file_util.file_util.file_util import FileUtil
