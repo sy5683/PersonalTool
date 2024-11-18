@@ -80,7 +80,7 @@ class MatchImage:
         if os.name == "nt":
             from .match_image_windows import MatchImageWindows
             return MatchImageWindows
-        elif os.name == 'posix':
+        elif os.name == "posix":
             from .match_image_linux import MatchImageLinux
             return MatchImageLinux
         raise Exception(f"未知的操作系统类型: {os.name}")
