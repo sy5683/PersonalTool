@@ -9,9 +9,9 @@ class FileFeature:
 
     @staticmethod
     def get_file_path(file_name: str = '') -> str:
-        file_dir_path = Path(__file__).parent.parent.joinpath("file")
-        FileUtil.make_dir(file_dir_path)
-        return str(file_dir_path.joinpath(file_name))
+        file_path = Path(__file__).parent.parent.joinpath(f"file\\{file_name}")
+        FileUtil.make_dir(file_path)
+        return str(file_path)
 
     @classmethod
     def load_font(cls, font_name: str, font_size: int) -> pygame.font.Font:
