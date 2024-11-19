@@ -34,9 +34,9 @@ class LaunchIeWindows(LaunchIe):
             RegCloseKey(key)
 
         # 1) 设置浏览器缩放为100%
-        set_regedit_value("Software/Microsoft/Internet Explorer/Zoom", "ZoomFactor", 100000)
+        set_regedit_value("Software\\Microsoft\\Internet Explorer\\Zoom", "ZoomFactor", 100000)
         # 2) 设置浏览器所有保护模式统一开启或关闭
         for each in range(1, 5):
             # 最后一个参数: 0->开启, 3->关闭
-            set_regedit_value(f"Software/Microsoft/Windows/CurrentVersion/Internet Settings/Zones/{each}", "2500",
+            set_regedit_value(f"Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\{each}", "2500",
                               3)

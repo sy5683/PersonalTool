@@ -12,7 +12,7 @@ class PlaneBulletBase(ElementBase, metaclass=abc.ABCMeta):
                  position: typing.Tuple[int, int]):
         super().__init__(image_names)
         # 加载子弹音效
-        self.sound = FileFeature.load_sound("game_scene/plane\\bullet\\attack.wav")
+        self.sound = FileFeature.load_sound("game_scene/plane/bullet/attack.wav")
         # 设置子弹参数
         self.alive = False  # 存活
         self.speed = speed  # 速度

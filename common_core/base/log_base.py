@@ -28,7 +28,7 @@ class LogBase(metaclass=abc.ABCMeta):
         self.logger.addHandler(file_handler)
 
     def get_log_path(self, file_name: str = '') -> Path:
-        log_path = self._get_subclass_path().parent.joinpath(f"file\\logs\\{file_name}")
+        log_path = self._get_subclass_path().parent.joinpath(f"file/logs/{file_name}")
         FileUtil.make_dir(log_path)
         return log_path
 

@@ -30,7 +30,7 @@ class LaunchChromeWindows(LaunchChrome):
         """获取谷歌浏览器路径"""
         # 1) 通过注册表查找谷歌浏览器路径
         for regedit_dir in [win32con.HKEY_LOCAL_MACHINE, win32con.HKEY_CURRENT_USER]:  # 谷歌浏览器路径注册表一般在这两个位置下固定位置
-            regedit_path = "Software/Microsoft/Windows/CurrentVersion/App Paths/chrome.exe"
+            regedit_path = "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\chrome.exe"
             # noinspection PyBroadException
             try:
                 key = RegOpenKey(regedit_dir, regedit_path)

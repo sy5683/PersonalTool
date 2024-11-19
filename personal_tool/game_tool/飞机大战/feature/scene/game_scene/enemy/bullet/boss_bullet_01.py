@@ -10,7 +10,7 @@ from .....setting.setting_feature import SettingFeature
 class BossBullet01(BossBulletBase):
 
     def __init__(self, position: typing.Tuple[int, int]):
-        image_names = ["game_scene/enemy\\bullet\\boss_bullet_01.png"]
+        image_names = ["game_scene/enemy/bullet/boss_bullet_01.png"]
         super().__init__(image_names, 5)
         self.__position = position
 

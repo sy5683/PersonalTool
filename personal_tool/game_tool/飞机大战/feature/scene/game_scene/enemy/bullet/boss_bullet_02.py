@@ -10,7 +10,7 @@ from .....setting.setting_feature import SettingFeature
 class BossBullet02(BossBulletBase):
 
     def __init__(self, speeds: typing.Tuple[int, int]):
-        image_names = ["game_scene/enemy\\bullet\\boss_bullet_02.png"]
+        image_names = ["game_scene/enemy/bullet/boss_bullet_02.png"]
         super().__init__(image_names, speeds)
 
     def draw(self, screen: pygame.Surface):

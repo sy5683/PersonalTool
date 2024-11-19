@@ -15,7 +15,7 @@ class EnemyBase(ElementBase, metaclass=abc.ABCMeta):
                  score: int):
         super().__init__(image_names)
         # 加载敌机音效
-        self.crash_sound = FileFeature.load_sound("game_scene/enemy\\crash.wav")  # 敌机坠毁
+        self.crash_sound = FileFeature.load_sound("game_scene/enemy/crash.wav")  # 敌机坠毁
         # 设置敌机参数
         self.hit = False  # 是否被击中
         self.hit_points = hit_points  # 生命值

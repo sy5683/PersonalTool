@@ -11,7 +11,7 @@ class BossBulletBase(ElementBase, metaclass=abc.ABCMeta):
     def __init__(self, image_names: typing.List[str], speed: typing.Union[int, typing.Tuple[int, int]]):
         super().__init__(image_names)
         # 加载子弹音效
-        self.sound = FileFeature.load_sound("game_scene\\enemy\\bullet\\boss_attack.wav")
+        self.sound = FileFeature.load_sound("game_scene/enemy/bullet/boss_attack.wav")
         # 设置子弹参数
         self.alive = False  # 存活
         self.invincible = False  # 无敌
