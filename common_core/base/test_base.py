@@ -4,6 +4,7 @@ import time
 import unittest
 from pathlib import Path
 
+from common_util.file_util.file_util.file_util import FileUtil
 from .log_base import LogBase
 
 
@@ -15,6 +16,7 @@ class TestBase(unittest.TestCase, LogBase, metaclass=abc.ABCMeta):
         test_file = Path(sys.modules[self.__module__].__file__)
         if file_name:
             test_file = test_file.parent.joinpath(file_name)
+            FileUtil.make_dir(test_file)
         return test_file
 
     def tearDown(self):
