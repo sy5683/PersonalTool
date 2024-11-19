@@ -2,10 +2,9 @@ import logging
 import tempfile
 import time
 import typing
-
-from PIL import Image
 from pathlib import Path
 
+from PIL import Image
 from selenium import common
 
 from ..control_browser.control_browser import ControlBrowser
