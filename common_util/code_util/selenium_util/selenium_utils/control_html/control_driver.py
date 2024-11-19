@@ -6,6 +6,8 @@ import typing
 from PIL import Image
 from pathlib import Path
 
+from selenium import common
+
 from ..control_browser.control_browser import ControlBrowser
 from ..entity.selenium_config import SeleniumConfig
 
@@ -38,7 +40,10 @@ class ControlDriver:
         """截图"""
         # 1) 使用selenium方法进行截图
         save_path = tempfile.mktemp(".png") if save_path is None else str(save_path)
-        ControlBrowser.get_driver(selenium_config).save_screenshot(save_path)
+        try:
+            ControlBrowser.get_driver(selenium_config).save_screenshot(save_path)
+        except common.exceptions.NoSuchWindowException:
+            raise RuntimeError("窗口已关闭，无法截图")
         # 2) 如果传入了元素，则截取元素所在位置
         # 注: 当浏览器滑动了之后，截图还是当前位置截图，但是计算元素坐标时，坐标并未变换，会导致裁剪出现的图片会有问题
         if selenium_config.element:
