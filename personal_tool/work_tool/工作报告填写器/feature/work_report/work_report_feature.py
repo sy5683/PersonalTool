@@ -45,7 +45,7 @@ class WorkReportFeature:
 
     @classmethod
     def _get_work_report_path(cls) -> str:
-        default_work_report_path = str(Path(__file__).parent.parent.parent.joinpath("file\\日报.xlsx"))  # 工作报告默认路径
+        default_work_report_path = str(Path(__file__).parent.parent.parent.joinpath("file/日报.xlsx"))  # 工作报告默认路径
         if cls.__work_report_path is None:
             if not os.path.exists(default_work_report_path):
                 logging.warning(f"默认日报文件路径不存在: {default_work_report_path}")

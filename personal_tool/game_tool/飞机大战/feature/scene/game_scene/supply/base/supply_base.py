@@ -13,7 +13,7 @@ class SupplyBase(ElementBase, metaclass=abc.ABCMeta):
     def __init__(self, image_name: str):
         super().__init__([image_name])
         # 加载补给音效
-        self.appear_sound = FileFeature.load_sound("game_scene\\supply\\appear.wav")  # 补给出现
+        self.appear_sound = FileFeature.load_sound("game_scene/supply\\appear.wav")  # 补给出现
         # 设置补给参数
         self.alive = False  # 存活
         self.speed = 3  # 速度

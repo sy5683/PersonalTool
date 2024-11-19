@@ -9,7 +9,7 @@ class PauseIcon(IconBase):
 
     def __init__(self):
         super().__init__()
-        self.image = FileFeature.load_image("game_scene\\icon\\pause.png")
+        self.image = FileFeature.load_image("game_scene/icon/pause.png")
         self.rect = self.image.get_rect()
         width, height = SettingFeature.screen_setting.screen_size
         self.rect.left = width - self.rect.width - 10

@@ -9,7 +9,7 @@ class FileFeature:
 
     @staticmethod
     def get_file_path(file_name: str = '') -> str:
-        file_path = Path(__file__).parent.parent.joinpath(f"file\\{file_name}")
+        file_path = Path(__file__).parent.parent.joinpath(f"file/{file_name}")
         FileUtil.make_dir(file_path)
         return str(file_path)
 

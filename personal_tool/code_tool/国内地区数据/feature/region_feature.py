@@ -42,7 +42,7 @@ class RegionFeature:
     def _get_region_json_path() -> Path:
         """获取地区数据文件路径"""
         # http://xzqh.mca.gov.cn/map
-        return Path(__file__).parent.parent.joinpath("file\\地区.json")
+        return Path(__file__).parent.parent.joinpath("file/地区.json")
 
     @staticmethod
     def _check_by_info(region: RegionBase, region_info: str) -> bool:

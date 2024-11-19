@@ -15,20 +15,20 @@ from ....file_feature import FileFeature
 class Boss(EnemyBase):
 
     def __init__(self):
-        image_names = ["game_scene\\enemy\\boss\\boss_1.png",
-                       "game_scene\\enemy\\boss\\boss_2.png",
-                       "game_scene\\enemy\\boss\\boss_3.png",
-                       "game_scene\\enemy\\boss\\boss_4.png"]
+        image_names = ["game_scene/enemy/boss/boss_1.png",
+                       "game_scene/enemy/boss/boss_2.png",
+                       "game_scene/enemy/boss/boss_3.png",
+                       "game_scene/enemy/boss/boss_4.png"]
         super().__init__(image_names, 10000, 1, 1000000)
         # 加载Boss音效
-        self.crash_sound = FileFeature.load_sound("game_scene\\enemy\\boss\\crash.wav")  # 敌机坠毁
+        self.crash_sound = FileFeature.load_sound("game_scene/enemy/boss/crash.wav")  # 敌机坠毁
         # 设置Boss参数
         self.bullets: typing.List[BossBulletBase] = []
         self.rect.left, self.rect.top = 0, -250
 
     def draw(self, screen: pygame.Surface):
         """绘制Boss"""
-        hit_image = FileFeature.load_image("game_scene\\enemy\\boss\\boss_hit.png")
+        hit_image = FileFeature.load_image("game_scene/enemy/boss/boss_hit.png")
         screen.blit(hit_image if self.hit else self.get_image(), self.rect)
         self.draw_hit_points_ratio(screen, 10, 5)
         self.hit = False

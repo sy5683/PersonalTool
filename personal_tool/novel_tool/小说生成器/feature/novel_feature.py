@@ -45,6 +45,6 @@ class NovelFeature:
     @staticmethod
     def _get_novel_path(novel_name: str) -> Path:
         """获取小说路径"""
-        novel_path = Path(__file__).parent.joinpath(f"profile\\{novel_name}")
+        novel_path = Path(__file__).parent.joinpath(f"profile/{novel_name}")
         assert novel_path.is_dir(), f"小说不存在: {novel_name}"
         return novel_path

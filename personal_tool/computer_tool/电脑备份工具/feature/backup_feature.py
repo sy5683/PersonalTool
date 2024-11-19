@@ -19,6 +19,6 @@ class BackupFeature:
     @staticmethod
     def get_backup_save_path(file_name: str = '') -> Path:
         """获取备份保存路径"""
-        backup_save_path = Path(__file__).parent.parent.joinpath(f"file\\备份文件\\{file_name}")
+        backup_save_path = Path(__file__).parent.parent.joinpath(f"file/备份文件/{file_name}")
         FileUtil.make_dir(backup_save_path)
         return backup_save_path

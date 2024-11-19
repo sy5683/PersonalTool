@@ -20,7 +20,7 @@ class PlaneBase(ElementBase, metaclass=abc.ABCMeta):
     def __init__(self, image_names: typing.List[str], bomb_number: int, life_number: int):
         super().__init__(image_names)
         # 加载飞机音效
-        self.crash_sound = FileFeature.load_sound("game_scene\\plane\\crash.wav")  # 飞机坠毁
+        self.crash_sound = FileFeature.load_sound("game_scene/plane\\crash.wav")  # 飞机坠毁
         self.upgrade_sound = FileFeature.load_sound("game_scene\\plane\\upgrade.wav")  # 飞机升级
         self.use_bomb_sound = FileFeature.load_sound("game_scene\\plane\\use_bomb.wav")  # 飞机使用炸弹
         # 设置飞机参数

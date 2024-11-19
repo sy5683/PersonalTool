@@ -9,7 +9,7 @@ class LifeIcon(IconBase):
 
     def __init__(self):
         super().__init__()
-        self.image = FileFeature.load_image("game_scene\\icon\\life.png")
+        self.image = FileFeature.load_image("game_scene/icon/life.png")
         self.rect = self.image.get_rect()
 
     def draw(self, screen: pygame.Surface, life_number: int):

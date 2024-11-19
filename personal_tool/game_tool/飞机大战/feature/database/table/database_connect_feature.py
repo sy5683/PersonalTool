@@ -10,6 +10,6 @@ class DatabaseConnectFeature:
     def get_database_connect(cls) -> DatabaseConnect:
         """获取数据库连接"""
         if cls._database_connect is None:
-            database_path = FileFeature.get_file_path("database\\AircraftWar.sqlite")
+            database_path = FileFeature.get_file_path("database/AircraftWar.sqlite")
             cls._database_connect = DatabaseUtil.get_database_connect(sqlite_path=database_path)
         return cls._database_connect

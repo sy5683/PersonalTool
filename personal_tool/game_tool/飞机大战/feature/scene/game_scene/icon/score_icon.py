@@ -9,7 +9,7 @@ class ScoreIcon(IconBase):
 
     def __init__(self):
         super().__init__()
-        self.font = FileFeature.load_font("font\\fangsong_GB2312.ttf", 24)
+        self.font = FileFeature.load_font("font/fangsong_GB2312.ttf", 24)
 
     def draw(self, screen: pygame.Surface, score: int):
         """绘制得分"""

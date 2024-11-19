@@ -17,7 +17,7 @@ class PPRemoveBackground:
     def matting_picture(cls, file_paths: typing.List[str], background_color: typing.Tuple[int, int, int] = None):
         """抠取图像"""
         # 获取pp模型
-        model_path = Path(__file__).parent.parent.parent.joinpath("file\\ppseg\\ppseg.onnx")
+        model_path = Path(__file__).parent.parent.parent.joinpath("file/ppseg/ppseg.onnx")
         session = onnxruntime.InferenceSession(model_path, providers=['CPUExecutionProvider'])
         input_name = session.get_inputs()[0].name
         # 处理图片

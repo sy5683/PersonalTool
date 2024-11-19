@@ -13,7 +13,7 @@ class Operations(Enum):
 class NovelCrawler(ToolBase):
 
     def main(self, _class, **kwargs):
-        crawler = _class.value("E:\\test.txt")
+        crawler = _class.value("E:/test.txt")
         crawler.run(**kwargs)
 
 

@@ -25,7 +25,7 @@ from ...volume_feature import VolumeFeature
 class GameScene(SceneBase):
 
     def __init__(self):
-        super().__init__("game_scene\\background.png", "game_scene\\bgm.ogg")
+        super().__init__("game_scene/background.png", "game_scene/bgm.ogg")
         self.level = 0  # 难度等级
         self.score = 0  # 得分
         self.paused = False  # 暂停

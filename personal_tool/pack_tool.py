@@ -23,11 +23,11 @@ class PackTool:
         shutil.copytree(tool_path, self.__to_copy_path(self.tool_name))
         # 2) 复制框架
         core_path = self.__to_project_path("common_core")
-        shutil.copytree(core_path, self.__to_copy_path(f"{self.tool_name}\\common_core"))
+        shutil.copytree(core_path, self.__to_copy_path(f"{self.tool_name}/common_core"))
         # 3) 复制组件
         for relative_util_path in self._get_relative_util_paths(tool_path):
             util_path = self.__to_project_path(relative_util_path)
-            copy_util_path = self.__to_copy_path(f"{self.tool_name}\\{relative_util_path}")
+            copy_util_path = self.__to_copy_path(f"{self.tool_name}/{relative_util_path}")
             shutil.copytree(util_path, copy_util_path)
         # 4) 删除一些无用文件
         for file_name in ["__pycache__"]:
@@ -61,7 +61,7 @@ class PackTool:
                     module_path = re.findall(r"^from common_util\.(.*?)_util.? import", code)
                     if not module_path:
                         continue
-                    relative_util_path = "\\".join(["common_util"] + module_path[0].split(".")[:-1])
+                    relative_util_path = "/".join(["common_util"] + module_path[0].split(".")[:-1])
                     if relative_util_path not in relative_util_paths:
                         relative_util_paths.append(relative_util_path)
         return relative_util_paths
