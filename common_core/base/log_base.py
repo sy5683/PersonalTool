@@ -4,8 +4,6 @@ import sys
 from logging import handlers
 from pathlib import Path
 
-from common_util.file_util.file_util.file_util import FileUtil
-
 
 class LogBase(metaclass=abc.ABCMeta):
     logger = logging.getLogger()
@@ -21,16 +19,20 @@ class LogBase(metaclass=abc.ABCMeta):
 
     def __init__(self):
         # 3) 日志保存至本地文件
-        log_path = self.get_log_path(f"{self.get_subclass_path().parent.stem}.log")
+        log_path = self.get_subclass_path(f"file/logs/{self.get_subclass_path().parent.stem}.log")
         file_handler = handlers.TimedRotatingFileHandler(log_path, when='D', interval=1, backupCount=90,
                                                          encoding='UTF-8')
         file_handler.setFormatter(self.formatter)
         self.logger.addHandler(file_handler)
 
-    def get_log_path(self, file_name: str = '') -> Path:
-        log_path = self.get_subclass_path().parent.joinpath(f"file/logs/{file_name}")
-        FileUtil.make_dir(log_path)
-        return log_path
-
-    def get_subclass_path(self):
-        return Path(sys.modules[self.__module__].__file__)
+    def get_subclass_path(self, file_name: str = None) -> Path:
+        """
+        获取子类文件路径
+        传入file_name时，会生成子类同级的路径
+        """
+        file_path = Path(sys.modules[self.__module__].__file__)
+        if file_name:
+            file_path = file_path.parent.joinpath(file_name)
+            dir_path = file_path.parent if file_path.suffix else file_path
+            dir_path.mkdir(exist_ok=True, parents=True)
+        return file_path

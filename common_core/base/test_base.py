@@ -3,7 +3,6 @@ import time
 import unittest
 from pathlib import Path
 
-from common_util.file_util.file_util.file_util import FileUtil
 from .log_base import LogBase
 
 
@@ -12,11 +11,7 @@ class TestBase(unittest.TestCase, LogBase, metaclass=abc.ABCMeta):
 
     def get_test_file(self, file_name: str = None) -> Path:
         """获取测试用的文件路径（测试代码同级目录）"""
-        test_file = self.get_subclass_path()
-        if file_name:
-            test_file = test_file.parent.joinpath(file_name)
-            FileUtil.make_dir(test_file)
-        return test_file
+        return self.get_subclass_path(file_name)
 
     def tearDown(self):
         # 结尾强制等待0.01秒，保证控制台打印的信息保留在一起
