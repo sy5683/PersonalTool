@@ -1,6 +1,8 @@
+import logging
 import os
-import subprocess
 from pathlib import Path
+
+import psutil
 
 from common_util.code_util.selenium_util.selenium_utils.entity.selenium_config import SeleniumConfig
 from .launch_chrome import LaunchChrome
@@ -11,9 +13,14 @@ class LaunchChromeLinux(LaunchChrome):
     @classmethod
     def _close_browser_by_cmd(cls, selenium_config: SeleniumConfig):
         """命令行关闭浏览器"""
-        # TODO 需要具体实现
-        # 1) 使用命令行直接关闭进程
-        # 2) 如果控制debug接管的浏览器，使用driver.quit()仅会关闭selenium，因此需要将端口也进行处理
+        # 1) 使用命令行直接关闭chrome相关的进程
+        for proc in psutil.process_iter(["pid", "name", "cpu_percent"]):
+            name = proc.info.get("name", "")
+            try:
+                if "chrome" in proc.info.get("name", "").lower():
+                    proc.kill()
+            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                logging.warning(f"进程关闭失败: {name}")
 
     @classmethod
     def _get_chrome_path(cls) -> str:
