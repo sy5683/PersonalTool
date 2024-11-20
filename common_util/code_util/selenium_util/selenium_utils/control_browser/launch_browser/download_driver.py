@@ -94,9 +94,14 @@ class DownloadDriver:
         # 驱动只需要保证大版本一致即可
         check_version = check_version[:check_version.find(".")] if "." in check_version else check_version
         # 遍历驱动下载路径的指定文件
-        for driver_path in Path(DEFAULT_USER_HOME_CACHE_PATH).rglob(driver_name):
+        driver_paths = list(Path(DEFAULT_USER_HOME_CACHE_PATH).rglob(driver_name))
+        if not driver_paths:
+            raise FileExistsError
+        for driver_path in driver_paths:
+            if driver_path.is_dir():
+                continue
             relative_path = str(driver_path).replace(DEFAULT_USER_HOME_CACHE_PATH, "")
             if check_version and not re.search(rf"\\{check_version}\.|\\{check_version}\\", relative_path):
                 continue
             return str(driver_path)
-        raise FileExistsError
+        return driver_paths[-1]
