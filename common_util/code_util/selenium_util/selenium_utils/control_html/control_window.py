@@ -94,5 +94,4 @@ class ControlWindow:
     def __switch_to_window(driver: webdriver, window_handle: str):
         """切换到window中"""
         driver.switch_to.window(window_handle)
-        # window切换完之后需要等待一小段时间再进行操作，不然可能会出现无法找到元素的情况
-        time.sleep(0.5)
+        time.sleep(0.5)  # window切换完之后需要等待一小段时间再进行操作，不然可能会出现无法找到元素的情况
