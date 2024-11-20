@@ -1,5 +1,4 @@
 import abc
-import sys
 import time
 import unittest
 from pathlib import Path
@@ -13,7 +12,7 @@ class TestBase(unittest.TestCase, LogBase, metaclass=abc.ABCMeta):
 
     def get_test_file(self, file_name: str = None) -> Path:
         """获取测试用的文件路径（测试代码同级目录）"""
-        test_file = Path(sys.modules[self.__module__].__file__)
+        test_file = self.get_subclass_path()
         if file_name:
             test_file = test_file.parent.joinpath(file_name)
             FileUtil.make_dir(test_file)

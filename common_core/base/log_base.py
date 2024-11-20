@@ -21,16 +21,16 @@ class LogBase(metaclass=abc.ABCMeta):
 
     def __init__(self):
         # 3) 日志保存至本地文件
-        log_path = self.get_log_path(f"{self._get_subclass_path().parent.stem}.log")
+        log_path = self.get_log_path(f"{self.get_subclass_path().parent.stem}.log")
         file_handler = handlers.TimedRotatingFileHandler(log_path, when='D', interval=1, backupCount=90,
                                                          encoding='UTF-8')
         file_handler.setFormatter(self.formatter)
         self.logger.addHandler(file_handler)
 
     def get_log_path(self, file_name: str = '') -> Path:
-        log_path = self._get_subclass_path().parent.joinpath(f"file/logs/{file_name}")
+        log_path = self.get_subclass_path().parent.joinpath(f"file/logs/{file_name}")
         FileUtil.make_dir(log_path)
         return log_path
 
-    def _get_subclass_path(self):
+    def get_subclass_path(self):
         return Path(sys.modules[self.__module__].__file__)
