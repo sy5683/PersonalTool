@@ -24,7 +24,7 @@ class FlaskUtil:
 
         # 添加异常捕获，捕获所有异常，并返回统一的错误格式
         @app.errorhandler(Exception)
-        def handle_exception(e):
+        def handle_exception(e) -> FlaskResponse:
             return FlaskResponse(code=-1, message=str(e))
 
         return app
