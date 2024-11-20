@@ -17,7 +17,7 @@ class LaunchChromeLinux(LaunchChrome):
         for proc in psutil.process_iter(["pid", "name", "cpu_percent"]):
             name = proc.info.get("name", "")
             try:
-                if "chrome" in proc.info.get("name", "").lower():
+                if "chrome" in name.lower():
                     proc.kill()
             except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
                 logging.warning(f"进程关闭失败: {name}")
