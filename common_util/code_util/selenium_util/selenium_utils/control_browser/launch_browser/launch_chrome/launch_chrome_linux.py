@@ -13,7 +13,7 @@ class LaunchChromeLinux(LaunchChrome):
     @classmethod
     def _close_browser_by_cmd(cls, selenium_config: SeleniumConfig):
         """命令行关闭浏览器"""
-        # 1) 使用命令行直接关闭chrome相关的进程
+        # 使用psutil直接关闭chrome相关的进程
         for proc in psutil.process_iter(["pid", "name", "cpu_percent"]):
             name = proc.info.get("name", "")
             try:
