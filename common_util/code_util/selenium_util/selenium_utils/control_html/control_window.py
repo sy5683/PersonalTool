@@ -28,6 +28,9 @@ class ControlWindow:
                 elif not window_title and window_title == title:
                     break
             else:
+                # 需要注意，为了保证浏览器活性，当最后一个窗口仍不满足条件时，需要保留窗口
+                if len(driver.window_handles) == 1:
+                    raise RuntimeWarning(f"指定窗口不存在，将所有窗口关闭，保留一个窗口: {driver.title}")
                 logging.info(f"关闭窗口: {title}")
                 driver.close()
         # 关闭完窗口之后还需要重新切换一下窗口
