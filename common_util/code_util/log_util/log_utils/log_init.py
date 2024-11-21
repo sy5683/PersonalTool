@@ -1,12 +1,11 @@
 import logging
-import typing
 from logging import handlers
 
 from pathlib import Path
 
 
 class LogInit:
-    _logger = None
+    _logger_map = {}
     _console_handler = None
     _log_paths = []
 
@@ -17,14 +16,13 @@ class LogInit:
             return
         cls._console_handler = logging.StreamHandler()
         cls._console_handler.setFormatter(cls._get_formatter())
-        cls._get_logger().addHandler(cls._console_handler)
+        cls.get_logger().addHandler(cls._console_handler)
 
     @classmethod
-    def add_file_handler(cls, log_path: typing.Union[Path, str]):
+    def add_file_handler(cls, log_path: Path, log_name: str = ''):
         """日志保存至本地文件"""
         if not log_path:
             return
-        log_path = Path(log_path)
         if log_path.suffix != ".log":
             logging.warning(f"日志文件路径错误: {log_path}")
             return
@@ -33,20 +31,20 @@ class LogInit:
             return
         if not log_path.parent.exists():
             log_path.parent.mkdir(exist_ok=True, parents=True)
-        cls._file_handler = handlers.TimedRotatingFileHandler(log_path, when='D', interval=1, backupCount=90,
+        file_handler = handlers.TimedRotatingFileHandler(log_path, when='D', interval=1, backupCount=90,
                                                          encoding='UTF-8')
-        cls._file_handler.setFormatter(cls._get_formatter())
-        cls._get_logger().addHandler(cls._file_handler)
+        file_handler.setFormatter(cls._get_formatter())
+        cls.get_logger(log_name).addHandler(file_handler)
         cls._log_paths.append(log_path)
 
     @classmethod
-    def _get_logger(cls) -> logging.Logger:
+    def get_logger(cls, log_name: str = '') -> logging.Logger:
         """获取日志对象Logger"""
-        if cls._logger is None:
-            cls._logger = logging.getLogger()
-            # 设置日志输出等级
-            cls._logger.setLevel(logging.INFO)
-        return cls._logger
+        if log_name not in cls._logger_map:
+            logger = logging.getLogger()
+            logger.setLevel(logging.INFO)  # 设置日志输出等级
+            cls._logger_map[log_name] = logger
+        return cls._logger_map[log_name]
 
     @staticmethod
     def _get_formatter() -> logging.Formatter:
