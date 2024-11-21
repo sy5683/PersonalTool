@@ -1,50 +1,27 @@
 import flask
-from flask import typing as ft, Response
-from werkzeug.datastructures import MultiDict, ImmutableMultiDict
 
-from .entity.flask_response import FlaskResponse
+from .flask_utils.flask_init import FlaskInit
+from .flask_utils.flask_parameter import FlaskParameter
 
 
 class FlaskUtil:
 
     @staticmethod
-    def get_app(name: str) -> flask.app:
+    def get_app(name: str = '') -> flask.app:
         """获取app服务"""
+        return FlaskInit.get_app(name)
 
-        class _Flask(flask.Flask):
-            """使用视图重写Flask类，使接口返回统一值"""
-
-            # 重写make_response方法
-            def make_response(self, rv: ft.ResponseReturnValue) -> Response:
-                if isinstance(rv, FlaskResponse):
-                    rv = rv.to_dict()
-                return super().make_response(rv)
-
-        app = _Flask(name)
-
-        # 添加异常捕获，捕获所有异常，并返回统一的错误格式
-        @app.errorhandler(Exception)
-        def handle_exception(e) -> FlaskResponse:
-            return FlaskResponse(code=-1, message=str(e))
-
-        return app
-
-    @classmethod
-    def get_json(cls) -> dict:
+    @staticmethod
+    def get_json(key: str = '') -> any:
         """获取json参数"""
-        return flask.request.args.to_dict() if flask.request.method == "GET" else flask.request.get_json()
+        return FlaskParameter.get_json(key)
 
-    @classmethod
-    def get_kwarg(cls, key: str) -> any:
+    @staticmethod
+    def get_kwarg(key: str = '') -> any:
         """获取参数"""
-        return cls._get_kwargs().get(key)
+        return FlaskParameter.get_kwarg(key)
 
     @staticmethod
     def run(app: flask.app, port: int = 8080):
         """运行接口"""
         app.run(host="0.0.0.0", port=port, threaded=True)
-
-    @staticmethod
-    def _get_kwargs() -> MultiDict[str, str] | ImmutableMultiDict[str, str]:
-        """获取参数"""
-        return flask.request.args if flask.request.method == "GET" else flask.request.form

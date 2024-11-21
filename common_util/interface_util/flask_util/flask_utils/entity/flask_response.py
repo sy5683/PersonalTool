@@ -5,7 +5,7 @@ class FlaskResponse(object):
         self.data = data
         self.message = message
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         if not self.code:
             return {'code': self.code, 'data': self.data}
         else:
