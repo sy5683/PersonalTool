@@ -30,6 +30,11 @@ class FlaskUtil:
         return app
 
     @classmethod
+    def get_json(cls) -> dict:
+        """获取json参数"""
+        return flask.request.args.to_dict() if flask.request.method == "GET" else flask.request.get_json()
+
+    @classmethod
     def get_kwarg(cls, key: str) -> any:
         """获取参数"""
         return cls._get_kwargs().get(key)
