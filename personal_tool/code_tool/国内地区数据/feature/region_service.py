@@ -1,5 +1,3 @@
-import typing
-
 import flask
 import flask_cors
 
