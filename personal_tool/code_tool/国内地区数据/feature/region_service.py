@@ -1,8 +1,8 @@
 import flask
 import flask_cors
 
-from common_util.interface_util.flask_util.entity.flask_response import FlaskResponse
 from common_util.interface_util.flask_util.flask_util import FlaskUtil
+from common_util.interface_util.flask_util.flask_utils.entity.flask_response import FlaskResponse
 from .region_feature import RegionFeature
 
 

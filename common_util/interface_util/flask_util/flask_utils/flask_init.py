@@ -9,7 +9,7 @@ class _Flask(flask.Flask):
 
     # 重写make_response方法
     def make_response(self, rv: ft.ResponseReturnValue) -> Response:
-        if not isinstance(rv, FlaskResponse):
+        if not isinstance(rv, Response) and not isinstance(rv, FlaskResponse):
             rv = FlaskResponse(data=rv)
         if isinstance(rv, FlaskResponse):
             rv = rv.to_dict()

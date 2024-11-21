@@ -7,15 +7,9 @@ from .log_base import LogBase
 
 class ServiceBase(LogBase, metaclass=abc.ABCMeta):
 
-    def __init__(self):
+    def __init__(self, app: flask.Flask):
         super().__init__()
-        # 获取app服务
-        self.app = flask.Flask(self.get_subclass_path().parent.name)
-
-        # 添加异常捕获，捕获所有异常，并返回统一的错误格式
-        @self.app.errorhandler(Exception)
-        def handle_exception(e) -> dict:
-            return {'code': -1, 'message': str(e)}
+        self.app = app  # app服务
 
     @abc.abstractmethod
     def set_route(self, *args, **kwargs):
