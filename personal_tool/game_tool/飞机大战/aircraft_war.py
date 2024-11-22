@@ -7,6 +7,7 @@ from feature.scene.game_scene.game_scene import GameScene
 class AircraftWar(ToolBase):
 
     def __init__(self):
+        super().__init__()
         pygame.init()
         pygame.mixer.init()
         pygame.display.set_caption("飞机大战")

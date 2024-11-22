@@ -11,6 +11,7 @@ from feature.date_feature import DateFeature
 class WorkReportFiller(ToolBase):
 
     def __init__(self, target_date: str = str(datetime.datetime.now())):
+        super().__init__()
         target_date = TimeUtil.format_to_str(target_date, WorkReportFillerConfig.time_format)
         self.weekly_report = WorkReportFeature.get_weekly_report(target_date)
 

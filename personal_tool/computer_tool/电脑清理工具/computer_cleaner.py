@@ -8,6 +8,7 @@ from feature.file_cleaner import FileCleaner
 class ComputerCleaner(ToolBase):
 
     def __init__(self):
+        super().__init__()
         self.functions = [
             FileCleaner.clean_tempdir,  # 清理临时文件夹
         ]

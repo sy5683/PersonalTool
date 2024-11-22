@@ -16,6 +16,7 @@ class Operations(Enum):
 class FileFormatter(ToolBase):
 
     def __init__(self):
+        super().__init__()
         self.directory_path = FileUtil.get_directory_path()
         assert self.directory_path, "未选择文件夹"
 

@@ -1,3 +1,4 @@
+import logging
 from enum import Enum
 
 from common_core.base.tool_base import ToolBase
@@ -12,6 +13,7 @@ class DomesticRegionData(ToolBase):
 
     def main(self, function, **kwargs):
         function(**kwargs)
+        logging.info("[test]")
 
 
 if __name__ == '__main__':

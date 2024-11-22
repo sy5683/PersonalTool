@@ -16,6 +16,7 @@ class Operations(Enum):
 class FileParser(ToolBase):
 
     def __init__(self):
+        super().__init__()
         self.file_path = FileUtil.get_file_path()
         assert self.file_path, "未选择文件"
 

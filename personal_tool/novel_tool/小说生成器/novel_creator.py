@@ -12,6 +12,7 @@ class Operations(Enum):
 class NovelCreator(ToolBase):
 
     def __init__(self, novel_name: str):
+        super().__init__()
         self.novel_name = novel_name
 
     def main(self, function):

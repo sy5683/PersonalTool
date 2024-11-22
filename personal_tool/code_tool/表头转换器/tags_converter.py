@@ -23,6 +23,7 @@ class Operations(Enum):
 class TagsConverter(ToolBase):
 
     def __init__(self, operation: Operations):
+        super().__init__()
         self.show_str = operation.to_format()
 
     def main(self, tags: typing.Union[typing.List[str], str]):

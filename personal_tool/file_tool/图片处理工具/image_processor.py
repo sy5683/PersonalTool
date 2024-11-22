@@ -14,6 +14,7 @@ class Operations(Enum):
 class ImageProcessor(ToolBase):
 
     def __init__(self):
+        super().__init__()
         self.file_paths = FileUtil.get_file_paths()
         assert self.file_paths, "未选择文件"
 
