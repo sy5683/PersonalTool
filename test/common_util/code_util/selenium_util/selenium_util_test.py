@@ -12,6 +12,7 @@ class SeleniumUtilTestCase(TestBase):
         self.url = "https://www.baidu.com/"
         self.xpath = '//map[@id="s_mp"]/area'
         self.title = "百度一下"
+        self.debug_port = 9222
 
     def test_close_other_window(self):
         SeleniumUtil.close_other_window(SeleniumConfig(), self.title)  # 关闭其他页签
@@ -26,11 +27,15 @@ class SeleniumUtilTestCase(TestBase):
         SeleniumUtil.find(SeleniumConfig(xpath='./ancestor::div[@id="lg"]', element=element))  # 查找父级元素
 
     def test_launch_chrome_debug(self):
-        self.assertEqual(SeleniumUtil.launch_chrome_debug(9222), None)
+        self.assertEqual(SeleniumUtil.launch_chrome_debug(self.debug_port), None)
 
     def test_open_url(self):
-        SeleniumUtil.open_url(SeleniumConfig(driver_path=SeleniumUtil.get_chrome_driver_path()), self.url)  # 打开url
-        # SeleniumUtil.open_url(SeleniumConfig(debug_port=9223), self.url)  # 接管debug浏览器打开url
+        SeleniumUtil.open_url(SeleniumConfig(), self.url)
+        # # 接管debug浏览器打开url
+        # SeleniumUtil.open_url(SeleniumConfig(debug_port=self.debug_port), self.url)
+        # # 指定driver打开url
+        # driver_path = SeleniumUtil.get_chrome_driver_path()
+        # SeleniumUtil.open_url(SeleniumConfig(driver_path=driver_path), self.url)
 
     def test_thread(self):
         """测试多并发"""
