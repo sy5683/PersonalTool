@@ -28,7 +28,7 @@ class LogInit:
         if log_path.suffix != ".log":
             logging.warning(f"日志文件路径错误: {log_path}")
             return
-        handler: logging.FileHandler = cls._get_handler(logging.FileHandler, **kwargs)
+        handler = cls._get_handler(logging.FileHandler, **kwargs)
         if handler:
             logging.warning(f"日志文件已运行: {handler.baseFilename}")
             return
@@ -56,7 +56,8 @@ class LogInit:
         return logger
 
     @classmethod
-    def _get_handler(cls, handler_type: typing.Type[logging.Handler], **kwargs) -> typing.Union[logging.Handler, None]:
+    def _get_handler(cls, handler_type: typing.Type[typing.Union[logging.StreamHandler, logging.FileHandler]],
+                     **kwargs) -> typing.Union[logging.StreamHandler, logging.FileHandler, None]:
         """获取日志handler"""
         logger = cls.get_logger(**kwargs)
         for handler in logger.handlers:
