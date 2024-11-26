@@ -1,8 +1,7 @@
 import typing
 
-from .crypto_utils.convert_crypto import ConvertCrypto
-from .crypto_utils.md5_crypto import Md5Crypto
-from .crypto_utils.rsa_crypto import RSACrypto
+from .crypto_utils.profile.md5_crypto import Md5Crypto
+from .crypto_utils.profile.rsa_crypto import RSACrypto
 
 
 class CryptoUtil:
@@ -15,9 +14,9 @@ class CryptoUtil:
     @staticmethod
     def rsa_decrypt(ciphertext: typing.Union[bytes, str]) -> str:
         """rsa解密"""
-        return RSACrypto.rsa_decrypt(ConvertCrypto.to_bytes(ciphertext))
+        return RSACrypto.rsa_decrypt(ciphertext)
 
     @staticmethod
     def rsa_encrypt(plaintext: typing.Union[bytes, str]) -> str:
         """rsa加密"""
-        return RSACrypto.rsa_encrypt(ConvertCrypto.to_bytes(plaintext))
+        return RSACrypto.rsa_encrypt(plaintext)
