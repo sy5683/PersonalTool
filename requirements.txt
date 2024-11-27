@@ -28,6 +28,7 @@ rarfile
 requests
 rsa
 screeninfo
+schedule
 selenium
 webdriver-manager==4.0.1
 xlrd==1.2.0
