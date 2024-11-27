@@ -2,7 +2,7 @@ import abc
 import sys
 from pathlib import Path
 
-from common_core.tool.log_tool.log_tool import LogTool
+from ..tool.log_tool.log_tool import LogTool
 
 
 class LogBase(metaclass=abc.ABCMeta):
