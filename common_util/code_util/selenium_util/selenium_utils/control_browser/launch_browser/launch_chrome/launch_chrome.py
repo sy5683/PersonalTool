@@ -1,10 +1,8 @@
 import abc
-import logging
 import os
 import subprocess
 import threading
 import time
-import traceback
 import typing
 
 from selenium import webdriver, common
@@ -66,7 +64,7 @@ class LaunchChrome(LaunchBase):
         # 1) 检测debug端口
         debug_port = cls.__get_debug_port(selenium_config, True)
         if debug_port and debug_port in cls._driver_map:
-            logging.info(f"Debug端口的谷歌浏览器正在运行: {debug_port}")
+            selenium_config.info(f"Debug端口的谷歌浏览器正在运行: {debug_port}")
             return
         assert debug_port > 0, f"端口号异常: {debug_port}"
         assert not cls.__netstat_debug_port_running(debug_port), f"Debug端口被占用: {debug_port}"
@@ -113,7 +111,7 @@ class LaunchChrome(LaunchBase):
         prefs.update({'credentials_enable_service': False})  # 设置取消提示保存密码
         prefs.update({'download.prompt_for_download': False})  # 取消提示下载
         # 1.5.2) 设置默认下载路径
-        logging.info(f"浏览器下载路径为: {selenium_config.download_path}")
+        selenium_config.info(f"浏览器下载路径为: {selenium_config.download_path}")
         if os.path.exists(selenium_config.download_path):
             prefs.update({'download.default_directory': selenium_config.download_path})
         options.add_experimental_option("prefs", prefs)
@@ -132,7 +130,7 @@ class LaunchChrome(LaunchBase):
     @classmethod
     def _launch_chrome(cls, selenium_config: SeleniumConfig) -> WebDriver:
         """启动谷歌浏览器"""
-        logging.info("启动谷歌浏览器")
+        selenium_config.info("启动谷歌浏览器")
         try:
             assert selenium_config.use_user_data
             # 1.1) 获取谷歌浏览器用户缓存路径
@@ -154,7 +152,7 @@ class LaunchChrome(LaunchBase):
         """接管谷歌浏览器"""
         debug_port = cls.__get_debug_port(selenium_config)
         assert cls.__netstat_debug_port_running(debug_port), f"当前端口并未启动，无法接管谷歌浏览器: {debug_port}"
-        logging.info(f"接管已debug运行的谷歌浏览器，端口: {debug_port}")
+        selenium_config.info(f"接管已debug运行的谷歌浏览器，端口: {debug_port}")
         # 1.1) 获取谷歌浏览器设置
         options = webdriver.ChromeOptions()
         # 1.2) 添加debug地址
@@ -220,13 +218,13 @@ class LaunchChrome(LaunchBase):
     @staticmethod
     def __netstat_debug_port_running(debug_port: int) -> bool:
         """判断debug端口是否正在运行"""
+        # noinspection PyBroadException
         try:
             cmd = f'netstat -ano | findstr "{debug_port}" | findstr "LISTEN"'
             with subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                   stderr=subprocess.PIPE, encoding='gbk') as p:
                 return str(debug_port) in p.stdout.read()
-        except Exception as e:
-            logging.warning(f"{e}\n{traceback.format_exc()}")
+        except Exception:
             return False
 
     @staticmethod

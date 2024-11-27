@@ -1,6 +1,4 @@
-import logging
 import time
-import traceback
 import typing
 
 from selenium import common
@@ -28,7 +26,7 @@ class ControlElement:
         else:
             wait_seconds = selenium_config.wait_seconds
             selenium_config.wait_seconds = 1
-            selenium_config.without_log = True
+            selenium_config.logger = None
             for _ in range(wait_seconds):
                 try:
                     cls.find(selenium_config).click()
@@ -57,8 +55,7 @@ class ControlElement:
             return cls.__find(selenium_config, lambda x: x.find_element(By.XPATH, selenium_config.xpath))
         # 当xpath不存在的情况下，返回参数中的element，如果也为空，则需要报错
         if selenium_config.element is None:
-            logging.error("参数中的xpath与element均为空，无法定位元素")
-            raise AttributeError("传入的参数无法定位元素")
+            raise AttributeError("参数中的xpath与element均为空，无法定位元素")
         return selenium_config.element
 
     @classmethod
@@ -89,7 +86,7 @@ class ControlElement:
                 raise ValueError("未指定输入对象时，输入值必须为类Keys。")
             cls.get_action(selenium_config).key_down(value).perform()
         else:
-            logging.info("输入元素: %s" % ("*" * len(value) if cls.__check_is_password(element) else value))
+            selenium_config.info("输入元素: %s" % ("*" * len(value) if cls.__check_is_password(element) else value))
             for _ in range(3):
                 # 先点击元素定位
                 cls._clear_element(element)
@@ -108,10 +105,9 @@ class ControlElement:
                 element_value = element.get_attribute("value")
                 if element_value == value:
                     break
-                logging.warning(f"元素输入失败，输入的值为: {element_value}")
+                selenium_config.info(f"重新输入，元素的值为: {element_value}")
             else:
-                logging.error(f"元素输入失败: {value}\n{traceback.format_exc()}")
-                raise RuntimeError("元素输入失败")
+                raise RuntimeError(f"元素输入失败: {value}")
 
     @classmethod
     def select(cls, selenium_config: SeleniumConfig, value: typing.Union[int, str]):
@@ -149,13 +145,13 @@ class ControlElement:
         try:
             element.click()
         except (common.exceptions.ElementClickInterceptedException, common.exceptions.ElementNotInteractableException):
-            logging.warning("元素无法点击，请选择正确的元素")
+            pass  # 元素可能无法点击
         time.sleep(0.5)
         # 使用selenium自带的clear方法
         try:
             element.clear()
         except common.InvalidElementStateException:
-            logging.warning("元素无法清空，请选择正确的元素")
+            pass  # 元素可能无法清空
         time.sleep(0.5)
         # 有时候有输入框 element.clear() 方法无效，因此再使用手动清空方式
         for _ in range(len(element.get_attribute("value"))):

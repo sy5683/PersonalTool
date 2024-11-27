@@ -1,5 +1,4 @@
 import abc
-import logging
 import os
 import threading
 import time
@@ -50,7 +49,7 @@ class LaunchIe(LaunchBase):
     @classmethod
     def _launch_ie(cls, selenium_config: SeleniumConfig) -> WebDriver:
         """启动IE浏览器"""
-        logging.info("启动IE浏览器")
+        selenium_config.info("启动IE浏览器")
         # 1.1) 获取IE浏览器设置
         options = webdriver.IeOptions()
         # 1.2.1) IE浏览器无法设置静默运行

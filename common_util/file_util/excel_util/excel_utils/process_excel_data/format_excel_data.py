@@ -38,7 +38,6 @@ class FormatExcelData:
         然后通过计算，将一串数字显示为目标日期
         因此在取的时候，需要对其进行转换
         """
-        # noinspection PyBroadException
         try:
             stamp = xlrd.xldate_as_datetime(date_number, 0)
             # 为了统一格式方便后续处理，这里将日期格式化为年月日时分秒格式的字符串

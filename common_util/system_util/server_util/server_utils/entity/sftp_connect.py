@@ -25,12 +25,11 @@ class SftpConnect(ServerConnect):
 
     def check_remote_path_exists(self, remote_path: str) -> bool:
         """判断服务器路径是否存在"""
-        # noinspection PyBroadException
         try:
             # 根据是否可以获取修改时间判断路径是否存在
             _ = self.connect.stat(remote_path).st_mtime
             return True
-        except Exception:
+        except (IOError, OSError, paramiko.sftp.SFTPError):
             return False
 
     def upload_file(self, local_path: str, remote_path: str):

@@ -33,7 +33,6 @@ class DatabaseConnect(metaclass=abc.ABCMeta):
     def execute_sql(self, sql: str, *args):
         """执行sql语句"""
         assert self.connect is not None, "数据库未连接"
-        # noinspection PyBroadException
         try:
             self.cursor.execute(sql, *args)  # 执行SQL语句
             self.connect.commit()  # 提交事务，只有运行了这句话，sql操作才会生效

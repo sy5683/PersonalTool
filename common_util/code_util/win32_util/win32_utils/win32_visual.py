@@ -1,6 +1,5 @@
 import logging
 import time
-import traceback
 import typing
 
 import pywintypes
@@ -29,7 +28,7 @@ class Win32Visual:
                 TerminateProcess(process, 0)
                 CloseHandle(process)
             except Exception:
-                logging.error(traceback.format_exc())
+                pass
             time.sleep(1)
 
     @classmethod

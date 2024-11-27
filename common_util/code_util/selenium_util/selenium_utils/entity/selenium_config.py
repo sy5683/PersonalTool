@@ -27,7 +27,7 @@ class SeleniumConfig:
                  user_data_dir: typing.Union[str, Path] = None,
                  xpath: str = '',
                  wait_seconds: int = 120,
-                 without_log: bool = False
+                 logger: logging.Logger = logging.getLogger(),
                  ):
         self.browser_type = browser_type  # 浏览器类型，默认为谷歌浏览器
         self.check_input = check_input  # 检测输入内容是否正确
@@ -44,9 +44,14 @@ class SeleniumConfig:
         self.user_data_dir = user_data_dir  # user_data目录
         self.xpath = xpath  # 元素定位的xpath
         self.wait_seconds = wait_seconds  # 等待时间，默认为120秒
-        self.without_log = without_log  # 是否不打印日志
+        self.logger = logger  # 日志对象
 
     def info(self, message: str):
-        if self.without_log:
+        if self.logger is None:
             return
-        logging.info(message)
+        self.logger.info(message)
+
+    def error(self, message: str):
+        if self.logger is None:
+            return
+        self.logger.error(message)

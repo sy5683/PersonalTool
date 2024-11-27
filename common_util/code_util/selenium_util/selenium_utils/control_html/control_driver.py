@@ -1,4 +1,3 @@
-import logging
 import tempfile
 import time
 import typing
@@ -57,5 +56,5 @@ class ControlDriver:
                     image = image.crop((left, top, right, bottom))
                     image.save(save_path)
             except Exception as e:
-                logging.warning(f"图片裁剪失败: {e}")
+                selenium_config.error(f"图片裁剪失败: {e}")
         return save_path

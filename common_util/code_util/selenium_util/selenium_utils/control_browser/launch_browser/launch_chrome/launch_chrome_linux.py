@@ -1,4 +1,3 @@
-import logging
 import os
 from pathlib import Path
 
@@ -20,7 +19,7 @@ class LaunchChromeLinux(LaunchChrome):
                 if "chrome" in name.lower():
                     proc.kill()
             except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-                logging.warning(f"进程关闭失败: {name}")
+                selenium_config.error(f"进程关闭失败: {name}")
 
     @classmethod
     def _get_chrome_path(cls) -> str:

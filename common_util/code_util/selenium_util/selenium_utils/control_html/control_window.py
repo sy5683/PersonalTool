@@ -1,4 +1,3 @@
-import logging
 import re
 import time
 import typing
@@ -31,7 +30,7 @@ class ControlWindow:
                 # 需要注意，为了保证浏览器活性，当最后一个窗口仍不满足条件时，需要保留窗口
                 if len(driver.window_handles) == 1:
                     raise RuntimeWarning(f"指定窗口不存在，将所有窗口关闭，保留一个窗口: {driver.title}")
-                logging.info(f"关闭窗口: {title}")
+                selenium_config.info(f"关闭窗口: {title}")
                 driver.close()
         # 关闭完窗口之后还需要重新切换一下窗口
         cls.switch_window(selenium_config, window_titles[-1])
@@ -78,13 +77,11 @@ class ControlWindow:
                     continue
                 target_handles.append(window_handle)
             if len(target_handles) == 1:
-                logging.info(f"切换到窗口: {driver.title if window_title else window_title}")
+                selenium_config.info(f"切换到窗口: {driver.title if window_title else window_title}")
                 cls.__switch_to_window(driver, target_handles[0])
                 break
             elif not target_handles:
-                if selenium_config.without_log:
-                    continue
-                logging.warning("指定的窗口数量为空，重新查询")
+                selenium_config.info("指定的窗口数量为空，重新查询")
             else:
                 cls.__switch_to_window(driver, target_handles[-1])
                 raise RuntimeWarning(f"出现多个包含 {window_title} 的目标窗口")

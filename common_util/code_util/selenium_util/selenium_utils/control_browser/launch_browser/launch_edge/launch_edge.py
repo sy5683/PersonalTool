@@ -1,5 +1,4 @@
 import abc
-import logging
 import os
 import threading
 import time
@@ -68,7 +67,7 @@ class LaunchEdge(LaunchBase):
         prefs.update({'credentials_enable_service': False})  # 设置取消提示保存密码
         prefs.update({'download.prompt_for_download': False})  # 取消提示下载
         # 1.5.2) 设置默认下载路径
-        logging.info(f"浏览器下载路径为: {selenium_config.download_path}")
+        selenium_config.info(f"浏览器下载路径为: {selenium_config.download_path}")
         if os.path.exists(selenium_config.download_path):
             prefs.update({'download.default_directory': selenium_config.download_path})
         options.add_experimental_option('prefs', prefs)
@@ -87,7 +86,7 @@ class LaunchEdge(LaunchBase):
     @classmethod
     def _launch_edge(cls, selenium_config: SeleniumConfig) -> WebDriver:
         """启动Edge浏览器"""
-        logging.info("启动Edge浏览器")
+        selenium_config.info("启动Edge浏览器")
         try:
             assert selenium_config.use_user_data
             # 1.1) 获取Edge浏览器用户缓存路径
@@ -107,7 +106,7 @@ class LaunchEdge(LaunchBase):
     @classmethod
     def _launch_edge_with_ie(cls, selenium_config: SeleniumConfig) -> WebDriver:
         """ie模式启动Edge浏览器"""
-        logging.info("ie模式启动Edge浏览器")
+        selenium_config.info("ie模式启动Edge浏览器")
         from ..launch_ie.launch_ie import LaunchIe
         # 1.1) 获取IE浏览器设置
         options = webdriver.IeOptions()
