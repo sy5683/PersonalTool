@@ -25,7 +25,7 @@ class Crawler001(CrawlerBase):
             while True:
                 while True:
                     try:
-                        element = SeleniumUtil.find(SeleniumConfig(xpath='//article[@id="content"]', without_log=True))
+                        element = SeleniumUtil.find(SeleniumConfig(xpath='//article[@id="content"]', logger=None))
                         contents = [each for each in re.split(r"\n", element.get_attribute("innerText")) if each]
                         if contents != temp_contents:
                             temp_contents = contents
