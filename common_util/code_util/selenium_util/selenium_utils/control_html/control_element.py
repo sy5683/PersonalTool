@@ -41,11 +41,10 @@ class ControlElement:
     @classmethod
     def exist(cls, selenium_config: SeleniumConfig) -> bool:
         """查找元素是否存在"""
-        # noinspection PyBroadException
         try:
             element = cls.find(selenium_config)
             print([element.text])  # 这一行是为了检测入参为WebElement的元素
-        except Exception:
+        except (common.exceptions.ElementNotInteractableException, common.exceptions.TimeoutException):
             return False
         return True
 

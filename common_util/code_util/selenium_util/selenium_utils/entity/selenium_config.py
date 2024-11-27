@@ -24,7 +24,7 @@ class SeleniumConfig:
                  operate_type: OperateType = OperateType.js,
                  proxy_ip: str = None,
                  use_user_data: bool = True,
-                 user_data_dir: str = None,
+                 user_data_dir: typing.Union[str, Path] = None,
                  xpath: str = '',
                  wait_seconds: int = 120,
                  without_log: bool = False

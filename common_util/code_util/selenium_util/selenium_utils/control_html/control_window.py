@@ -42,12 +42,11 @@ class ControlWindow:
         driver = ControlBrowser.get_driver(selenium_config)
         # 遍历页面，关闭弹窗
         for window_handle in driver.window_handles:
-            # noinspection PyBroadException
             try:
                 cls.__switch_to_window(driver, window_handle)
                 driver.switch_to.alert.accept()
                 time.sleep(0.5)
-            except Exception:
+            except common.exceptions.NoSuchWindowException:
                 pass
 
     @classmethod
