@@ -1,5 +1,3 @@
-import time
-
 from selenium import common
 
 from ..control_browser.control_browser import ControlBrowser
@@ -17,8 +15,6 @@ class ControlAlert:
             try:
                 # 每个操作结束后需要等待一会，否则会出现无法正确执行操作的问题
                 driver.switch_to.window(window_handle)
-                time.sleep(0.5)
                 driver.switch_to.alert.accept()
-                time.sleep(0.5)
             except common.exceptions.NoSuchWindowException:
                 pass

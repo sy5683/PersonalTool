@@ -131,11 +131,10 @@ class ControlElement:
         """
         wait_seconds = selenium_config.wait_seconds
         selenium_config.wait_seconds = 1
-        time.sleep(1)  # 等待元素加载
         for _ in range(wait_seconds):
+            time.sleep(1)
             if not cls.exist(selenium_config):
                 return True
-            time.sleep(1)
         return False
 
     @staticmethod
@@ -146,13 +145,13 @@ class ControlElement:
             element.click()
         except (common.exceptions.ElementClickInterceptedException, common.exceptions.ElementNotInteractableException):
             pass  # 元素可能无法点击
-        time.sleep(0.5)
+        time.sleep(0.2)
         # 使用selenium自带的clear方法
         try:
             element.clear()
         except common.InvalidElementStateException:
             pass  # 元素可能无法清空
-        time.sleep(0.5)
+        time.sleep(0.2)
         # 有时候有输入框 element.clear() 方法无效，因此再使用手动清空方式
         for _ in range(len(element.get_attribute("value"))):
             element.send_keys(Keys.RIGHT)

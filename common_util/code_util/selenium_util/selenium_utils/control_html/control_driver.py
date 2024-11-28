@@ -17,7 +17,7 @@ class ControlDriver:
         """执行js代码"""
         driver = ControlBrowser.get_driver(selenium_config)
         driver.execute_script(js)
-        time.sleep(0.5)  # 执行结束之后等待一会
+        time.sleep(0.1)  # 执行结束之后等待一会
 
     @staticmethod
     def open_url(selenium_config: SeleniumConfig, url: str):

@@ -28,4 +28,4 @@ class ControlIframe:
                     selenium_config.info("切换至默认iframe")
                     driver.switch_to.default_content()
         # iframe切换完之后需要等待一小段时间再进行操作，不然可能会出现无法找到元素的情况
-        time.sleep(0.5)
+        time.sleep(0.1)
