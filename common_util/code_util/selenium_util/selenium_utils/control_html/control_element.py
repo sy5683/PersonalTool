@@ -41,7 +41,7 @@ class ControlElement:
         """查找元素是否存在"""
         try:
             element = cls.find(selenium_config)
-            print([element.text])  # 这一行是为了检测入参为WebElement的元素
+            assert [element.text] is not None  # 这一行是为了检测入参为WebElement的元素
         except (common.exceptions.ElementNotInteractableException, common.exceptions.TimeoutException):
             return False
         return True
