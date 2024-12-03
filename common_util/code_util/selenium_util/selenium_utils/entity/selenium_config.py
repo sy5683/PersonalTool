@@ -16,7 +16,7 @@ class SeleniumConfig:
                  check_input: bool = True,
                  close_task: bool = True,
                  debug_port: int = None,
-                 download_path: typing.Union[str, Path] = "E:/Download",
+                 download_path: typing.Union[str, Path] = 'E:/Download',
                  driver: WebDriver = None,
                  driver_path: typing.Union[str, Path] = None,
                  element: WebElement = None,
