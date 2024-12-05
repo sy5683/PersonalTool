@@ -33,7 +33,7 @@ class SeleniumConfig:
         self.check_input = check_input  # 检测输入内容是否正确
         self.close_task = close_task  # 是否关闭浏览器cmd窗口
         self.debug_port = debug_port  # debug端口，用于接管浏览器
-        self.download_path = download_path  # 浏览器下载路径
+        self.download_path: str = str(download_path) if download_path else download_path  # 浏览器下载路径
         self.driver = driver  # selenium运行的driver对象
         self.driver_path: str = str(driver_path) if driver_path else driver_path  # driver路径
         self.element = element  # 目标元素，当有xpath时这个元素用于相对检测
