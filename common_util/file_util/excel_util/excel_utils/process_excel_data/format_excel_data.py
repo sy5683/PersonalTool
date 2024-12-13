@@ -31,6 +31,13 @@ class FormatExcelData:
             return data  # 如果数据异常无法进行转换，则返回原样
 
     @staticmethod
+    def format_list_data(data: list) -> list:
+        """处理一些无法写入excel的异常编码数据"""
+        # 处理\x02导致数据无法写入数据库的问题
+        data = [each.replace("\x02", "") if isinstance(each, str) else each for each in data]
+        return data
+
+    @staticmethod
     def _format_excel_date_number(date_number: int) -> str:
         """
         excel中保存日期的时候，可能会有很多种保存方式

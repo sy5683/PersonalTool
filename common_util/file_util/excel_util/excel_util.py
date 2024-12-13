@@ -34,6 +34,11 @@ class ExcelUtil:
         return FormatExcelData.format_int_data(str(data))
 
     @staticmethod
+    def format_list_data(data: list) -> list:
+        """格式化列表数据"""
+        return FormatExcelData.format_list_data(data)
+
+    @staticmethod
     def get_data_list(excel_path: typing.Union[Path, str], sheet_index: int = 0, sheet_name: str = None,
                       tag_row: int = 0, tag_row_quantity: int = 1) -> typing.List[dict]:
         """获取excel数据"""
