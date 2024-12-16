@@ -11,6 +11,7 @@ class Operations(Enum):
     to_class = {'name': "类实例", 'format': """\t\tself.{object_name} = None  # {tag}"""}
     to_dict = {'name': "字典", 'format': """'{object_name}': ""  # {tag}"""}
     to_factory = {'name': "工厂方法", 'format': """\t\t\tself.{object_name} = data.get("{tag}")"""}
+    to_result_list = {'name': "对象名称", 'format': "self.{object_name},"}
     to_tag_width_tuples = {'name': "表头行宽映射", 'format': """({tag}, 16),"""}
 
     def to_name(self) -> str:
