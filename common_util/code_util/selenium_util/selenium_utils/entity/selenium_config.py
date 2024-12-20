@@ -21,13 +21,13 @@ class SeleniumConfig:
                  driver_path: typing.Union[str, Path] = None,
                  element: WebElement = None,
                  headless: bool = False,
+                 logger: typing.Union[logging.Logger, None] = logging.getLogger(),
                  operate_type: OperateType = OperateType.js,
                  proxy_ip: str = None,
                  use_user_data: bool = True,
                  user_data_dir: typing.Union[str, Path] = None,
                  xpath: str = '',
                  wait_seconds: int = 120,
-                 logger: typing.Union[logging.Logger, None] = logging.getLogger(),
                  ):
         self.browser_type = browser_type  # 浏览器类型，默认为谷歌浏览器
         self.check_input = check_input  # 检测输入内容是否正确
@@ -38,13 +38,13 @@ class SeleniumConfig:
         self.driver_path: str = str(driver_path) if driver_path else driver_path  # driver路径
         self.element = element  # 目标元素，当有xpath时这个元素用于相对检测
         self.headless = headless  # 是否无头启动浏览器，默认为否
-        self.operate_type = operate_type  # 操作方式，主要有js、selenium，默认为js，用于点击
+        self.logger = logger  # 日志对象
+        self.operate_type = operate_type  # 操作方式，默认为js，用于点击、输入等操作
         self.proxy_ip = proxy_ip  # 代理ip
         self.use_user_data = use_user_data  # 浏览器启动是否使用user_data，默认为是
         self.user_data_dir = user_data_dir  # user_data目录
         self.xpath = xpath  # 元素定位的xpath
         self.wait_seconds = wait_seconds  # 等待时间，默认为120秒
-        self.logger = logger  # 日志对象
 
     def info(self, message: str):
         if self.logger is None:

@@ -26,8 +26,9 @@ class ControlElement:
         else:
             wait_seconds = selenium_config.wait_seconds
             selenium_config.wait_seconds = 1
-            selenium_config.logger = None
-            for _ in range(wait_seconds):
+            for index in range(wait_seconds):
+                if index:
+                    selenium_config.logger = None
                 try:
                     cls.find(selenium_config).click()
                 except (common.exceptions.ElementNotInteractableException, common.exceptions.TimeoutException):
