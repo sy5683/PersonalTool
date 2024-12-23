@@ -203,7 +203,7 @@ class ParsePdf:
             text = pdf_word[4]
             if not text:
                 continue
-            words.append(Word((p3[0], p3[1], p4[0], p4[1]), text))
+            words.append(Word((int(p3[0]), int(p3[1]), int(p4[0]), int(p4[1])), text))
         # 根据左上角坐标排序，从上至下，从左至右
         return sorted(words, key=lambda x: (x.rect[1], x.rect[0]))
 
