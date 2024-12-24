@@ -24,14 +24,10 @@ class ProcessPdfProfile:
         for word in words:
             word_search = pattern.search(word.text)
             if word_search:
-                if "(.*?)" not in pattern.pattern:
-                    word_text = word_search.group(0)
-                else:
-                    if "|" not in pattern.pattern:
-                        word_text = word_search.group(1)
-                    else:
-                        word_text = word_search.group(2)
-                word_texts.append(word_text)
+                all_search = [each for each in re.findall(f"[(].*?[)]", pattern.pattern) if
+                              not re.search("\[\(|\[\)|\(\[|\)\[", each)]
+                index = (all_search.index("(.*?)") + 1) if "(.*?)" in all_search else 0
+                word_texts.append(word_search.group(index))
         return word_texts
 
     @classmethod

@@ -15,7 +15,7 @@ class AcceptanceReceiptParser(ReceiptParser):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        return self._check_contains("电子银行承兑汇票")
+        return self._check_contains("渤海银行电子印图案", "电子银行承兑汇票")
 
     def parse(self):
         """解析"""
