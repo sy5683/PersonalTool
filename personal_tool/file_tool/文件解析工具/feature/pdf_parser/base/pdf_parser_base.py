@@ -56,7 +56,7 @@ class PdfParserBase(metaclass=abc.ABCMeta):
                 image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
             if image.shape[2] == 4:
                 image = cv2.cvtColor(image, cv2.COLOR_RGBA2BGR)
-            # ImageUtil.save_opencv_image(image, f"D:/{index}.png")
+            # ImageUtil.save_opencv_image(image, f"E:/{index}.png")
             for judge_image in judge_images:
                 if ImageUtil.compare_image(image, judge_image) < different:
                     return True

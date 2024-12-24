@@ -24,7 +24,14 @@ class ProcessPdfProfile:
         for word in words:
             word_search = pattern.search(word.text)
             if word_search:
-                word_texts.append(word_search.group(1) if "(.*?)" in pattern.pattern else word_search.group(0))
+                if "(.*?)" not in pattern.pattern:
+                    word_text = word_search.group(0)
+                else:
+                    if "|" not in pattern.pattern:
+                        word_text = word_search.group(1)
+                    else:
+                        word_text = word_search.group(2)
+                word_texts.append(word_text)
         return word_texts
 
     @classmethod

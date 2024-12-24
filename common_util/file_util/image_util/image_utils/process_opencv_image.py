@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 import typing
@@ -48,10 +49,14 @@ class ProcessOpenCVImage:
     @classmethod
     def read_image(cls, image_path: str) -> numpy.ndarray:
         """读取图片"""
-        if cls._check_path_is_chinese(image_path):
-            return cv2.imdecode(numpy.fromfile(image_path, dtype=numpy.uint8), cv2.IMREAD_COLOR)
-        else:
-            return cv2.imread(image_path)
+        try:
+            if cls._check_path_is_chinese(image_path):
+                return cv2.imdecode(numpy.fromfile(image_path, dtype=numpy.uint8), cv2.IMREAD_COLOR)
+            else:
+                return cv2.imread(image_path)
+        except cv2.error as e:
+            logging.error(f"无法读取图片: {image_path}\n{e}")
+            raise FileExistsError(f"图片异常，无法读取图片: {os.path.basename(image_path)}")
 
     @staticmethod
     def remove_border(image: numpy.ndarray, color: typing.Union[int, typing.Tuple[int, int, int]]) -> numpy.ndarray:

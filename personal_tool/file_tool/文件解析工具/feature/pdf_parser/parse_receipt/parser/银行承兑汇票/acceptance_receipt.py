@@ -1,6 +1,7 @@
 import re
 
 from common_util.data_util.number_util.number_util import NumberUtil
+from common_util.data_util.time_util.time_util import TimeUtil
 from common_util.file_util.pdf_util.pdf_util import PdfUtil
 from .entity.acceptance import Acceptance
 from ...entity.receipt_parser import ReceiptParser
@@ -27,8 +28,10 @@ class AcceptanceReceiptParser(ReceiptParser):
         except IndexError:
             raise ValueError("无法在电子银行承兑汇票中提取出表格数据")
         acceptance = Acceptance()
-        acceptance.date = PdfUtil.filter_word(words, "^出票日期[:：](.*?)$")  # 日期
+        acceptance.date = TimeUtil.format_to_str(PdfUtil.filter_word(words, "^出票日期[:：](.*?)$"))  # 日期
         acceptance.receipt_number = PdfUtil.filter_word(words, "^票据号码[:：](.*?)$")  # 回单编号
+        acceptance.due_date = TimeUtil.format_to_str(
+            PdfUtil.filter_word(words, "^(汇票到期日|汇票到日期)[:：](.*?)$"))  # 汇票到期日
         name_row_cells = table.get_row_cells(0)
         number_row_cells = table.get_row_cells(1)
         bank_row_cells = table.get_row_cells(2)
