@@ -27,7 +27,7 @@ class ParsePdfTestCase(TestBase):
                 print(receipt.__dict__)
 
     def test_parse_receipt(self):
-        for receipt_path in self.__get_pdf_path(self.receipt_path.joinpath(r"")):
+        for receipt_path in self.__get_pdf_path(self.receipt_path.joinpath(r"华夏银行")):
             parser = ParsePdf.parse_receipt(receipt_path)
             for receipt in parser.receipts:
                 print(receipt.__dict__)
