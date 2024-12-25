@@ -37,6 +37,4 @@ xlrd==1.2.0
 docx
 fitz
 magic
-pathlib
-werkzeug
 win32gui
