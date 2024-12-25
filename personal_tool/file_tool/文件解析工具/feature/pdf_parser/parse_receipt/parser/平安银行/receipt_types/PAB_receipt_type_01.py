@@ -18,6 +18,7 @@ class PABReceiptType01(PABReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
+        receipt.bank = self.bank_name  # 银行
         # 平安银行这个格式的回单间隔稍微大一点，重新合并word数据后再解析
         self.words = PdfUtil.merge_words(self.words, 40)
         receipt.date = TimeUtil.format_to_str(self._get_word("^记账日期[:：](.*?)$"))  # 日期

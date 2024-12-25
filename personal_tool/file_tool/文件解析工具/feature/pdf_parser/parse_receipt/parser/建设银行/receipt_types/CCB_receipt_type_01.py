@@ -19,6 +19,7 @@ class CCBReceiptType01(CCBReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
+        receipt.bank = self.bank_name  # 银行
         # 建设银行这个格式的回单这个格式的回单，日期、凭证号、流水号都在一个单元格中
         cell_value = self.table.get_cell(1, 0).get_value()
         receipt.date = TimeUtil.format_to_str(re.findall("日期[:：](.*?)凭证号", cell_value)[0])  # 日期

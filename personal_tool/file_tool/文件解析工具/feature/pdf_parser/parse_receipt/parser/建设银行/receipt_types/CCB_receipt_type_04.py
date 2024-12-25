@@ -18,6 +18,7 @@ class CCBReceiptType04(CCBReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
+        receipt.bank = self.bank_name  # 银行
         receipt.date = TimeUtil.format_to_str(self._get_word("^.*年.*月.*日$"))  # 日期
         payer_account_row_cells = self.table.get_row_cells(0)
         receipt.payer_account_name = self._get_name(payer_account_row_cells[0].get_value())  # 付款人户名

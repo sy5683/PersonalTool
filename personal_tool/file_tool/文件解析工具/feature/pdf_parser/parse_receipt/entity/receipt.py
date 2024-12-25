@@ -1,6 +1,11 @@
+import re
+import typing
+
+
 class Receipt:
 
     def __init__(self):
+        self.bank = None  # 银行
         self.date = None  # 日期
         self.receipt_number = None  # 回单编号
         self.serial_number = None  # 流水号
@@ -11,3 +16,19 @@ class Receipt:
         self.payee_account_number = None  # 收款人账号
         self.payee_account_bank = None  # 收款人开户银行
         self.amount = 0  # 金额
+
+    def to_dict(self) -> typing.Dict[str, str]:
+        return {
+            'bank': self.bank,
+            'pay_bank': self.payer_account_bank,
+            'pay_name': self.payer_account_name,
+            'pay_no': self.payer_account_number,
+            'account_bank': self.payee_account_bank,
+            'account_name': self.payee_account_name,
+            'account_no': self.payee_account_number,
+            'date': self.date,
+            'business_no': re.sub(r"\D", "", self.receipt_number),
+            'amount': self.amount,
+            # 'use':self.receipt_value(receipt, '用途', '收费种类:', '附言:')
+            # 'image':receipt_img
+        }

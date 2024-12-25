@@ -18,6 +18,7 @@ class CDBReceiptType02(CDBReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
+        receipt.bank = self.bank_name  # 银行
         receipt.date = TimeUtil.format_to_str(self._get_word("^.*年.*月.*日$"))  # 日期
         receipt.receipt_number = self._get_word(r"^[a-zA-Z\d+]+$")  # 回单编号
         receipt.serial_number = self._get_word("^流水号[:：](.*?)$")  # 流水号

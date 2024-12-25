@@ -18,6 +18,7 @@ class CBHBReceiptType01(CBHBReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
+        receipt.bank = self.bank_name  # 银行
         receipt.date = TimeUtil.format_to_str(self._get_cell_relative("^交易日期$").get_value())  # 日期
         receipt.serial_number = self._get_cell_relative(r"^网银流水号$").get_value()  # 流水号
         number_row_cells = self.table.get_row_cells(1)

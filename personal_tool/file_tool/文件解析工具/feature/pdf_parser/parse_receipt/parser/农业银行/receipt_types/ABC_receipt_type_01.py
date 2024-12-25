@@ -17,6 +17,7 @@ class ABCReceiptType01(ABCReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
+        receipt.bank = self.bank_name  # 银行
         receipt.date = TimeUtil.format_to_str(self._get_cell_relative("^交易时间$").get_value())  # 日期
         receipt.receipt_number = re.findall(r"[a-zA-Z\d+]+", self.table.get_cell(0, 0).get_value())[0]  # 回单编号
         receipt.serial_number = self._get_cell_relative("^凭证号$").get_value()  # 流水号

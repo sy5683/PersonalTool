@@ -17,6 +17,7 @@ class NBCBReceiptType01(NBCBReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
+        receipt.bank = self.bank_name  # 银行
         receipt.serial_number = self.table.get_cell(5, 3).get_value()  # 流水号
         receipt.date = TimeUtil.format_to_str(self._get_word("^.*年.*月.*日$"))  # 日期
         business_type = self.table.get_cell(5, 1).get_value()  # 业务种类

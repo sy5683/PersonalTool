@@ -17,6 +17,7 @@ class CGBReceiptType01(CGBReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
+        receipt.bank = self.bank_name  # 银行
         receipt.date = TimeUtil.format_to_str(self._get_cell_relative("记账日期").get_value())  # 日期
         receipt.serial_number = self._get_cell_relative("^核心流水号$").get_value()  # 流水号
         name_row_cells = self.table.get_row_cells(0)
