@@ -27,10 +27,10 @@ class ParsePdfTestCase(TestBase):
                 print(receipt.__dict__)
 
     def test_parse_receipt(self):
-        for receipt_path in self.__get_pdf_path(self.receipt_path.joinpath(r"华夏银行")):
+        for receipt_path in self.__get_pdf_path(self.receipt_path.joinpath(r"")):
             parser = ParsePdf.parse_receipt(receipt_path)
             for receipt in parser.receipts:
-                print(receipt.__dict__)
+                print(receipt.to_dict(False))
 
     def test_parse_voucher(self):
         for voucher_path in self.__get_pdf_path(self.voucher_path.joinpath(r"")):

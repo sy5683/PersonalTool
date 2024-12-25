@@ -14,6 +14,7 @@ class ReceiptType(metaclass=abc.ABCMeta):
         self.bank_name = bank_name
         self.table = profile.table
         self.words = profile.words
+        self.image = profile.image
 
     def __str__(self):
         types = re.search(r"\d+", self.__class__.__name__).group()

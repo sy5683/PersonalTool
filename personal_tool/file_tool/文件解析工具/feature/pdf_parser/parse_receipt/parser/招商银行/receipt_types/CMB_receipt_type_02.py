@@ -30,4 +30,5 @@ class CMBReceiptType02(CMBReceiptType):
         receipt.payee_account_number = self._get_word("^收款账号[:：](.*?)$")  # 收款人账号
         receipt.payee_account_bank = self._get_word("^开户行[:：](.*?)$")  # 收款人开户银行
         receipt.amount = NumberUtil.to_amount(self._get_word("^税后利息[(（]小写[)）][:：](.*?)$"))  # 金额
+        receipt.image = self.image  # 图片
         return receipt

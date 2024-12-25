@@ -77,6 +77,7 @@ class ProcessPdfProfile:
             for word in pdf_profile.words:
                 if word.rect[1] > split_ys[index - 1] and word.rect[3] < split_ys[index]:
                     profile.words.append(word)
+            cls.__split_pdf_image(profile, pdf_profile)
             profiles.append(profile)
         return profiles
 
@@ -102,8 +103,8 @@ class ProcessPdfProfile:
                 new_words.append(word)
         return new_words
 
-    @staticmethod
-    def __split_pdf_without_table(pdf_profile: PdfProfile, *split_words: str) -> typing.List[TableProfile]:
+    @classmethod
+    def __split_pdf_without_table(cls, pdf_profile: PdfProfile, *split_words: str) -> typing.List[TableProfile]:
         """切割没有表格的pdf"""
         if not split_words:
             return [TableProfile(None, pdf_profile.words)]
@@ -112,10 +113,24 @@ class ProcessPdfProfile:
             profile = TableProfile()
             for index, word in enumerate(pdf_profile.words):
                 if re.search("|".join(split_words), word.text):
+                    cls.__split_pdf_image(profile, pdf_profile)
                     profile = TableProfile()
                     profiles.append(profile)
                 profile.words.append(word)
+            cls.__split_pdf_image(profile, pdf_profile)
             return [profile for profile in profiles if len(profile.words) != 1]
+
+    @staticmethod
+    def __split_pdf_image(profile: TableProfile, pdf_profile: PdfProfile, zoom = 2):
+        """切割pdf图片"""
+        border = 10
+        height, width = pdf_profile.image.shape[:2]
+        x1, y1, x2, y2 = profile.get_rect()
+        x1 = max(0, int(x1 * zoom - border))
+        y1 = max(0, int(y1 * zoom - border))
+        x2 = min(int(x2 * zoom + border), width * zoom)
+        y2 = min(int(y2 * zoom + border), height * zoom)
+        profile.image = pdf_profile.image[y1:y2, x1:x2]
 
     @staticmethod
     def __split_pdf_without_word(pdf_profile: PdfProfile) -> typing.List[TableProfile]:

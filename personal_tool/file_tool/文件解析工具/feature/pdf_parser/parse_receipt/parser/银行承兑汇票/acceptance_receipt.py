@@ -66,4 +66,5 @@ class AcceptanceReceiptParser(ReceiptParser):
         elif re.search("农业银行", acceptance.acceptor_account_bank_name):
             acceptance.acceptor_bank = "农业银行"  # 承兑所属银行
             acceptance.amount = NumberUtil.to_amount(table.get_row_cells(amount_cell.row)[-1].get_value())  # 金额
+        acceptance.image = profile.image
         self.receipts.append(acceptance)

@@ -25,4 +25,5 @@ class FCReceiptType04(FCReceiptType):
         receipt.payer_account_number = self._get_word("^账号[:：](.*?)$")  # 付款人账号
         receipt.payee_account_name = self._get_word("^委托单位名称[:：](.*?)$")  # 收款人户名
         receipt.amount = NumberUtil.to_amount(self._get_cell_relative("^利息总额", 3).get_value())  # 金额
+        receipt.image = self.image  # 图片
         return receipt

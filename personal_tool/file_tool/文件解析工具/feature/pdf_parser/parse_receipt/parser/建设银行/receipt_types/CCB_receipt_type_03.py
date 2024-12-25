@@ -31,4 +31,5 @@ class CCBReceiptType03(CCBReceiptType):
         receipt.payer_account_bank = self._get_word("^付款人开户银行[:：](.*?)$")  # 付款人开户银行
         receipt.payee_account_name = self._get_word("^征收机关名称[(（]委托方[)）][:：](.*?)$")  # 收款人户名
         receipt.amount = NumberUtil.to_amount(self._get_word("^小写[(（]合计[)）]金额[:：](.*?)$"))  # 金额
+        receipt.image = self.image  # 图片
         return receipt

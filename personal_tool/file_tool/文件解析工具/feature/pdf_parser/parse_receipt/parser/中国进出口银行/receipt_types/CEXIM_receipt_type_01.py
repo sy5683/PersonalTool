@@ -39,4 +39,5 @@ class CEXIMReceiptType01(CEXIMReceiptType):
             receipt.payee_account_number = number_row_cells[1].get_value()  # 收款人账号
             receipt.payee_account_bank = bank_row_cells[1].get_value()  # 收款人开户银行
         receipt.amount = NumberUtil.to_amount(self._get_cell_relative("^金额$").get_value())  # 金额
+        receipt.image = self.image  # 图片
         return receipt

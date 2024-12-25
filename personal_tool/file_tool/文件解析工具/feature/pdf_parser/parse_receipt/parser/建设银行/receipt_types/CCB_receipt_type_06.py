@@ -39,4 +39,5 @@ class CCBReceiptType06(CCBReceiptType):
             receipt.payee_account_name = name_row_cells[1].get_value()  # 收款人户名
             receipt.payee_account_number = number_row_cells[1].get_value()  # 收款人账号
         receipt.amount = NumberUtil.to_amount(self.table.get_cell(5, 3).get_value())  # 金额
+        receipt.image = self.image  # 图片
         return receipt

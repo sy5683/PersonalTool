@@ -29,4 +29,5 @@ class CMBCReceiptType01(CMBCReceiptType):
         receipt.payer_account_bank = None  # 付款人开户银行
         receipt.payee_account_bank = None  # 收款人开户银行
         receipt.amount = NumberUtil.to_amount(self._get_word("^[(（]小写[)）](.*?)$"))  # 金额
+        receipt.image = self.image  # 图片
         return receipt

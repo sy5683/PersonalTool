@@ -5,6 +5,7 @@ import cv2
 import fitz
 import numpy
 
+from .convert_pdf import ConvertPdf
 from .entity.pdf_element import Cell, Table, Word
 from .entity.pdf_profile import PdfProfile
 
@@ -37,6 +38,9 @@ class ParsePdf:
                     # 4.2) 当从新的图片中提取出来的边缘大于1，则说明图片存在边框，需要重新取数
                     if len(contours) > 1:
                         pdf_profile = cls._get_pdf_profile(temp_table_image, words, threshold_x)
+                # 5) 将当前pdf页转换为图片
+                zoom = 2
+                pdf_profile.image = ConvertPdf.page_to_cv2_image(pdf_page, 72 * zoom)
                 pdf_profiles.append(pdf_profile)
         return pdf_profiles
 

@@ -45,4 +45,5 @@ class NBCBReceiptType01(NBCBReceiptType):
                 receipt.payee_account_bank = payee_account_bank_pattern.sub("", remark)  # 收款人开户银行
         amount = self.table.get_cell(3, 1).get_value()
         receipt.amount = NumberUtil.to_amount(amount.split("RMB")[-1] if "RMB" in amount else amount)  # 金额
+        receipt.image = self.image  # 图片
         return receipt

@@ -22,4 +22,5 @@ class CBHBReceiptType02(CBHBReceiptType):
         receipt.payer_account_number = self._get_cell_relative("^付款人账号[:：]$").get_value()  # 付款人账号
         receipt.payer_account_bank = self._get_cell_relative("^付款人开户行[:：]$").get_value()  # 付款人开户银行
         receipt.amount = NumberUtil.to_amount(self._get_cell_relative("^小写金额[:：]$").get_value())  # 金额
+        receipt.image = self.image  # 图片
         return receipt

@@ -25,4 +25,5 @@ class CIBReceiptType03(CIBReceiptType):
         receipt.payer_account_number = self._get_word("^缴费账号[:：](.*?)$")  # 付款人账号
         receipt.payee_account_name = self._get_word("^收费机构[:：](.*?)$")  # 收款人户名
         receipt.amount = NumberUtil.to_amount(self._get_word("^金额[(（]小写[)）][:：](.*?)$"))  # 金额
+        receipt.image = self.image  # 图片
         return receipt

@@ -34,6 +34,7 @@ class BOCOMReceiptType01(BOCOMReceiptType):
         receipt.payee_account_number = self.__get_data("^收款人账号")  # 收款人账号
         receipt.payee_account_bank = self.__get_data("^开户行名称", 1)  # 收款人开户银行
         receipt.amount = NumberUtil.to_amount(self._get_word("金额[:：](.*?)$"))  # 金额
+        receipt.image = self.image  # 图片
         return receipt
 
     def __get_data(self, pattern: str, index: int = 0) -> str:

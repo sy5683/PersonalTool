@@ -5,7 +5,9 @@ import traceback
 import typing
 from pathlib import Path
 
+import cv2
 import fitz
+import numpy
 from PIL import Image
 
 
@@ -25,7 +27,8 @@ class ConvertPdf:
             pdf_page = pdf[index]
             image_name = f"{Path(pdf_path).stem}_{str(index).zfill(len(str(pdf.page_count)))}"
             image_path = os.path.join(save_path, f"{image_name}.%s" % re.sub(r"^\.+", "", suffix))
-            cls._page_to_image(pdf_page, image_path, dpi)
+            pil_image = cls.page_to_pil_image(pdf_page, dpi)
+            pil_image.save(image_path, dpi=(dpi, dpi), format='PNG')
             image_paths.append(image_path)
         pdf.close()
         logging.info(f"成功将pdf文件转换为图片: {save_path}")
@@ -60,9 +63,21 @@ class ConvertPdf:
         return save_path
 
     @staticmethod
-    def _page_to_image(page, image_path: str, dpi, rotate: float = 0.0):
-        """页面转图片"""
+    def page_to_cv2_image(page, dpi: float, rotate: float = 0.0) -> numpy.ndarray:
+        """页面转Cv2图片"""
         trans = fitz.Matrix(dpi / 72, dpi / 72).prerotate(rotate)
-        image = page.get_pixmap(matrix=trans, alpha=False)
-        pil_image = Image.frombytes("RGB", (image.width, image.height), image.samples)
-        pil_image.save(image_path, dpi=(dpi, dpi), format='PNG')
+        pix_map = page.get_pixmap(matrix=trans, alpha=False)
+        data, width, height = pix_map.samples, pix_map.w, pix_map.h
+        numpy_data = numpy.frombuffer(data, numpy.uint8)  # 将字节数组转为numpy格式数据
+        if len(numpy_data) % (width * height) == 0:
+            image = numpy.reshape(numpy_data, (height, width, len(numpy_data) // (width * height)))
+        else:
+            image = cv2.imdecode(numpy_data, cv2.IMREAD_ANYCOLOR)
+        return image if image is None else cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+    @staticmethod
+    def page_to_pil_image(page, dpi: float, rotate: float = 0.0) -> Image:
+        """页面转PIL图片"""
+        trans = fitz.Matrix(dpi / 72, dpi / 72).prerotate(rotate)
+        pix_map = page.get_pixmap(matrix=trans, alpha=False)
+        return Image.frombytes("RGB", (pix_map.width, pix_map.height), pix_map.samples)
