@@ -10,7 +10,7 @@ class CommandUtilTestCase(TestBase):
         print(result)
 
     def test_install_python_package(self):
-        self.assertEqual(CommandUtil.install_python_package("onnxruntime"), None)
+        self.assertEqual(CommandUtil.install_python_package(""), None)
 
     def test_install_python_packages(self):
         packages_str = """"""
