@@ -55,5 +55,6 @@ class Test(TestBase):
         while True:
             logging.info("开始推送")
             Win32Util.press_key("ctrl", "shift", "k")
+            time.sleep(0.5)
             Win32Util.press_key("alt", "p")
             time.sleep(23)  # 连接超时平均是在21000ms到22000ms之间
