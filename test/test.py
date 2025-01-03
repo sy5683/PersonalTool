@@ -51,6 +51,7 @@ class Test(TestBase):
 
     def test_002(self):
         """自动推送"""
+        time.sleep(1)
         while True:
             logging.info("开始推送")
             Win32Util.press_key("ctrl", "shift", "k")
