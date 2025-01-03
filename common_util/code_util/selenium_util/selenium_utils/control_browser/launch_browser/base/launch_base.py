@@ -21,16 +21,16 @@ class LaunchBase(metaclass=abc.ABCMeta):
 
     @staticmethod
     def set_browser_front(driver: webdriver):
-        """设置浏览器最前端，最小化最大化时可能会因为正在操作而失败"""
+        """设置浏览器最前端"""
         # 1) 先设置浏览器最小化
         try:
             driver.minimize_window()
-        except common.WebDriverException:
+        except common.exceptions.WebDriverException:
             time.sleep(0.5)
         # 2) 再设置浏览器最大化
         for _ in range(3):
             try:
                 driver.maximize_window()
                 break
-            except common.WebDriverException:
+            except common.exceptions.WebDriverException:
                 time.sleep(0.5)
