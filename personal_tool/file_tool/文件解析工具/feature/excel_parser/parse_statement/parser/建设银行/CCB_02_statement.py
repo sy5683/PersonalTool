@@ -20,6 +20,8 @@ class CCB02Tags(Enum):
     payment_amount = "借方发生额（支取）"
     receive_amount = "贷方发生额（收入）"
     balance = "余额"
+    # 国开行新格式与建行格式相同，这里新增一个特殊列进行判断区分
+    custom_info_1 = "个性化信息名称1"
 
 
 class CCB02StatementParser(StatementParser):
