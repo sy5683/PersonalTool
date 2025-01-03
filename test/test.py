@@ -27,6 +27,7 @@ from common_util.code_util.net_util.net_util import NetUtil
 from common_util.code_util.selenium_util.selenium_util import SeleniumUtil
 from common_util.code_util.selenium_util.selenium_utils.entity.selenium_config import SeleniumConfig
 from common_util.code_util.selenium_util.selenium_utils.enum.operate_type import OperateType
+from common_util.code_util.win32_util.win32_util import Win32Util
 from common_util.data_util.object_util.object_util import ObjectUtil
 from common_util.data_util.textual_util.textual_util import TextualUtil
 from common_util.file_util.excel_util.excel_util import ExcelUtil
@@ -44,5 +45,14 @@ class Test(TestBase):
         """"""
 
     def test_001(self):
+        """密码加密"""
         from common_util.code_util.crypto_util.crypto_util import CryptoUtil
         print(CryptoUtil.rsa_encrypt(""))
+
+    def test_002(self):
+        """自动推送"""
+        while True:
+            logging.info("开始推送")
+            Win32Util.press_key("ctrl", "shift", "k")
+            Win32Util.press_key("alt", "p")
+            time.sleep(23)  # 连接超时平均是在21000ms到22000ms之间
