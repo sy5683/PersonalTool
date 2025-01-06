@@ -20,6 +20,7 @@ class CDBReceiptType03(CDBReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
+        receipt.type = self.__str__()  # 类型
         receipt.bank = self.bank_name  # 银行
         date = re.findall("日期[:：](.*?)凭证号", self.table.get_cell(1, 0).get_value())[0]
         receipt.date = TimeUtil.format_to_str(date)  # 日期
@@ -42,5 +43,6 @@ class CDBReceiptType03(CDBReceiptType):
             receipt.payee_account_number = self._get_account(number_row_cells[0].get_value())  # 收款人账号
             receipt.payee_account_bank = self._get_bank(bank_row_cells[0].get_value())  # 收款人开户银行
         receipt.amount = NumberUtil.to_amount(self._get_cell_relative("小写金额").get_value())  # 金额
+        receipt.abstract = ""  # 摘要
         receipt.image = self.image  # 图片
         return receipt

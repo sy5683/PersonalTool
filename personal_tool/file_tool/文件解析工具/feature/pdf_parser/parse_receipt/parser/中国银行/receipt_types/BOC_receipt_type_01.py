@@ -21,6 +21,7 @@ class BOCReceiptType01(BOCReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
+        receipt.type = self.__str__()  # 类型
         receipt.bank = self.bank_name  # 银行
         # 中国银行这个格式的回单数据全在一个大的表格单元格中，重新加载其为word数据后使用word方法解析
         self.words += PdfUtil.merge_words(self.table.cells[0].words, 10)
@@ -34,5 +35,6 @@ class BOCReceiptType01(BOCReceiptType):
         receipt.payee_account_number = self._get_word("^收款人账号[:：](.*?)$")  # 收款人账号
         receipt.payee_account_bank = self._get_word("^收款人开户行[:：](.*?)$")  # 收款人开户银行
         receipt.amount = NumberUtil.to_amount(self._get_word("^金额[:：](.*?)$"))  # 金额
+        receipt.abstract = ""  # 摘要
         receipt.image = self.image  # 图片
         return receipt

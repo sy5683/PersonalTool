@@ -5,6 +5,7 @@ import typing
 class Receipt:
 
     def __init__(self):
+        self.type = None  # 类型
         self.bank = None  # 银行
         self.date = None  # 日期
         self.receipt_number = None  # 回单编号
@@ -16,7 +17,11 @@ class Receipt:
         self.payee_account_number = None  # 收款人账号
         self.payee_account_bank = None  # 收款人开户银行
         self.amount = 0  # 金额
+        self.abstract = None  # 摘要
         self.image = None  # 图片
+
+    def __str__(self) -> str:
+        return self.type
 
     def to_dict(self, with_image: bool = True) -> typing.Dict[str, str]:
         return {
@@ -30,6 +35,6 @@ class Receipt:
             'date': self.date,
             'business_no': re.sub(r"\D", "", str(self.receipt_number)),
             'amount': self.amount,
-            # 'use':self.receipt_value(receipt, '用途', '收费种类:', '附言:')
+            'use':self.abstract,
             'image': self.image if with_image else None  # 测试时为了便于查看，这里添加一个参数来控制显不显示image
         }

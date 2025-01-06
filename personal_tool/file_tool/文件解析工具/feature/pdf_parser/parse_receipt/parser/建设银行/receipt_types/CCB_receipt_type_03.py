@@ -20,6 +20,7 @@ class CCBReceiptType03(CCBReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
+        receipt.type = self.__str__()  # 类型
         receipt.bank = self.bank_name  # 银行
         # 建设银行这个格式的回单数据全在一个大的表格单元格中，重新加载其为word数据后使用word方法解析
         self.words += PdfUtil.merge_words(self.table.cells[0].words, 10)
@@ -31,5 +32,6 @@ class CCBReceiptType03(CCBReceiptType):
         receipt.payer_account_bank = self._get_word("^付款人开户银行[:：](.*?)$")  # 付款人开户银行
         receipt.payee_account_name = self._get_word("^征收机关名称[(（]委托方[)）][:：](.*?)$")  # 收款人户名
         receipt.amount = NumberUtil.to_amount(self._get_word("^小写[(（]合计[)）]金额[:：](.*?)$"))  # 金额
+        receipt.abstract = ""  # 摘要
         receipt.image = self.image  # 图片
         return receipt

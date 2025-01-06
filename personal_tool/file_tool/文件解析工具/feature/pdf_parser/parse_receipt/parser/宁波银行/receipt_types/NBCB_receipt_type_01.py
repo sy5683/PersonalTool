@@ -17,6 +17,7 @@ class NBCBReceiptType01(NBCBReceiptType):
     def get_receipt(self) -> Receipt:
         """解析"""
         receipt = Receipt()
+        receipt.type = self.__str__()  # 类型
         receipt.bank = self.bank_name  # 银行
         receipt.serial_number = self.table.get_cell(5, 3).get_value()  # 流水号
         receipt.date = TimeUtil.format_to_str(self._get_word("^.*年.*月.*日$"))  # 日期
@@ -45,5 +46,6 @@ class NBCBReceiptType01(NBCBReceiptType):
                 receipt.payee_account_bank = payee_account_bank_pattern.sub("", remark)  # 收款人开户银行
         amount = self.table.get_cell(3, 1).get_value()
         receipt.amount = NumberUtil.to_amount(amount.split("RMB")[-1] if "RMB" in amount else amount)  # 金额
+        receipt.abstract = ""  # 摘要
         receipt.image = self.image  # 图片
         return receipt

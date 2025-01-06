@@ -17,8 +17,7 @@ class ReceiptType(metaclass=abc.ABCMeta):
         self.image = profile.image
 
     def __str__(self):
-        types = re.search(r"\d+", self.__class__.__name__).group()
-        return f"{self.bank_name}_{types}"
+        return f"{self.bank_name}_%s" % re.search(r"\d+", self.__class__.__name__).group()
 
     @abc.abstractmethod
     def judge(self) -> bool:
