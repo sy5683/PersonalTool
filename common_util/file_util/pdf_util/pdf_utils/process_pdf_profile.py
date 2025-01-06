@@ -64,11 +64,9 @@ class ProcessPdfProfile:
             if split_y:
                 split_ys.append(split_y)
         if not any(split_ys):
-            profiles = []
-            for table in pdf_profile.tables:
-                profile = TableProfile(table)
+            profiles = [TableProfile(table) for table in pdf_profile.tables]
+            for profile in profiles:
                 cls.__split_pdf_image(profile, pdf_profile)
-                profiles.append(profile)
             return profiles
         split_ys = [0] + split_ys + [999999]
         # 根据纵坐标分割pdf
@@ -137,10 +135,15 @@ class ProcessPdfProfile:
         y2 = min(int(y2 * zoom + border), height * zoom)
         profile.image = pdf_profile.image[y1:y2, x1:x2]
 
-    @staticmethod
-    def __split_pdf_without_word(pdf_profile: PdfProfile) -> typing.List[TableProfile]:
+    @classmethod
+    def __split_pdf_without_word(cls, pdf_profile: PdfProfile) -> typing.List[TableProfile]:
         """切割没有表格外文字的pdf"""
         if len(pdf_profile.tables) > 1:
-            return [TableProfile(table) for table in pdf_profile.tables]
+            profiles = []
+            for table in pdf_profile.tables:
+                profiles.append(TableProfile(table))
         else:
-            return [TableProfile(pdf_profile.tables[0], pdf_profile.words)]
+            profiles = [TableProfile(pdf_profile.tables[0], pdf_profile.words)]
+        for profile in profiles:
+            cls.__split_pdf_image(profile, pdf_profile)
+        return profiles
