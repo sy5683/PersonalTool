@@ -11,6 +11,7 @@ import typing
 import unittest
 import winreg
 from pathlib import Path
+from urllib import parse
 
 import cv2
 import numpy

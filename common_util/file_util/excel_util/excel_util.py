@@ -24,6 +24,11 @@ class ExcelUtil:
         return Win32Excel.excel_to_images(str(file_path), save_path)
 
     @staticmethod
+    def format_data(data: any):
+        """处理数据"""
+        return FormatExcelData.format_data(data)
+
+    @staticmethod
     def format_date_data(date: typing.Union[float, str]) -> str:
         """格式化日期数据"""
         return FormatExcelData.format_date_data(date)
@@ -32,11 +37,6 @@ class ExcelUtil:
     def format_int_data(data: typing.Union[float, str]) -> str:
         """格式化整数数据"""
         return FormatExcelData.format_int_data(str(data))
-
-    @staticmethod
-    def format_list_data(data: list) -> list:
-        """格式化列表数据"""
-        return FormatExcelData.format_list_data(data)
 
     @staticmethod
     def get_data_list(excel_path: typing.Union[Path, str], sheet_index: int = 0, sheet_name: str = None,

@@ -6,6 +6,16 @@ import xlrd
 
 class FormatExcelData:
 
+    @staticmethod
+    def format_data(data: any):
+        """处理数据"""
+        if isinstance(data, str):
+            # 去除收尾空字符
+            data = data.strip()
+            # 去除无法写入excel中的异常编码字符
+            data = re.sub("\x00|\x02", "", data)
+        return data
+
     @classmethod
     def format_date_data(cls, date: typing.Union[float, str]) -> str:
         """
@@ -29,13 +39,6 @@ class FormatExcelData:
             return re.sub(r"[.]0+$", "", data)
         except Exception:
             return data  # 如果数据异常无法进行转换，则返回原样
-
-    @staticmethod
-    def format_list_data(data: list) -> list:
-        """处理一些无法写入excel的异常编码数据"""
-        # 处理\x02导致数据无法写入数据库的问题
-        data = [each.replace("\x02", "") if isinstance(each, str) else each for each in data]
-        return data
 
     @staticmethod
     def _format_excel_date_number(date_number: int) -> str:

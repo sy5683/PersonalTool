@@ -63,7 +63,7 @@ class ParseExcel:
         row_values = []
         for col, value in enumerate(worksheet.row_values(row)):
             # 字符串化数据并去除异常字符与空字符
-            value = str(value).replace("\x00", "").strip()
+            value = FormatExcelData.format_data(str(value))
             # 某些特殊的单元格需要特殊处理
             cell = worksheet.cell(row, col)
             if cell.ctype == 2:  # 数字类型，需要去除掉excel数据中数字字符串中".0"结尾的小数
