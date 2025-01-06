@@ -64,7 +64,12 @@ class ProcessPdfProfile:
             if split_y:
                 split_ys.append(split_y)
         if not any(split_ys):
-            return [TableProfile(table) for table in pdf_profile.tables]
+            profiles = []
+            for table in pdf_profile.tables:
+                profile = TableProfile(table)
+                cls.__split_pdf_image(profile, pdf_profile)
+                profiles.append(profile)
+            return profiles
         split_ys = [0] + split_ys + [999999]
         # 根据纵坐标分割pdf
         profiles = []
