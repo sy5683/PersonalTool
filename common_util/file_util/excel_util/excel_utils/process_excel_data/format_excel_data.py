@@ -12,8 +12,8 @@ class FormatExcelData:
         if isinstance(data, str):
             # 去除收尾空字符
             data = data.strip()
-            # 去除无法写入excel中的异常编码字符
-            data = re.sub("\x00|\x02", "", data)
+            # 去除常见的无法写入excel中的异常编码字符
+            data = re.sub("\x00|\x01|\x02", "", data)
         return data
 
     @classmethod
