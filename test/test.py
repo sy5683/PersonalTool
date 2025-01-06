@@ -48,13 +48,3 @@ class Test(TestBase):
         """密码加密"""
         from common_util.code_util.crypto_util.crypto_util import CryptoUtil
         print(CryptoUtil.rsa_encrypt(""))
-
-    def test_002(self):
-        """自动推送"""
-        time.sleep(1)
-        while True:
-            logging.info("开始推送")
-            Win32Util.press_key("ctrl", "shift", "k")
-            time.sleep(0.5)
-            Win32Util.press_key("alt", "p")
-            time.sleep(23)  # 连接超时平均是在21000ms到22000ms之间
