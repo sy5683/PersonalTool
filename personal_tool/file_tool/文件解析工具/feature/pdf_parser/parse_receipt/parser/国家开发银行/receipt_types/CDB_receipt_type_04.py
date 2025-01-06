@@ -7,7 +7,7 @@ from .CDB_receipt_type import CDBReceiptType
 from ....entity.receipt import Receipt
 
 
-class CDBReceiptType03(CDBReceiptType):
+class CDBReceiptType04(CDBReceiptType):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""

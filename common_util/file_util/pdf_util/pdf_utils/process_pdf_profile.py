@@ -33,6 +33,14 @@ class ProcessPdfProfile:
     @classmethod
     def split_pdf(cls, pdf_profile: PdfProfile, *split_words: str) -> typing.List[TableProfile]:
         """分割pdf"""
+        profiles = cls._split_pdf(pdf_profile, *split_words)
+        for profile in profiles:
+            cls.__split_pdf_image(profile, pdf_profile)
+        return profiles
+
+    @classmethod
+    def _split_pdf(cls, pdf_profile: PdfProfile, *split_words: str) -> typing.List[TableProfile]:
+        """分割pdf"""
         if not pdf_profile.tables:
             # 当没有表格且文字少于一定数量时，说明该页面为无效的空白页面
             if len(pdf_profile.words) < 5:
@@ -64,10 +72,7 @@ class ProcessPdfProfile:
             if split_y:
                 split_ys.append(split_y)
         if not any(split_ys):
-            profiles = [TableProfile(table) for table in pdf_profile.tables]
-            for profile in profiles:
-                cls.__split_pdf_image(profile, pdf_profile)
-            return profiles
+            return [TableProfile(table) for table in pdf_profile.tables]
         split_ys = [0] + split_ys + [999999]
         # 根据纵坐标分割pdf
         profiles = []
@@ -80,7 +85,6 @@ class ProcessPdfProfile:
             for word in pdf_profile.words:
                 if word.rect[1] > split_ys[index - 1] and word.rect[3] < split_ys[index]:
                     profile.words.append(word)
-            cls.__split_pdf_image(profile, pdf_profile)
             profiles.append(profile)
         return profiles
 
@@ -116,15 +120,13 @@ class ProcessPdfProfile:
             profile = TableProfile()
             for index, word in enumerate(pdf_profile.words):
                 if re.search("|".join(split_words), word.text):
-                    cls.__split_pdf_image(profile, pdf_profile)
                     profile = TableProfile()
                     profiles.append(profile)
                 profile.words.append(word)
-            cls.__split_pdf_image(profile, pdf_profile)
             return [profile for profile in profiles if len(profile.words) != 1]
 
     @staticmethod
-    def __split_pdf_image(profile: TableProfile, pdf_profile: PdfProfile, zoom = 2):
+    def __split_pdf_image(profile: TableProfile, pdf_profile: PdfProfile, zoom: float = 2):
         """切割pdf图片"""
         border = 10
         height, width = pdf_profile.image.shape[:2]
@@ -139,11 +141,6 @@ class ProcessPdfProfile:
     def __split_pdf_without_word(cls, pdf_profile: PdfProfile) -> typing.List[TableProfile]:
         """切割没有表格外文字的pdf"""
         if len(pdf_profile.tables) > 1:
-            profiles = []
-            for table in pdf_profile.tables:
-                profiles.append(TableProfile(table))
+            return [TableProfile(table) for table in pdf_profile.tables]
         else:
-            profiles = [TableProfile(pdf_profile.tables[0], pdf_profile.words)]
-        for profile in profiles:
-            cls.__split_pdf_image(profile, pdf_profile)
-        return profiles
+            return [TableProfile(pdf_profile.tables[0], pdf_profile.words)]
