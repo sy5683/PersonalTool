@@ -4,7 +4,6 @@ from ....entity.receipt import Receipt
 class Acceptance(Receipt):
 
     def __init__(self):
-        self.acceptor_bank = None  # 承兑所属银行
         super().__init__()
         self.due_date = None  # 汇票到期日
         self.acceptor_account_name = None  # 承兑人全称

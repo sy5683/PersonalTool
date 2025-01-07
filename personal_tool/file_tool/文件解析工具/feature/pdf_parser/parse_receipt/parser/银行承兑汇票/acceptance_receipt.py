@@ -15,7 +15,7 @@ class AcceptanceReceiptParser(ReceiptParser):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        return self._check_contains("渤海银行电子印图案", "电子银行承兑汇票")
+        return self._check_contains("电子银行承兑汇票")
 
     def parse(self):
         """解析"""
@@ -60,11 +60,13 @@ class AcceptanceReceiptParser(ReceiptParser):
         # 根据承兑人开户银行名称判断票据所属银行，再根据所属银行取出金额
         amount_cell = table.get_cell_relative("^票据金额", 0)
         if re.search("渤海银行", acceptance.acceptor_account_bank_name):
-            acceptance.acceptor_bank = "渤海银行"  # 承兑所属银行
+            acceptance.bank = "渤海银行"  # 承兑所属银行
             amount = "".join([each.get_value() for each in table.get_row_cells(amount_cell.row + 1)])
             acceptance.amount = NumberUtil.to_amount(amount)  # 金额
         elif re.search("农业银行", acceptance.acceptor_account_bank_name):
-            acceptance.acceptor_bank = "农业银行"  # 承兑所属银行
+            acceptance.bank = "农业银行"  # 承兑所属银行
             acceptance.amount = NumberUtil.to_amount(table.get_row_cells(amount_cell.row)[-1].get_value())  # 金额
-        acceptance.image = profile.image
+        acceptance.type = f"{acceptance.bank}{self.parser_type}"  # 类型
+        acceptance.abstract = ""  # 摘要
+        acceptance.image = profile.image  # 图片
         self.receipts.append(acceptance)
