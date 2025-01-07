@@ -17,6 +17,7 @@ import cv2
 import numpy
 import openpyxl
 import win32api
+import xmltodict
 from PIL import Image
 from bs4 import BeautifulSoup
 from selenium import common
