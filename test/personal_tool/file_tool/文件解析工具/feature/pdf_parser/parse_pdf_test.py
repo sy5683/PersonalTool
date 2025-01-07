@@ -1,10 +1,8 @@
-import os
 import re
 import typing
 from pathlib import Path
 
 from common_core.base.test_base import TestBase
-from common_util.file_util.image_util.image_util import ImageUtil
 from personal_tool.file_tool.文件解析工具.feature.pdf_parser.parse_pdf import ParsePdf
 
 
@@ -34,7 +32,9 @@ class ParsePdfTestCase(TestBase):
             for receipt in parser.receipts:
                 print(receipt.to_dict(False))
                 # image_path = f"E:\\{receipt}.png"
+                # import os
                 # if not os.path.exists(image_path):
+                #     from common_util.file_util.image_util.image_util import ImageUtil
                 #     ImageUtil.save_opencv_image(receipt.image, image_path)
 
     def test_parse_voucher(self):
