@@ -1,4 +1,3 @@
-import logging
 import re
 from enum import Enum
 
@@ -39,13 +38,7 @@ class CBHB03StatementParser(StatementParser):
         for data in ExcelUtil.get_data_list(self.statement_path, tag_row=self.tag_row):
             statement = Statement()
             statement.reference_number = data[CBHB03Tags.reference_number.value]  # 交易流水号
-            # noinspection PyBroadException
-            try:  # 交易时间
-                trade_datetime = data[CBHB03Tags.trade_date.value]
-                statement.trade_datetime = self._format_date(trade_datetime)
-            except Exception:
-                logging.warning(f"数据异常，不处理: {data}")
-                continue
+            statement.trade_datetime = self._format_date(data[CBHB03Tags.trade_date.value])  # 交易时间
             statement.account_name = account_name  # 开户名称
             statement.account_number = self.account_number  # 开户账号
             statement.reciprocal_account_name = data[CBHB03Tags.reciprocal_account_name.value]  # 对方账户名称

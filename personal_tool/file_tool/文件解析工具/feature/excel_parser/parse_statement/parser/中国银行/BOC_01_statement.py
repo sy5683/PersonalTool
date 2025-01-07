@@ -1,4 +1,3 @@
-import logging
 from enum import Enum
 
 from common_util.data_util.number_util.number_util import NumberUtil
@@ -40,13 +39,8 @@ class BOC01StatementParser(StatementParser):
         for data in ExcelUtil.get_data_list(self.statement_path, tag_row=self.tag_row):
             statement = Statement()
             statement.reference_number = data[BOC01Tags.reference_number.value]  # 交易流水号
-            # noinspection PyBroadException
-            try:  # 交易时间
-                trade_datetime = data[BOC01Tags.trade_date.value] + data[BOC01Tags.trade_time.value]
-                statement.trade_datetime = self._format_date(trade_datetime)
-            except Exception:
-                logging.warning(f"数据异常，不处理: {data}")
-                continue
+            trade_datetime = data[BOC01Tags.trade_date.value] + data[BOC01Tags.trade_time.value]
+            statement.trade_datetime = self._format_date(trade_datetime)  # 交易时间
             statement.account_number = self.account_number  # 开户账号
             if self.account_number == data[BOC01Tags.payee_account_number.value].strip():
                 statement.account_name = data[BOC01Tags.payee_name.value]  # 开户名称

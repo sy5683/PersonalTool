@@ -1,4 +1,3 @@
-import logging
 from enum import Enum
 
 from common_util.data_util.number_util.number_util import NumberUtil
@@ -13,7 +12,7 @@ class ABC02Tags(Enum):
     trade_datetime = "交易时间戳"
     reciprocal_account_name = "对方户名"
     reciprocal_account_number = "对方账号"
-    purpose = "交易附言"
+    abstract = "交易附言"
     # 【农业银行】无对应【用途】
     payment_amount = "支出金额"
     receive_amount = "收入金额"
@@ -42,17 +41,12 @@ class ABC02StatementParser(StatementParser):
         for data in ExcelUtil.get_data_list(self.statement_path, tag_row=self.tag_row):
             statement = Statement()
             statement.reference_number = ""  # 交易流水号(【农业银行】无对应交易流水号)
-            # noinspection PyBroadException
-            try:  # 交易时间
-                statement.trade_datetime = self._format_date(data[ABC02Tags.trade_datetime.value])
-            except Exception:
-                logging.warning(f"数据异常，不处理: {data}")
-                continue
+            statement.trade_datetime = self._format_date(data[ABC02Tags.trade_datetime.value])  # 交易时间
             statement.account_name = account_name  # 开户名称
             statement.account_number = self.account_number  # 开户账号
             statement.reciprocal_account_name = data[ABC02Tags.reciprocal_account_name.value]  # 对方账户名称
             statement.reciprocal_account_number = data[ABC02Tags.reciprocal_account_number.value]  # 对方账户号
-            statement.abstract = f"{statement.reciprocal_account_name} {data[ABC02Tags.purpose.value]}"  # 摘要
+            statement.abstract = f"{statement.reciprocal_account_name} {data[ABC02Tags.abstract.value]}"  # 摘要
             statement.purpose = ""  # 用途(【农业银行】无对应用途)
             statement.payment_amount = NumberUtil.to_amount(data[ABC02Tags.payment_amount.value])  # 付款金额
             statement.receive_amount = NumberUtil.to_amount(data[ABC02Tags.receive_amount.value])  # 收款金额

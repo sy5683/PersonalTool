@@ -1,4 +1,3 @@
-import logging
 from enum import Enum
 
 from common_util.data_util.number_util.number_util import NumberUtil
@@ -39,13 +38,8 @@ class SPDB01StatementParser(StatementParser):
         for data in ExcelUtil.get_data_list(self.statement_path, tag_row=self.tag_row):
             statement = Statement()
             statement.reference_number = data[SPDB01Tags.reference_number.value]  # 交易流水号
-            # noinspection PyBroadException
-            try:  # 交易时间
-                trade_datetime = data[SPDB01Tags.trade_date.value] + data[SPDB01Tags.trade_time.value]
-                statement.trade_datetime = self._format_date(trade_datetime)  # 交易时间
-            except Exception:
-                logging.warning(f"数据异常，不处理: {data}")
-                continue
+            trade_datetime = data[SPDB01Tags.trade_date.value] + data[SPDB01Tags.trade_time.value]
+            statement.trade_datetime = self._format_date(trade_datetime)  # 交易时间
             statement.account_name = account_name  # 开户名称
             statement.account_number = self.account_number  # 开户账号
             statement.reciprocal_account_name = data[SPDB01Tags.reciprocal_account_name.value]  # 对方账户名称

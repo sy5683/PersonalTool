@@ -1,4 +1,3 @@
-import logging
 from enum import Enum
 
 from common_util.data_util.number_util.number_util import NumberUtil
@@ -33,12 +32,7 @@ class ICBC01StatementParser(StatementParser):
         for data in ExcelUtil.get_data_list(self.statement_path, tag_row=self.tag_row):
             statement = Statement()
             statement.reference_number = ""  # 交易流水号(【工商银行】无对应交易流水号)
-            # noinspection PyBroadException
-            try:  # 交易时间
-                statement.trade_datetime = self._format_date(data[ICBC01Tags.trade_datetime.value])
-            except Exception:
-                logging.warning(f"数据异常，不处理: {data}")
-                continue
+            statement.trade_datetime = self._format_date(data[ICBC01Tags.trade_datetime.value])  # 交易时间
             # 工行下载时有异常情况，下载时选项没有开户名称，因此工行的开户名称通过表单参数传递
             statement.account_name = self.company_name  # 开户名称
             statement.account_number = data[ICBC01Tags.account_number.value]  # 开户账号

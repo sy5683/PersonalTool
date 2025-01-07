@@ -1,4 +1,3 @@
-import logging
 from enum import Enum
 
 from common_util.data_util.number_util.number_util import NumberUtil
@@ -32,12 +31,7 @@ class CDB01StatementParser(StatementParser):
         for data in ExcelUtil.get_data_list(self.statement_path, tag_row=self.tag_row):
             statement = Statement()
             statement.reference_number = data[CDB01Tags.reference_number.value]  # 交易流水号
-            # noinspection PyBroadException
-            try:  # 交易时间
-                statement.trade_datetime = self._format_date(data[CDB01Tags.trade_datetime.value])
-            except Exception:
-                logging.warning(f"数据异常，不处理: {data}")
-                continue
+            statement.trade_datetime = self._format_date(data[CDB01Tags.trade_datetime.value])  # 交易时间
             if data[CDB01Tags.payment_or_receive.value] == "收入":
                 statement.account_name = data[CDB01Tags.payee_name.value]  # 开户名称
                 statement.account_number = data[CDB01Tags.payee_account_number.value]  # 开户账号

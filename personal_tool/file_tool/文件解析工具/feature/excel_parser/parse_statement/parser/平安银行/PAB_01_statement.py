@@ -1,4 +1,3 @@
-import logging
 from enum import Enum
 
 from common_util.data_util.number_util.number_util import NumberUtil
@@ -31,12 +30,7 @@ class PAB01StatementParser(StatementParser):
         for excel in ExcelUtil.get_data_list(self.statement_path, tag_row=self.tag_row):
             statement = Statement()
             statement.reference_number = excel[PAB01Tags.reference_number.value]  # 交易流水号
-            # noinspection PyBroadException
-            try:  # 交易时间
-                statement.trade_datetime = self._format_date(excel[PAB01Tags.trade_date.value])
-            except Exception:  
-                logging.warning(f"数据异常，不处理: {excel}")
-                continue
+            statement.trade_datetime = self._format_date(excel[PAB01Tags.trade_date.value])  # 交易时间
             statement.account_name = ""  # 开户名称(【平安银行】无对应开户名称)
             statement.account_number = excel[PAB01Tags.account_number.value]  # 开户账号
             self.account_number = statement.account_number

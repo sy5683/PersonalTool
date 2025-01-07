@@ -31,6 +31,7 @@ from common_util.code_util.selenium_util.selenium_utils.enum.operate_type import
 from common_util.code_util.win32_util.win32_util import Win32Util
 from common_util.data_util.object_util.object_util import ObjectUtil
 from common_util.data_util.textual_util.textual_util import TextualUtil
+from common_util.data_util.time_util.time_util import TimeUtil
 from common_util.file_util.excel_util.excel_util import ExcelUtil
 from common_util.file_util.file_util.file_util import FileUtil
 from common_util.file_util.image_util.image_util import ImageUtil
