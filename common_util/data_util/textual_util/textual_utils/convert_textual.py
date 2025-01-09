@@ -31,7 +31,7 @@ class ConvertTextual:
     def _unicode_to_str(unicodes: str) -> str:
         """unicode转字符串"""
         # 接收的unicode中特殊字符可能会出现不足四位的情况，因此使用正则表达式在其前方补零
-        for unicode in re.findall(r"(\\u\w{1,3})(?=[\\<])", unicodes):
+        for unicode in list(set(re.findall(r"(\\u\w{1,3})(?=[\\<])", unicodes))):
             code = unicode.replace("\\u", "")
             unicodes = unicodes.replace(unicode, unicode.replace(f"\\u{code}", f"\\u{code.zfill(4)}"))
         return unicodes.encode('utf-8').decode('unicode_escape')
