@@ -7,7 +7,7 @@ Flask-Cors
 natsort
 numpy
 onnxruntime
-opencv-python
+opencv-python==4.10.0.84
 openpyxl
 oracledb
 paramiko
@@ -32,6 +32,7 @@ schedule
 selenium
 webdriver-manager==4.0.1
 xlrd==1.2.0
+xmltodict
 
 # 需要忽略的依赖
 docx
