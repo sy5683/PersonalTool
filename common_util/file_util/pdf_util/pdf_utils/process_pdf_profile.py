@@ -1,6 +1,8 @@
 import re
 import typing
 
+import numpy
+
 from .entity.pdf_element import Word
 from .entity.pdf_profile import PdfProfile, TableProfile
 
@@ -35,8 +37,20 @@ class ProcessPdfProfile:
         """分割pdf"""
         profiles = cls._split_pdf(pdf_profile, *split_words)
         for profile in profiles:
-            cls.__split_pdf_image(profile, pdf_profile)
+            cls.split_pdf_image(profile, pdf_profile.image)
         return profiles
+
+    @staticmethod
+    def split_pdf_image(profile: TableProfile, image: numpy.ndarray, zoom: float = 2):
+        """切割pdf图片"""
+        border = 10
+        height, width = image.shape[:2]
+        x1, y1, x2, y2 = profile.get_rect()
+        x1 = max(0, int(x1 * zoom - border))
+        y1 = max(0, int(y1 * zoom - border))
+        x2 = min(int(x2 * zoom + border), int(width * zoom))
+        y2 = min(int(y2 * zoom + border), int(height * zoom))
+        profile.image = image[y1:y2, x1:x2]
 
     @classmethod
     def _split_pdf(cls, pdf_profile: PdfProfile, *split_words: str) -> typing.List[TableProfile]:
@@ -124,18 +138,6 @@ class ProcessPdfProfile:
                     profiles.append(profile)
                 profile.words.append(word)
             return [profile for profile in profiles if len(profile.words) != 1]
-
-    @staticmethod
-    def __split_pdf_image(profile: TableProfile, pdf_profile: PdfProfile, zoom: float = 2):
-        """切割pdf图片"""
-        border = 10
-        height, width = pdf_profile.image.shape[:2]
-        x1, y1, x2, y2 = profile.get_rect()
-        x1 = max(0, int(x1 * zoom - border))
-        y1 = max(0, int(y1 * zoom - border))
-        x2 = min(int(x2 * zoom + border), width * zoom)
-        y2 = min(int(y2 * zoom + border), height * zoom)
-        profile.image = pdf_profile.image[y1:y2, x1:x2]
 
     @classmethod
     def __split_pdf_without_word(cls, pdf_profile: PdfProfile) -> typing.List[TableProfile]:

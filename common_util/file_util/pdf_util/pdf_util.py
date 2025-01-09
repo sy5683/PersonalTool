@@ -65,3 +65,8 @@ class PdfUtil:
     def split_pdf(pdf_profile: PdfProfile, *split_words: str) -> typing.List[TableProfile]:
         """分割pdf"""
         return ProcessPdfProfile.split_pdf(pdf_profile, *split_words)
+
+    @staticmethod
+    def split_pdf_image(profile: TableProfile, image: numpy.ndarray, zoom: float = 2):
+        """切割pdf图片"""
+        ProcessPdfProfile.split_pdf_image(profile, image, zoom)
