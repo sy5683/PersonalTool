@@ -3,6 +3,7 @@ import typing
 from pathlib import Path
 
 from common_core.base.test_base import TestBase
+from common_util.data_util.object_util.object_util import ObjectUtil
 from personal_tool.file_tool.文件解析工具.feature.pdf_parser.parse_pdf import ParsePdf
 
 
@@ -30,12 +31,13 @@ class ParsePdfTestCase(TestBase):
         for receipt_path in self.__get_pdf_path(self.receipt_path.joinpath(r"")):
             parser = ParsePdf.parse_receipt(receipt_path)
             for receipt in parser.receipts:
-                print(receipt.to_dict(False))
-                # image_path = f"E:\\{receipt}.png"
-                # import os
-                # if not os.path.exists(image_path):
-                #     from common_util.file_util.image_util.image_util import ImageUtil
-                #     ImageUtil.save_opencv_image(receipt.image, image_path)
+                image_path = f"E:\\{receipt}.png"
+                import os
+                if not os.path.exists(image_path):
+                    from common_util.file_util.image_util.image_util import ImageUtil
+                    ImageUtil.save_opencv_image(receipt.image, image_path)
+                # receipt.image = None  # 为了便于测试查看，去除图片数据
+                # ObjectUtil.print_object(receipt)
 
     def test_parse_voucher(self):
         for voucher_path in self.__get_pdf_path(self.voucher_path.joinpath(r"")):

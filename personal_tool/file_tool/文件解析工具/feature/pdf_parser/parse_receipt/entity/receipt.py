@@ -1,7 +1,3 @@
-import re
-import typing
-
-
 class Receipt:
 
     def __init__(self):
@@ -22,19 +18,3 @@ class Receipt:
 
     def __str__(self) -> str:
         return self.type
-
-    def to_dict(self, with_image: bool = True) -> typing.Dict[str, str]:
-        return {
-            'bank': self.bank,
-            'pay_bank': self.payer_account_bank,
-            'pay_name': self.payer_account_name,
-            'pay_no': self.payer_account_number,
-            'account_bank': self.payee_account_bank,
-            'account_name': self.payee_account_name,
-            'account_no': self.payee_account_number,
-            'date': self.date,
-            'business_no': re.sub(r"\D", "", str(self.receipt_number)),
-            'amount': self.amount,
-            'use':self.abstract,
-            'image': self.image if with_image else None  # 测试时为了便于查看，这里添加一个参数来控制显不显示image
-        }
