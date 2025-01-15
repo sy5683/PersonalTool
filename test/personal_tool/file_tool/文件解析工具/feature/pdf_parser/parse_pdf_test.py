@@ -28,16 +28,16 @@ class ParsePdfTestCase(TestBase):
                 print(receipt.__dict__)
 
     def test_parse_receipt(self):
-        for receipt_path in self.__get_pdf_path(self.receipt_path.joinpath(r"")):
+        for receipt_path in self.__get_pdf_path(self.receipt_path.joinpath(r"华夏银行")):
             parser = ParsePdf.parse_receipt(receipt_path)
             for receipt in parser.receipts:
-                image_path = f"E:\\{receipt}.png"
-                import os
-                if not os.path.exists(image_path):
-                    from common_util.file_util.image_util.image_util import ImageUtil
-                    ImageUtil.save_opencv_image(receipt.image, image_path)
-                # receipt.image = None  # 为了便于测试查看，去除图片数据
-                # ObjectUtil.print_object(receipt)
+                # image_path = f"E:\\{receipt}.png"
+                # import os
+                # if not os.path.exists(image_path):
+                #     from common_util.file_util.image_util.image_util import ImageUtil
+                #     ImageUtil.save_opencv_image(receipt.image, image_path)
+                receipt.image = None  # 为了便于测试查看，去除图片数据
+                ObjectUtil.print_object(receipt)
 
     def test_parse_voucher(self):
         for voucher_path in self.__get_pdf_path(self.voucher_path.joinpath(r"")):
