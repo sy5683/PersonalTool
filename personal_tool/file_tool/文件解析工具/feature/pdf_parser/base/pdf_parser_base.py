@@ -46,7 +46,7 @@ class PdfParserBase(metaclass=abc.ABCMeta):
             raise FileNotFoundError("缺少判断图片")
         return judge_images
 
-    def _judge_images(self, different: float):
+    def _judge_images(self, different: float, show_different: bool = False) -> bool:
         """比较图片"""
         judge_images = self._get_judge_images()
         for index, image in enumerate(PdfUtil.get_pdf_images(self.pdf_path)):
@@ -58,11 +58,17 @@ class PdfParserBase(metaclass=abc.ABCMeta):
                 image = cv2.cvtColor(image, cv2.COLOR_RGBA2BGR)
             # ImageUtil.save_opencv_image(image, f"E:/{index}.png")
             for judge_image in judge_images:
-                if ImageUtil.compare_image(image, judge_image) < different:
+                _different = ImageUtil.compare_image(image, judge_image)
+                if show_different:
+                    print(_different)
+                if _different < different:
                     return True
                 # 颜色反转
                 if image.shape[2] == 3:
                     reverse_image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-                    if ImageUtil.compare_image(reverse_image, judge_image) < different:
+                    _different = ImageUtil.compare_image(reverse_image, judge_image)
+                    if show_different:
+                        print(_different)
+                    if _different < different:
                         return True
         return False

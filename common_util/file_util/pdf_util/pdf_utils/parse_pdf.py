@@ -209,7 +209,26 @@ class ParsePdf:
                 continue
             words.append(Word((int(p3[0]), int(p3[1]), int(p4[0]), int(p4[1])), text))
         # 根据左上角坐标排序，从上至下，从左至右
-        return sorted(words, key=lambda x: (x.rect[1], x.rect[0]))
+        # 原本直接使用 return sorted(words, key=lambda x: (x.rect[1], x.rect[0])) 方法
+        # 但是会有一些格式浮动导致值在键的上面的情况，因此重新对排序方法进行实现，保证浮动排序
+        words_map: typing.Dict[float, typing.List[Word]] = {}
+        # 先根据y坐标对所有文字进行分组，允许往上偏差3个像素点
+        for word in words:
+            x1, y1, x2, y2 = word.rect
+            for target_y in list(words_map.keys())[::-1]:
+                if y1 - target_y > 3:
+                    continue
+                words_map[target_y].append(word)
+                break
+            else:
+                words_map[y1] = [word]
+        # 然后将每组文字根据x轴进行排序
+        for target_y in words_map:
+            words_map[target_y] = sorted(words_map[target_y], key=lambda x: x.rect[0])
+        new_words = []
+        for words in words_map.values():
+            new_words += words
+        return new_words
 
     @classmethod
     def _group_table_cells(cls, tables: typing.List[Table], cells: typing.List[Cell]):
