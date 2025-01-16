@@ -24,10 +24,13 @@ class SCRCBReceiptType01(SCRCBReceiptType):
         receipt.date = TimeUtil.format_to_str(self._get_word("^交易时间[:：](.*?)$"))  # 日期
         receipt.receipt_number = self._get_word("^电子回单号码[:：](.*?)$")  # 回单编号
         receipt.serial_number = self._get_word("^交易流水号[:：](.*?)$")  # 流水号
-        receipt.payer_account_name = self._get_word("^付款户名[:：](.*?)$")  # 付款人户名
-        receipt.payer_account_number = self._get_word("^付款账号[:：](.*?)$")  # 付款人账号
+        receipt.payer_account_name = self._get_word("^(付款户名|户名)[:：](.*?)$")  # 付款人户名
+        receipt.payer_account_number = self._get_word("^(付款账号|交易账号|扣费账号)[:：](.*?)$")  # 付款人账号
         receipt.payer_account_bank = "攀枝花农村商业银行股份有限公司"  # 付款人开户银行
+        receipt.payee_account_name = self._get_word("^对方户名[:：](.*?)$")  # 收款人户名
+        receipt.payee_account_number = self._get_word("^对方账号[:：](.*?)$")  # 收款人账号
+        receipt.payee_account_bank = "攀枝花农村商业银行股份有限公司"  # 收款人开户银行
         receipt.amount = NumberUtil.to_amount(self._get_word("^交易金额[(（]小写[)）][:：](.*?)$"))  # 金额
-        receipt.abstract = self._get_word("^业务种类[:：](.*?)$")  # 摘要
+        receipt.abstract = self._get_word("^摘要[:：](.*?)$")  # 摘要
         receipt.image = self.image  # 图片
         return receipt
