@@ -213,7 +213,7 @@ class ParsePdf:
         # 但是会有一些格式浮动导致值在键的上面的情况，因此重新对排序方法进行实现，保证浮动排序
         words_map: typing.Dict[float, typing.List[Word]] = {}
         # 先根据y坐标对所有文字进行分组，允许往上偏差3个像素点
-        for word in words:
+        for word in sorted(words, key=lambda x: x.rect[1]):
             x1, y1, x2, y2 = word.rect
             for target_y in list(words_map.keys())[::-1]:
                 if y1 - target_y > 3:
