@@ -21,8 +21,8 @@ class ICBC02Tags(Enum):
 
 class ICBC02SpecialTags(Enum):
     """工商银行 特殊表头"""
-    account_name = "户名: "
-    account_number = "账号: "
+    account_name = "户名:"
+    account_number = "账号:"
 
 
 class ICBC02StatementParser(StatementParser):
