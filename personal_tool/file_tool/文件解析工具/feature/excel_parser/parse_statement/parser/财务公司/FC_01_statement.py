@@ -21,8 +21,8 @@ class FC01Tags(Enum):
 
 class FC01SpecialTags(Enum):
     """财务公司 特殊表头"""
-    account_name = "户名"
-    account_number = "账户号"
+    account_name = "户名："
+    account_number = "账户号："
 
 
 class FC01StatementParser(StatementParser):
@@ -32,9 +32,8 @@ class FC01StatementParser(StatementParser):
 
     def parse_statement(self):
         """解析流水"""
-        account_name = self._get_special_data(FC01SpecialTags.account_name.value, relative_col=0).split("：")[-1].strip()
-        self.account_number = self._get_special_data(FC01SpecialTags.account_number.value,
-                                                     relative_col=0).split("：")[-1].strip()
+        account_name = self._get_special_data(FC01SpecialTags.account_name.value, relative_col=0)
+        self.account_number = self._get_special_data(FC01SpecialTags.account_number.value, relative_col=0)
         for data in ExcelUtil.get_data_list(self.statement_path, tag_row=self.tag_row):
             statement = Statement()
             statement.reference_number = data[FC01Tags.reference_number.value]  # 交易流水号

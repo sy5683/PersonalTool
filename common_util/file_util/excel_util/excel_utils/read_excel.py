@@ -70,5 +70,5 @@ class ParseExcel:
                 value = FormatExcelData.format_int_data(value)
             if cell.ctype == 3:  # 日期类型，需要将excel中的日期数据转换为标准日期字符串
                 value = FormatExcelData.format_date_data(value)
-            row_values.append(value)
+            row_values.append(value.strip())
         return row_values

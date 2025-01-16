@@ -42,12 +42,12 @@ class BOC01StatementParser(StatementParser):
             trade_datetime = data[BOC01Tags.trade_date.value] + data[BOC01Tags.trade_time.value]
             statement.trade_datetime = self._format_date(trade_datetime)  # 交易时间
             statement.account_number = self.account_number  # 开户账号
-            if self.account_number == data[BOC01Tags.payee_account_number.value].strip():
+            if self.account_number == data[BOC01Tags.payee_account_number.value]:
                 statement.account_name = data[BOC01Tags.payee_name.value]  # 开户名称
                 statement.reciprocal_account_name = data[BOC01Tags.payer_name.value]  # 对方账户名称
                 statement.reciprocal_account_number = data[BOC01Tags.payer_account_number.value]  # 对方账户号
                 statement.receive_amount = abs(NumberUtil.to_amount(data[BOC01Tags.trade_amount.value]))  # 收款金额
-            elif self.account_number == data[BOC01Tags.payer_account_number.value].strip():
+            elif self.account_number == data[BOC01Tags.payer_account_number.value]:
                 statement.account_name = data[BOC01Tags.payer_name.value]  # 开户名称
                 statement.reciprocal_account_name = data[BOC01Tags.payee_name.value]  # 对方账户名称
                 statement.reciprocal_account_number = data[BOC01Tags.payee_account_number.value]  # 对方账户号

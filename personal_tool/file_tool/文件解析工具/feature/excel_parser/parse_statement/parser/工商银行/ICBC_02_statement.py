@@ -33,7 +33,7 @@ class ICBC02StatementParser(StatementParser):
     def parse_statement(self):
         """解析流水"""
         account_name = self._get_special_data(ICBC02SpecialTags.account_name.value)
-        self.account_number = self._get_special_data(ICBC02SpecialTags.account_number.value).strip()
+        self.account_number = self._get_special_data(ICBC02SpecialTags.account_number.value)
         for data in ExcelUtil.get_data_list(self.statement_path, tag_row=self.tag_row):
             statement = Statement()
             statement.reference_number = ""  # 交易流水号(【工商银行】无对应交易流水号)

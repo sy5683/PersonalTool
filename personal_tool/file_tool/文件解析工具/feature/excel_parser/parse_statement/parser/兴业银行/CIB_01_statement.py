@@ -30,7 +30,6 @@ class CIB01StatementParser(StatementParser):
         """解析流水"""
         for data in ExcelUtil.get_data_list(self.statement_path, tag_row=self.tag_row):
             statement = Statement()
-            """转换规则"""
             statement.reference_number = data[CIB01Tags.reference_number.value]  # 交易流水号
             statement.trade_datetime = self._format_date(data[CIB01Tags.trade_datetime.value])  # 交易时间
             statement.account_name = data[CIB01Tags.account_name.value]  # 开户名称
