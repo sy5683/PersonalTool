@@ -64,10 +64,9 @@ class ABC01StatementParser(StatementParser):
             statement.reciprocal_account_number = data[ABC01Tags.reciprocal_account_number.value]  # 对方账户号
             # 摘要
             abstract = data.get(ABC01SpecialTags.abstract.value, "")
+            abstract = abstract if abstract else data.get(ABC01SpecialTags.purpose.value, "")
             statement.abstract = f"{reciprocal_account_name}；{abstract}" if abstract else ""
-            # 用途
-            purpose = data.get(ABC01SpecialTags.purpose.value, "")
-            statement.purpose = f"{reciprocal_account_name}；{purpose}" if purpose else ""
+            statement.purpose = ""  # 用途(【农业银行】无对应用途)
             statement.payment_amount = NumberUtil.to_amount(data[ABC01Tags.payment_amount.value])  # 付款金额
             statement.receive_amount = NumberUtil.to_amount(data[ABC01Tags.receive_amount.value])  # 收款金额
             if not statement.payment_amount and not statement.receive_amount:
