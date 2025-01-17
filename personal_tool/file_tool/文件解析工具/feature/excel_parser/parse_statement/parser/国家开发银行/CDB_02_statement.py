@@ -1,7 +1,5 @@
 from enum import Enum
 
-import xlrd
-
 from common_util.data_util.number_util.number_util import NumberUtil
 from common_util.file_util.excel_util.excel_util import ExcelUtil
 from ...entity.statement import Statement
@@ -32,9 +30,8 @@ class CDB02StatementParser(StatementParser):
         """判断是否为当前格式"""
         if self.tag_row is None:
             return False
-        # 国开行新格式与建行格式相同，这里新增一个特殊条件进行判断区分
-        workbook = xlrd.open_workbook(self.statement_path)
-        worksheet = workbook.sheet_by_name(workbook.sheet_names()[0])
+        # 国家开发银行格式与建设银行格式02相同，这里新增一个特殊条件进行判断区分
+        worksheet = self._get_worksheet()
         if "个性化信息名称1" in worksheet.row_values(self.tag_row):
             return False
         return True

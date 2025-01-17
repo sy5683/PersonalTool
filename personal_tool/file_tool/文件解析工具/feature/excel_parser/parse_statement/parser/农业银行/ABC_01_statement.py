@@ -1,7 +1,5 @@
 from enum import Enum
 
-import xlrd
-
 from common_util.data_util.number_util.number_util import NumberUtil
 from common_util.file_util.excel_util.excel_util import ExcelUtil
 from ...entity.statement import Statement
@@ -34,11 +32,24 @@ class ABC01StatementParser(StatementParser):
     def __init__(self, statement_path: str, **kwargs):
         super().__init__("农业银行", statement_path, check_tags=[tag.value for tag in ABC01Tags], **kwargs)
 
+    def judge(self) -> bool:
+        """判断是否为当前格式"""
+        if self.tag_row is None:
+            return False
+        # 农行有两个可能会只有一个的特殊表头，这里新增一个特殊条件进行判断区分
+        worksheet = self._get_worksheet()
+        tags = worksheet.row_values(self.tag_row)
+        if ABC01SpecialTags.abstract.value not in tags and ABC01SpecialTags.purpose.value not in tags:
+            return False
+        # 农业银行与四川农村商业银行格式相同，这里新增一个特殊条件进行判断区分
+        if worksheet.cell_value(0, 0) != "账户明细":
+            return False
+        return True
+
     def parse_statement(self):
         """解析流水"""
         try:
-            workbook = xlrd.open_workbook(self.statement_path)
-            worksheet = workbook.sheet_by_name(workbook.sheet_names()[0])
+            worksheet = self._get_worksheet()
             special_values = [each for each in worksheet.row_values(2) if isinstance(each, str)]
             if ABC01SpecialTags.account_name_1.value in special_values:
                 account_name = self._get_special_data(ABC01SpecialTags.account_name_1.value, relative_col=2)

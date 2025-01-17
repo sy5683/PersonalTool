@@ -49,8 +49,7 @@ class StatementParser(metaclass=abc.ABCMeta):
         获取方式一般为在指定标签单元格的右边一格获取公司名称，因此relative_col默认为1
         """
         special_data_list = []
-        workbook = xlrd.open_workbook(self.statement_path)
-        worksheet = workbook.sheet_by_name(workbook.sheet_names()[0])
+        worksheet = self._get_worksheet()
         for row in range(self.tag_row):
             row_values = worksheet.row_values(row)
             for index, value in enumerate(row_values):
@@ -67,6 +66,11 @@ class StatementParser(metaclass=abc.ABCMeta):
             raise ValueError("有多行匹配上的列: %s" % "、".join(check_tags))
         else:
             return special_data_list[0].strip()
+
+    def _get_worksheet(self):
+        """获取worksheet"""
+        workbook = xlrd.open_workbook(self.statement_path)
+        return workbook.sheet_by_name(workbook.sheet_names()[0])
 
     def __get_tag_row(self, check_tags: typing.List[str]) -> int:
         """获取表头所在行"""
