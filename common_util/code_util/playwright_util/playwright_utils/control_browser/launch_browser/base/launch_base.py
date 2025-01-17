@@ -17,3 +17,8 @@ class LaunchBase(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def get_driver(cls, playwright_config: PlaywrightConfig) -> typing.Tuple[Browser, BrowserContext, Page]:
         """获取句柄browser, context, page"""
+
+    @staticmethod
+    def set_browser_front(browser: BrowserContext):
+        """设置浏览器最前端"""
+        # TODO

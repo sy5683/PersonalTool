@@ -37,10 +37,37 @@ class LaunchChrome(LaunchBase):
             return cls._driver_map[debug_port]
 
     @classmethod
+    def _get_chrome_driver(cls, playwright_config: PlaywrightConfig) -> typing.Tuple[Browser, BrowserContext, Page]:
+        """获取谷歌浏览器句柄"""
+        # 1) 生成playwright实例对象
+        playwright = cls.__create_playwright()
+        # 2.1) 生成谷歌浏览器
+        browser = playwright.chromium.launch(
+            headless=playwright_config.headless,
+            args=[
+                "--disable-blink-features=AutomationControlled",  # 去掉webdriver痕迹
+                "--start-maximized",  # 最大化窗口启动
+            ]
+        )
+        # 2.2.1) 生成浏览器内容
+        context = browser.new_context(**playwright.devices['Desktop Chrome'])
+        # 2.2.2) 设置context进行伪装
+        cls.__set_context(context)
+        # 2.3) 生成浏览器页面
+        page = context.new_page()
+        return browser, context, page
+
+    @classmethod
     def _launch_chrome(cls, playwright_config: PlaywrightConfig) -> typing.Tuple[Browser, BrowserContext, Page]:
         """启动谷歌浏览器"""
         playwright_config.info("启动谷歌浏览器")
-        playwright = cls.__create_playwright()
+        # 1) 获取谷歌浏览器句柄
+        browser, context, page = cls._get_chrome_driver(playwright_config)
+        # 2) 设置默认加载超时时间
+        page.set_default_navigation_timeout(playwright_config.wait_seconds * 1000)
+        # 3) 启动后设置浏览器最前端
+        cls.set_browser_front(page)
+        return browser, context, page
 
     @classmethod
     def _take_over_chrome(cls, playwright_config: PlaywrightConfig) -> typing.Tuple[Browser, BrowserContext, Page]:
@@ -86,3 +113,74 @@ class LaunchChrome(LaunchBase):
                 return str(debug_port) in p.stdout.read()
         except Exception:
             return False
+
+    @staticmethod
+    def __set_context(context: BrowserContext):
+        """设置context进行伪装"""
+        # 赋予权限
+        context.grant_permissions(["geolocation", "camera", "microphone", "notifications"])
+        # webdriver
+        context.add_init_script("""
+                // 修改 Array.prototype.filter，让它自动过滤掉 "webdriver"
+                const originalFilter = Array.prototype.filter;
+                Array.prototype.filter = function(callback, thisArg) {
+                    return originalFilter.call(this, function(item, index, array) {
+                        // 如果元素是 "webdriver"，则忽略它
+                        if (item === "webdriver") {
+                            return false;  // 过滤掉 "webdriver"
+                        }
+                        return callback.call(thisArg, item, index, array);
+                    });
+                };
+            """)
+        # 注入 JavaScript 修改 navigator.plugins
+        context.add_init_script("""
+                Object.defineProperty(navigator, 'plugins', {
+                    get: () => [
+                        {
+                            0: {type: "application/x-google-chrome-pdf", suffixes: "pdf", description: "Portable Document Format", enabledPlugin: Plugin},
+                            description: "Portable Document Format",
+                            filename: "internal-pdf-viewer",
+                            length: 1,
+                            name: "Chrome PDF Plugin"
+                        },
+                        {
+                            0: {type: "application/pdf", suffixes: "pdf", description: "", enabledPlugin: Plugin},
+                            description: "",
+                            filename: "mhjfbmdgcfjbbpaeojofohoefgiehjai",
+                            length: 1,
+                            name: "Chrome PDF Viewer"
+                        },
+                        {
+                            0: {type: "application/x-nacl", suffixes: "", description: "Native Client Executable", enabledPlugin: Plugin},
+                            1: {type: "application/x-pnacl", suffixes: "", description: "Portable Native Client Executable", enabledPlugin: Plugin},
+                            description: "",
+                            filename: "internal-nacl-plugin",
+                            length: 2,
+                            name: "Native Client"
+                        }
+                    ],
+                });
+            """)
+        context.add_init_script("""
+                    window.navigator.chrome = {
+                        runtime: {},
+                        loadTimes: function() {},
+                        csi: function() {},
+                        app: {}
+                    };
+                """)
+        context.add_init_script("""
+                    // 重写 WebGLRenderingContext 的 getParameter 方法
+                    const getParameter = WebGLRenderingContext.prototype.getParameter;
+                    WebGLRenderingContext.prototype.getParameter = function (parameter) {
+                        // 模拟特定的 WebGL 渲染器和供应商信息
+                        if (parameter === 37445) {  // UNMASKED_VENDOR_WEBGL
+                            return "NVIDIA Corporation";
+                        }
+                        if (parameter === 37446) {  // UNMASKED_RENDERER_WEBGL
+                            return "ANGLE (NVIDIA, NVIDIA GeForce GTX 1080 Ti (0x00001B06) Direct3D11 vs_5_0 ps_5_0, D3D11)";
+                        }
+                        return getParameter.call(this, parameter);
+                    };
+                """)
