@@ -32,7 +32,7 @@ class CDB02StatementParser(StatementParser):
         """判断是否为当前格式"""
         if self.tag_row is None:
             return False
-        # 国开行新格式与建行格式相同，这里选一个特殊列进行判断区分
+        # 国开行新格式与建行格式相同，这里新增一个特殊条件进行判断区分
         workbook = xlrd.open_workbook(self.statement_path)
         worksheet = workbook.sheet_by_name(workbook.sheet_names()[0])
         if "个性化信息名称1" in worksheet.row_values(self.tag_row):
