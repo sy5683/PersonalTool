@@ -10,6 +10,7 @@ class ICBC03Tags(Enum):
     """工商银行 表头"""
     # 【工商银行】无对应【交易流水号】
     trade_datetime = "交易时间"
+    # 【工商银行】无对应【开户名称】
     account_number = "本方账号"
     reciprocal_account_name = "对方单位"
     reciprocal_account_number = "对方账号"
@@ -28,15 +29,14 @@ class ICBC03StatementParser(StatementParser):
 
     def parse_statement(self):
         """解析流水"""
-        assert self.company_name, "工行流水需要传入公司名称作为开户名称"
+        assert self.company_name, "工商银行流水需要传入公司名称作为开户名称"
         for data in ExcelUtil.get_data_list(self.statement_path, tag_row=self.tag_row):
             statement = Statement()
             statement.reference_number = ""  # 交易流水号(【工商银行】无对应交易流水号)
             statement.trade_datetime = self._format_date(data[ICBC03Tags.trade_datetime.value])  # 交易时间
-            # 工行下载时有异常情况，下载时选项没有开户名称，因此工行的开户名称通过表单参数传递
+            # 工商银行下载时有异常情况，下载时选项没有开户名称，因此工商银行的开户名称通过表单参数传递
             statement.account_name = self.company_name  # 开户名称
-            statement.account_number = data[ICBC03Tags.account_number.value]  # 开户账号
-            self.account_number = statement.account_number
+            self.account_number = statement.account_number = data[ICBC03Tags.account_number.value]  # 开户账号
             statement.reciprocal_account_name = data[ICBC03Tags.reciprocal_account_name.value]  # 对方账户名称
             statement.reciprocal_account_number = data[ICBC03Tags.reciprocal_account_number.value]  # 对方账户号
             statement.abstract = f"{data[ICBC03Tags.abstract.value]}；{data[ICBC03Tags.remark.value]}".strip("；")  # 摘要

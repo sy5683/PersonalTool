@@ -40,8 +40,7 @@ class HXB01StatementParser(StatementParser):
             statement.trade_datetime = self._format_date(data[HXB01Tags.trade_datetime.value])  # 交易时间
             statement.account_name = account_name  # 开户名称
             statement.account_number = self.account_number  # 开户账号
-            reciprocal_account_name = data[HXB01Tags.reciprocal_account_name.value]
-            statement.reciprocal_account_name = reciprocal_account_name  # 对方账户名称
+            statement.reciprocal_account_name = data[HXB01Tags.reciprocal_account_name.value]  # 对方账户名称
             statement.reciprocal_account_number = data[HXB01Tags.reciprocal_account_number.value]  # 对方账户号
             statement.abstract = data[HXB01Tags.abstract.value]  # 摘要
             statement.purpose = data[HXB01Tags.purpose.value]  # 用途

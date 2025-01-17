@@ -59,13 +59,12 @@ class ABC01StatementParser(StatementParser):
             statement.trade_datetime = self._format_date(data[ABC01Tags.trade_datetime.value])  # 交易时间
             statement.account_name = account_name  # 开户名称
             statement.account_number = self.account_number  # 开户账号
-            reciprocal_account_name = data[ABC01Tags.reciprocal_account_name.value]
-            statement.reciprocal_account_name = reciprocal_account_name  # 对方账户名称
+            statement.reciprocal_account_name = data[ABC01Tags.reciprocal_account_name.value]  # 对方账户名称
             statement.reciprocal_account_number = data[ABC01Tags.reciprocal_account_number.value]  # 对方账户号
             # 摘要
             abstract = data.get(ABC01SpecialTags.abstract.value, "")
             abstract = abstract if abstract else data.get(ABC01SpecialTags.purpose.value, "")
-            statement.abstract = f"{reciprocal_account_name}；{abstract}" if abstract else ""
+            statement.abstract = f"{statement.reciprocal_account_name}；{abstract}" if abstract else ""
             statement.purpose = ""  # 用途(【农业银行】无对应用途)
             statement.payment_amount = NumberUtil.to_amount(data[ABC01Tags.payment_amount.value])  # 付款金额
             statement.receive_amount = NumberUtil.to_amount(data[ABC01Tags.receive_amount.value])  # 收款金额

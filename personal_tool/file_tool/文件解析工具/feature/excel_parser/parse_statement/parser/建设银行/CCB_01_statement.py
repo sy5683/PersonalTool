@@ -39,8 +39,7 @@ class CCB01StatementParser(StatementParser):
             statement.reference_number = data[CCB01Tags.reference_number.value]  # 交易流水号
             statement.trade_datetime = self._format_date(data[CCB01Tags.trade_datetime.value])  # 交易时间
             statement.account_name = data[CCB01Tags.account_name.value]  # 开户名称
-            statement.account_number = data[CCB01Tags.account_number.value]  # 开户账号
-            self.account_number = statement.account_number
+            self.account_number = statement.account_number = data[CCB01Tags.account_number.value]  # 开户账号
             statement.reciprocal_account_name = data[CCB01Tags.reciprocal_account_name.value]  # 对方账户名称
             statement.reciprocal_account_number = data[CCB01Tags.reciprocal_account_number.value]  # 对方账户号
             statement.abstract = data[CCB01Tags.remark.value]  # 摘要
