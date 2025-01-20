@@ -27,12 +27,12 @@ class LaunchChrome(LaunchBase):
             driver = cls._driver_map.get(debug_port if debug_port else threading.current_thread().ident)
         if driver is None:
             return
-        # 2) 使用selenium自带的quit方法关闭driver
+        # 2.1) 使用selenium自带的quit方法关闭driver
         driver.quit()
         time.sleep(1)  # 等待一秒，确认等待操作执行完成
-        # 3) 因为经常出现quit之后cmd窗口未关的情况，因此这里使用命令行直接关闭进程
+        # 2.2) 因为经常出现quit之后cmd窗口未关的情况，因此这里使用命令行直接关闭进程
         cls._close_browser_by_cmd(selenium_config)
-        # 4) 清除缓存
+        # 3) 清除缓存
         selenium_config.driver = None
         for key, _driver in list(cls._driver_map.items()):
             if driver == _driver:

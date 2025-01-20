@@ -12,6 +12,7 @@ openpyxl
 oracledb
 paramiko
 pillow
+playwright
 psutil
 py7zr
 PyAutoGUI

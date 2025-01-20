@@ -1,5 +1,6 @@
 import subprocess
 import threading
+import time
 import typing
 
 from playwright.sync_api import *
@@ -9,12 +10,29 @@ from ...entity.playwright_config import PlaywrightConfig
 
 
 class LaunchChrome(LaunchBase):
-    _playwright = None
+    _playwright: typing.Union[Playwright, None] = None
     _driver_map: typing.Dict[int, typing.Tuple[Browser, BrowserContext, Page]] = {}
 
     @classmethod
     def close_browser(cls, playwright_config: PlaywrightConfig):
         """关闭浏览器"""
+        # 1) 确认参数、缓存中的driver是否存在，不存在则返回
+        browser = playwright_config.browser
+        if browser is None:
+            debug_port = cls.__get_debug_port(playwright_config)
+            browser, context, page = cls._driver_map.get(debug_port if debug_port else threading.current_thread().ident)
+        if browser is None:
+            return
+        # 2) 使用playwright自带的close方法关闭browser
+        browser.close()
+        time.sleep(1)  # 等待一秒，确认等待操作执行完成
+        # 3) 清除缓存
+        playwright_config.driver = None
+        for key, (_browser, _context, _page) in list(cls._driver_map.items()):
+            if browser == _browser:
+                del cls._driver_map[key]
+        cls._playwright.stop()
+        cls._playwright = None
 
     @classmethod
     def get_driver(cls, playwright_config: PlaywrightConfig) -> typing.Tuple[Browser, BrowserContext, Page]:
@@ -37,8 +55,9 @@ class LaunchChrome(LaunchBase):
             return cls._driver_map[debug_port]
 
     @classmethod
-    def _get_chrome_driver(cls, playwright_config: PlaywrightConfig) -> typing.Tuple[Browser, BrowserContext, Page]:
-        """获取谷歌浏览器句柄"""
+    def _launch_chrome(cls, playwright_config: PlaywrightConfig) -> typing.Tuple[Browser, BrowserContext, Page]:
+        """启动谷歌浏览器"""
+        playwright_config.info("启动谷歌浏览器")
         # 1) 生成playwright实例对象
         playwright = cls.__create_playwright()
         # 2.1) 生成谷歌浏览器
@@ -55,17 +74,9 @@ class LaunchChrome(LaunchBase):
         cls.__set_context(context)
         # 2.3) 生成浏览器页面
         page = context.new_page()
-        return browser, context, page
-
-    @classmethod
-    def _launch_chrome(cls, playwright_config: PlaywrightConfig) -> typing.Tuple[Browser, BrowserContext, Page]:
-        """启动谷歌浏览器"""
-        playwright_config.info("启动谷歌浏览器")
-        # 1) 获取谷歌浏览器句柄
-        browser, context, page = cls._get_chrome_driver(playwright_config)
-        # 2) 设置默认加载超时时间
+        # 3.1) 设置默认加载超时时间
         page.set_default_navigation_timeout(playwright_config.wait_seconds * 1000)
-        # 3) 启动后设置浏览器最前端
+        # 3.2) 启动后设置浏览器最前端
         cls.set_browser_front(page)
         return browser, context, page
 
@@ -75,7 +86,20 @@ class LaunchChrome(LaunchBase):
         debug_port = cls.__get_debug_port(playwright_config)
         assert cls.__netstat_debug_port_running(debug_port), f"当前端口并未启动，无法接管谷歌浏览器: {debug_port}"
         playwright_config.info(f"接管已debug运行的谷歌浏览器，端口: {debug_port}")
+        # 1) 生成playwright实例对象
         playwright = cls.__create_playwright()
+        # 2) 接管谷歌浏览器
+        browser = playwright.chromium.connect_over_cdp(f"http://localhost:{debug_port}")
+        context = browser.contexts[-1]
+        page = context.pages[-1]
+        # 3.1) 设置默认加载超时时间
+        page.set_default_navigation_timeout(playwright_config.wait_seconds * 1000)
+        # 3.2) 启动后设置浏览器最前端
+        cls.set_browser_front(page)
+        # 4) 接管切换浏览器页签至最后一个
+        page.bring_to_front()  # 激活当前窗口
+        time.sleep(0.5)  # 接管切换浏览器之后必须强制等待一会，否则会出现操作无效的问题
+        return browser, context, page
 
     @classmethod
     def __create_playwright(cls) -> Playwright:
