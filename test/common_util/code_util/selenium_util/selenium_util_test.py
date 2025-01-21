@@ -27,7 +27,7 @@ class SeleniumUtilTestCase(TestBase):
         SeleniumUtil.find(SeleniumConfig(xpath='./ancestor::div[@id="lg"]', element=element))  # 查找父级元素
 
     def test_launch_chrome_debug(self):
-        SeleniumUtil.launch_chrome_debug(self.debug_port), None
+        SeleniumUtil.launch_chrome_debug(self.debug_port)
 
     def test_open_url(self):
         SeleniumUtil.open_url(SeleniumConfig(), self.url)
