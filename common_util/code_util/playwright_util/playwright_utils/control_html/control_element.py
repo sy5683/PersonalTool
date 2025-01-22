@@ -30,6 +30,16 @@ class ControlElement:
                 raise Exception("点击失败")
 
     @classmethod
+    def exist(cls, playwright_config: PlaywrightConfig) -> bool:
+        """查找元素是否存在"""
+        try:
+            locator = cls.find(playwright_config)
+            assert [locator.text_content()] is not None  # 这一行是为了检测入参为WebElement的元素
+        except (AssertionError, ):
+            return False
+        return True
+
+    @classmethod
     def find(cls, playwright_config: PlaywrightConfig) -> Locator:
         """查找元素"""
         # 当存在xpath的情况下，优先定位xpath对应的元素
@@ -58,6 +68,68 @@ class ControlElement:
     @classmethod
     def input(cls, playwright_config: PlaywrightConfig, value: str):
         """输入"""
+        # playwright框架定位有问题，暂不支持action操作
+        locator = cls.find(playwright_config)
+        playwright_config.info("输入元素: %s" % ("*" * len(value) if cls.__check_is_password(locator) else value))
+        for _ in range(3):
+            # 先清空元素内容
+            cls._clear_locator(locator)
+            # 模拟全选
+            locator.press("Control+A")
+            time.sleep(0.2)
+            # 输入元素
+            locator.fill(value)
+            # 密码无需判断输入结果
+            if cls.__check_is_password(locator):
+                break
+            # 某些特殊情况无需判断输入结果: 日期格式化、金额会计格式化等
+            if not playwright_config.check_input:
+                break
+            # 判断输入结果是否正确
+            locator_value = locator.get_attribute("value")
+            if locator_value == value:
+                break
+            playwright_config.info(f"重新输入，元素的值为: {locator_value}")
+        else:
+            raise RuntimeError(f"元素输入失败: {value}")
+
+    @classmethod
+    def wait_disappear(cls, playwright_config: PlaywrightConfig) -> bool:
+        """
+        等待元素消失
+        需要注意的是，检测元素消失的前提是这个元素已经出现
+        使用时需要注意，不要在做完上一个操作之后立马调用这个方法，不然可能会出现【要检测消失的元素还未出现，这个方法就已经判断该元素已消失】
+        在使用时需要根据具体情况在前面加一定时间的强制等待
+        """
+        wait_seconds = playwright_config.wait_seconds
+        playwright_config.wait_seconds = 1
+        for _ in range(wait_seconds):
+            time.sleep(1)  # 等待元素加载
+            if not cls.exist(playwright_config):
+                return True
+        return False
+
+    @staticmethod
+    def _clear_locator(locator: Locator):
+        """清空元素"""
+        # 先点击定位
+        locator.click()
+        pass  # 元素可能无法点击
+        time.sleep(0.2)
+        # 使用playwright自带的clear方法
+        locator.clear()
+        pass  # 元素可能无法清空
+        time.sleep(0.2)
+        # 有时候有输入框 locator.clear() 方法无效，因此再使用手动清空方式
+        for _ in range(len(locator.get_attribute("value"))):
+            locator.press("ArrowRight")
+            locator.press("Backspace")
+            time.sleep(0.1)
+
+    @staticmethod
+    def __check_is_password(locator: Locator) -> bool:
+        """判断元素是否为密码类"""
+        return locator.get_attribute("type") == "password"
 
     @classmethod
     def __finds(cls, playwright_config: PlaywrightConfig) -> typing.List[Locator]:

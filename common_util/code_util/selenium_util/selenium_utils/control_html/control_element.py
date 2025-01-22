@@ -89,7 +89,7 @@ class ControlElement:
         else:
             selenium_config.info("输入元素: %s" % ("*" * len(value) if cls.__check_is_password(element) else value))
             for _ in range(3):
-                # 先点击元素定位
+                # 先清空元素内容
                 cls._clear_element(element)
                 # 模拟全选
                 element.send_keys(Keys.CONTROL, "a")
@@ -141,7 +141,7 @@ class ControlElement:
     @staticmethod
     def _clear_element(element: WebElement):
         """清空元素"""
-        # 先点击再删除
+        # 先点击定位
         try:
             element.click()
         except (common.exceptions.ElementClickInterceptedException, common.exceptions.ElementNotInteractableException):
