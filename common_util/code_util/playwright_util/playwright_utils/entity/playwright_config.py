@@ -15,6 +15,7 @@ class PlaywrightConfig:
                  check_input: bool = True,
                  context: BrowserContext = None,
                  debug_port: int = None,
+                 delay_seconds: int = 0,
                  headless: bool = False,
                  locator: Locator = None,
                  logger: typing.Union[logging.Logger, None] = logging.getLogger(),
@@ -28,6 +29,7 @@ class PlaywrightConfig:
         self.check_input = check_input  # 检测输入内容是否正确
         self.context = context  # playwright运行的context对象
         self.debug_port = debug_port  # debug端口，用于接管浏览器
+        self.delay_seconds = delay_seconds  # 演示时间，默认为0不等待
         self.headless = headless  # 是否无头启动浏览器，默认为否
         self.locator = locator  # 目标元素，当有xpath时这个元素用于相对检测
         self.logger = logger  # 日志对象

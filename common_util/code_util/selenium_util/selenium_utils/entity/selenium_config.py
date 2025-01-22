@@ -16,6 +16,7 @@ class SeleniumConfig:
                  check_input: bool = True,
                  close_task: bool = True,
                  debug_port: int = None,
+                 delay_seconds: int = 0,
                  download_path: typing.Union[str, Path] = 'E:/Download',
                  driver: WebDriver = None,
                  driver_path: typing.Union[str, Path] = None,
@@ -33,6 +34,7 @@ class SeleniumConfig:
         self.check_input = check_input  # 检测输入内容是否正确
         self.close_task = close_task  # 是否关闭浏览器cmd窗口
         self.debug_port = debug_port  # debug端口，用于接管浏览器
+        self.delay_seconds = delay_seconds  # 演示时间，默认为0不等待
         self.download_path: str = str(download_path) if download_path else download_path  # 浏览器下载路径
         self.driver = driver  # selenium运行的driver对象
         self.driver_path: str = str(driver_path) if driver_path else driver_path  # driver路径

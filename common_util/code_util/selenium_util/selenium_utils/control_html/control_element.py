@@ -170,6 +170,7 @@ class ControlElement:
         if not selenium_config.xpath:
             raise ValueError("查找元素方法必须传入xpath")
         driver = cls.__get_driver(selenium_config) if selenium_config.element is None else selenium_config.element
+        time.sleep(selenium_config.delay_seconds)
         # 注！查询间隔为一秒时，这个方法无法检测等待时间为1秒的元素（检测次数为1，即即时检测，而不是预计的等待一秒后报错，因此这里将间隔时间修改为0.3s）
         return WebDriverWait(driver, selenium_config.wait_seconds, 0.3).until(find_method)
 

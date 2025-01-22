@@ -1,3 +1,4 @@
+import time
 import typing
 
 from playwright.sync_api import *
@@ -58,13 +59,13 @@ class ControlElement:
     def input(cls, playwright_config: PlaywrightConfig, value: str):
         """输入"""
 
-
     @classmethod
     def __finds(cls, playwright_config: PlaywrightConfig) -> typing.List[Locator]:
         """查找元素列表"""
         if not playwright_config.xpath:
             raise ValueError("查找元素方法必须传入xpath")
         page = cls.__get_page(playwright_config) if playwright_config.locator is None else playwright_config.locator
+        time.sleep(playwright_config.delay_seconds)
         # 注: playwright并没有显性等待和隐性等待的区别，其拥有的自动等待功能类似于隐性等待，默认为30s
         return page.locator(playwright_config.xpath).all()
 
