@@ -17,7 +17,7 @@ class ControlBrowser:
 
     @classmethod
     def get_driver(cls, playwright_config: PlaywrightConfig) -> typing.Tuple[Browser, BrowserContext, Page]:
-        """获取driver"""
+        """获取句柄browser, context, page"""
         return cls._get_launch_class(playwright_config.browser_type).get_driver(playwright_config)
 
     @staticmethod

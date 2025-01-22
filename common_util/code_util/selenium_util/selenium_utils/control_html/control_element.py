@@ -164,13 +164,6 @@ class ControlElement:
         """判断元素是否为密码类"""
         return element.get_attribute("type") == "password"
 
-    @staticmethod
-    def __get_driver(selenium_config: SeleniumConfig) -> WebDriver:
-        """根据参数获取WebDriver"""
-        if selenium_config.driver is None:
-            selenium_config.driver = ControlBrowser.get_driver(selenium_config)
-        return selenium_config.driver
-
     @classmethod
     def __find(cls, selenium_config: SeleniumConfig, find_method) -> typing.Union[WebElement, typing.List[WebElement]]:
         """显性等待查找元素"""
@@ -179,3 +172,10 @@ class ControlElement:
         driver = cls.__get_driver(selenium_config) if selenium_config.element is None else selenium_config.element
         # 注！查询间隔为一秒时，这个方法无法检测等待时间为1秒的元素（检测次数为1，即即时检测，而不是预计的等待一秒后报错，因此这里将间隔时间修改为0.3s）
         return WebDriverWait(driver, selenium_config.wait_seconds, 0.3).until(find_method)
+
+    @staticmethod
+    def __get_driver(selenium_config: SeleniumConfig) -> WebDriver:
+        """根据参数获取WebDriver"""
+        if selenium_config.driver is None:
+            selenium_config.driver = ControlBrowser.get_driver(selenium_config)
+        return selenium_config.driver

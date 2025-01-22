@@ -24,9 +24,11 @@ class ControlDriver:
         """打开url"""
         for _ in range(3):
             try:
-                return ControlBrowser.get_driver(selenium_config).get(url)
+                ControlBrowser.get_driver(selenium_config).get(url)
+                break
             except OSError:  # selenium驱动升级会导致driver失效，会报错OSError
                 selenium_config.info("selenium启动异常，重新启动")
+                time.sleep(1)
 
     @staticmethod
     def refresh(selenium_config: SeleniumConfig):

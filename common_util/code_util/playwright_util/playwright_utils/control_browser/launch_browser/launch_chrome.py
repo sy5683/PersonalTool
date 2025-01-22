@@ -69,7 +69,7 @@ class LaunchChrome(LaunchBase):
             ]
         )
         # 2.2.1) 生成浏览器内容
-        context = browser.new_context(**playwright.devices['Desktop Chrome'])
+        context = browser.new_context(no_viewport=True, **playwright.devices['Desktop Chrome'])
         # 2.2.2) 设置context进行伪装
         cls.__set_context(context)
         # 2.3) 生成浏览器页面

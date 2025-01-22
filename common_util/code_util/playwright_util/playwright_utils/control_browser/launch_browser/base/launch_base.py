@@ -21,5 +21,4 @@ class LaunchBase(metaclass=abc.ABCMeta):
     @staticmethod
     def set_browser_front(page: Page):
         """设置浏览器最前端"""
-        # page.set_viewport_size({'width': 1920, 'height': 1080})
-        pass  # TODO 方法待实现
+        pass  # TODO 暂未找到设置浏览器最前端的方法
