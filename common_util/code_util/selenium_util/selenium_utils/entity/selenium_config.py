@@ -1,7 +1,7 @@
 import logging
 import typing
-
 from pathlib import Path
+
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 

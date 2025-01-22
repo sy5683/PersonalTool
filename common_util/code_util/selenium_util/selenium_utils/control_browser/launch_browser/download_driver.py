@@ -40,7 +40,7 @@ class DownloadDriver:
             return os.path.join(os.path.dirname(ChromeDriverManager().install()), driver_name)
         except ConnectionError:
             logging.warning(f"webdriver_manager下载谷歌浏览器驱动失败: {traceback.format_exc()}")
-        raise Exception("谷歌浏览器驱动下载失败")
+        raise ConnectionError("谷歌浏览器驱动下载失败")
 
     @classmethod
     def get_edge_driver_path(cls) -> str:

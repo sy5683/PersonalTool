@@ -43,7 +43,7 @@ class ControlElement:
         try:
             element = cls.find(selenium_config)
             assert [element.text] is not None  # 这一行是为了检测入参为WebElement的元素
-        except (common.exceptions.ElementNotInteractableException, common.exceptions.TimeoutException):
+        except (AssertionError, common.exceptions.ElementNotInteractableException, common.exceptions.TimeoutException):
             return False
         return True
 
@@ -119,7 +119,7 @@ class ControlElement:
         else:
             try:
                 select.select_by_visible_text(value)  # 根据可见文本选择下拉选项
-            except common.NoSuchElementException:
+            except common.exceptions.NoSuchElementException:
                 select.select_by_value(value)  # 根据值选择下拉选项
 
     @classmethod
@@ -133,7 +133,7 @@ class ControlElement:
         wait_seconds = selenium_config.wait_seconds
         selenium_config.wait_seconds = 1
         for _ in range(wait_seconds):
-            time.sleep(1)
+            time.sleep(1)  # 等待元素加载
             if not cls.exist(selenium_config):
                 return True
         return False
@@ -150,7 +150,7 @@ class ControlElement:
         # 使用selenium自带的clear方法
         try:
             element.clear()
-        except common.InvalidElementStateException:
+        except common.exceptions.InvalidElementStateException:
             pass  # 元素可能无法清空
         time.sleep(0.2)
         # 有时候有输入框 element.clear() 方法无效，因此再使用手动清空方式

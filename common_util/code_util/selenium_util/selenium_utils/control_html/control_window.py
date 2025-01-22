@@ -52,7 +52,7 @@ class ControlWindow:
         driver = ControlBrowser.get_driver(selenium_config)
         try:
             return driver.title
-        except common.UnexpectedAlertPresentException:
+        except common.exceptions.UnexpectedAlertPresentException:
             cls.confirm_alert(selenium_config)
             return driver.title
 
@@ -82,7 +82,7 @@ class ControlWindow:
                 selenium_config.info("指定的窗口数量为空，重新查询")
             else:
                 driver.switch_to.window(target_handles[-1])
-                raise RuntimeWarning(f"出现多个包含 {window_title} 的目标窗口")
+                raise common.exceptions.NoSuchWindowException(f"出现多个包含 {window_title} 的目标窗口")
         else:
             driver.switch_to.window(driver.window_handles[-1])  # 切换至最新窗口
             raise common.exceptions.NoSuchWindowException(f"未找到目标窗口: {window_title}")
