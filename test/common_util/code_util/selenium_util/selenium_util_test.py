@@ -14,12 +14,15 @@ class SeleniumUtilTestCase(TestBase):
         self.title = "百度一下"
         self.debug_port = 9222
 
-    def test_close_other_window(self):
-        SeleniumUtil.close_other_window(SeleniumConfig(), self.title)  # 关闭其他页签
+    def test_(self):
+        """"""
 
     def test_click(self):
         # SeleniumUtil.click(SeleniumConfig(xpath=self.xpath))  # 模拟点击，默认使用js点击
         SeleniumUtil.click(SeleniumConfig(xpath=self.xpath, operate_type=OperateType.selenium))  # 使用selenium的点击方法
+
+    def test_close_other_window(self):
+        SeleniumUtil.close_other_window(SeleniumConfig(), self.title)  # 关闭其他页签
 
     def test_find(self):
         element = SeleniumUtil.find(SeleniumConfig(xpath=self.xpath))  # 查找元素

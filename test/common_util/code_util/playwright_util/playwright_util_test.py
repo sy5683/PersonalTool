@@ -12,9 +12,15 @@ class PlaywrightUtilTestCase(TestBase):
         self.title = "百度一下"
         self.debug_port = 9222
 
+    def test_(self):
+        """"""
+
     def test_click(self):
         PlaywrightUtil.click(PlaywrightConfig(xpath=self.xpath))  # 模拟点击，默认使用js点击
         # PlaywrightUtil.click(PlaywrightConfig(xpath=self.xpath, operate_type=OperateType.selenium))  # 使用selenium的点击方法
+
+    def test_close_other_window(self):
+        PlaywrightUtil.close_other_window(PlaywrightConfig(), self.title)
 
     def test_find(self):
         locator = PlaywrightUtil.find(PlaywrightConfig(xpath=self.xpath))  # 查找元素
@@ -28,3 +34,6 @@ class PlaywrightUtilTestCase(TestBase):
         PlaywrightUtil.open_url(PlaywrightConfig(), self.url)
         # # 接管debug浏览器打开url
         # PlaywrightUtil.open_url(PlaywrightConfig(debug_port=self.debug_port), self.url)
+
+    def test_switch_window(self):
+        PlaywrightUtil.switch_window(PlaywrightConfig(), self.title)

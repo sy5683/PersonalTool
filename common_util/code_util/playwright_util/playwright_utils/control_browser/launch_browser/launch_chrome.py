@@ -55,6 +55,17 @@ class LaunchChrome(LaunchBase):
             return cls._driver_map[debug_port]
 
     @classmethod
+    def update_driver(cls, playwright_config: PlaywrightConfig, context: BrowserContext = None, page: Page = None):
+        """更新句柄，主要是context, page"""
+        context = context if context else playwright_config.context
+        page = page if page else playwright_config.page
+        debug_port = cls.__get_debug_port(playwright_config)
+        if debug_port is None:
+            cls._driver_map[threading.current_thread().ident] = playwright_config.browser, context, page
+        else:
+            cls._driver_map[debug_port] = playwright_config.browser, context, page
+
+    @classmethod
     def _launch_chrome(cls, playwright_config: PlaywrightConfig) -> typing.Tuple[Browser, BrowserContext, Page]:
         """启动谷歌浏览器"""
         playwright_config.info("启动谷歌浏览器")

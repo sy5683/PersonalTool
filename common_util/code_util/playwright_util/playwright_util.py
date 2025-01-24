@@ -5,6 +5,7 @@ from playwright.sync_api import *
 from .playwright_utils.control_browser.control_browser import ControlBrowser
 from .playwright_utils.control_html.control_driver import ControlDriver
 from .playwright_utils.control_html.control_element import ControlElement
+from .playwright_utils.control_html.control_window import ControlWindow
 from .playwright_utils.entity.playwright_config import PlaywrightConfig
 
 
@@ -14,6 +15,11 @@ class PlaywrightUtil:
     def click(playwright_config: PlaywrightConfig):
         """模拟点击"""
         ControlElement.click(playwright_config)
+
+    @staticmethod
+    def close_other_window(playwright_config: PlaywrightConfig, *window_titles: str):
+        """关闭其他窗口"""
+        ControlWindow.close_other_window(playwright_config, *window_titles)
 
     @staticmethod
     def find(playwright_config: PlaywrightConfig) -> Locator:
@@ -49,3 +55,8 @@ class PlaywrightUtil:
     def refresh(playwright_config: PlaywrightConfig):
         """刷新"""
         ControlDriver.refresh(playwright_config)
+
+    @staticmethod
+    def switch_window(playwright_config: PlaywrightConfig, window_title: str):
+        """切换窗口"""
+        ControlWindow.switch_window(playwright_config, window_title)

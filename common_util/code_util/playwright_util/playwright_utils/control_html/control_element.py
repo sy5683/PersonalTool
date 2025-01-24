@@ -1,3 +1,4 @@
+import re
 import time
 import typing
 
@@ -35,7 +36,7 @@ class ControlElement:
         try:
             locator = cls.find(playwright_config)
             assert [locator.text_content()] is not None  # 这一行是为了检测入参为WebElement的元素
-        except (AssertionError, ):
+        except (AssertionError,):
             return False
         return True
 
@@ -46,9 +47,7 @@ class ControlElement:
         if playwright_config.xpath:
             playwright_config.info(f"查找元素: {playwright_config.xpath}")
             # 当有多个元素时，直接调用点击方法时会报错，因此最好先使用finds方法获取全部元素，再返回第一个
-            playwright_config.logger = None
-            locators = cls.finds(playwright_config)
-            return locators[0]
+            return cls.finds(playwright_config)[0]
         # 当xpath不存在的情况下，返回参数中的locator，如果也为空，则需要报错
         if playwright_config.locator is None:
             raise AttributeError("参数中的xpath与locator均为空，无法定位元素")
@@ -63,7 +62,11 @@ class ControlElement:
     @classmethod
     def get_attribute(cls, playwright_config: PlaywrightConfig, attribute_type: str) -> str:
         """获取元素内容"""
-        return cls.find(playwright_config).get_attribute(attribute_type)
+        locator = cls.find(playwright_config)
+        if attribute_type == "innerText":
+            return locator.inner_text()
+        else:
+            return locator.get_attribute(attribute_type)
 
     @classmethod
     def input(cls, playwright_config: PlaywrightConfig, value: str):
@@ -86,7 +89,7 @@ class ControlElement:
             if not playwright_config.check_input:
                 break
             # 判断输入结果是否正确
-            locator_value = locator.get_attribute("value")
+            locator_value = locator.input_value()
             if locator_value == value:
                 break
             playwright_config.info(f"重新输入，元素的值为: {locator_value}")
@@ -114,7 +117,7 @@ class ControlElement:
         """清空元素"""
         # 先点击定位
         locator.click()
-        pass  # 元素可能无法点击
+        pass  # 元素可能无法点击  TODO
         time.sleep(0.2)
         # 使用playwright自带的clear方法
         locator.clear()
@@ -138,8 +141,17 @@ class ControlElement:
             raise ValueError("查找元素方法必须传入xpath")
         page = cls.__get_page(playwright_config) if playwright_config.locator is None else playwright_config.locator
         time.sleep(playwright_config.delay_seconds)
-        # 注: playwright并没有显性等待和隐性等待的区别，其拥有的自动等待功能类似于隐性等待，默认为30s
-        return page.locator(playwright_config.xpath).all()
+        # playwright中没有类似selenium的显性等待与隐性等待，因此这里模拟实现一个
+        for _ in range(playwright_config.wait_seconds):
+            if re.search("//iframe\[", playwright_config.xpath):
+                locators = [page.frame_locator(playwright_config.xpath)]
+            else:
+                locators = page.locator(playwright_config.xpath).all()
+            # locator.all()方法在未查到元素时不会报错，而是返回一个空列表出去
+            if locators:
+                return locators
+            time.sleep(1)
+        raise AttributeError(f"未找到指定元素: {playwright_config.xpath}")
 
     @staticmethod
     def __get_page(playwright_config: PlaywrightConfig) -> Page:

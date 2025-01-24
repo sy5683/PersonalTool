@@ -19,8 +19,8 @@ class ControlIframe:
             driver.switch_to.parent_frame()
         # 根据xpath或element切换至指定iframe
         else:
+            selenium_config.info(f"切换至指定iframe: {selenium_config.xpath}")
             try:
-                selenium_config.info(f"切换至指定iframe: {selenium_config.xpath}")
                 driver.switch_to.frame(ControlElement.find(selenium_config))
             except (AttributeError, common.exceptions.NoSuchWindowException):
                 # 没有需要定位的iframe且xpath为空时，切换至默认iframe

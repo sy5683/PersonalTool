@@ -1,6 +1,6 @@
 import typing
-
 from pathlib import Path
+
 from selenium.webdriver import ActionChains
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
@@ -23,9 +23,9 @@ class SeleniumUtil:
         ControlElement.click(selenium_config)
 
     @staticmethod
-    def close_other_window(selenium_config: SeleniumConfig, window_titles: typing.Union[str, typing.List[str]]):
+    def close_other_window(selenium_config: SeleniumConfig, *window_titles: str):
         """关闭其他窗口"""
-        ControlWindow.close_other_window(selenium_config, window_titles)
+        ControlWindow.close_other_window(selenium_config, *window_titles)
 
     @staticmethod
     def close_browser(selenium_config: SeleniumConfig):

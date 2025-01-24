@@ -1,5 +1,4 @@
 import re
-import typing
 
 from selenium import common
 
@@ -10,10 +9,9 @@ from ..entity.selenium_config import SeleniumConfig
 class ControlWindow:
 
     @classmethod
-    def close_other_window(cls, selenium_config: SeleniumConfig, window_titles: typing.Union[str, typing.List[str]]):
+    def close_other_window(cls, selenium_config: SeleniumConfig, *window_titles: str):
         """关闭其他窗口"""
         driver = ControlBrowser.get_driver(selenium_config)
-        window_titles = [window_titles] if isinstance(window_titles, str) else window_titles
         for window_handle in driver.window_handles:
             try:
                 driver.switch_to.window(window_handle)
@@ -74,6 +72,7 @@ class ControlWindow:
                 elif not window_title and window_title != title:
                     continue
                 target_handles.append(window_handle)
+            # 根据提取到的窗口情况进行处理
             if len(target_handles) == 1:
                 selenium_config.info(f"切换到窗口: {driver.title if window_title else window_title}")
                 driver.switch_to.window(target_handles[0])
@@ -82,7 +81,7 @@ class ControlWindow:
                 selenium_config.info("指定的窗口数量为空，重新查询")
             else:
                 driver.switch_to.window(target_handles[-1])
-                raise common.exceptions.NoSuchWindowException(f"出现多个包含 {window_title} 的目标窗口")
+                raise common.exceptions.NoSuchWindowException(f"出现多个包含【{window_title}】的目标窗口")
         else:
             driver.switch_to.window(driver.window_handles[-1])  # 切换至最新窗口
             raise common.exceptions.NoSuchWindowException(f"未找到目标窗口: {window_title}")
