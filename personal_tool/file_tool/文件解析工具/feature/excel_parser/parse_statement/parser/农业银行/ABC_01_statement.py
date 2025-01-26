@@ -50,7 +50,7 @@ class ABC01StatementParser(StatementParser):
         """解析流水"""
         try:
             worksheet = self._get_worksheet()
-            special_values = [each for each in worksheet.row_values(2) if isinstance(each, str)]
+            special_values = [each for each in worksheet.row_values(1) if isinstance(each, str)]
             if ABC01SpecialTags.account_name_1.value in special_values:
                 account_name = self._get_special_data(ABC01SpecialTags.account_name_1.value, relative_col=2)
                 self.account_number = self._get_special_data(ABC01SpecialTags.account_number_1.value, relative_col=2)
