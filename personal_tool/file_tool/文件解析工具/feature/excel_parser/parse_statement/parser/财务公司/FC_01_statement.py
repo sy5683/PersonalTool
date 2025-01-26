@@ -33,7 +33,9 @@ class FC01StatementParser(StatementParser):
     def parse_statement(self):
         """解析流水"""
         account_name = self._get_special_data(FC01SpecialTags.account_name.value, relative_col=0)
+        account_name = account_name.replace(FC01SpecialTags.account_name.value, "").strip()
         self.account_number = self._get_special_data(FC01SpecialTags.account_number.value, relative_col=0)
+        self.account_number = self.account_number.replace(FC01SpecialTags.account_number.value, "").strip()
         for data in ExcelUtil.get_data_list(self.statement_path, tag_row=self.tag_row):
             statement = Statement()
             statement.reference_number = data[FC01Tags.reference_number.value]  # 交易流水号

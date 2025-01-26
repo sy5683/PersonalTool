@@ -56,9 +56,9 @@ class ABC01StatementParser(StatementParser):
                 self.account_number = self._get_special_data(ABC01SpecialTags.account_number_1.value, relative_col=2)
             elif ABC01SpecialTags.account_name_2.value in "".join(special_values):
                 account_name = self._get_special_data(ABC01SpecialTags.account_name_2.value, relative_col=0)
-                account_name = account_name.replace(ABC01SpecialTags.account_name_2.value, "")
+                account_name = account_name.replace(ABC01SpecialTags.account_name_2.value, "").strip()
                 self.account_number = self._get_special_data(ABC01SpecialTags.account_number_2.value, relative_col=0)
-                self.account_number = self.account_number.replace(ABC01SpecialTags.account_number_2.value, "")
+                self.account_number = self.account_number.replace(ABC01SpecialTags.account_number_2.value, "").strip()
             else:
                 raise ValueError
         except ValueError:  # 农行流水文件中可能没有这些值，因此需要特殊处理
@@ -79,6 +79,8 @@ class ABC01StatementParser(StatementParser):
             statement.purpose = ""  # 用途(【农业银行】无对应用途)
             statement.payment_amount = NumberUtil.to_amount(data[ABC01Tags.payment_amount.value])  # 付款金额
             statement.receive_amount = NumberUtil.to_amount(data[ABC01Tags.receive_amount.value])  # 收款金额
+            if not statement.trade_datetime:
+                continue
             if not statement.payment_amount and not statement.receive_amount:
                 continue
             statement.balance = NumberUtil.to_amount(data[ABC01Tags.balance.value])  # 余额
