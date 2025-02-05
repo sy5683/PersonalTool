@@ -78,4 +78,4 @@ class PackTool:
 
 
 if __name__ == '__main__':
-    PackTool("国税系统脚本").copy_tool()
+    PackTool("电脑检测工具").copy_tool()
