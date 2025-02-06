@@ -72,6 +72,7 @@ class PackTool:
         return Path(__file__).parent.parent.joinpath(file_name)
 
     def __to_copy_path(self, file_name: str = '') -> str:
+        """拷贝文件至临时路径"""
         if self.copy_path is None:
             self.copy_path = tempfile.mkdtemp()
         return os.path.join(self.copy_path, file_name)
