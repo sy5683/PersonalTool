@@ -20,3 +20,5 @@ class ICBCReceiptParser(ReceiptParser):
                 if not profile.table and len(profile.words) < 6:
                     continue
                 self._parse_receipt(profile, ICBCReceiptType)
+        # 解析完成后对整张解析后的银行回单做收支类型等信息的提前和整合
+        self._format_parser()

@@ -3,6 +3,9 @@ class Receipt:
     def __init__(self):
         self.type = None  # 类型
         self.bank = None  # 银行
+        self.pay_type = None  # 收付类型
+        self.receipt_account_name = None  # 回单户名
+        self.receipt_account_number = None  # 回单账号
         self.date = None  # 日期
         self.receipt_number = None  # 回单编号
         self.serial_number = None  # 流水号

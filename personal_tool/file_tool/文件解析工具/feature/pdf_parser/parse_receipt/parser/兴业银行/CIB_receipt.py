@@ -17,3 +17,5 @@ class CIBReceiptParser(ReceiptParser):
         for pdf_profile in self.pdf_profiles:
             for profile in PdfUtil.split_pdf(pdf_profile, "回单编号:"):
                 self._parse_receipt(profile, CIBReceiptType)
+        # 解析完成后对整张解析后的银行回单做收支类型等信息的提前和整合
+        self._format_parser()

@@ -71,3 +71,5 @@ class AcceptanceReceiptParser(ReceiptParser):
         PdfUtil.split_pdf_image(profile, pdf_profile.image)
         acceptance.image = profile.image  # 图片
         self.receipts.append(acceptance)
+        # 解析完成后对整张解析后的银行回单做收支类型等信息的提前和整合
+        self._format_parser()
