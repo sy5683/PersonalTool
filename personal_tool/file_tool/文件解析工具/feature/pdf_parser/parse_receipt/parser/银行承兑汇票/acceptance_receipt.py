@@ -61,8 +61,9 @@ class AcceptanceReceiptParser(ReceiptParser):
         amount_cell = profile.table.get_cell_relative("^票据金额", 0)
         if re.search("渤海银行", acceptance.acceptor_account_bank_name):
             acceptance.bank = "渤海银行"  # 承兑所属银行
-            amount = "".join([each.get_value() for each in profile.table.get_row_cells(amount_cell.row + 1)])
-            acceptance.amount = NumberUtil.to_amount(amount)  # 金额
+            amounts = [each.get_value() for each in profile.table.get_row_cells(amount_cell.row + 1)]
+            amounts = amounts[:-2] + ["."] + amounts[-2:]  # 渤海银行金额没有小数点，取出的数据需要在角分之前加个小数点
+            acceptance.amount = NumberUtil.to_amount("".join(amounts))  # 金额
         elif re.search("农业银行", acceptance.acceptor_account_bank_name):
             acceptance.bank = "农业银行"  # 承兑所属银行
             acceptance.amount = NumberUtil.to_amount(profile.table.get_row_cells(amount_cell.row)[-1].get_value())  # 金额
