@@ -10,7 +10,11 @@ class ICBCReceiptParser(ReceiptParser):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        return self._check_contains("中国建设银行网上银行电子回执", "中国建设银行单位客户专用回单")
+        if self._check_contains("中国建设银行网上银行电子回执", "中国建设银行单位客户专用回单"):
+            return True
+        if self._judge_images(0.1):
+            return True
+        return False
 
     def parse(self):
         """解析"""
