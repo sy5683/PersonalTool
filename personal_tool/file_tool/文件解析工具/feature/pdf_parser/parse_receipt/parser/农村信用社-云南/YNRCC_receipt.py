@@ -13,7 +13,7 @@ class YNRCCReceiptParser(ReceiptParser):
         # YNRCC_receipt_type_02格式中的章，会出现被切割成几段的情况，因此这里加一种方式判断
         if self._check_contains("云南农信网上银行电子回单"):  # 放在比较图片之前，可以有效提升判断速度
             return True
-        if self._judge_images(0.2):
+        if self._judge_images(0.2, 0):
             return True
         return False
 

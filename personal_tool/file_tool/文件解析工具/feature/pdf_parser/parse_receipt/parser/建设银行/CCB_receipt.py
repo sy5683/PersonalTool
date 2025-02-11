@@ -12,7 +12,7 @@ class ICBCReceiptParser(ReceiptParser):
         """判断是否为当前格式"""
         if self._check_contains("中国建设银行网上银行电子回执", "中国建设银行单位客户专用回单"):
             return True
-        if self._judge_images(0.1):
+        if self._judge_images(0.05, 0):
             return True
         return False
 

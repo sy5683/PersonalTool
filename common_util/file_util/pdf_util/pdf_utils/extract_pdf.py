@@ -9,7 +9,7 @@ import numpy
 class ExtractPdf:
 
     @classmethod
-    def get_pdf_images(cls, pdf_path: str) -> typing.List[numpy.ndarray]:
+    def get_pdf_images(cls, pdf_path: str, page_index: int) -> typing.List[numpy.ndarray]:
         """提取pdf中图片"""
         pdf = fitz.open(pdf_path)
         # 如果是xps对象需要转为pdf对象，然后提取图片，但是会丢失透明度
@@ -19,6 +19,9 @@ class ExtractPdf:
             pdf = fitz.open("pdf", pdf_bytes)
         page_images = []
         for index in range(pdf.page_count):
+            if page_index is not None:
+                if index != page_index:
+                    continue
             for item_index, item in enumerate(pdf[index].get_images()):
                 image = cls.__recover_pix(pdf, item)
                 if isinstance(image, dict):

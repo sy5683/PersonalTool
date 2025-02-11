@@ -132,12 +132,13 @@ class ProcessPdfProfile:
         else:
             profiles = []
             profile = TableProfile()
+            profiles.append(profile)
             for index, word in enumerate(pdf_profile.words):
                 if re.search("|".join(split_words), word.text):
                     profile = TableProfile()
                     profiles.append(profile)
                 profile.words.append(word)
-            return [profile for profile in profiles if len(profile.words) != 1]
+            return [profile for profile in profiles if len(profile.words) > 1]
 
     @classmethod
     def __split_pdf_without_word(cls, pdf_profile: PdfProfile) -> typing.List[TableProfile]:

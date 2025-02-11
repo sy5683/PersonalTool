@@ -46,10 +46,10 @@ class PdfParserBase(metaclass=abc.ABCMeta):
             raise FileNotFoundError("缺少判断图片")
         return judge_images
 
-    def _judge_images(self, different: float, show_different: bool = False) -> bool:
+    def _judge_images(self, different: float, page_index: int = None, show_different: bool = False) -> bool:
         """比较图片"""
         judge_images = self._get_judge_images()
-        for index, image in enumerate(PdfUtil.get_pdf_images(self.pdf_path)):
+        for index, image in enumerate(PdfUtil.get_pdf_images(self.pdf_path, page_index)):
             if image is None:
                 continue
             if len(image.shape) == 2:

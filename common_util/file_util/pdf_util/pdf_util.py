@@ -25,9 +25,9 @@ class PdfUtil:
         return ProcessPdfProfile.filter_words(words, pattern)
 
     @staticmethod
-    def get_pdf_images(pdf_path: str) -> typing.List[numpy.ndarray]:
+    def get_pdf_images(pdf_path: str, page_index: int = None) -> typing.List[numpy.ndarray]:
         """提取pdf中图片"""
-        return ExtractPdf.get_pdf_images(pdf_path)
+        return ExtractPdf.get_pdf_images(pdf_path, page_index)
 
     @staticmethod
     def get_pdf_profiles(pdf_path: typing.Union[Path, str], threshold_x: int = 10) -> typing.List[PdfProfile]:

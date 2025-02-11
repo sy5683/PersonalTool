@@ -10,7 +10,7 @@ class CIBReceiptType03(CIBReceiptType):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        if not re.search("收费回单", self.words[1].text):
+        if not re.search("收费回单", "".join([word.text for word in self.words])):
             return False
         return True
 

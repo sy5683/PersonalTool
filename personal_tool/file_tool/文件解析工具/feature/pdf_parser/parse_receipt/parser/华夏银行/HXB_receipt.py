@@ -10,7 +10,7 @@ class HXBReceiptParser(ReceiptParser):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        return self._judge_images(0.2)
+        return self._judge_images(0.2, 0)
 
     def parse(self):
         """解析"""
