@@ -66,7 +66,6 @@ class PdfParserBase(metaclass=abc.ABCMeta):
             if image.shape[2] == 4:
                 image = cv2.cvtColor(image, cv2.COLOR_RGBA2BGR)
             # ImageUtil.save_opencv_image(image, f"E:/{index}.png")
-            reverse_image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
             for judge_image in judge_images:
                 _different = ImageUtil.compare_image(image, judge_image)
                 if show_different:
@@ -75,6 +74,7 @@ class PdfParserBase(metaclass=abc.ABCMeta):
                     return True
                 # 颜色反转
                 if image.shape[2] == 3:
+                    reverse_image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
                     _different = ImageUtil.compare_image(reverse_image, judge_image)
                     if show_different:
                         print(_different)
