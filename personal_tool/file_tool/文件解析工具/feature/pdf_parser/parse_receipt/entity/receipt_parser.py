@@ -27,6 +27,8 @@ class ReceiptParser(PdfParserBase, metaclass=abc.ABCMeta):
             try:
                 if _type.judge():
                     _types.append(_type)
+                else:
+                    del _type
             except Exception:
                 pass
         if not len(_types):
