@@ -1,6 +1,7 @@
 import abc
 import collections
 import logging
+import traceback
 import typing
 
 from common_util.file_util.pdf_util.pdf_utils.entity.pdf_profile import TableProfile
@@ -34,7 +35,13 @@ class ReceiptParser(PdfParserBase, metaclass=abc.ABCMeta):
             logging.error(f"{self.parser_type}回单pdf中有匹配多个格式的回单: {[each.__str__() for each in _types]}")
             raise ValueError(f"{self.parser_type}回单pdf中有匹配多个格式的回单")
         else:
-            receipt = _types[0].get_receipt()
+            _type = _types[0]
+            # noinspection PyBroadException
+            try:
+                receipt = _type.get_receipt()
+            except Exception:
+                logging.error(f"{_type}回单pdf中有异常格式的回单\n{traceback.format_exc()}")
+                raise ValueError(f"{self.parser_type}回单pdf中有异常格式的回单")
             if receipt:
                 self.receipts.append(receipt)
 
