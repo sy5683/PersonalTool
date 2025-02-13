@@ -1,9 +1,11 @@
 import typing
 from pathlib import Path
 
+from openpyxl.cell import Cell
 from openpyxl.worksheet.worksheet import Worksheet
 
 from .excel_utils.process_excel.copy_xlsx import CopyXlsx
+from .excel_utils.process_excel.openpyxl_excel import OpenpyxlExcel
 from .excel_utils.process_excel.win32_excel import Win32Excel
 from .excel_utils.process_excel_data.format_excel_data import FormatExcelData
 from .excel_utils.process_excel_data.verify_excel_data import VerifyExcelData
@@ -11,6 +13,17 @@ from .excel_utils.read_excel import ParseExcel
 
 
 class ExcelUtil:
+
+    @staticmethod
+    def add_title(worksheet: Worksheet, title: str, length: int, title_size: float = 20):
+        """添加标题"""
+        OpenpyxlExcel.add_title(worksheet, title, length, title_size)
+
+    @staticmethod
+    def add_tag(worksheet: Worksheet, tags: typing.List[str], tag_row: int, tag_size: float = 14,
+                tag_color: str = '9BC2E6'):
+        """添加表头"""
+        OpenpyxlExcel.add_tag(worksheet, tags, tag_row, tag_size, tag_color)
 
     @staticmethod
     def copy_sheet(worksheet: Worksheet, copy_worksheet: Worksheet):
@@ -48,6 +61,33 @@ class ExcelUtil:
     def re_save_excel(excel_path: typing.Union[Path, str]):
         """重新保存excel"""
         Win32Excel.re_save_excel(str(excel_path))
+
+    @staticmethod
+    def set_cell(cell: Cell, value: any = '_no_value', number_format: str = None,
+                 horizontal: typing.Optional[str] = '_no_horizontal', vertical: typing.Optional[str] = '_no_vertical',
+                 fill_color: typing.Optional[str] = '_no_fill_color', is_border: bool = None,
+                 font_size: float = None, is_bold: bool = None, is_italic: bool = None,
+                 font_color: typing.Optional[str] = '_no_font_color'
+                 ):
+        """设置单元格"""
+        OpenpyxlExcel.set_cell(cell, value, number_format, horizontal, vertical, fill_color, is_border, font_size,
+                               is_bold, is_italic, font_color)
+
+    @staticmethod
+    def set_cell_money_format(cell: Cell):
+        """设置金额单元格"""
+        OpenpyxlExcel.set_cell(cell, number_format=r'_ * #,##0.00_ ;_ * \-#,##0.00_ ;_ * "-"??_ ;_ @_ ',
+                               horizontal='right')
+
+    @staticmethod
+    def set_cell_percentage_format(cell: Cell):
+        """设置百分数单元格"""
+        OpenpyxlExcel.set_cell(cell, number_format='0.00%', horizontal='center')
+
+    @staticmethod
+    def set_sheet_widths(worksheet: Worksheet, widths: typing.List[typing.Union[float, None]]):
+        """设置sheet列宽"""
+        OpenpyxlExcel.set_sheet_widths(worksheet, widths)
 
     @staticmethod
     def verify_scientific_notation(value: str):
