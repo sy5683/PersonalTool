@@ -10,7 +10,7 @@ class ICBCReceiptType02(ICBCReceiptType):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        if not re.search("业务回单[(（]付款[)）]", "".join([each.text for each in self.words])):
+        if not re.search("业务回单[(（][付收]款[)）]", "".join([each.text for each in self.words])):
             return False
         return True
 
