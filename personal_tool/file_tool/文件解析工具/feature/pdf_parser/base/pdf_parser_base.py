@@ -50,10 +50,11 @@ class PdfParserBase(metaclass=abc.ABCMeta):
 
     def _get_pdf_profiles(self, threshold_x: int):
         """获取pdf解析对象，因为需要频繁读取，这里需要将数据放在全局缓存中，否则很容易出现内存溢出的问题"""
-        if self.pdf_path not in pdf_profiles_map:
+        pdf_profiles_key = f"【{threshold_x}】{self.pdf_path}"
+        if pdf_profiles_key not in pdf_profiles_map:
             pdf_profiles = PdfUtil.get_pdf_profiles(self.pdf_path, threshold_x)
-            pdf_profiles_map[self.pdf_path] = pdf_profiles
-        return pdf_profiles_map[self.pdf_path]
+            pdf_profiles_map[pdf_profiles_key] = pdf_profiles
+        return pdf_profiles_map[pdf_profiles_key]
 
     def _judge_images(self, different: float, page_index: int = None, show_different: bool = False) -> bool:
         """比较图片"""
