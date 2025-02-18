@@ -43,7 +43,7 @@ class ControlElement:
         try:
             element = cls.find(selenium_config)
             assert [element.text] is not None  # 这一行是为了检测入参为WebElement的元素
-        except (AssertionError, common.exceptions.ElementNotInteractableException):
+        except (AssertionError, AttributeError, common.exceptions.ElementNotInteractableException):
             return False
         return True
 
@@ -133,7 +133,7 @@ class ControlElement:
         wait_seconds = selenium_config.wait_seconds
         selenium_config.wait_seconds = 1
         for _ in range(wait_seconds):
-            time.sleep(1)  # 等待元素加载
+            time.sleep(0.2)  # 等待元素加载
             if not cls.exist(selenium_config):
                 return True
         return False
