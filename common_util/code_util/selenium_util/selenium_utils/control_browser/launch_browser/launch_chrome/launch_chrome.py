@@ -212,8 +212,7 @@ class LaunchChrome(LaunchBase):
     def __launch_chrome_driver(cls, selenium_config: SeleniumConfig, options: webdriver.ChromeOptions) -> WebDriver:
         """启动谷歌浏览器driver"""
         driver_path = cls.__get_driver_path(selenium_config)
-        service = Service(executable_path=driver_path)
-        return webdriver.Chrome(options=options, service=service)
+        return webdriver.Chrome(options=options, service=Service(executable_path=driver_path))
 
     @staticmethod
     def __netstat_debug_port_running(debug_port: int) -> bool:
