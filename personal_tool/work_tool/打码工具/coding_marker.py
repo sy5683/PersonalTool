@@ -22,5 +22,5 @@ class CodingMarker(ToolBase):
 
 
 if __name__ == '__main__':
-    coding_marker = CodingMarker("541张")
+    coding_marker = CodingMarker("")
     coding_marker.main(Operations.format_color)
