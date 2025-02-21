@@ -10,7 +10,7 @@ class CDBReceiptParser(ReceiptParser):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        if not self._judge_images(0.3, 0):
+        if not self._judge_images(0.1, 0):
             return False
         return self._check_contains("国家开发银行")
 
