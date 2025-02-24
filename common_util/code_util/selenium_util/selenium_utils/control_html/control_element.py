@@ -78,28 +78,23 @@ class ControlElement:
     @classmethod
     def input(cls, selenium_config: SeleniumConfig, value: str):
         """输入"""
-        try:
-            assert selenium_config.operate_type != OperateType.action
-            element = cls.find(selenium_config)
-        except (AssertionError, AttributeError):
-            # 参数无法定位
-            if value not in Keys.__dict__.values():
-                raise ValueError("未指定输入对象时，输入值必须为类Keys。")
+        if value in Keys.__dict__.values():
+            if selenium_config.operate_type != OperateType.action:
+                raise ValueError("输入值为类Keys时，操作方式必须为action。")
             cls.get_action(selenium_config).key_down(value).perform()
         else:
-            selenium_config.info("输入元素: %s" % ("*" * len(value) if cls.__check_is_password(element) else value))
+            element = cls.find(selenium_config)
+            if element.get_attribute("type") == "password":
+                selenium_config.info(f"输入密码: {'*' * len(value)}")
+                selenium_config.check_input = False  # 密码无需判断输入结果
+            else:
+                selenium_config.info(f"输入元素: {value}")
             for _ in range(3):
-                # 先清空元素内容
-                cls._clear_element(element)
-                # 模拟全选
-                element.send_keys(Keys.CONTROL, "a")
-                time.sleep(0.2)
-                # 输入元素
-                element.send_keys(value)
-                # 密码无需判断输入结果
-                if cls.__check_is_password(element):
-                    break
-                # 某些特殊情况无需判断输入结果: 日期格式化、金额会计格式化等
+                if selenium_config.operate_type == OperateType.action:
+                    cls._input_element_by_action(selenium_config, element, value)
+                else:
+                    cls._input_element_by_selenium(element, value)
+                # 某些特殊情况无需判断输入结果: 密码、日期格式化、金额会计格式化等
                 if not selenium_config.check_input:
                     break
                 # 判断输入结果是否正确
@@ -138,39 +133,54 @@ class ControlElement:
                 return True
         return False
 
+    @classmethod
+    def _input_element_by_action(cls, selenium_config: SeleniumConfig, element: WebElement, value: str):
+        action = cls.get_action(selenium_config)
+        # 先将焦点移动到元素上并点击
+        action.move_to_element(element).click().perform()
+        # 使用action模拟回退按钮删除内容
+        element_len = element.get_attribute("value")
+        for _ in range(0 if element_len is None else len(element_len)):
+            action.send_keys(Keys.RIGHT).perform()
+            action.send_keys(Keys.BACK_SPACE).perform()
+            time.sleep(0.1)
+        # 模拟全选
+        action.key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).perform()
+        # 输入元素
+        action.send_keys(value).perform()
+
     @staticmethod
-    def _clear_element(element: WebElement):
-        """清空元素"""
+    def _input_element_by_selenium(element: WebElement, value: str):
         # 先点击定位
         try:
             element.click()
         except (common.exceptions.ElementClickInterceptedException, common.exceptions.ElementNotInteractableException):
             pass  # 元素可能无法点击
         time.sleep(0.2)
-        # 使用selenium自带的clear方法
+        # 使用selenium自带的clear方法清空元素
         try:
             element.clear()
         except common.exceptions.InvalidElementStateException:
             pass  # 元素可能无法清空
         time.sleep(0.2)
-        # 有时候有输入框 element.clear() 方法无效，因此再使用手动清空方式
+        # 有时候有输入框 element.clear() 方法无效，因此再使用手动按键方式清空一次
         for _ in range(len(element.get_attribute("value"))):
             element.send_keys(Keys.RIGHT)
             element.send_keys(Keys.BACK_SPACE)
             time.sleep(0.1)
-
-    @staticmethod
-    def __check_is_password(element: WebElement) -> bool:
-        """判断元素是否为密码类"""
-        return element.get_attribute("type") == "password"
+        # 模拟全选
+        element.send_keys(Keys.CONTROL, "a")
+        time.sleep(0.2)
+        # 输入元素
+        element.send_keys(value)
 
     @classmethod
     def __find(cls, selenium_config: SeleniumConfig, find_method) -> typing.Union[WebElement, typing.List[WebElement]]:
         """显性等待查找元素"""
         if not selenium_config.xpath:
             raise ValueError("查找元素方法必须传入xpath")
-        driver = cls.__get_driver(selenium_config) if selenium_config.element is None else selenium_config.element
         time.sleep(selenium_config.delay_seconds)
+        driver = cls.__get_driver(selenium_config) if selenium_config.element is None else selenium_config.element
         # 注！查询间隔为一秒时，这个方法无法检测等待时间为1秒的元素（检测次数为1，即即时检测，而不是预计的等待一秒后报错，因此这里将间隔时间修改为0.3s）
         try:
             return WebDriverWait(driver, selenium_config.wait_seconds, 0.3).until(find_method)

@@ -10,7 +10,7 @@ class SeleniumUtilTestCase(TestBase):
 
     def setUp(self):
         self.url = "https://www.baidu.com/"
-        self.xpath = '//map[@id="s_mp"]/area'
+        self.xpath = '//*[@id="kw"]'
         self.title = "百度一下"
         self.debug_port = 9222
 
@@ -28,6 +28,9 @@ class SeleniumUtilTestCase(TestBase):
         element = SeleniumUtil.find(SeleniumConfig(xpath=self.xpath))  # 查找元素
         # element = SeleniumUtil.find(SeleniumConfig(xpath=self.xpath, wait_seconds=30))  # 在指定超时时间内查找元素
         SeleniumUtil.find(SeleniumConfig(xpath='./ancestor::div[@id="lg"]', element=element))  # 查找父级元素
+
+    def test_input(self):
+        SeleniumUtil.input(SeleniumConfig(xpath=self.xpath, operate_type=OperateType.action), "测试")
 
     def test_launch_chrome_debug(self):
         SeleniumUtil.launch_chrome_debug(self.debug_port)
