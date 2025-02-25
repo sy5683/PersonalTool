@@ -88,6 +88,11 @@ class SeleniumUtil:
         return DownloadDriver.get_ie_driver_path()
 
     @staticmethod
+    def get_networks(selenium_config: SeleniumConfig) -> typing.List[dict]:
+        """获取selenium运行中的network请求"""
+        return ControlDriver.get_networks(selenium_config)
+
+    @staticmethod
     def input(selenium_config: SeleniumConfig, value: typing.Union[float, str]):
         """输入"""
         ControlElement.input(selenium_config, str(value))

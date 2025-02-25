@@ -1,3 +1,5 @@
+import json
+import re
 import tempfile
 import time
 import typing
@@ -18,6 +20,42 @@ class ControlDriver:
         driver = ControlBrowser.get_driver(selenium_config)
         driver.execute_script(js)
         time.sleep(0.1)  # 执行结束之后等待一会
+
+    @staticmethod
+    def get_networks(selenium_config: SeleniumConfig) -> typing.List[dict]:
+        """获取selenium运行中的network请求"""
+        time.sleep(1)  # 等待页面请求发送
+        driver = ControlBrowser.get_driver(selenium_config)
+        # 1) 获取selenium的所有监听日志
+        performance_log = driver.get_log("performance")
+        # 2) 对日志进行处理并筛选
+        # types = ['application/json']
+        # filter_type = lambda _type: _type in types
+        results = []
+        for packet in performance_log:
+            # noinspection PyBroadException
+            try:
+                # 2.1) 过滤掉10秒之前的日志
+                if int(time.time() * 1000) - packet['timestamp'] >= 10 * 1000:
+                    continue
+                # 2.2) 获取message的数据
+                message = json.loads(packet['message'])['message']
+                # 2.3) 过滤所有非Network.responseReceived相关的日志
+                if not re.match("Network", message['method']):
+                    continue
+                # 2.4) 获取请求参数
+                params = message['params']
+                request_id = params['requestId']  # 唯一的请求标识符（相当于该请求的身份证）
+                url = params['response'].get('url')  # 该请求的url
+                # # 2.5) 过滤获取该请求返回的type
+                # if not filter_type(_type=params['response'].get('mimeType')):
+                #     continue
+                # 2.6) selenium调用cdp获取请求结果
+                response = driver.execute_cdp_cmd("Network.getResponseBody", {'requestId': request_id})
+                results.append({'timestamp': packet['timestamp'], 'url': url, 'response': response})
+            except Exception:
+                pass
+        return results
 
     @staticmethod
     def open_url(selenium_config: SeleniumConfig, url: str):

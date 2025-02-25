@@ -212,6 +212,8 @@ class LaunchChrome(LaunchBase):
     def __launch_chrome_driver(cls, selenium_config: SeleniumConfig, options: webdriver.ChromeOptions) -> WebDriver:
         """启动谷歌浏览器driver"""
         driver_path = cls.__get_driver_path(selenium_config)
+        # 开启日志性能监听，用于获取页面中的network请求
+        options.set_capability("goog:loggingPrefs", {'performance': "ALL"})
         return webdriver.Chrome(options=options, service=Service(executable_path=driver_path))
 
     @staticmethod
