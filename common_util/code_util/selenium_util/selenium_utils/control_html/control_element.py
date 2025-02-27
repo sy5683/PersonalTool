@@ -43,7 +43,8 @@ class ControlElement:
         try:
             element = cls.find(selenium_config)
             assert [element.text] is not None  # 这一行是为了检测入参为WebElement的元素
-        except (AssertionError, AttributeError, common.exceptions.ElementNotInteractableException):
+        except (AssertionError, AttributeError, common.exceptions.ElementNotInteractableException,
+                common.exceptions.StaleElementReferenceException):
             return False
         return True
 
