@@ -10,7 +10,7 @@ class CBHBReceiptParser(ReceiptParser):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        return self._check_contains("渤海银行电子印图案", "企业网上银行业务转账回单")
+        return self._judge_images(0.2, 0)
 
     def parse(self):
         """解析"""
