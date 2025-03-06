@@ -16,7 +16,12 @@ class AcceptanceReceiptParser(ReceiptParser):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        return self._check_contains("电子银行承兑汇票")
+        if not self._check_contains("电子银行承兑汇票"):
+            return False
+        # 有些回单中【凭证种类】的值为"电子银行承兑汇票"，会导致识别错误，因此这里再加一个承兑汇票的特殊值进行判断
+        if not self._check_contains("承兑信息"):
+            return False
+        return True
 
     def parse(self):
         """解析"""
