@@ -114,10 +114,14 @@ class LaunchChrome(LaunchBase):
         selenium_config.info(f"浏览器下载路径为: {selenium_config.download_path}")
         if os.path.exists(selenium_config.download_path):
             prefs.update({'download.default_directory': selenium_config.download_path})
+        # 1.5.3) 设置自动下载网页资源
+        prefs.update({'profile.default_content_setting_values.automatic_downloads': 1})
         options.add_experimental_option("prefs", prefs)
         # 1.6) 设置读取用户缓存目录
         if user_data_dir and os.path.exists(user_data_dir):
             options.add_argument(f"--user-data-dir={user_data_dir}")
+        # 1.7) 设置禁用弹窗拦截
+        options.add_argument("--disable-popup-blocking")
         # 2) 启动谷歌浏览器
         return cls.__launch_chrome_driver(selenium_config, options)
 
@@ -141,6 +145,8 @@ class LaunchChrome(LaunchBase):
                 common.exceptions.SessionNotCreatedException):
             # 2) 重新获取driver，不加载user_data_dir
             driver = cls._get_chrome_driver(selenium_config)
+        # 2.2) 注入伪装脚本
+        cls.__inject_camouflage_script(driver)
         # 3.1) 设置默认加载超时时间
         driver.set_page_load_timeout(selenium_config.wait_seconds)
         # 3.2) 启动后设置浏览器最前端
@@ -227,6 +233,121 @@ class LaunchChrome(LaunchBase):
                 return str(debug_port) in p.stdout.read()
         except Exception:
             return False
+
+    @staticmethod
+    def __inject_camouflage_script(driver: webdriver):
+        """注入伪装脚本"""
+        # 1) 修改 Array.prototype.filter，过滤掉 "webdriver"
+        driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+            "source": """
+            const originalFilter = Array.prototype.filter;
+            Array.prototype.filter = function(callback, thisArg) {
+                return originalFilter.call(this, function(item, index, array) {
+                    if (item === "webdriver") {
+                        return false;
+                    }
+                    return callback.call(thisArg, item, index, array);
+                });
+            };
+            """
+        })
+        # 2) 修改 navigator.plugins，注入伪装的插件信息
+        driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+            "source": """
+            Object.defineProperty(navigator, 'plugins', {
+                get: () => [
+                    {
+                        0: {type: "application/x-google-chrome-pdf", suffixes: "pdf", description: "Portable Document Format", enabledPlugin: {}},
+                        description: "Portable Document Format",
+                        filename: "internal-pdf-viewer",
+                        length: 1,
+                        name: "Chrome PDF Plugin"
+                    },
+                    {
+                        0: {type: "application/pdf", suffixes: "pdf", description: "", enabledPlugin: {}},
+                        description: "",
+                        filename: "mhjfbmdgcfjbbpaeojofohoefgiehjai",
+                        length: 1,
+                        name: "Chrome PDF Viewer"
+                    },
+                    {
+                        0: {type: "application/x-nacl", suffixes: "", description: "Native Client Executable", enabledPlugin: {}},
+                        1: {type: "application/x-pnacl", suffixes: "", description: "Portable Native Client Executable", enabledPlugin: {}},
+                        description: "",
+                        filename: "internal-nacl-plugin",
+                        length: 2,
+                        name: "Native Client"
+                    }
+                ],
+            });
+            """
+        })
+        # 3) 注入 window.navigator.chrome 对象
+        driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+            "source": """
+            Object.defineProperty(window, 'navigator', {
+                value: new Proxy(navigator, {
+                    get: function(target, name) {
+                        if (name === 'chrome') {
+                            return {
+                                runtime: {},
+                                loadTimes: function() {},
+                                csi: function() {},
+                                app: {}
+                            };
+                        }
+                        return target[name];
+                    }
+                })
+            });
+            """
+        })
+        # 4) 重写 WebGLRenderingContext.prototype.getParameter，模拟特定的 GPU 信息
+        driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+            "source": """
+            const getParameter = WebGLRenderingContext.prototype.getParameter;
+            WebGLRenderingContext.prototype.getParameter = function(parameter) {
+                if (parameter === 37445) {
+                    return "NVIDIA Corporation";
+                }
+                if (parameter === 37446) {
+                    return "ANGLE (NVIDIA, NVIDIA GeForce GTX 1080 Ti (0x00001B06) Direct3D11 vs_5_0 ps_5_0, D3D11)";
+                }
+                return getParameter.call(this, parameter);
+            };
+            """
+        })
+        # 5) 修改 navigator.languages，伪装常用语言列表
+        driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+            "source": """
+            Object.defineProperty(navigator, 'languages', {
+                get: () => ['zh-CN', 'en-US', 'en']
+            });
+            """
+        })
+        # 6) 重写 navigator.permissions.query 方法，对于 notifications 返回正常状态
+        driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+            "source": """
+            const originalQuery = window.navigator.permissions.query;
+            window.navigator.permissions.__proto__.query = parameters => (
+              parameters.name === 'notifications'
+                ? Promise.resolve({ state: Notification.permission })
+                : originalQuery(parameters)
+            );
+            """
+        })
+        # 7) 删除 Selenium 暴露的 "cdc_" 前缀属性
+        driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+            "source": """
+            for (let key in window) {
+                if (key.startsWith('cdc_')) {
+                    try {
+                        delete window[key];
+                    } catch(e) {}
+                }
+            }
+            """
+        })
 
     @staticmethod
     def __get_subclass():
