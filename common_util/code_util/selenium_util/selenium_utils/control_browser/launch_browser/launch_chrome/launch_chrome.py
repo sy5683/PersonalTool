@@ -203,17 +203,13 @@ class LaunchChrome(LaunchBase):
     @classmethod
     def __get_user_data_path(cls) -> typing.Union[str, None]:
         """获取谷歌浏览器用户缓存User Data路径"""
-        # 1) 查找User Data文件默认路径
-        user_data_path = os.path.join(os.path.expanduser("~"), "AppData", "Local", "Google", "Chrome", "User Data",
-                                      "Default")
-        if os.path.exists(user_data_path):
-            return user_data_path
-        # 2) 有的User Data文件放在谷歌浏览器同级目录中
-        user_data_path = os.path.join(os.path.dirname(cls._get_chrome_path()), "User Data", "Default")
-        if os.path.exists(user_data_path):
-            return user_data_path
-        # 3) 返回空值
-        return None
+        # 路径列表具有优先级，添加路径时注意顺序
+        for user_data_path in [
+            os.path.join(os.path.expanduser("~"), "AppData", "Local", "Google", "Chrome", "User Data", "Default"),  # 默认路径
+            os.path.join(os.path.dirname(cls._get_chrome_path()), "User Data", "Default"),  # 有的User Data文件放在谷歌浏览器同级目录中
+        ]:
+            if os.path.exists(user_data_path):
+                return user_data_path
 
     @classmethod
     def __launch_chrome_driver(cls, selenium_config: SeleniumConfig, options: webdriver.ChromeOptions) -> WebDriver:
