@@ -138,7 +138,8 @@ class LaunchEdge(LaunchBase):
     def __get_user_data_path() -> typing.Union[str, None]:
         """获取Edge浏览器用户缓存User Data路径"""
         # 1) 查找User Data文件默认路径
-        user_data_path = os.path.join(os.path.expanduser('~'), "AppData/Local/Microsoft/Edge/User Data/Default")
+        user_data_path = os.path.join(os.path.expanduser('~'), "AppData", "Local", "Microsoft", "Edge", "User Data",
+                                      "Default")
         if os.path.exists(user_data_path):
             return user_data_path
         # 2) 返回空值

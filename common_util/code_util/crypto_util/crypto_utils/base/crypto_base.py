@@ -17,4 +17,4 @@ class CryptoBase(metaclass=abc.ABCMeta):
     @staticmethod
     def get_key_path(file_name: str) -> Path:
         """获取秘钥路径"""
-        return Path(__file__).parent.parent.joinpath(f"keys/{file_name}")
+        return Path(__file__).parent.parent.joinpath("keys", f"{file_name}")
