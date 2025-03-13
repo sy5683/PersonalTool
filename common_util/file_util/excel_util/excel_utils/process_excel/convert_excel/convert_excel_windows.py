@@ -9,7 +9,7 @@ import xlrd
 from win32com.client import Dispatch
 
 
-class Win32Excel:
+class ConvertExcelWindows:
 
     @staticmethod
     def re_save_excel(excel_path: str):
@@ -18,7 +18,6 @@ class Win32Excel:
         因为使用openpyxl生成的excel，如果不手动打开并保存，其中的公式是未进行计算的，如果再次使用openpyxl进行读取，是取不到结果的
         因此需要使用win32重新将其打开并保存一次
         """
-        logging.info(f"重新保存excel: {excel_path}")
         app = Dispatch("Excel.Application")
         app.Visible = False
         workbook = app.Workbooks.Open(excel_path)
@@ -30,7 +29,6 @@ class Win32Excel:
     @staticmethod
     def xls_to_xlsx(excel_path: str, save_path: typing.Union[Path, str]) -> str:
         """xls文件转换为xlsx文件"""
-        logging.info(f"开始将xls文件转换为xlsx: {excel_path}")
         save_path = f"{os.path.splitext(excel_path)[0]}.xlsx" if save_path is None else str(save_path)
         assert not os.path.exists(save_path), f"文件已存在，无法转换: {save_path}"
         app = Dispatch("Excel.Application")
@@ -44,7 +42,6 @@ class Win32Excel:
     @staticmethod
     def excel_to_images(excel_path: str, save_path: typing.Union[Path, str]) -> typing.List[str]:
         """excel转图片"""
-        logging.info(f"开始将Excel文件转换为图片: {excel_path}")
         save_path = os.path.splitext(excel_path)[0] if save_path is None else str(save_path)
         if not os.path.exists(save_path):
             os.mkdir(save_path)

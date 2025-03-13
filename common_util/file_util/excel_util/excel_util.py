@@ -4,9 +4,9 @@ from pathlib import Path
 from openpyxl.cell import Cell
 from openpyxl.worksheet.worksheet import Worksheet
 
+from .excel_utils.process_excel.convert_excel.convert_excel import ConvertExcel
 from .excel_utils.process_excel.copy_xlsx import CopyXlsx
 from .excel_utils.process_excel.openpyxl_excel import OpenpyxlExcel
-from .excel_utils.process_excel.win32_excel import Win32Excel
 from .excel_utils.process_excel_data.format_excel_data import FormatExcelData
 from .excel_utils.process_excel_data.verify_excel_data import VerifyExcelData
 from .excel_utils.read_excel import ParseExcel
@@ -34,7 +34,7 @@ class ExcelUtil:
     def excel_to_images(file_path: typing.Union[Path, str],
                         save_path: typing.Union[Path, str] = None) -> typing.List[str]:
         """excel转图片"""
-        return Win32Excel.excel_to_images(str(file_path), save_path)
+        return ConvertExcel.excel_to_images(str(file_path), save_path)
 
     @staticmethod
     def format_data(data: any):
@@ -60,7 +60,7 @@ class ExcelUtil:
     @staticmethod
     def re_save_excel(excel_path: typing.Union[Path, str]):
         """重新保存excel"""
-        Win32Excel.re_save_excel(str(excel_path))
+        ConvertExcel.re_save_excel(str(excel_path))
 
     @staticmethod
     def set_cell(cell: Cell, value: any = '_no_value', number_format: str = None,
@@ -97,4 +97,4 @@ class ExcelUtil:
     @staticmethod
     def xls_to_xlsx(excel_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None) -> str:
         """xls文件转换为xlsx文件"""
-        return Win32Excel.xls_to_xlsx(str(excel_path), save_path)
+        return ConvertExcel.xls_to_xlsx(str(excel_path), save_path)
