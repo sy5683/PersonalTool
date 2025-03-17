@@ -2,7 +2,6 @@ import typing
 from pathlib import Path
 
 from .win32_utils.win32_control import Win32Control
-from .win32_utils.win32_path import Win32Path
 from .win32_utils.win32_visual import Win32Visual
 
 
@@ -47,11 +46,6 @@ class Win32Util:
     def move_mouse(x: int, y: int):
         """移动鼠标到指定坐标"""
         Win32Control.move_mouse(x, y)
-
-    @staticmethod
-    def open_file(file_path: typing.Union[Path, str]):
-        """打开文件"""
-        Win32Path.open_file(str(file_path))
 
     @staticmethod
     def press_key(*keys: typing.Union[int, str]):

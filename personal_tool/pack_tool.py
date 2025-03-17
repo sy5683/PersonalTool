@@ -5,7 +5,6 @@ import tempfile
 import typing
 from pathlib import Path
 
-from common_util.code_util.win32_util.win32_util import Win32Util
 from common_util.file_util.file_util.file_util import FileUtil
 
 
@@ -33,7 +32,7 @@ class PackTool:
         for file_name in ["__pycache__"]:
             for file_path in Path(self.__to_copy_path()).rglob(file_name):
                 FileUtil.delete_file(file_path)
-        Win32Util.open_file(self.__to_copy_path())
+        FileUtil.open_file(self.__to_copy_path())
 
     def _get_tool_path(self) -> Path:
         """获取工具路径"""

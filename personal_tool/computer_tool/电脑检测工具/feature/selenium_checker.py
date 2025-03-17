@@ -4,8 +4,8 @@ import traceback
 from pathlib import Path
 
 from common_util.code_util.selenium_util.selenium_util import SeleniumUtil
-from common_util.code_util.win32_util.win32_util import Win32Util
 from common_util.data_util.time_util.time_util import TimeUtil
+from common_util.file_util.file_util.file_util import FileUtil
 from common_util.visual_util.dialog_util.dialog_util import DialogUtil
 
 
@@ -27,7 +27,7 @@ class SeleniumChecker:
             if create_datetime.date() == datetime.datetime.now().date():
                 logging.info(f"chrome_driver为当日下载的文件: {chrome_driver_path}")
                 DialogUtil.messagebox("chrome_driver已更新")
-                Win32Util.open_file(chrome_driver_path.parent)
+                FileUtil.open_file(chrome_driver_path.parent)
             else:
                 logging.info(f"chrome_driver已为最新版本: {chrome_driver_path}")
                 # DialogUtil.messagebox("chrome_driver已为最新版本")

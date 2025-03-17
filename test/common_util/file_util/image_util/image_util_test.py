@@ -1,5 +1,5 @@
 from common_core.base.test_base import TestBase
-from common_util.code_util.win32_util.win32_util import Win32Util
+from common_util.file_util.file_util.file_util import FileUtil
 from common_util.file_util.image_util.image_util import ImageUtil
 
 
@@ -35,4 +35,4 @@ class ImageUtilTestCase(TestBase):
     def test_screenshot(self):
         image_paths = ImageUtil.screenshot(self.save_image_path)
         for image_path in image_paths:
-            Win32Util.open_file(image_path)
+            FileUtil.open_file(image_path)

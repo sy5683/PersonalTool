@@ -1,4 +1,5 @@
 import abc
+import logging
 import os
 import re
 import shutil
@@ -109,6 +110,14 @@ class ProcessFile:
         # pathlib.mkdir指向的必须为文件夹，因此如果路径为文件时则新建其父级文件夹
         dir_path = file_path.parent if file_path.suffix else file_path
         dir_path.mkdir(exist_ok=True, parents=True)  # parents参数保证递归创建文件目录
+
+    @classmethod
+    def open_file(cls, file_path: str):
+        """打开文件"""
+        logging.info(f"打开文件: {file_path}")
+        if os.path.isfile(file_path):
+            cls.__get_subclass().open_file(file_path)
+        cls.__get_subclass().open_file(file_path)
 
     @staticmethod
     def wait_file_appear(file_path: Path, wait_seconds: int) -> bool:

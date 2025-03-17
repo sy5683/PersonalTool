@@ -5,7 +5,6 @@ import cv2
 import numpy
 import onnxruntime
 
-from common_util.code_util.win32_util.win32_util import Win32Util
 from common_util.file_util.file_util.file_util import FileUtil
 from common_util.file_util.image_util.image_util import ImageUtil
 from .image_feature import ImageFeature
@@ -43,7 +42,7 @@ class PPRemoveBackground:
                 cutout = (background_color * (1 - prediction) + image * prediction).astype(numpy.uint8)
                 save_path = FileUtil.get_temp_path(Path(image_path).name)
             ImageUtil.save_opencv_image(cutout, save_path)
-        Win32Util.open_file(FileUtil.get_temp_path())
+        FileUtil.open_file(FileUtil.get_temp_path())
 
     @staticmethod
     def __resize_image(image: numpy.ndarray, short: int = 32) -> numpy.ndarray:

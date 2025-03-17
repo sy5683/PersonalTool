@@ -3,7 +3,6 @@ from pathlib import Path
 
 import cv2
 
-from common_util.code_util.win32_util.win32_util import Win32Util
 from common_util.file_util.file_util.file_util import FileUtil
 from common_util.file_util.image_util.image_util import ImageUtil
 from .image_feature import ImageFeature
@@ -27,4 +26,4 @@ class Cv2RemoveBackground:
             # 保存图片
             save_path = FileUtil.get_temp_path(Path(image_path).name)
             ImageUtil.save_opencv_image(transparent_image, save_path)
-        Win32Util.open_file(FileUtil.get_temp_path())
+        FileUtil.open_file(FileUtil.get_temp_path())

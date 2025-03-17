@@ -58,6 +58,11 @@ class FileUtil:
         ProcessFile.make_dir(Path(file_path))
 
     @staticmethod
+    def open_file(file_path: typing.Union[Path, str]):
+        """打开文件"""
+        ProcessFile.open_file(str(file_path))
+
+    @staticmethod
     def wait_file_appear(file_path: typing.Union[Path, str], wait_seconds: int = 120) -> bool:
         """等待文件出现"""
         return ProcessFile.wait_file_appear(Path(file_path), wait_seconds)

@@ -2,7 +2,6 @@ from enum import Enum
 from pathlib import Path
 
 from common_core.base.tool_base import ToolBase
-from common_util.code_util.win32_util.win32_util import Win32Util
 from common_util.file_util.file_util.file_util import FileUtil
 from feature.formatter.anime_formatter import AnimeFormatter
 from feature.formatter.manga_formatter import MangaFormatter
@@ -22,7 +21,7 @@ class FileFormatter(ToolBase):
 
     def main(self, function, **kwargs):
         function(Path(self.directory_path), **kwargs)
-        Win32Util.open_file(self.directory_path)
+        FileUtil.open_file(self.directory_path)
 
 
 if __name__ == '__main__':
