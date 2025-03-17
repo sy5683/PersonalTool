@@ -31,6 +31,5 @@ class ProcessFileLinux(ProcessFile):
         """打开文件"""
         try:
             subprocess.run(('xdg-open', file_path), check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        except Exception as e:
-            print(e)  # TODO 需要处理异常捕获
+        except subprocess.CalledProcessError:
             raise FileExistsError(f"文件不存在: {file_path}")
