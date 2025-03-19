@@ -6,7 +6,7 @@ from docx.table import _Cell
 from docx.text.paragraph import Paragraph
 from docx.text.run import Run
 
-from .word_utils.convert_word import ConvertWord
+from .word_utils.convert_word.convert_word import ConvertWord
 from .word_utils.process_word import ProcessWord
 from .word_utils.replace_word import ReplaceDocx
 

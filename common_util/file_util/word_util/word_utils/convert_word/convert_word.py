@@ -5,7 +5,6 @@ from pathlib import Path
 
 import docx
 import openpyxl
-from win32com.client import constants, gencache
 
 
 class ConvertWord:
@@ -28,17 +27,18 @@ class ConvertWord:
         logging.info(f"成功将Word文件转换为Excel: {save_path}")
         return save_path
 
-    @staticmethod
-    def word_to_pdf(word_path: str, save_path: typing.Union[Path, str]) -> str:
+    @classmethod
+    def word_to_pdf(cls, word_path: str, save_path: typing.Union[Path, str]) -> str:
         """word转pdf"""
         logging.info(f"开始将word文件转换为pdf: {word_path}")
-        save_path = f"{os.path.splitext(word_path)[0]}.pdf" if save_path is None else str(save_path)
-        assert not os.path.exists(save_path), f"文件已存在，无法转换: {save_path}"
-        app = gencache.EnsureDispatch('Word.Application')
-        document = app.Documents.Open(word_path, ReadOnly=True)
-        document.ExportAsFixedFormat(save_path, constants.wdExportFormatPDF, Item=constants.wdExportDocumentWithMarkup,
-                                     CreateBookmarks=constants.wdExportCreateHeadingBookmarks)
-        document.Close()
-        app.Quit(constants.wdDoNotSaveChanges)
-        logging.info(f"成功将word文件转换为pdf: {word_path}")
-        return save_path
+        return cls.__get_subclass().word_to_pdf(word_path, save_path)
+
+    @staticmethod
+    def __get_subclass():
+        if os.name == "nt":
+            from .convert_word_windows import ConvertWordWindows
+            return ConvertWordWindows
+        elif os.name == "posix":
+            from .convert_word_linux import ConvertWordLinux
+            return ConvertWordLinux
+        raise Exception(f"未知的操作系统类型: {os.name}")
