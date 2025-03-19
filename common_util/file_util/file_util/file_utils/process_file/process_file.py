@@ -40,16 +40,19 @@ class ProcessFile:
         return file_path
 
     @classmethod
+    @abc.abstractmethod
     def get_directory_path(cls) -> str:
         """获取文件夹路径"""
         return cls.__get_subclass().get_directory_path()
 
     @classmethod
+    @abc.abstractmethod
     def get_file_path(cls) -> str:
         """获取文件路径"""
         return cls.__get_subclass().get_file_path()
 
     @classmethod
+    @abc.abstractmethod
     def get_file_paths(cls) -> typing.Literal[""] | typing.Tuple[str, ...]:
         """获取文件路径列表"""
         return cls.__get_subclass().get_file_paths()
@@ -112,6 +115,7 @@ class ProcessFile:
         dir_path.mkdir(exist_ok=True, parents=True)  # parents参数保证递归创建文件目录
 
     @classmethod
+    @abc.abstractmethod
     def open_file(cls, file_path: str):
         """打开文件"""
         logging.info(f"打开文件: {file_path}")

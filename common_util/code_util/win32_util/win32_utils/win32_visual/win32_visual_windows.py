@@ -1,4 +1,3 @@
-import logging
 import time
 import typing
 
@@ -9,8 +8,10 @@ import win32process
 from win32api import CloseHandle, OpenProcess, TerminateProcess
 from win32com import client
 
+from .win32_visual import Win32Visual
 
-class Win32Visual:
+
+class Win32VisualWindows(Win32Visual):
 
     @classmethod
     def close_handle(cls, class_name: str, title: str):
@@ -32,25 +33,7 @@ class Win32Visual:
             time.sleep(1)
 
     @classmethod
-    def find_handle(cls, class_name: str, title: str, wait_seconds: int) -> int:
-        """查找窗口句柄"""
-        handles = cls.find_handles(class_name, title, wait_seconds)
-        return handles[0] if handles else 0
-
-    @classmethod
-    def find_handles(cls, class_name: str, title: str, wait_seconds: int) -> typing.List[int]:
-        """查找窗口句柄列表"""
-        for _ in range(wait_seconds):
-            handles = cls._find_handles(class_name, title)
-            if handles:
-                return handles
-            if wait_seconds > 1:
-                time.sleep(1)
-        logging.warning(f"未找到窗口: class_name={class_name}, title={title}")
-        return []
-
-    @staticmethod
-    def show_window(handle: int, need_admin_right: bool):
+    def show_window(cls, handle: int, need_admin_right: bool):
         """显示窗口"""
         if not handle:
             return
@@ -96,19 +79,7 @@ class Win32Visual:
         win32gui.SendMessage(dialog, win32con.WM_COMMAND, 1, button)
 
     @classmethod
-    def wait_handle_disappear(cls, class_name: str, title: str, wait_seconds: int) -> bool:
-        """等待窗口消失"""
-        for _ in range(wait_seconds):
-            handles = cls._find_handles(class_name, title)
-            if not handles:
-                return True
-            if wait_seconds > 1:
-                time.sleep(1)
-        logging.warning(f"窗口存在超时: class_name={class_name}, title={title}")
-        return False
-
-    @staticmethod
-    def _find_handles(class_name: str, title: str) -> typing.List[int]:
+    def _find_handles(cls, class_name: str, title: str) -> typing.List[int]:
         """查找窗口句柄列表"""
 
         def _filter_handle(handle: int, _handles: list):

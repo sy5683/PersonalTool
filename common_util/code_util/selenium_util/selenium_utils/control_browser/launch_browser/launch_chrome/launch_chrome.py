@@ -153,6 +153,7 @@ class LaunchChrome(LaunchBase):
         return driver
 
     @classmethod
+    @abc.abstractmethod
     def _netstat_debug_port_running(cls, debug_port: int) -> bool:
         """判断debug端口是否正在运行"""
         return cls.__get_subclass()._netstat_debug_port_running(debug_port)

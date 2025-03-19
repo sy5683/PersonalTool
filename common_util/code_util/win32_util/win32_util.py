@@ -2,7 +2,7 @@ import typing
 from pathlib import Path
 
 from .win32_utils.win32_control import Win32Control
-from .win32_utils.win32_visual import Win32Visual
+from .win32_utils.win32_visual.win32_visual import Win32Visual
 
 
 class Win32Util:

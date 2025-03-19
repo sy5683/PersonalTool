@@ -34,6 +34,7 @@ class LaunchEdge(LaunchBase):
                 del cls._driver_map[key]
 
     @classmethod
+    @abc.abstractmethod
     def get_driver(cls, selenium_config: SeleniumConfig) -> WebDriver:
         """获取driver"""
         return cls.__get_subclass().get_driver(selenium_config)

@@ -1,3 +1,4 @@
+import abc
 import logging
 import os
 import typing
@@ -28,6 +29,7 @@ class ConvertWord:
         return save_path
 
     @classmethod
+    @abc.abstractmethod
     def word_to_pdf(cls, word_path: str, save_path: typing.Union[Path, str]) -> str:
         """word转pdf"""
         logging.info(f"开始将word文件转换为pdf: {word_path}")
