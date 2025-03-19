@@ -1,5 +1,6 @@
 import os
 import re
+import subprocess
 from pathlib import Path
 
 import win32con
@@ -20,7 +21,7 @@ class LaunchChromeWindows(LaunchChrome):
             os.system(f"taskkill /f /im {os.path.basename(cls.__get_driver_path(selenium_config))}")
         # 2) 如果控制debug接管的浏览器，使用driver.quit()仅会关闭selenium，因此需要将端口也进行处理
         debug_port = cls.__get_debug_port(selenium_config)
-        if debug_port and cls.__netstat_debug_port_running(debug_port):
+        if debug_port and cls._netstat_debug_port_running(debug_port):
             with os.popen(f'netstat -aon|findstr "{debug_port}"') as cmd:
                 result = cmd.read()
             temp_result = [each for each in result.split('\n')[0].split(' ') if each != '']
@@ -53,6 +54,18 @@ class LaunchChromeWindows(LaunchChrome):
                 return str(chrome_path)
         # 4) 几种方式都未找到谷歌浏览器文件路径，抛出异常
         raise FileExistsError("未找到谷歌浏览器")
+
+    @classmethod
+    def _netstat_debug_port_running(cls, debug_port: int) -> bool:
+        """判断debug端口是否正在运行"""
+        # noinspection PyBroadException
+        try:
+            cmd = f'netstat -ano | findstr "{debug_port}" | findstr "LISTEN"'
+            with subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                  stderr=subprocess.PIPE, encoding='gbk') as p:
+                return str(debug_port) in p.stdout.read()
+        except Exception:
+            return False
 
     @classmethod
     def _set_special_options(cls, options: webdriver.ChromeOptions):

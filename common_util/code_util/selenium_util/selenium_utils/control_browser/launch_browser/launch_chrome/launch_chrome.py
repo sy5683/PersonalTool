@@ -66,12 +66,12 @@ class LaunchChrome(LaunchBase):
             selenium_config.info(f"Debug端口的谷歌浏览器正在运行: {debug_port}")
             return
         assert debug_port > 0, f"端口号异常: {debug_port}"
-        assert not cls.__netstat_debug_port_running(debug_port), f"Debug端口被占用: {debug_port}"
+        assert not cls._netstat_debug_port_running(debug_port), f"Debug端口被占用: {debug_port}"
         selenium_config.info(f"Debug启动谷歌浏览器: {debug_port}")
         # 2) 获取谷歌浏览器路径
         chrome_path = cls._get_chrome_path()
         # 3) cmd调用命令行debug启动谷歌浏览器
-        subprocess.Popen(f'"{chrome_path}" "--remote-debugging-port={debug_port}"')
+        subprocess.Popen(f'"{chrome_path}" "--remote-debugging-port={debug_port}"', shell=True)
         time.sleep(1)  # 等待一秒，确认端口正常启动
 
     @classmethod
@@ -121,9 +121,7 @@ class LaunchChrome(LaunchBase):
             options.add_argument(f"--user-data-dir={user_data_dir}")
         # 1.7) 设置禁用弹窗拦截
         options.add_argument("--disable-popup-blocking")
-        # 2) 进行一些特殊设置
-        cls._set_special_options(options)
-        # 3) 启动谷歌浏览器
+        # 2 启动谷歌浏览器
         return cls.__launch_chrome_driver(selenium_config, options)
 
     @classmethod
@@ -155,6 +153,11 @@ class LaunchChrome(LaunchBase):
         return driver
 
     @classmethod
+    def _netstat_debug_port_running(cls, debug_port: int) -> bool:
+        """判断debug端口是否正在运行"""
+        return cls.__get_subclass()._netstat_debug_port_running(debug_port)
+
+    @classmethod
     @abc.abstractmethod
     def _set_special_options(cls, options: webdriver.ChromeOptions):
         """进行一些特殊设置"""
@@ -164,7 +167,7 @@ class LaunchChrome(LaunchBase):
     def _take_over_chrome(cls, selenium_config: SeleniumConfig) -> WebDriver:
         """接管谷歌浏览器"""
         debug_port = cls.__get_debug_port(selenium_config)
-        assert cls.__netstat_debug_port_running(debug_port), f"当前端口并未启动，无法接管谷歌浏览器: {debug_port}"
+        assert cls._netstat_debug_port_running(debug_port), f"当前端口并未启动，无法接管谷歌浏览器: {debug_port}"
         selenium_config.info(f"接管已debug运行的谷歌浏览器，端口: {debug_port}")
         # 1.1) 获取谷歌浏览器设置
         options = webdriver.ChromeOptions()
@@ -193,7 +196,7 @@ class LaunchChrome(LaunchBase):
         if return_default:
             return default_debug_port
         # 2.2) 检测默认的debug_port是否正在运行，如果正在运行，则返回默认的debug_port
-        if cls.__netstat_debug_port_running(default_debug_port):
+        if cls._netstat_debug_port_running(default_debug_port):
             return default_debug_port
         # 3) 返回空值
         return None
@@ -225,20 +228,10 @@ class LaunchChrome(LaunchBase):
         driver_path = cls.__get_driver_path(selenium_config)
         # 开启日志性能监听，用于获取页面中的network请求
         options.set_capability("goog:loggingPrefs", {'performance': "ALL"})
+        # 进行一些特殊设置
+        cls._set_special_options(options)
         from selenium.webdriver.chrome.service import Service
         return webdriver.Chrome(options=options, service=Service(executable_path=driver_path))
-
-    @staticmethod
-    def __netstat_debug_port_running(debug_port: int) -> bool:
-        """判断debug端口是否正在运行"""
-        # noinspection PyBroadException
-        try:
-            cmd = f'netstat -ano | findstr "{debug_port}" | findstr "LISTEN"'
-            with subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                  stderr=subprocess.PIPE, encoding='gbk') as p:
-                return str(debug_port) in p.stdout.read()
-        except Exception:
-            return False
 
     @staticmethod
     def __inject_camouflage_script(driver: webdriver):

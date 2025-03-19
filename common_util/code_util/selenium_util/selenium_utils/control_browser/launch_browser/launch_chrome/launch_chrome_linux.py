@@ -1,4 +1,5 @@
 import os
+import subprocess
 from pathlib import Path
 
 import psutil
@@ -33,6 +34,18 @@ class LaunchChromeLinux(LaunchChrome):
             if chrome_file_path.exists():
                 return str(chrome_file_path)
         raise FileExistsError("未找到谷歌浏览器路径")
+
+    @classmethod
+    def _netstat_debug_port_running(cls, debug_port: int) -> bool:
+        """判断debug端口是否正在运行"""
+        # noinspection PyBroadException
+        try:
+            cmd = f"netstat -tuln | grep {debug_port} | grep LISTEN"
+            with subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                  stderr=subprocess.PIPE, encoding='gbk') as p:
+                return str(debug_port) in p.stdout.read()
+        except Exception:
+            return False
 
     @classmethod
     def _set_special_options(cls, options: webdriver.ChromeOptions):
