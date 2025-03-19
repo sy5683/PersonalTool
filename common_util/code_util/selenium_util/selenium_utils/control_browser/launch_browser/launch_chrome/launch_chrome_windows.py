@@ -3,6 +3,7 @@ import re
 from pathlib import Path
 
 import win32con
+from selenium import webdriver
 from win32api import GetLogicalDriveStrings, RegOpenKey, RegQueryValueEx
 
 from common_util.code_util.selenium_util.selenium_utils.entity.selenium_config import SeleniumConfig
@@ -52,3 +53,7 @@ class LaunchChromeWindows(LaunchChrome):
                 return str(chrome_path)
         # 4) 几种方式都未找到谷歌浏览器文件路径，抛出异常
         raise FileExistsError("未找到谷歌浏览器")
+
+    @classmethod
+    def _set_special_options(cls, options: webdriver.ChromeOptions):
+        """进行一些特殊设置"""

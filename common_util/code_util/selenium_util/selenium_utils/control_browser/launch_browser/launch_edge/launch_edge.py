@@ -5,7 +5,6 @@ import time
 import typing
 
 from selenium import webdriver, common
-from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.edge.webdriver import WebDriver
 
 from ..base.launch_base import LaunchBase
@@ -149,8 +148,8 @@ class LaunchEdge(LaunchBase):
     def __launch_edge_driver(cls, selenium_config: SeleniumConfig, options: webdriver.EdgeOptions) -> WebDriver:
         """启动Edge浏览器driver"""
         driver_path = cls.__get_driver_path(selenium_config)
-        service = EdgeService(executable_path=driver_path)
-        return webdriver.Edge(options=options, service=service)
+        from selenium.webdriver.edge.service import Service
+        return webdriver.Edge(options=options, service=Service(executable_path=driver_path))
 
     @staticmethod
     def __get_subclass():

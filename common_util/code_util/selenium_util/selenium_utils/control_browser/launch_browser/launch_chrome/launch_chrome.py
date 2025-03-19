@@ -6,7 +6,6 @@ import time
 import typing
 
 from selenium import webdriver, common
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import WebDriver
 
 from ..base.launch_base import LaunchBase
@@ -122,7 +121,9 @@ class LaunchChrome(LaunchBase):
             options.add_argument(f"--user-data-dir={user_data_dir}")
         # 1.7) 设置禁用弹窗拦截
         options.add_argument("--disable-popup-blocking")
-        # 2) 启动谷歌浏览器
+        # 2) 进行一些特殊设置
+        cls._set_special_options(options)
+        # 3) 启动谷歌浏览器
         return cls.__launch_chrome_driver(selenium_config, options)
 
     @classmethod
@@ -152,6 +153,12 @@ class LaunchChrome(LaunchBase):
         # 3.2) 启动后设置浏览器最前端
         cls.set_browser_front(driver)
         return driver
+
+    @classmethod
+    @abc.abstractmethod
+    def _set_special_options(cls, options: webdriver.ChromeOptions):
+        """进行一些特殊设置"""
+        cls.__get_subclass()._set_special_options(options)
 
     @classmethod
     def _take_over_chrome(cls, selenium_config: SeleniumConfig) -> WebDriver:
@@ -205,7 +212,8 @@ class LaunchChrome(LaunchBase):
         """获取谷歌浏览器用户缓存User Data路径"""
         # 路径列表具有优先级，添加路径时注意顺序
         for user_data_path in [
-            os.path.join(os.path.expanduser("~"), "AppData", "Local", "Google", "Chrome", "User Data", "Default"),  # 默认路径
+            os.path.join(os.path.expanduser("~"), "AppData", "Local", "Google", "Chrome", "User Data", "Default"),
+            # 默认路径
             os.path.join(os.path.dirname(cls._get_chrome_path()), "User Data", "Default"),  # 有的User Data文件放在谷歌浏览器同级目录中
         ]:
             if os.path.exists(user_data_path):
@@ -217,6 +225,7 @@ class LaunchChrome(LaunchBase):
         driver_path = cls.__get_driver_path(selenium_config)
         # 开启日志性能监听，用于获取页面中的network请求
         options.set_capability("goog:loggingPrefs", {'performance': "ALL"})
+        from selenium.webdriver.chrome.service import Service
         return webdriver.Chrome(options=options, service=Service(executable_path=driver_path))
 
     @staticmethod

@@ -5,7 +5,6 @@ import time
 import typing
 
 from selenium import webdriver
-from selenium.webdriver.ie.service import Service
 from selenium.webdriver.ie.webdriver import WebDriver
 
 from ..base.launch_base import LaunchBase
@@ -70,8 +69,8 @@ class LaunchIe(LaunchBase):
     def _launch_ie_driver(cls, selenium_config: SeleniumConfig, options: webdriver.IeOptions) -> WebDriver:
         """启动IE浏览器driver"""
         driver_path = cls.__get_driver_path(selenium_config)
-        service = Service(executable_path=driver_path)
-        return webdriver.Ie(options=options, service=service)
+        from selenium.webdriver.ie.service import Service
+        return webdriver.Ie(options=options, service=Service(executable_path=driver_path))
 
     @staticmethod
     def __get_driver_path(selenium_config: SeleniumConfig) -> str:
