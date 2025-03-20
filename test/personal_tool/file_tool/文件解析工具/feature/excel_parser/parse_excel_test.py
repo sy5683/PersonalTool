@@ -12,8 +12,9 @@ class ParseExcelTestCase(TestBase):
         self.statement_path = Path(r"E:\Document\公司文档\RPA\场景文档\02_银行对账\银行流水")
 
     def test_parse_statement(self):
-        for excel_path in self.__get_excel_path(self.statement_path.joinpath("")):
+        for excel_path in self.__get_excel_path(self.statement_path.joinpath("test")):
             statement_parser = ParseExcel.parse_statement(excel_path)
+            print(statement_parser.account_number)
             for statement in statement_parser.statements:
                 print(statement.__dict__)
 

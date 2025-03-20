@@ -36,7 +36,7 @@ class ICBC03StatementParser(StatementParser):
             statement.trade_datetime = self._format_date(data[ICBC03Tags.trade_datetime.value])  # 交易时间
             # 工商银行下载时有异常情况，下载时选项没有开户名称，因此工商银行的开户名称通过表单参数传递
             statement.account_name = self.company_name  # 开户名称
-            self.account_number = statement.account_number = data[ICBC03Tags.account_number.value]  # 开户账号
+            statement.account_number = data[ICBC03Tags.account_number.value]  # 开户账号
             statement.reciprocal_account_name = data[ICBC03Tags.reciprocal_account_name.value]  # 对方账户名称
             statement.reciprocal_account_number = data[ICBC03Tags.reciprocal_account_number.value]  # 对方账户号
             statement.abstract = f"{data[ICBC03Tags.abstract.value]}；{data[ICBC03Tags.remark.value]}".strip("；")  # 摘要
@@ -49,3 +49,4 @@ class ICBC03StatementParser(StatementParser):
                 continue
             statement.balance = NumberUtil.to_amount(data[ICBC03Tags.balance.value])  # 余额
             self.statements.append(statement)
+            self.account_number = statement.account_number

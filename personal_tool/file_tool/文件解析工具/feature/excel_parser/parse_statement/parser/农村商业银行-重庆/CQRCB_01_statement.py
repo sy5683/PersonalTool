@@ -34,7 +34,7 @@ class CQRCB01StatementParser(StatementParser):
             statement.trade_datetime = self._format_date(data[CQRCB01Tags.trade_datetime.value])  # 交易时间
             # 重庆农村商业银行下载文件中没有开户名称，因此重庆农村商业银行的开户名称通过表单参数传递
             statement.account_name = self.company_name  # 开户名称
-            self.account_number = statement.account_number = data[CQRCB01Tags.account_number.value]  # 开户账号
+            statement.account_number = data[CQRCB01Tags.account_number.value]  # 开户账号
             statement.reciprocal_account_name = data[CQRCB01Tags.reciprocal_account_name.value]  # 对方账户名称
             statement.reciprocal_account_number = data[CQRCB01Tags.reciprocal_account_number.value]  # 对方账户号
             statement.abstract = data[CQRCB01Tags.abstract.value]  # 摘要
@@ -45,3 +45,4 @@ class CQRCB01StatementParser(StatementParser):
                 continue
             statement.balance = NumberUtil.to_amount(data[CQRCB01Tags.balance.value])  # 余额
             self.statements.append(statement)
+            self.account_number = statement.account_number
