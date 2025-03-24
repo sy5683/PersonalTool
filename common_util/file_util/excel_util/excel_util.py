@@ -52,6 +52,12 @@ class ExcelUtil:
         return FormatExcelData.format_int_data(str(data))
 
     @staticmethod
+    def format_row_style(worksheet: Worksheet, row: int, data_size: int = 14):
+        """格式化行样式"""
+        # 字体大小不超过表头字体大小时，均使用表头字体大小为参数传参，这个值只在这里只是为了设置行高
+        OpenpyxlExcel.format_row_style(worksheet, row, max(data_size, 14))
+
+    @staticmethod
     def get_data_list(excel_path: typing.Union[Path, str], sheet_index: int = 0, sheet_name: str = None,
                       tag_row: int = 0, tag_row_quantity: int = 1) -> typing.List[dict]:
         """获取excel数据"""

@@ -30,35 +30,24 @@ class OpenpyxlExcel:
                 cls.set_cell(cell, fill_color=tag_color)
         worksheet.row_dimensions[tag_row].height = tag_size + cls._height_difference
 
-    @staticmethod
-    def merge_cells(worksheet: Worksheet, coordinate_from: str, coordinate_to: str):
-        """合并单元格"""
-        # 处理起始坐标与结束坐标，使起始坐标必须在结束坐标左上
-        from_col, from_row = [each for each in re.compile(r'(\d+|\s+)').split(coordinate_from) if each]
-        to_col, to_row = [each for each in re.compile(r'(\d+|\s+)').split(coordinate_to) if each]
-        new_from_col, new_to_col = (from_col, to_col) if from_col < to_col else (to_col, from_col)
-        new_from_row, new_to_row = (from_row, to_row) if int(from_row) < int(to_row) else (to_row, from_row)
-        # 合并单元格
-        worksheet.merge_cells(f"{new_from_col}{new_from_row}:{new_to_col}{new_to_row}")
+    @classmethod
+    def format_row_style(cls, worksheet: Worksheet, row: int, data_size: int):
+        """格式化行样式"""
+        worksheet.row_dimensions[row].height = data_size + cls._height_difference  # 设置行高
+        for cell in worksheet[row]:
+            vertical = "center" if cell.alignment.vertical is None else cell.alignment.vertical
+            cls.set_cell(cell, vertical=vertical, is_border=True)
 
     @staticmethod
     def get_sheet_heights(worksheet: Worksheet) -> typing.List[float]:
         """获取sheet行高"""
-        heights = []
-        for row in range(worksheet.max_row):
-            row_height = worksheet.row_dimensions[row + 1].height
-            heights.append(row_height)
-        return heights
+        return [worksheet.row_dimensions[row + 1].height for row in range(worksheet.max_row)]
 
     @staticmethod
     def get_sheet_widths(worksheet: Worksheet) -> typing.List[float]:
         """获取sheet列宽"""
-        widths = []
-        for col in range(worksheet.max_column):
-            col_letter = utils.get_column_letter(col + 1)
-            col_width = worksheet.column_dimensions[col_letter].width
-            widths.append(col_width)
-        return widths
+        return [worksheet.column_dimensions[utils.get_column_letter(col + 1)].width for col in
+                range(worksheet.max_column)]
 
     @classmethod
     def insert_row_data(cls, worksheet: Worksheet, data_list: list, row: int):
@@ -74,6 +63,17 @@ class OpenpyxlExcel:
             # 使用insert方法插入一行后，excel会多出一行可以被获取的空行，因此在插入之后需要检测一下并删除，不然使用append方法添加数据会有空行
             if not any([cell.value for cell in worksheet[row + 1]]):
                 worksheet.delete_rows(row + 1)
+
+    @staticmethod
+    def merge_cells(worksheet: Worksheet, coordinate_from: str, coordinate_to: str):
+        """合并单元格"""
+        # 处理起始坐标与结束坐标，使起始坐标必须在结束坐标左上
+        from_col, from_row = [each for each in re.compile(r'(\d+|\s+)').split(coordinate_from) if each]
+        to_col, to_row = [each for each in re.compile(r'(\d+|\s+)').split(coordinate_to) if each]
+        new_from_col, new_to_col = (from_col, to_col) if from_col < to_col else (to_col, from_col)
+        new_from_row, new_to_row = (from_row, to_row) if int(from_row) < int(to_row) else (to_row, from_row)
+        # 合并单元格
+        worksheet.merge_cells(f"{new_from_col}{new_from_row}:{new_to_col}{new_to_row}")
 
     @classmethod
     def set_cell(cls, cell: Cell, value: any = '_no_value', number_format: str = None,
@@ -114,8 +114,7 @@ class OpenpyxlExcel:
         for index, width in enumerate(widths):
             if width is None:  # 当设置列宽为None时，不修改列值
                 continue
-            col_letter = utils.get_column_letter(index + 1)
-            worksheet.column_dimensions[col_letter].width = width
+            worksheet.column_dimensions[utils.get_column_letter(index + 1)].width = width
 
     @staticmethod
     def _set_cell_alignment(cell: Cell, horizontal: str, vertical: str):
