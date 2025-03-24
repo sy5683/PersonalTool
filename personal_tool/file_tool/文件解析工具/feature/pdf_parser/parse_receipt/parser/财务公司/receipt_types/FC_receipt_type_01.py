@@ -38,7 +38,7 @@ class FCReceiptType01(FCReceiptType):
             receipt.payee_account_name = name_row_cells[2].get_value()  # 收款人户名
             receipt.payee_account_number = number_row_cells[1].get_value()  # 收款人账号
             receipt.payee_account_bank = bank_row_cells[1].get_value()  # 收款人开户银行
-        receipt.amount = NumberUtil.to_amount(self._get_cell_relative("^人民币元[(（]大写[)）]").get_value())  # 金额
+        receipt.amount = NumberUtil.to_amount(self._get_cell_relative("^人民币元[(（]大写[)）]", 2).get_value())  # 金额
         receipt.abstract = self._get_cell_relative("^摘要$").get_value()  # 摘要
         receipt.image = self.image  # 图片
         return receipt
