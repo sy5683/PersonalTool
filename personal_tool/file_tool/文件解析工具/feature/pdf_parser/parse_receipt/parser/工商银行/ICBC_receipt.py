@@ -6,7 +6,6 @@ from ...entity.receipt_parser import ReceiptParser
 class ICBCReceiptParser(ReceiptParser):
 
     def __init__(self, receipt_path: str, **kwargs):
-        kwargs['threshold_x'] = 25
         super().__init__("工商银行", receipt_path, **kwargs)
 
     def judge(self) -> bool:

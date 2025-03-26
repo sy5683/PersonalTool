@@ -2,6 +2,7 @@ import re
 
 from common_util.data_util.number_util.number_util import NumberUtil
 from common_util.data_util.time_util.time_util import TimeUtil
+from common_util.file_util.pdf_util.pdf_util import PdfUtil
 from .ICBC_receipt_type import ICBCReceiptType
 from ....entity.receipt import Receipt
 
@@ -21,7 +22,6 @@ class ICBCReceiptType02(ICBCReceiptType):
         receipt.bank = self.bank_name  # 银行
         receipt.date = TimeUtil.format_to_str(self._get_word("^日期[:：](.*?)$"))  # 日期
         receipt.receipt_number = self._get_word("^回单编号[:：](.*?)$")  # 回单编号
-        receipt.serial_number = self._get_word("^流水号[:：](.*?)$")  # 流水号
         receipt.payer_account_name = self._get_word("^付款人户名[:：](.*?)$")  # 付款人户名
         receipt.payer_account_number = self._get_word("^付款人[帐账]号[:：](.*?)$")  # 付款人账号
         receipt.payer_account_bank = self._get_word("^付款人开户行[:：](.*?)$")  # 付款人开户银行
