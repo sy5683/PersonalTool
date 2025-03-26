@@ -21,7 +21,7 @@ class SPDBReceiptType01(SPDBReceiptType):
         receipt.bank = self.bank_name  # 银行
         receipt.date = TimeUtil.format_to_str(self._get_cell_relative("^交易时间$").get_value())  # 日期
         receipt.receipt_number = self._get_cell_relative(r"电子回单编号$").get_value()  # 回单编号
-        receipt.serial_number = self._get_cell_relative(r"交易流水号$").get_value()  # 流水号
+        receipt.serial_number = self._get_cell_relative(r"交易流水号").get_value()  # 流水号
         name_row_cells = self.table.get_row_cells(2)
         number_row_cells = self.table.get_row_cells(3)
         bank_row_cells = self.table.get_row_cells(4)
