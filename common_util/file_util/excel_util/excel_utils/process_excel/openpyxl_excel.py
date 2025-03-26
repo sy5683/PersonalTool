@@ -78,7 +78,7 @@ class OpenpyxlExcel:
     @classmethod
     def set_cell(cls, cell: Cell, value: any = '_no_value', number_format: str = None,
                  horizontal: typing.Optional[str] = '_no_horizontal', vertical: typing.Optional[str] = '_no_vertical',
-                 fill_color: typing.Optional[str] = '_no_color', is_border: bool = None,
+                 fill_color: typing.Optional[str] = '_no_fill_color', is_border: bool = None,
                  font_size: float = None, is_bold: bool = None, is_italic: bool = None,
                  font_color: typing.Optional[str] = '_no_font_color'
                  ):
@@ -130,7 +130,7 @@ class OpenpyxlExcel:
     @staticmethod
     def _set_cell_fill(cell: Cell, fill_color: typing.Optional[str]):
         """设置单元格颜色"""
-        if fill_color == "_no_color":
+        if fill_color == "_no_fill_color":
             pass
         elif fill_color is None:
             cell.fill = styles.fills.PatternFill(fill_type=None)
