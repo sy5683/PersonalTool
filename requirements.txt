@@ -30,7 +30,7 @@ requests
 rsa
 screeninfo
 schedule
-selenium
+selenium==4.30.0
 webdriver-manager==4.0.2
 xlrd==1.2.0
 xmltodict

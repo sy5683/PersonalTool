@@ -30,7 +30,7 @@ class LaunchEdgeWindows(LaunchEdge):
         """获取Edge浏览器路径"""
         # 1) 通过注册表查找Edge浏览器路径
         for regedit_dir in [win32con.HKEY_LOCAL_MACHINE, win32con.HKEY_CURRENT_USER]:  # Edge浏览器路径注册表一般在这两个位置下固定位置
-            regedit_path = "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\msedge.exe"
+            regedit_path = os.path.join("Software", "Microsoft", "Windows", "CurrentVersion", "App Paths", "msedge.exe")
             try:
                 key = RegOpenKey(regedit_dir, regedit_path)
                 edge_path, _ = RegQueryValueEx(key, "path")
@@ -41,8 +41,8 @@ class LaunchEdgeWindows(LaunchEdge):
                 return edge_path
         # 2) 通过遍历Edge浏览器常用安装路径查找Edge浏览器路径
         for edge_parent_path in [os.path.join(os.path.expanduser('~'), "AppData", "Local"),
-                                 os.path.join("C:\\","Program Files"),
-                                 os.path.join("C:\\","Program Files (x86)")]:
+                                 os.path.join("C:/", "Program Files"),
+                                 os.path.join("C:/", "Program Files (x86)")]:
             edge_path = os.path.join(edge_parent_path, "Microsoft", "Edge", "Application", "msedge.exe")
             if os.path.isfile(edge_path):
                 return edge_path

@@ -31,7 +31,7 @@ class ParsePdfTestCase(TestBase):
         for receipt_path in self.__get_pdf_path(self.receipt_path.joinpath(r"")):
             parser = ParsePdf.parse_receipt(receipt_path)
             for index, receipt in enumerate(parser.receipts):
-                # image_path = f"E:\\{receipt}.png"
+                # image_path = f"E:/{receipt}.png"
                 # import os
                 # if not os.path.exists(image_path):
                 #     from common_util.file_util.image_util.image_util import ImageUtil

@@ -92,7 +92,8 @@ class DownloadDriver:
             if driver_path.is_dir():
                 continue
             relative_path = str(driver_path).replace(DEFAULT_USER_HOME_CACHE_PATH, "")
-            if check_version and not re.search(rf"\\{check_version}\.|\\{check_version}\\", relative_path):
+            if check_version and not re.search(
+                    rf"\\{check_version}\.|\\{check_version}\\|/{check_version}\.|/{check_version}\\", relative_path):
                 continue
             return str(driver_path)
         raise FileExistsError(f"DriverManager下载路径没有指定版本driver: {check_version}")

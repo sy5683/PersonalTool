@@ -43,8 +43,8 @@ class LaunchChromeWindows(LaunchChrome):
                 return chrome_path
         # 2) 通过遍历谷歌浏览器常用安装路径查找谷歌浏览器路径
         for chrome_parent_path in [os.path.join(os.path.expanduser('~'), "AppData", "Local"),
-                                   os.path.join("C:\\", "Program Files"),
-                                   os.path.join("C:\\", "Program Files (x86)")]:
+                                   os.path.join("C:/", "Program Files"),
+                                   os.path.join("C:/", "Program Files (x86)")]:
             chrome_path = os.path.join(chrome_parent_path, "Google", "Chrome", "Application", "chrome.exe")
             if os.path.isfile(chrome_path):
                 return chrome_path
