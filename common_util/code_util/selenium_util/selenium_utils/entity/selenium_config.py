@@ -7,6 +7,7 @@ from selenium.webdriver.remote.webelement import WebElement
 
 from ..enum.browser_type import BrowserType
 from ..enum.operate_type import OperateType
+from ..selenium_cache import SeleniumCache
 
 
 class SeleniumConfig:
@@ -30,7 +31,8 @@ class SeleniumConfig:
                  xpath: str = '',
                  wait_seconds: int = 120,
                  ):
-        self.browser_type = browser_type  # 浏览器类型，默认为谷歌浏览器
+        self.browser_type = SeleniumCache.browser_type if browser_type is None else browser_type  # 浏览器类型，默认为谷歌浏览器
+        SeleniumCache.browser_type = self.browser_type if self.browser_type != SeleniumCache.browser_type else SeleniumCache.browser_type
         self.check_input = check_input  # 检测输入内容是否正确
         self.close_task = close_task  # 是否关闭浏览器cmd窗口
         self.debug_port = debug_port  # debug端口，用于接管浏览器
