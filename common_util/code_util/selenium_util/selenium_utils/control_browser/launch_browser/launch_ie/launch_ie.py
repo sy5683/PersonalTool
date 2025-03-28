@@ -39,6 +39,15 @@ class LaunchIe(LaunchBase):
         """获取driver"""
         return cls.__get_subclass().get_driver(selenium_config)
 
+    @staticmethod
+    def _get_driver_path(selenium_config: SeleniumConfig) -> str:
+        """获取driver路径"""
+        # 1) 使用参数中的driver_path
+        if selenium_config.driver_path:
+            return selenium_config.driver_path
+        # 2) 自动获取下载的driver_path路径
+        return DownloadDriver.get_ie_driver_path()
+
     @classmethod
     @abc.abstractmethod
     def _set_ie_setting(cls):
@@ -68,18 +77,9 @@ class LaunchIe(LaunchBase):
     @classmethod
     def _launch_ie_driver(cls, selenium_config: SeleniumConfig, options: webdriver.IeOptions) -> WebDriver:
         """启动IE浏览器driver"""
-        driver_path = cls.__get_driver_path(selenium_config)
+        driver_path = cls._get_driver_path(selenium_config)
         from selenium.webdriver.ie.service import Service
         return webdriver.Ie(options=options, service=Service(executable_path=driver_path))
-
-    @staticmethod
-    def __get_driver_path(selenium_config: SeleniumConfig) -> str:
-        """获取driver路径"""
-        # 1) 使用参数中的driver_path
-        if selenium_config.driver_path:
-            return selenium_config.driver_path
-        # 2) 自动获取下载的driver_path路径
-        return DownloadDriver.get_ie_driver_path()
 
     @staticmethod
     def __get_subclass():

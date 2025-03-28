@@ -19,7 +19,7 @@ class LaunchChrome(LaunchBase):
         # 1) 确认参数、缓存中的driver是否存在，不存在则返回
         browser = playwright_config.browser
         if browser is None:
-            debug_port = cls.__get_debug_port(playwright_config)
+            debug_port = cls._get_debug_port(playwright_config)
             browser, context, page = cls._driver_map.get(debug_port if debug_port else threading.current_thread().ident)
         if browser is None:
             return
@@ -41,7 +41,7 @@ class LaunchChrome(LaunchBase):
         if playwright_config.browser:
             return playwright_config.browser, playwright_config.context, playwright_config.page
         # 2) 获取debug端口
-        debug_port = cls.__get_debug_port(playwright_config)
+        debug_port = cls._get_debug_port(playwright_config)
         # 3.1) 获取进程id，并启动谷歌浏览器
         if debug_port is None:
             thread_id = threading.current_thread().ident
@@ -59,11 +59,29 @@ class LaunchChrome(LaunchBase):
         """更新句柄，主要是context, page"""
         context = context if context else playwright_config.context
         page = page if page else playwright_config.page
-        debug_port = cls.__get_debug_port(playwright_config)
+        debug_port = cls._get_debug_port(playwright_config)
         if debug_port is None:
             cls._driver_map[threading.current_thread().ident] = playwright_config.browser, context, page
         else:
             cls._driver_map[debug_port] = playwright_config.browser, context, page
+
+    @classmethod
+    def _get_debug_port(cls, playwright_config: PlaywrightConfig,
+                         return_default: bool = False) -> typing.Union[int, None]:
+        """获取debug端口"""
+        # 1) 获取参数中的debug_port
+        if playwright_config.debug_port:
+            return playwright_config.debug_port
+        # 2) 返回默认的debug_port
+        default_debug_port = 9222
+        # 2.1) 如果需要返回默认的debug_port，则无需进行判断debug_port是否正在运行，直接返回
+        if return_default:
+            return default_debug_port
+        # 2.2) 检测默认的debug_port是否正在运行，如果正在运行，则返回默认的debug_port
+        if cls.__netstat_debug_port_running(default_debug_port):
+            return default_debug_port
+        # 3) 返回空值
+        return None
 
     @classmethod
     def _launch_chrome(cls, playwright_config: PlaywrightConfig) -> typing.Tuple[Browser, BrowserContext, Page]:
@@ -94,7 +112,7 @@ class LaunchChrome(LaunchBase):
     @classmethod
     def _take_over_chrome(cls, playwright_config: PlaywrightConfig) -> typing.Tuple[Browser, BrowserContext, Page]:
         """接管谷歌浏览器"""
-        debug_port = cls.__get_debug_port(playwright_config)
+        debug_port = cls._get_debug_port(playwright_config)
         assert cls.__netstat_debug_port_running(debug_port), f"当前端口并未启动，无法接管谷歌浏览器: {debug_port}"
         playwright_config.info(f"接管已debug运行的谷歌浏览器，端口: {debug_port}")
         # 1) 生成playwright实例对象
@@ -118,24 +136,6 @@ class LaunchChrome(LaunchBase):
         if cls._playwright is None:
             cls._playwright = sync_playwright().start()
         return cls._playwright
-
-    @classmethod
-    def __get_debug_port(cls, playwright_config: PlaywrightConfig,
-                         return_default: bool = False) -> typing.Union[int, None]:
-        """获取debug端口"""
-        # 1) 获取参数中的debug_port
-        if playwright_config.debug_port:
-            return playwright_config.debug_port
-        # 2) 返回默认的debug_port
-        default_debug_port = 9222
-        # 2.1) 如果需要返回默认的debug_port，则无需进行判断debug_port是否正在运行，直接返回
-        if return_default:
-            return default_debug_port
-        # 2.2) 检测默认的debug_port是否正在运行，如果正在运行，则返回默认的debug_port
-        if cls.__netstat_debug_port_running(default_debug_port):
-            return default_debug_port
-        # 3) 返回空值
-        return None
 
     @staticmethod
     def __netstat_debug_port_running(debug_port: int) -> bool:

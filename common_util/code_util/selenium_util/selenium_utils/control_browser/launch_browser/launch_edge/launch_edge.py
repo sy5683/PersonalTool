@@ -39,6 +39,15 @@ class LaunchEdge(LaunchBase):
         """获取driver"""
         return cls.__get_subclass().get_driver(selenium_config)
 
+    @staticmethod
+    def _get_driver_path(selenium_config: SeleniumConfig) -> str:
+        """获取driver路径"""
+        # 1) 使用参数中的driver_path
+        if selenium_config.driver_path:
+            return selenium_config.driver_path
+        # 2) 自动获取下载的driver_path路径
+        return DownloadDriver.get_edge_driver_path()
+
     @classmethod
     def _get_edge_driver(cls, selenium_config: SeleniumConfig, user_data_dir: str = None) -> WebDriver:
         """获取edge_driver"""
@@ -126,15 +135,6 @@ class LaunchEdge(LaunchBase):
         return driver
 
     @staticmethod
-    def __get_driver_path(selenium_config: SeleniumConfig) -> str:
-        """获取driver路径"""
-        # 1) 使用参数中的driver_path
-        if selenium_config.driver_path:
-            return selenium_config.driver_path
-        # 2) 自动获取下载的driver_path路径
-        return DownloadDriver.get_edge_driver_path()
-
-    @staticmethod
     def __get_user_data_path() -> typing.Union[str, None]:
         """获取Edge浏览器用户缓存User Data路径"""
         # 1) 查找User Data文件默认路径
@@ -148,7 +148,7 @@ class LaunchEdge(LaunchBase):
     @classmethod
     def __launch_edge_driver(cls, selenium_config: SeleniumConfig, options: webdriver.EdgeOptions) -> WebDriver:
         """启动Edge浏览器driver"""
-        driver_path = cls.__get_driver_path(selenium_config)
+        driver_path = cls._get_driver_path(selenium_config)
         from selenium.webdriver.edge.service import Service
         return webdriver.Edge(options=options, service=Service(executable_path=driver_path))
 

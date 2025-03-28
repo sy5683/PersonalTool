@@ -18,9 +18,9 @@ class LaunchChromeWindows(LaunchChrome):
         """命令行关闭浏览器"""
         # 1) 使用命令行直接关闭进程
         if selenium_config.close_task:
-            os.system(f"taskkill /f /im {os.path.basename(cls.__get_driver_path(selenium_config))}")
+            os.system(f"taskkill /f /im {os.path.basename(cls._get_driver_path(selenium_config))}")
         # 2) 如果控制debug接管的浏览器，使用driver.quit()仅会关闭selenium，因此需要将端口也进行处理
-        debug_port = cls.__get_debug_port(selenium_config)
+        debug_port = cls._get_debug_port(selenium_config)
         if debug_port and cls._netstat_debug_port_running(debug_port):
             with os.popen(f'netstat -aon|findstr "{debug_port}"') as cmd:
                 result = cmd.read()
