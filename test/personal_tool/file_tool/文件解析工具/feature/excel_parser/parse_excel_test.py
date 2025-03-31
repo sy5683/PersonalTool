@@ -13,7 +13,7 @@ class ParseExcelTestCase(TestBase):
 
     def test_parse_statement(self):
         for excel_path in self.__get_excel_path(self.statement_path.joinpath("")):
-            statement_parser = ParseExcel.parse_statement(excel_path)
+            statement_parser = ParseExcel.parse_statement(excel_path, company_name='测试')
             print(f"{statement_parser.bank_name}")
             print(f"{statement_parser.company_name}")
             print(f"{statement_parser.statement_path}")
