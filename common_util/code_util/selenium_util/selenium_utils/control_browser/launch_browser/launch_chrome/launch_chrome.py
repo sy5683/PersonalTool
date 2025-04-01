@@ -133,7 +133,7 @@ class LaunchChrome(LaunchBase):
         """获取谷歌浏览器路径"""
         if selenium_config.chrome_path is not None:
             return selenium_config.chrome_path
-        return cls.__get_subclass()._get_chrome_path()
+        return cls.__get_subclass()._get_chrome_path(selenium_config)
 
     @classmethod
     def _get_debug_port(cls, selenium_config: SeleniumConfig, return_default: bool = False) -> typing.Union[int, None]:

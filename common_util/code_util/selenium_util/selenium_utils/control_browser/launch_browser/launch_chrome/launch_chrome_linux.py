@@ -24,7 +24,7 @@ class LaunchChromeLinux(LaunchChrome):
                 selenium_config.error(f"进程关闭失败: {name}")
 
     @classmethod
-    def _get_chrome_path(cls) -> str:
+    def _get_chrome_path(cls, selenium_config: SeleniumConfig) -> str:
         """获取谷歌浏览器路径"""
         # Linux只有一个根目录，因此直接获取这个根目录之后从中遍历全部文件路径
         for chrome_path in Path(os.path.abspath(os.sep)).rglob("*google.chrome*"):
