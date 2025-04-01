@@ -19,7 +19,7 @@ class CGBReceiptType01(CGBReceiptType):
         receipt = Receipt()
         receipt.type = self.__str__()  # 类型
         receipt.bank = self.bank_name  # 银行
-        receipt.date = TimeUtil.format_to_str(self._get_cell_relative("记账日期").get_value())  # 日期
+        receipt.date = TimeUtil.format_to_str(self._get_cell_relative("^记账日期$").get_value())  # 日期
         receipt.serial_number = self._get_cell_relative("^核心流水号$").get_value()  # 流水号
         name_row_cells = self.table.get_row_cells(0)
         number_row_cells = self.table.get_row_cells(1)
@@ -38,7 +38,7 @@ class CGBReceiptType01(CGBReceiptType):
             receipt.payee_account_name = name_row_cells[2].get_value()  # 收款人户名
             receipt.payee_account_number = number_row_cells[1].get_value()  # 收款人账号
             receipt.payee_account_bank = bank_row_cells[1].get_value()  # 收款人开户银行
-        receipt.amount = NumberUtil.to_amount(self._get_cell_relative("交易金额").get_value())  # 金额
+        receipt.amount = NumberUtil.to_amount(self._get_cell_relative("^交易金额$").get_value())  # 金额
         receipt.abstract = ""  # 摘要
         receipt.image = self.image  # 图片
         return receipt
