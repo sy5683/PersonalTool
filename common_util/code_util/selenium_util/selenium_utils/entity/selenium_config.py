@@ -15,6 +15,7 @@ class SeleniumConfig:
     def __init__(self,
                  browser_type: BrowserType = BrowserType.chrome,
                  check_input: bool = True,
+                 chrome_path: typing.Union[str, Path] = None,
                  close_task: bool = True,
                  debug_port: int = None,
                  delay_seconds: int = 0,
@@ -34,6 +35,7 @@ class SeleniumConfig:
         self.browser_type = SeleniumCache.browser_type if browser_type is None else browser_type  # 浏览器类型，默认为谷歌浏览器
         SeleniumCache.browser_type = self.browser_type if self.browser_type != SeleniumCache.browser_type else SeleniumCache.browser_type
         self.check_input = check_input  # 检测输入内容是否正确
+        self.chrome_path: str = str(chrome_path) if chrome_path else chrome_path  # 谷歌浏览器路径
         self.close_task = close_task  # 是否关闭浏览器cmd窗口
         self.debug_port = debug_port  # debug端口，用于接管浏览器
         self.delay_seconds = delay_seconds  # 演示时间，默认为0不等待

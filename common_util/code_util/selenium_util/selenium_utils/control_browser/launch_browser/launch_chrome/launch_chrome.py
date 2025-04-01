@@ -69,7 +69,7 @@ class LaunchChrome(LaunchBase):
         assert not cls._netstat_debug_port_running(debug_port), f"Debug端口被占用: {debug_port}"
         selenium_config.info(f"Debug启动谷歌浏览器: {debug_port}")
         # 2) 获取谷歌浏览器路径
-        chrome_path = cls._get_chrome_path()
+        chrome_path = cls._get_chrome_path(selenium_config)
         # 3) cmd调用命令行debug启动谷歌浏览器
         subprocess.Popen(f'"{chrome_path}" "--remote-debugging-port={debug_port}"', shell=True)
         time.sleep(1)  # 等待一秒，确认端口正常启动
@@ -86,10 +86,13 @@ class LaunchChrome(LaunchBase):
         # 1.1) 获取谷歌浏览器设置
         options = webdriver.ChromeOptions()
         options.add_argument("--no-sandbox")  # 解决DevToolActivePort文件不存在的报错
-        # 1.2.1) 设置静默运行
+        # 1.2.1) 直接指定谷歌浏览器路径
+        if selenium_config.chrome_path:
+            options.binary_location = selenium_config.chrome_path
+        # 1.2.2) 设置静默运行
         if selenium_config.headless:
             options.add_argument("--headless")
-        # 1.2.2) 设置ip代理
+        # 1.2.3) 设置ip代理
         if selenium_config.proxy_ip:
             options.add_argument(f"--proxy-server={selenium_config.proxy_ip}")
         # 1.3.1) 设置忽略私密链接警告
@@ -126,8 +129,10 @@ class LaunchChrome(LaunchBase):
 
     @classmethod
     @abc.abstractmethod
-    def _get_chrome_path(cls) -> str:
+    def _get_chrome_path(cls, selenium_config: SeleniumConfig) -> str:
         """获取谷歌浏览器路径"""
+        if selenium_config.chrome_path is not None:
+            return selenium_config.chrome_path
         return cls.__get_subclass()._get_chrome_path()
 
     @classmethod
@@ -163,7 +168,8 @@ class LaunchChrome(LaunchBase):
         try:
             assert selenium_config.use_user_data
             # 1.1) 获取谷歌浏览器用户缓存路径
-            user_data_dir = cls.__get_user_data_path() if selenium_config.user_data_dir is None else selenium_config.user_data_dir
+            user_data_dir = cls.__get_user_data_path(selenium_config) if selenium_config.user_data_dir is None \
+                else selenium_config.user_data_dir
             # 1.2) 获取driver
             driver = cls._get_chrome_driver(selenium_config, user_data_dir)
         except (AssertionError, common.exceptions.InvalidArgumentException,
@@ -212,13 +218,14 @@ class LaunchChrome(LaunchBase):
         return driver
 
     @classmethod
-    def __get_user_data_path(cls) -> typing.Union[str, None]:
+    def __get_user_data_path(cls, selenium_config: SeleniumConfig) -> typing.Union[str, None]:
         """获取谷歌浏览器用户缓存User Data路径"""
         # 路径列表具有优先级，添加路径时注意顺序
         for user_data_path in [
             os.path.join(os.path.expanduser("~"), "AppData", "Local", "Google", "Chrome", "User Data", "Default"),
             # 默认路径
-            os.path.join(os.path.dirname(cls._get_chrome_path()), "User Data", "Default"),  # 有的User Data文件放在谷歌浏览器同级目录中
+            os.path.join(os.path.dirname(cls._get_chrome_path(selenium_config)), "User Data", "Default"),
+            # 有的User Data文件放在谷歌浏览器同级目录中
         ]:
             if os.path.exists(user_data_path):
                 return user_data_path
