@@ -10,11 +10,12 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 
 from ..base.launch_base import LaunchBase
 from ..download_driver import DownloadDriver
+from ....entity.cache_driver import CacheDriver
 from ....entity.selenium_config import SeleniumConfig
 
 
 class LaunchChrome(LaunchBase):
-    _driver_map: typing.Dict[int, WebDriver] = {}
+    _driver_map: typing.Dict[int, CacheDriver] = {}
 
     @classmethod
     def close_browser(cls, selenium_config: SeleniumConfig):
@@ -22,8 +23,7 @@ class LaunchChrome(LaunchBase):
         # 1) 确认参数、缓存中的driver是否存在，不存在则返回
         driver = selenium_config.driver
         if driver is None:
-            debug_port = cls._get_debug_port(selenium_config)
-            driver = cls._driver_map.get(debug_port if debug_port else threading.current_thread().ident)
+            driver = cls._driver_map.get(threading.current_thread().ident).driver
         if driver is None:
             return
         # 2.1) 使用selenium自带的quit方法关闭driver
@@ -32,39 +32,32 @@ class LaunchChrome(LaunchBase):
         # 2.2) 因为经常出现quit之后cmd窗口未关的情况，因此这里使用命令行直接关闭进程
         cls._close_browser_by_cmd(selenium_config)
         # 3) 清除缓存
-        selenium_config.driver = None
-        for key, _driver in list(cls._driver_map.items()):
-            if driver == _driver:
-                del cls._driver_map[key]
+        for thread_id, cache_driver in list(cls._driver_map.items()):
+            if driver == cache_driver.driver:
+                del cls._driver_map[thread_id]
 
     @classmethod
-    def get_driver(cls, selenium_config: SeleniumConfig) -> WebDriver:
+    def get_driver(cls, selenium_config: SeleniumConfig) -> typing.Optional[WebDriver]:
         """获取driver"""
         # 1) 返回参数中传入的driver
         if selenium_config.driver:
+            cls._get_cache_driver(driver=selenium_config.driver)
             return selenium_config.driver
-        # 2) 获取debug端口
-        debug_port = cls._get_debug_port(selenium_config)
-        # 3.1) 获取进程id，并启动谷歌浏览器
-        if debug_port is None:
-            thread_id = threading.current_thread().ident
-            if thread_id not in cls._driver_map:
-                cls._driver_map[thread_id] = cls._launch_chrome(selenium_config)
-            return cls._driver_map[thread_id]
-        # 3.2) 使用debug方式接管谷歌浏览器
-        else:
-            if debug_port not in cls._driver_map:
-                cls._driver_map[debug_port] = cls._take_over_chrome(selenium_config)
-            return cls._driver_map[debug_port]
+        # 2) 启动谷歌浏览器
+        cache_driver = cls._get_cache_driver()
+        if cache_driver.driver is None:
+            # 根据debug端口判断是启动还是接管
+            if cls._get_debug_port(selenium_config) is None:
+                cache_driver.driver = cls._launch_chrome(selenium_config)
+            else:
+                cache_driver.driver = cls._take_over_chrome(selenium_config)
+        return cache_driver.driver
 
     @classmethod
     def launch_browser_debug(cls, selenium_config: SeleniumConfig):
         """debug启动谷歌浏览器"""
         # 1) 检测debug端口
         debug_port = cls._get_debug_port(selenium_config, True)
-        if debug_port and debug_port in cls._driver_map:
-            selenium_config.info(f"Debug端口的谷歌浏览器正在运行: {debug_port}")
-            return
         assert debug_port > 0, f"端口号异常: {debug_port}"
         assert not cls._netstat_debug_port_running(debug_port), f"Debug端口被占用: {debug_port}"
         selenium_config.info(f"Debug启动谷歌浏览器: {debug_port}")
@@ -79,6 +72,22 @@ class LaunchChrome(LaunchBase):
     def _close_browser_by_cmd(cls, selenium_config: SeleniumConfig):
         """命令行关闭浏览器"""
         return cls.__get_subclass()._close_browser_by_cmd(selenium_config)
+
+    @classmethod
+    def _get_cache_driver(cls, debug_port: int = None, driver: WebDriver = None, driver_path: str = None):
+        # 1) 进程id，一个进程对应一个cache_driver
+        thread_id = threading.current_thread().ident
+        if thread_id not in cls._driver_map:
+            cls._driver_map[thread_id] = CacheDriver()
+        # 2) 如果传入对应入参，则更新cache_driver中对应的参数
+        cache_driver = cls._driver_map[thread_id]
+        if debug_port is not None:
+            cache_driver.debug_port = debug_port
+        if driver is not None:
+            cache_driver.driver = driver
+        if driver_path is not None:
+            cache_driver.driver_path = driver_path
+        return cache_driver
 
     @classmethod
     def _get_chrome_driver(cls, selenium_config: SeleniumConfig, user_data_dir: str = None) -> WebDriver:
@@ -136,30 +145,36 @@ class LaunchChrome(LaunchBase):
         return cls.__get_subclass()._get_chrome_path(selenium_config)
 
     @classmethod
-    def _get_debug_port(cls, selenium_config: SeleniumConfig, return_default: bool = False) -> typing.Union[int, None]:
+    def _get_debug_port(cls, selenium_config: SeleniumConfig, return_default: bool = False) -> typing.Optional[int]:
         """获取debug端口"""
-        # 1) 获取参数中的debug_port
-        if selenium_config.debug_port:
+        # 1) 获取参数中的debug端口
+        if selenium_config.debug_port is not None:
+            cls._get_cache_driver(debug_port=selenium_config.debug_port)
             return selenium_config.debug_port
-        # 2) 返回默认的debug_port
+        # 2) 返回默认的debug端口
         default_debug_port = 9222
-        # 2.1) 如果需要返回默认的debug_port，则无需进行判断debug_port是否正在运行，直接返回
+        # 2.1) 如果需要返回默认的debug端口，则无需进行判断debug端口是否正在运行，直接返回
         if return_default:
+            cls._get_cache_driver(debug_port=default_debug_port)
             return default_debug_port
-        # 2.2) 检测默认的debug_port是否正在运行，如果正在运行，则返回默认的debug_port
+        # 2.2) 检测默认的debug端口是否正在运行，如果正在运行，则返回默认的debug_port
         if cls._netstat_debug_port_running(default_debug_port):
+            cls._get_cache_driver(debug_port=default_debug_port)
             return default_debug_port
-        # 3) 返回空值
-        return None
+        # 3) 返回缓存中的debug端口
+        return cls._get_cache_driver().debug_port
 
-    @staticmethod
-    def _get_driver_path(selenium_config: SeleniumConfig) -> str:
+    @classmethod
+    def _get_driver_path(cls, selenium_config: SeleniumConfig) -> str:
         """获取driver路径"""
         # 1) 使用参数中的driver_path
         if selenium_config.driver_path:
+            cls._get_cache_driver(driver_path=selenium_config.driver_path)
             return selenium_config.driver_path
         # 2) 自动获取下载的driver_path路径
-        return DownloadDriver.get_chrome_driver_path()
+        driver_path = DownloadDriver.get_chrome_driver_path()
+        cls._get_cache_driver(driver_path=driver_path)
+        return driver_path
 
     @classmethod
     def _launch_chrome(cls, selenium_config: SeleniumConfig) -> WebDriver:
@@ -218,7 +233,7 @@ class LaunchChrome(LaunchBase):
         return driver
 
     @classmethod
-    def __get_user_data_path(cls, selenium_config: SeleniumConfig) -> typing.Union[str, None]:
+    def __get_user_data_path(cls, selenium_config: SeleniumConfig) -> typing.Optional[str]:
         """获取谷歌浏览器用户缓存User Data路径"""
         # 路径列表具有优先级，添加路径时注意顺序
         for user_data_path in [

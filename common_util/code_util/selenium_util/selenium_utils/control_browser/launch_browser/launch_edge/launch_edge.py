@@ -9,11 +9,12 @@ from selenium.webdriver.edge.webdriver import WebDriver
 
 from ..base.launch_base import LaunchBase
 from ..download_driver import DownloadDriver
+from ....entity.cache_driver import CacheDriver
 from ....entity.selenium_config import SeleniumConfig
 
 
 class LaunchEdge(LaunchBase):
-    _driver_map: typing.Dict[int, WebDriver] = {}
+    _driver_map: typing.Dict[int, CacheDriver] = {}
 
     @classmethod
     def close_browser(cls, selenium_config: SeleniumConfig):
@@ -21,23 +22,38 @@ class LaunchEdge(LaunchBase):
         # 1) 确认参数、缓存中的driver是否存在，不存在则返回
         driver = selenium_config.driver
         if driver is None:
-            driver = cls._driver_map.get(threading.current_thread().ident)
+            driver = cls._driver_map.get(threading.current_thread().ident).driver
         if driver is None:
             return
         # 2) 使用selenium自带的quit方法关闭driver
         driver.quit()
         time.sleep(1)  # 等待一秒，确认等待操作执行完成
         # 3) 清除缓存
-        selenium_config.driver = None
-        for key, _driver in list(cls._driver_map.items()):
-            if driver == _driver:
-                del cls._driver_map[key]
+        for thread_id, cache_driver in list(cls._driver_map.items()):
+            if driver == cache_driver.driver:
+                del cls._driver_map[thread_id]
 
     @classmethod
     @abc.abstractmethod
     def get_driver(cls, selenium_config: SeleniumConfig) -> WebDriver:
         """获取driver"""
         return cls.__get_subclass().get_driver(selenium_config)
+
+    @classmethod
+    def _get_cache_driver(cls, debug_port: int = None, driver: WebDriver = None, driver_path: str = None):
+        # 1) 进程id，一个进程对应一个cache_driver
+        thread_id = threading.current_thread().ident
+        if thread_id not in cls._driver_map:
+            cls._driver_map[thread_id] = CacheDriver()
+        # 2) 如果传入对应入参，则更新cache_driver中对应的参数
+        cache_driver = cls._driver_map[thread_id]
+        if debug_port is not None:
+            cache_driver.debug_port = debug_port
+        if driver is not None:
+            cache_driver.driver = driver
+        if driver_path is not None:
+            cache_driver.driver_path = driver_path
+        return cache_driver
 
     @staticmethod
     def _get_driver_path(selenium_config: SeleniumConfig) -> str:

@@ -1,6 +1,5 @@
 import os
 import re
-import threading
 from pathlib import Path
 
 import win32con
@@ -18,12 +17,13 @@ class LaunchEdgeWindows(LaunchEdge):
         """获取driver"""
         # 1) 返回参数中传入的driver
         if selenium_config.driver:
+            cls._get_cache_driver(driver=selenium_config.driver)
             return selenium_config.driver
-        # 2) 获取进程id，并启动Edge浏览器
-        thread_id = threading.current_thread().ident
-        if thread_id not in cls._driver_map:
-            cls._driver_map[thread_id] = cls._launch_edge(selenium_config)
-        return cls._driver_map[thread_id]
+        # 2) 启动Edge浏览器
+        cache_driver = cls._get_cache_driver()
+        if cache_driver.driver is None:
+            cache_driver.driver = cls._launch_edge(selenium_config)
+        return cache_driver.driver
 
     @classmethod
     def _get_edge_path(cls) -> str:
