@@ -1,5 +1,3 @@
-import re
-
 from common_util.data_util.number_util.number_util import NumberUtil
 from common_util.data_util.time_util.time_util import TimeUtil
 from .CIB_receipt_type import CIBReceiptType
@@ -10,7 +8,7 @@ class CIBReceiptType03(CIBReceiptType):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        if not re.search("收费回单", "".join([word.text for word in self.words])):
+        if not self._get_word("^收费回单$"):
             return False
         return True
 

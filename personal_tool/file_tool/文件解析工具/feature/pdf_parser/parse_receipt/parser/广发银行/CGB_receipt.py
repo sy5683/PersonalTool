@@ -10,7 +10,7 @@ class CGBReceiptParser(ReceiptParser):
 
     def judge(self) -> bool:
         """判断是否为当前格式"""
-        return self._judge_images(0.1, 0, True)
+        return self._judge_images(0.1, 0)
 
     def parse(self):
         """解析"""
