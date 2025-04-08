@@ -237,10 +237,10 @@ class LaunchChrome(LaunchBase):
         """获取谷歌浏览器用户缓存User Data路径"""
         # 路径列表具有优先级，添加路径时注意顺序
         for user_data_path in [
-            os.path.join(os.path.expanduser("~"), "AppData", "Local", "Google", "Chrome", "User Data", "Default"),
             # 默认路径
-            os.path.join(os.path.dirname(cls._get_chrome_path(selenium_config)), "User Data", "Default"),
+            os.path.join(os.path.expanduser("~"), "AppData", "Local", "Google", "Chrome", "User Data", "Default"),
             # 有的User Data文件放在谷歌浏览器同级目录中
+            os.path.join(os.path.dirname(cls._get_chrome_path(selenium_config)), "User Data", "Default"),
         ]:
             if os.path.exists(user_data_path):
                 return user_data_path
