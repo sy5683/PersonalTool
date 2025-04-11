@@ -124,23 +124,34 @@ class ProcessFile:
         cls.__get_subclass().open_file(file_path)
 
     @staticmethod
-    def wait_file_appear(file_path: Path, wait_seconds: int) -> bool:
+    def wait_file_appear(file_path: Path, wait_seconds: int):
         """等待文件出现"""
-        for _ in range(wait_seconds):
+        logging.info(f"等待文件出现: {file_path}")
+        for index in range(wait_seconds):
             try:
-                if file_path.suffix:  # 根据是否有后缀名判断等待的是不是文件
+                # 根据是否有后缀名判断等待的是不是文件，当等待的文件为文件时，判断文件是否存在
+                if file_path.suffix:
                     if file_path.is_file():
+                        logging.info(f"文件已出现: {file_path}")
                         return True
-                else:  # 当等待的文件为文件夹时，还需要判断其中是否有文件出现
+                # 当等待的文件为文件夹时，还需要判断其中是否有文件出现
+                else:
                     try:
-                        next(file_path.glob("*.*"))
+                        appear_file_path = next(file_path.glob("*.*"))
                     except StopIteration:
                         continue
+                    logging.info(f"文件夹中出现文件: {appear_file_path}")
                     return True
             finally:
-                if wait_seconds > 1:
+                if index != wait_seconds - 1:
                     time.sleep(1)
-        return False
+        # 文件未出现，返回报错
+        if file_path.suffix:
+            logging.warning(f"未找到文件: {file_path}")
+            raise FileExistsError(f"未找到文件: {file_path.name}")
+        else:
+            logging.warning(f"文件夹中未生成文件: {file_path}")
+            raise FileExistsError("文件夹中未生成文件")
 
     @staticmethod
     def __get_subclass():
