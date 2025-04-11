@@ -129,7 +129,7 @@ class LaunchChrome(LaunchBase):
         prefs.update({'profile.default_content_setting_values.automatic_downloads': 1})
         options.add_experimental_option("prefs", prefs)
         # 1.6) 设置读取用户缓存目录
-        if user_data_dir and os.path.exists(user_data_dir):
+        if user_data_dir is not None and os.path.exists(user_data_dir):
             options.add_argument(f"--user-data-dir={user_data_dir}")
         # 1.7) 设置禁用弹窗拦截
         options.add_argument("--disable-popup-blocking")
@@ -207,9 +207,9 @@ class LaunchChrome(LaunchBase):
 
     @classmethod
     @abc.abstractmethod
-    def _set_special_options(cls, options: webdriver.ChromeOptions):
+    def _set_special_options(cls, selenium_config: SeleniumConfig, options: webdriver.ChromeOptions):
         """进行一些特殊设置"""
-        cls.__get_subclass()._set_special_options(options)
+        cls.__get_subclass()._set_special_options(selenium_config, options)
 
     @classmethod
     def _take_over_chrome(cls, selenium_config: SeleniumConfig) -> WebDriver:
@@ -252,7 +252,7 @@ class LaunchChrome(LaunchBase):
         # 开启日志性能监听，用于获取页面中的network请求
         options.set_capability("goog:loggingPrefs", {'performance': "ALL"})
         # 进行一些特殊设置
-        cls._set_special_options(options)
+        cls._set_special_options(selenium_config, options)
         from selenium.webdriver.chrome.service import Service
         return webdriver.Chrome(options=options, service=Service(executable_path=driver_path))
 

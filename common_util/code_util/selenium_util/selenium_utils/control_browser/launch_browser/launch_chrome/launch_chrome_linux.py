@@ -48,6 +48,6 @@ class LaunchChromeLinux(LaunchChrome):
             return False
 
     @classmethod
-    def _set_special_options(cls, options: webdriver.ChromeOptions):
+    def _set_special_options(cls, selenium_config:SeleniumConfig, options: webdriver.ChromeOptions):
         """进行一些特殊设置"""
-        options.binary_location = cls._get_chrome_path()
+        options.binary_location = cls._get_chrome_path(selenium_config)
