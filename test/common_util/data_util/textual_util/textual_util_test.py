@@ -15,6 +15,11 @@ class TextualUtilTestCase(TestBase):
         # self.textual = b"\\xe7\\x8e\\x8a\\xe7\\x83\\xa8"
         self.response_string = """"""
 
+    def test_extract_tax_rate(self):
+        self.textual = "应交税费-应交增值税-进项税额-一般进项税-税率13%"
+        tax_rate = TextualUtil.extract_tax_rate(self.textual)
+        print(tax_rate)
+
     def test_textual_decode(self):
         result_textual = TextualUtil.textual_decode(self.textual)
         print(result_textual)

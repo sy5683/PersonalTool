@@ -1,9 +1,18 @@
+import re
 import typing
 
 import cpca
 
 
-class ProcessChinese:
+class ProcessTextual:
+
+    @staticmethod
+    def extract_tax_rate(textual: str) -> str:
+        """提取税率"""
+        try:
+            return re.search(r"\d*%|\d*[.]\d*%", textual).group()
+        except AttributeError:
+            return ""
 
     @staticmethod
     def spilt_address(address: str) -> typing.Tuple[str, str, str, str]:

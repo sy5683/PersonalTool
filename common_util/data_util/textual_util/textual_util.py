@@ -2,7 +2,7 @@ import typing
 
 from .textual_utils.convert_chinese import ConvertChinese
 from .textual_utils.convert_textual import ConvertTextual
-from .textual_utils.process_chinese import ProcessChinese
+from .textual_utils.process_textual import ProcessTextual
 
 
 class TextualUtil:
@@ -13,6 +13,11 @@ class TextualUtil:
         return ConvertChinese.chinese_to_object_name(chinese)
 
     @staticmethod
+    def extract_tax_rate(textual: str) -> str:
+        """提取税率"""
+        return ProcessTextual.extract_tax_rate(textual)
+
+    @staticmethod
     def textual_decode(textual: typing.Union[bytes, str]) -> str:
         """文本解码"""
         return ConvertTextual.textual_decode(textual)
@@ -20,4 +25,4 @@ class TextualUtil:
     @staticmethod
     def spilt_address(address: str) -> typing.Tuple[str, str, str, str]:
         """将地址分割为省、市、区、地址"""
-        return ProcessChinese.spilt_address(address)
+        return ProcessTextual.spilt_address(address)
