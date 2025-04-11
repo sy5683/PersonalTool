@@ -2,7 +2,7 @@ beautifulsoup4
 cn2an
 cpca
 excel2img
-Flask
+Flask==3.1.0
 Flask-Cors
 natsort
 numpy
