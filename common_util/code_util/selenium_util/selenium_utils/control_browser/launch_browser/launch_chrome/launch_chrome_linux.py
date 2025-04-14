@@ -51,3 +51,4 @@ class LaunchChromeLinux(LaunchChrome):
     def _set_special_options(cls, selenium_config:SeleniumConfig, options: webdriver.ChromeOptions):
         """进行一些特殊设置"""
         options.binary_location = cls._get_chrome_path(selenium_config)
+        options.add_argument("--disable-dev-shm-usage")  # 避免共享内存问题

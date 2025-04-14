@@ -95,6 +95,7 @@ class LaunchChrome(LaunchBase):
         # 1.1) 获取谷歌浏览器设置
         options = webdriver.ChromeOptions()
         options.add_argument("--no-sandbox")  # 解决DevToolActivePort文件不存在的报错
+        options.add_argument("--disable-extensions")  # 设置禁用Chrome浏览器扩展
         # 1.2.1) 直接指定谷歌浏览器路径
         if selenium_config.chrome_path:
             options.binary_location = selenium_config.chrome_path
@@ -129,8 +130,9 @@ class LaunchChrome(LaunchBase):
         prefs.update({'profile.default_content_setting_values.automatic_downloads': 1})
         options.add_experimental_option("prefs", prefs)
         # 1.6) 设置读取用户缓存目录
-        if user_data_dir is not None and os.path.exists(user_data_dir):
-            options.add_argument(f"--user-data-dir={user_data_dir}")
+        if selenium_config.use_user_data:
+            if user_data_dir is not None and os.path.exists(user_data_dir):
+                options.add_argument(f"--user-data-dir={user_data_dir}")
         # 1.7) 设置禁用弹窗拦截
         options.add_argument("--disable-popup-blocking")
         # 2 启动谷歌浏览器
