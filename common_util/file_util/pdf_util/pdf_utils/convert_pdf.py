@@ -50,10 +50,10 @@ class ConvertPdf:
         pdf = fitz.open()
         for image_path in image_paths:
             try:
-                image = fitz.open(image_path)  # 打开图片
-                pdf_bytes = image.convert_to_pdf()  # 使用图片创建单页的 PDF
-                image = fitz.open("pdf", pdf_bytes)
-                pdf.insert_pdf(image)  # 将当前页插入文档
+                with fitz.open(image_path) as image:  # 打开图片
+                    pdf_bytes = image.convert_to_pdf()  # 使用图片创建单页的 PDF
+                with fitz.open("pdf", pdf_bytes) as page:  # 根据这个图片生成单页pdf
+                    pdf.insert_pdf(page)  # 将当前页插入文档
             except RuntimeError:
                 logging.error(traceback.format_exc())
                 raise AttributeError(f"图片异常，pdf保存失败: {image_path}")
