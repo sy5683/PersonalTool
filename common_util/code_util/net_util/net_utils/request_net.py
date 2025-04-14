@@ -3,6 +3,7 @@ import logging
 import tempfile
 import time
 import traceback
+import typing
 
 import requests
 
@@ -39,7 +40,7 @@ class RequestNet:
             raise Exception(f"请求失败: {url}\n{traceback.format_exc()}")
 
     @staticmethod
-    def response_to_result(response: requests.Response, *keys) -> dict:
+    def response_to_result(response: requests.Response, *keys) -> typing.Union[dict, list]:
         """将requests请求返回的response转为可以阅读的结构化字典result"""
         # 1) json格式化解析接口返回的结果
         try:
