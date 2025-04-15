@@ -3,6 +3,7 @@ import re
 import subprocess
 from pathlib import Path
 
+import pywintypes
 import win32con
 from selenium import webdriver
 from win32api import GetLogicalDriveStrings, RegOpenKey, RegQueryValueEx
@@ -36,7 +37,7 @@ class LaunchChromeWindows(LaunchChrome):
             try:
                 key = RegOpenKey(regedit_dir, regedit_path)
                 chrome_path, _ = RegQueryValueEx(key, "path")
-            except (FileNotFoundError, PermissionError, WindowsError, ValueError, TypeError):
+            except (pywintypes.error, FileNotFoundError, PermissionError, WindowsError, ValueError, TypeError):
                 continue
             chrome_path = os.path.join(chrome_path, "chrome.exe")
             if os.path.isfile(chrome_path):

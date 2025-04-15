@@ -2,6 +2,7 @@ import os
 import re
 from pathlib import Path
 
+import pywintypes
 import win32con
 from selenium.webdriver.edge.webdriver import WebDriver
 from win32api import GetLogicalDriveStrings, RegOpenKey, RegQueryValueEx
@@ -34,7 +35,7 @@ class LaunchEdgeWindows(LaunchEdge):
             try:
                 key = RegOpenKey(regedit_dir, regedit_path)
                 edge_path, _ = RegQueryValueEx(key, "path")
-            except (FileNotFoundError, PermissionError, WindowsError, ValueError, TypeError):
+            except (pywintypes.error, FileNotFoundError, PermissionError, WindowsError, ValueError, TypeError):
                 continue
             edge_path = os.path.join(edge_path, "msedge.exe")
             if os.path.isfile(edge_path):
