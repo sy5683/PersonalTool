@@ -120,7 +120,7 @@ class ProcessFile:
         """打开文件"""
         logging.info(f"打开文件: {file_path}")
         if os.path.isfile(file_path):
-            cls.__get_subclass().open_file(file_path)
+            cls.__get_subclass().open_file(os.path.dirname(file_path))
         cls.__get_subclass().open_file(file_path)
 
     @staticmethod
