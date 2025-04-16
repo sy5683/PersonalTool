@@ -100,11 +100,11 @@ class ConvertPdf:
         canvas = Canvas(save_path)
         for image_path in image_paths:
             try:
-                with Image.open(image_path) as image:
-                    width, height = image.size
-                    canvas.setPageSize((width, height))
-                    canvas.drawImage(image_path, 0, 0, width=width, height=height)
-                    canvas.showPage()  # 新建一页
+                image = Image.open(image_path)
+                width, height = image.size
+                canvas.setPageSize((width, height))
+                canvas.drawImage(image_path, 0, 0, width=width, height=height)
+                canvas.showPage()  # 新建一页
             except RuntimeError:
                 logging.error(traceback.format_exc())
                 raise AttributeError(f"图片异常，pdf保存失败: {image_path}")
