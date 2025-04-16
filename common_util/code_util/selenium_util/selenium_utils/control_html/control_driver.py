@@ -2,6 +2,7 @@ import json
 import re
 import tempfile
 import time
+import traceback
 import typing
 from pathlib import Path
 
@@ -66,7 +67,9 @@ class ControlDriver:
                 break
             except OSError:  # selenium驱动升级会导致driver失效，会报错OSError
                 selenium_config.info("selenium启动异常，重新启动")
+                selenium_config.error(traceback.format_exc())
                 time.sleep(1)
+        raise common.exceptions.WebDriverException("浏览器启动失败")
 
     @staticmethod
     def refresh(selenium_config: SeleniumConfig):
