@@ -26,6 +26,7 @@ python-docx
 python-magic-bin
 pywin32
 rarfile
+reportlab
 requests
 rsa
 screeninfo

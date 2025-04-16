@@ -46,9 +46,9 @@ class PdfUtil:
 
     @staticmethod
     def images_to_pdf(image_paths: typing.List[typing.Union[Path, str]],
-                      save_path: typing.Union[Path, str] = None) -> str:
+                      save_path: typing.Union[Path, str] = None, operate_type: str = 'fitz') -> str:
         """图片转pdf"""
-        return ConvertPdf.images_to_pdf([str(image_path) for image_path in image_paths], save_path)
+        return ConvertPdf.images_to_pdf([str(image_path) for image_path in image_paths], save_path, operate_type)
 
     @staticmethod
     def merge_words(words: typing.List[Word], threshold: int = 1) -> typing.List[Word]:
