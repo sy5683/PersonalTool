@@ -23,6 +23,8 @@ from PIL import Image
 from bs4 import BeautifulSoup
 from selenium import common
 from selenium.webdriver import ActionChains, Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
 from common_core.base.test_base import TestBase
