@@ -1,5 +1,6 @@
 import os
 import pathlib
+import platform
 import subprocess
 
 import psutil
@@ -27,10 +28,13 @@ class LaunchChromeLinux(LaunchChrome):
     def _get_chrome_path(cls, selenium_config: SeleniumConfig) -> str:
         """获取谷歌浏览器路径"""
         # Linux只有一个根目录，因此直接获取这个根目录之后从中遍历全部文件路径
-        for chrome_path in pathlib.Path(os.path.abspath(os.sep)).rglob("*google.chrome*"):
+        for chrome_path in pathlib.Path(os.path.abspath(os.sep)).joinpath("opt").rglob("*google*"):
             if chrome_path.is_file():
                 continue
-            chrome_file_path = chrome_path.joinpath("files", "google", "chrome", "chrome")
+            if "KYLIN" in platform.version().upper():
+                chrome_file_path = chrome_path.joinpath("chrome", "google-chrome")
+            else:  # UOS操作系统（目前只支持这个）
+                chrome_file_path = chrome_path.joinpath("files", "google", "chrome", "chrome")
             if chrome_file_path.exists():
                 return str(chrome_file_path)
         raise FileExistsError("未找到谷歌浏览器路径")
