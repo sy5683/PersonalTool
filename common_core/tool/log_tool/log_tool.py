@@ -1,6 +1,6 @@
 import logging
+import pathlib
 import typing
-from pathlib import Path
 
 from .log_tools.log_init import LogInit
 
@@ -13,9 +13,9 @@ class LogTool:
         LogInit.add_console_handler(**kwargs)
 
     @staticmethod
-    def add_file_handler(log_path: typing.Union[Path, str], **kwargs):
+    def add_file_handler(log_path: typing.Union[pathlib.Path, str], **kwargs):
         """日志保存至本地文件"""
-        LogInit.add_file_handler(Path(log_path),**kwargs)
+        LogInit.add_file_handler(pathlib.Path(log_path), **kwargs)
 
     @staticmethod
     def get_logger(**kwargs) -> logging.Logger:

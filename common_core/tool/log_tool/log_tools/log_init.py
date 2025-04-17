@@ -1,8 +1,8 @@
 import logging
+import pathlib
 import time
 import typing
 from logging import handlers
-from pathlib import Path
 
 from .log_config import LogConfig
 
@@ -21,7 +21,7 @@ class LogInit:
         cls.get_logger(**kwargs).addHandler(console_handler)
 
     @classmethod
-    def add_file_handler(cls, log_path: Path, **kwargs):
+    def add_file_handler(cls, log_path: pathlib.Path, **kwargs):
         """日志保存至本地文件"""
         if not log_path:
             return

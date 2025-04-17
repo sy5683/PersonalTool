@@ -1,5 +1,4 @@
 import typing
-from pathlib import Path
 
 from openpyxl.cell import Cell
 from openpyxl.worksheet.worksheet import Worksheet
@@ -31,8 +30,8 @@ class ExcelUtil:
         CopyXlsx.copy_sheet(worksheet, copy_worksheet)
 
     @staticmethod
-    def excel_to_images(file_path: typing.Union[Path, str],
-                        save_path: typing.Union[Path, str] = None) -> typing.List[str]:
+    def excel_to_images(file_path: typing.Union[pathlib.Path, str],
+                        save_path: typing.Union[pathlib.Path, str] = None) -> typing.List[str]:
         """excel转图片"""
         return ConvertExcel.excel_to_images(str(file_path), save_path)
 
@@ -58,13 +57,13 @@ class ExcelUtil:
         OpenpyxlExcel.format_row_style(worksheet, row, max(data_size, 14))
 
     @staticmethod
-    def get_data_list(excel_path: typing.Union[Path, str], sheet_index: int = 0, sheet_name: str = None,
+    def get_data_list(excel_path: typing.Union[pathlib.Path, str], sheet_index: int = 0, sheet_name: str = None,
                       tag_row: int = 0, tag_row_quantity: int = 1) -> typing.List[dict]:
         """获取excel数据"""
         return ParseExcel.get_data_list(str(excel_path), sheet_index, sheet_name, tag_row, tag_row_quantity)
 
     @staticmethod
-    def re_save_excel(excel_path: typing.Union[Path, str]):
+    def re_save_excel(excel_path: typing.Union[pathlib.Path, str]):
         """重新保存excel"""
         ConvertExcel.re_save_excel(str(excel_path))
 
@@ -101,6 +100,6 @@ class ExcelUtil:
         VerifyExcelData.verify_scientific_notation(value)
 
     @staticmethod
-    def xls_to_xlsx(excel_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None) -> str:
+    def xls_to_xlsx(excel_path: typing.Union[pathlib.Path, str], save_path: typing.Union[pathlib.Path, str] = None) -> str:
         """xls文件转换为xlsx文件"""
         return ConvertExcel.xls_to_xlsx(str(excel_path), save_path)

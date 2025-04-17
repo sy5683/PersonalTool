@@ -1,6 +1,5 @@
 import os
 import typing
-from pathlib import Path
 
 from PIL import Image
 
@@ -19,7 +18,7 @@ class ProcessPILImage:
         return new_image
 
     @classmethod
-    def convert_to_jpg(cls, image_path: str, save_path: typing.Union[Path, str]) -> str:
+    def convert_to_jpg(cls, image_path: str, save_path: typing.Union[pathlib.Path, str]) -> str:
         """转换为jpg图片"""
         with Image.open(image_path) as image:
             image.load()
@@ -35,7 +34,7 @@ class ProcessPILImage:
         return save_path
 
     @classmethod
-    def re_scale(cls, image_path: str, new_size: typing.Tuple[int, int], save_path: typing.Union[Path, str],
+    def re_scale(cls, image_path: str, new_size: typing.Tuple[int, int], save_path: typing.Union[pathlib.Path, str],
                  resize: bool) -> str:
         """转换图片比例"""
         new_width, new_height = new_size

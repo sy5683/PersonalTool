@@ -1,5 +1,5 @@
+import pathlib
 import typing
-from pathlib import Path
 
 import requests
 
@@ -9,7 +9,8 @@ from .net_utils.request_net import RequestNet
 class NetUtil:
 
     @staticmethod
-    def download(download_url: str, download_path: typing.Union[Path, str] = None, suffix: str = 'tmp', **kwargs) -> str:
+    def download(download_url: str, download_path: typing.Union[pathlib.Path, str] = None, suffix: str = 'tmp',
+                 **kwargs) -> str:
         """下载文件"""
         return RequestNet.download(download_url, download_path, suffix, **kwargs)
 

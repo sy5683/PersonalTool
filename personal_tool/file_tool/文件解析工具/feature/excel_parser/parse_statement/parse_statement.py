@@ -1,6 +1,5 @@
 import logging
 import os
-from pathlib import Path
 
 import xlrd
 
@@ -11,7 +10,7 @@ from .entity.statement_parser import StatementParser
 
 
 class ParseStatement:
-    ImportUtil.import_modules(Path(__file__).parent.joinpath("parser"))
+    ImportUtil.import_modules(pathlib.Path(__file__).parent.joinpath("parser"))
 
     @classmethod
     def parse_statement(cls, statement_path: str, **kwargs) -> StatementParser:

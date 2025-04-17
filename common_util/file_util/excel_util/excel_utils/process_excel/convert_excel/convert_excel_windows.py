@@ -2,7 +2,6 @@ import logging
 import os
 import time
 import typing
-from pathlib import Path
 
 import excel2img
 import xlrd
@@ -27,7 +26,7 @@ class ConvertExcelWindows:
         time.sleep(0.5)
 
     @staticmethod
-    def xls_to_xlsx(excel_path: str, save_path: typing.Union[Path, str]) -> str:
+    def xls_to_xlsx(excel_path: str, save_path: typing.Union[pathlib.Path, str]) -> str:
         """xls文件转换为xlsx文件"""
         save_path = f"{os.path.splitext(excel_path)[0]}.xlsx" if save_path is None else str(save_path)
         assert not os.path.exists(save_path), f"文件已存在，无法转换: {save_path}"
@@ -40,7 +39,7 @@ class ConvertExcelWindows:
         return save_path
 
     @staticmethod
-    def excel_to_images(excel_path: str, save_path: typing.Union[Path, str]) -> typing.List[str]:
+    def excel_to_images(excel_path: str, save_path: typing.Union[pathlib.Path, str]) -> typing.List[str]:
         """excel转图片"""
         save_path = os.path.splitext(excel_path)[0] if save_path is None else str(save_path)
         if not os.path.exists(save_path):
@@ -48,7 +47,7 @@ class ConvertExcelWindows:
         image_paths = []
         wb = xlrd.open_workbook(excel_path)
         for index, sheet_name in enumerate(wb.sheet_names()):
-            image_path = os.path.join(save_path, f"{Path(excel_path).stem}_{sheet_name}.png")
+            image_path = os.path.join(save_path, f"{pathlib.Path(excel_path).stem}_{sheet_name}.png")
             excel2img.export_img(excel_path, image_path, page=index + 1)
             image_paths.append(image_path)
         logging.info(f"成功将Excel文件转换为图片: {save_path}")

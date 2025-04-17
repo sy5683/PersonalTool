@@ -1,23 +1,25 @@
 import importlib
+import pathlib
 import re
-from pathlib import Path
+import typing
 from types import ModuleType
 
 
 class ImportPath:
 
     @classmethod
-    def import_module(cls, module_path: Path) -> ModuleType:
+    def import_module(cls, module_path: pathlib.Path) -> typing.Optional[ModuleType]:
         """导入路径下文件"""
         module_parts = module_path.parts
         for index in range(len(module_parts), 1, -1):
             try:
                 return cls._import_module(".".join(module_parts[index - 1:]))
             except ModuleNotFoundError:
-                pass
+                return None
+        return None
 
     @classmethod
-    def import_modules(cls, module_path: Path):
+    def import_modules(cls, module_path: pathlib.Path):
         """导入指定路径下所有文件"""
         py_paths = [module_path] if module_path.suffix == ".py" else module_path.rglob("*.py")
         for py_path in py_paths:

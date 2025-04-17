@@ -1,6 +1,6 @@
+import pathlib
 import re
 import typing
-from pathlib import Path
 
 from common_util.file_util.json_util.json_util import JsonUtil
 from .entity.region import RegionBase, Country
@@ -39,10 +39,10 @@ class RegionFeature:
         return RegionFactory.data_to_country(region_data)
 
     @staticmethod
-    def _get_region_json_path() -> Path:
+    def _get_region_json_path() -> pathlib.Path:
         """获取地区数据文件路径"""
         # http://xzqh.mca.gov.cn/map
-        return Path(__file__).parent.parent.joinpath("file/地区.json")
+        return pathlib.Path(__file__).parent.parent.joinpath("file/地区.json")
 
     @staticmethod
     def _check_by_info(region: RegionBase, region_info: str) -> bool:

@@ -1,8 +1,8 @@
 import logging
 import os
+import pathlib
 import re
 import traceback
-from pathlib import Path
 
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.constants import DEFAULT_USER_HOME_CACHE_PATH
@@ -85,7 +85,7 @@ class DownloadDriver:
         # 驱动只需要保证大版本一致即可
         check_version = check_version[:check_version.find(".")] if "." in check_version else check_version
         # 遍历驱动下载路径的指定文件
-        driver_paths = list(Path(DEFAULT_USER_HOME_CACHE_PATH).rglob(driver_name))
+        driver_paths = list(pathlib.Path(DEFAULT_USER_HOME_CACHE_PATH).rglob(driver_name))
         if not driver_paths:
             raise FileExistsError
         for driver_path in driver_paths:

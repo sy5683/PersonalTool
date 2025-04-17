@@ -1,11 +1,11 @@
 import abc
 import logging
 import os
+import pathlib
 import re
 import shutil
 import time
 import typing
-from pathlib import Path
 
 import magic
 
@@ -13,7 +13,7 @@ import magic
 class ProcessFile:
 
     @staticmethod
-    def delete_file(file_path: Path):
+    def delete_file(file_path: pathlib.Path):
         """删除文件"""
         try:
             if file_path.is_dir():
@@ -25,7 +25,7 @@ class ProcessFile:
             pass
 
     @classmethod
-    def format_path(cls, file_path: Path) -> Path:
+    def format_path(cls, file_path: pathlib.Path) -> pathlib.Path:
         """
         格式化路径
         如果文件所在文件夹路径不存在，则新建其祖辈文件夹
@@ -58,10 +58,10 @@ class ProcessFile:
         return cls.__get_subclass().get_file_paths()
 
     @staticmethod
-    def get_file_size(file_path: Path) -> float:
+    def get_file_size(file_path: pathlib.Path) -> float:
         """获取文件大小"""
         if file_path.is_dir():
-            file_size = sum(each.stat().st_size for each in Path(file_path).glob("**/*") if each.is_file())
+            file_size = sum(each.stat().st_size for each in pathlib.Path(file_path).glob("**/*") if each.is_file())
         else:
             file_size = file_path.stat().st_size
         return file_size  # 返回值为KB，需要其他单位可以在这里除以1024进行处理
@@ -108,7 +108,7 @@ class ProcessFile:
         return cls.__get_subclass().get_root_paths()
 
     @staticmethod
-    def make_dir(file_path: Path):
+    def make_dir(file_path: pathlib.Path):
         """新建文件夹"""
         # pathlib.mkdir指向的必须为文件夹，因此如果路径为文件时则新建其父级文件夹
         dir_path = file_path.parent if file_path.suffix else file_path
@@ -124,7 +124,7 @@ class ProcessFile:
         cls.__get_subclass().open_file(file_path)
 
     @staticmethod
-    def wait_file_appear(file_path: Path, wait_seconds: int):
+    def wait_file_appear(file_path: pathlib.Path, wait_seconds: int):
         """等待文件出现"""
         logging.info(f"等待文件出现: {file_path}")
         for index in range(wait_seconds):

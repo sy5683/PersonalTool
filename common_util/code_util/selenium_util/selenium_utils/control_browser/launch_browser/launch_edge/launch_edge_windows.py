@@ -1,6 +1,6 @@
 import os
+import pathlib
 import re
-from pathlib import Path
 
 import pywintypes
 import win32con
@@ -49,7 +49,7 @@ class LaunchEdgeWindows(LaunchEdge):
                 return edge_path
         # 3) 某些极个别特殊情况，用户直接解压绿色文件使用Edge浏览器，这时候注册表没值路径也不确定，因此只能遍历全部文件路径
         for root_path in re.findall(r"(.:/)", GetLogicalDriveStrings()):
-            for edge_path in Path(root_path).rglob("msedge.exe"):
+            for edge_path in pathlib.Path(root_path).rglob("msedge.exe"):
                 return str(edge_path)
         # 4) 几种方式都未找到Edge浏览器文件路径，抛出异常
         raise FileExistsError("未找到Edge浏览器")

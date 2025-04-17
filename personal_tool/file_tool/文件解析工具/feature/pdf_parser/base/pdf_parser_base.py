@@ -2,7 +2,6 @@ import abc
 import re
 import sys
 import typing
-from pathlib import Path
 
 import cv2
 import fitz
@@ -41,7 +40,7 @@ class PdfParserBase(metaclass=abc.ABCMeta):
 
     def _get_judge_images(self) -> typing.List[numpy.ndarray]:
         """获取判断图片"""
-        image_dir_path = Path(sys.modules[self.__module__].__file__).parent.joinpath("judge_image")
+        image_dir_path = pathlib.Path(sys.modules[self.__module__].__file__).parent.joinpath("judge_image")
         FileUtil.make_dir(image_dir_path)
         judge_images = [ImageUtil.read_opencv_image(image_path) for image_path in image_dir_path.rglob("*.*")]
         if not judge_images:

@@ -1,6 +1,6 @@
 import os
+import pathlib
 import subprocess
-from pathlib import Path
 
 import psutil
 from selenium import webdriver
@@ -27,7 +27,7 @@ class LaunchChromeLinux(LaunchChrome):
     def _get_chrome_path(cls, selenium_config: SeleniumConfig) -> str:
         """获取谷歌浏览器路径"""
         # Linux只有一个根目录，因此直接获取这个根目录之后从中遍历全部文件路径
-        for chrome_path in Path(os.path.abspath(os.sep)).rglob("*google.chrome*"):
+        for chrome_path in pathlib.Path(os.path.abspath(os.sep)).rglob("*google.chrome*"):
             if chrome_path.is_file():
                 continue
             chrome_file_path = chrome_path.joinpath("files", "google", "chrome", "chrome")
@@ -53,7 +53,7 @@ class LaunchChromeLinux(LaunchChrome):
             return False
 
     @classmethod
-    def _set_special_options(cls, selenium_config:SeleniumConfig, options: webdriver.ChromeOptions):
+    def _set_special_options(cls, selenium_config: SeleniumConfig, options: webdriver.ChromeOptions):
         """进行一些特殊设置"""
         options.binary_location = cls._get_chrome_path(selenium_config)
         options.add_argument("--disable-dev-shm-usage")  # 避免共享内存问题

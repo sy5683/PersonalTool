@@ -1,13 +1,12 @@
 import abc
 import sys
-from pathlib import Path
 
 
 class Event(metaclass=abc.ABCMeta):
     """事件"""
 
     def __init__(self):
-        self.event_path = Path(sys.modules[self.__module__].__file__)
+        self.event_path = pathlib.Path(sys.modules[self.__module__].__file__)
         self._event_name = self.event_path.stem  # 事件名称
         self.is_done = False  # 是否完成
         self.key_roles = []  # 关键角色

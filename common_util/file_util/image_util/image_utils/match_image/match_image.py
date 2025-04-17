@@ -2,7 +2,6 @@ import abc
 import os
 import time
 import typing
-from pathlib import Path
 
 import cv2
 import numpy
@@ -14,13 +13,13 @@ from ..screenshot.screenshot import Screenshot
 class MatchImage:
 
     @classmethod
-    def get_image_pos(cls, image: typing.Union[numpy.ndarray, Path, str], **kwargs) -> typing.Tuple[int, int]:
+    def get_image_pos(cls, image: typing.Union[numpy.ndarray, pathlib.Path, str], **kwargs) -> typing.Tuple[int, int]:
         """获取图片坐标"""
-        name = kwargs.get("name", "" if isinstance(image, numpy.ndarray) else Path(image).stem)
+        name = kwargs.get("name", "" if isinstance(image, numpy.ndarray) else pathlib.Path(image).stem)
         similarity = kwargs.get("similarity", 0.6)
         wait_seconds = kwargs.get("wait_seconds", 120)
         # 1) 处理模板图片
-        if isinstance(image, (Path, str)):
+        if isinstance(image, (pathlib.Path, str)):
             image = ProcessOpenCVImage.read_image(str(image))
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         for _ in range(wait_seconds):

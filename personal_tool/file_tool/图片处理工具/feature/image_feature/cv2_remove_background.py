@@ -1,5 +1,4 @@
 import typing
-from pathlib import Path
 
 import cv2
 
@@ -24,6 +23,6 @@ class Cv2RemoveBackground:
             # 使用蒙版将图片将图片背景透明化
             transparent_image = ImageUtil.image_to_transparent(image, mask_image)
             # 保存图片
-            save_path = FileUtil.get_temp_path(Path(image_path).name)
+            save_path = FileUtil.get_temp_path(pathlib.Path(image_path).name)
             ImageUtil.save_opencv_image(transparent_image, save_path)
         FileUtil.open_file(FileUtil.get_temp_path())

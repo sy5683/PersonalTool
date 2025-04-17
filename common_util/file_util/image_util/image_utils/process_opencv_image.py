@@ -2,7 +2,6 @@ import logging
 import os
 import re
 import typing
-from pathlib import Path
 
 import cv2
 import numpy
@@ -29,7 +28,7 @@ class ProcessOpenCVImage:
         return numpy.sum(cv2.absdiff(image, judge_image)) / 255 / width / height
 
     @classmethod
-    def convert_to_jpg(cls, image_path: str, save_path: typing.Union[Path, str]) -> str:
+    def convert_to_jpg(cls, image_path: str, save_path: typing.Union[pathlib.Path, str]) -> str:
         """转换为jpg图片"""
         image = cls.read_image(image_path)
         if image.shape[2] == 4:
@@ -86,7 +85,7 @@ class ProcessOpenCVImage:
     def save_image(cls, image: numpy.ndarray, image_path: str):
         """保存图片"""
         if cls._check_path_is_chinese(image_path):
-            cv2.imencode(Path(image_path).suffix, image)[1].tofile(image_path)
+            cv2.imencode(pathlib.Path(image_path).suffix, image)[1].tofile(image_path)
         else:
             cv2.imwrite(image_path, image)
 

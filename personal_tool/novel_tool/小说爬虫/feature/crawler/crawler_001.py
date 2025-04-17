@@ -1,7 +1,6 @@
 import logging
 import re
 import typing
-from pathlib import Path
 
 from selenium import common
 
@@ -12,7 +11,7 @@ from .base.crawler_base import CrawlerBase
 
 class Crawler001(CrawlerBase):
 
-    def __init__(self, save_path: typing.Union[Path, str]):
+    def __init__(self, save_path: typing.Union[pathlib.Path, str]):
         super().__init__("抖音小说", save_path)
 
     def run(self, **kwargs):

@@ -1,5 +1,4 @@
 import typing
-from pathlib import Path
 
 
 class ConvertExcelLinux:
@@ -10,11 +9,11 @@ class ConvertExcelLinux:
         raise SystemError("Linux系统暂不支持该方法")
 
     @staticmethod
-    def xls_to_xlsx(excel_path: str, save_path: typing.Union[Path, str]) -> str:
+    def xls_to_xlsx(excel_path: str, save_path: typing.Union[pathlib.Path, str]) -> str:
         """xls文件转换为xlsx文件"""
         raise SystemError("Linux系统暂不支持该方法")
 
     @staticmethod
-    def excel_to_images(excel_path: str, save_path: typing.Union[Path, str]) -> typing.List[str]:
+    def excel_to_images(excel_path: str, save_path: typing.Union[pathlib.Path, str]) -> typing.List[str]:
         """excel转图片"""
         raise SystemError("Linux系统暂不支持该方法")

@@ -1,6 +1,5 @@
 import logging
 import re
-from pathlib import Path
 
 from ..file_feature import FileFeature
 from ..image_feature import ImageFeature
@@ -9,7 +8,7 @@ from ..image_feature import ImageFeature
 class MangaFormatter:
 
     @staticmethod
-    def format_manga_name(directory_path: Path, start_number: int):
+    def format_manga_name(directory_path: pathlib.Path, start_number: int):
         """格式化漫画名称"""
         logging.info(f"格式化漫画名称: {directory_path.stem}")
         manga_paths = FileFeature.get_file_paths(directory_path)

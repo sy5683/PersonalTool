@@ -1,6 +1,6 @@
 import logging
+import pathlib
 import typing
-from pathlib import Path
 
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
@@ -15,20 +15,20 @@ class SeleniumConfig:
     def __init__(self,
                  browser_type: BrowserType = BrowserType.chrome,
                  check_input: bool = True,
-                 chrome_path: typing.Union[str, Path] = None,
+                 chrome_path: typing.Union[str, pathlib.Path] = None,
                  close_task: bool = True,
                  debug_port: int = None,
                  delay_seconds: int = 0,
-                 download_path: typing.Union[str, Path] = 'E:/Download',
+                 download_path: typing.Union[str, pathlib.Path] = 'E:/Download',  # 默认值根据个人情况进行修改
                  driver: WebDriver = None,
-                 driver_path: typing.Union[str, Path] = None,
+                 driver_path: typing.Union[str, pathlib.Path] = None,
                  element: WebElement = None,
                  headless: bool = False,
                  logger: typing.Union[logging.Logger, None] = logging.getLogger(),
                  operate_type: OperateType = OperateType.js,
                  proxy_ip: str = None,
                  use_user_data: bool = True,
-                 user_data_dir: typing.Union[str, Path] = None,
+                 user_data_dir: typing.Union[str, pathlib.Path] = None,
                  xpath: str = '',
                  wait_seconds: int = 120,
                  ):

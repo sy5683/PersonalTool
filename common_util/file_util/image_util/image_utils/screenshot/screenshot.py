@@ -1,9 +1,9 @@
 import abc
 import logging
 import os
+import pathlib
 import tempfile
 import typing
-from pathlib import Path
 
 import cv2
 import numpy
@@ -15,7 +15,7 @@ from ..process_opencv_image import ProcessOpenCVImage
 class Screenshot:
 
     @classmethod
-    def screenshot(cls, save_path: typing.Union[Path, str]) -> typing.List[str]:
+    def screenshot(cls, save_path: typing.Union[pathlib.Path, str]) -> typing.List[str]:
         """截图"""
         save_paths = []
         save_path, suffix = os.path.splitext(tempfile.mktemp(".jpg") if save_path is None else str(save_path))

@@ -1,14 +1,13 @@
 import abc
 import logging
 import sys
-from pathlib import Path
 
 
 class Role(metaclass=abc.ABCMeta):
     """角色"""
 
     def __init__(self):
-        __role_path = Path(sys.modules[self.__module__].__file__)
+        __role_path = pathlib.Path(sys.modules[self.__module__].__file__)
         self.role_name = __role_path.stem  # 角色名字
         self.persona = """"""  # 人设
 

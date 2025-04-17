@@ -1,7 +1,6 @@
 import logging
 import re
 import typing
-from pathlib import Path
 
 from common_util.code_util.selenium_util.selenium_util import SeleniumUtil
 from common_util.code_util.selenium_util.selenium_utils.entity.selenium_config import SeleniumConfig
@@ -10,7 +9,7 @@ from .base.crawler_base import CrawlerBase
 
 class Crawler002(CrawlerBase):
 
-    def __init__(self, save_path: typing.Union[Path, str]):
+    def __init__(self, save_path: typing.Union[pathlib.Path, str]):
         super().__init__("95书包", save_path)
 
     def run(self, **kwargs):

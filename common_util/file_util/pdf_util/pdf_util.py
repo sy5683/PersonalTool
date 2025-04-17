@@ -1,5 +1,5 @@
+import pathlib
 import typing
-from pathlib import Path
 
 import numpy
 
@@ -30,23 +30,23 @@ class PdfUtil:
         return ExtractPdf.get_pdf_images(pdf_path, page_index)
 
     @staticmethod
-    def get_pdf_profiles(pdf_path: typing.Union[Path, str], threshold_x: int = 10) -> typing.List[PdfProfile]:
+    def get_pdf_profiles(pdf_path: typing.Union[pathlib.Path, str], threshold_x: int = 10) -> typing.List[PdfProfile]:
         """获取pdf内容"""
         return ParsePdf.get_pdf_profiles(str(pdf_path), threshold_x)
 
     @staticmethod
-    def get_pdf_tables(pdf_path: typing.Union[Path, str]) -> typing.List[Table]:
+    def get_pdf_tables(pdf_path: typing.Union[pathlib.Path, str]) -> typing.List[Table]:
         """获取pdf中的表格"""
         return ParsePdf.get_pdf_tables(str(pdf_path))
 
     @staticmethod
-    def get_pdf_words(pdf_path: typing.Union[Path, str], threshold_x: int = 10) -> typing.List[Word]:
+    def get_pdf_words(pdf_path: typing.Union[pathlib.Path, str], threshold_x: int = 10) -> typing.List[Word]:
         """获取pdf中的文字"""
         return ParsePdf.get_pdf_words(str(pdf_path), threshold_x)
 
     @staticmethod
-    def images_to_pdf(image_paths: typing.List[typing.Union[Path, str]],
-                      save_path: typing.Union[Path, str] = None, operate_type: str = 'fitz') -> str:
+    def images_to_pdf(image_paths: typing.List[typing.Union[pathlib.Path, str]],
+                      save_path: typing.Union[pathlib.Path, str] = None, operate_type: str = 'fitz') -> str:
         """图片转pdf"""
         return ConvertPdf.images_to_pdf([str(image_path) for image_path in image_paths], save_path, operate_type)
 
@@ -56,7 +56,7 @@ class PdfUtil:
         return ProcessPdfProfile.merge_words(words, threshold)
 
     @staticmethod
-    def pdf_to_images(pdf_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None,
+    def pdf_to_images(pdf_path: typing.Union[pathlib.Path, str], save_path: typing.Union[pathlib.Path, str] = None,
                       suffix: str = 'png', dpi: int = 320) -> typing.List[str]:
         """pdf转图片"""
         return ConvertPdf.pdf_to_images(str(pdf_path), save_path, suffix, dpi)

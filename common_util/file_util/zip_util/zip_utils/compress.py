@@ -1,12 +1,12 @@
 import logging
+import pathlib
 import shutil
-from pathlib import Path
 
 
 class Compress:
 
     @staticmethod
-    def compress(file_path: Path, compress_name: str) -> str:
+    def compress(file_path: pathlib.Path, compress_name: str) -> str:
         """压缩文件"""
         compress_path = file_path.parent.joinpath(compress_name if compress_name else file_path.stem)
         try:

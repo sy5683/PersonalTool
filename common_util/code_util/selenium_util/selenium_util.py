@@ -1,5 +1,5 @@
+import pathlib
 import typing
-from pathlib import Path
 
 from selenium.webdriver import ActionChains
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -113,7 +113,7 @@ class SeleniumUtil:
         ControlDriver.refresh(selenium_config)
 
     @staticmethod
-    def screenshot(selenium_config: SeleniumConfig, save_path: typing.Union[Path, str] = None) -> str:
+    def screenshot(selenium_config: SeleniumConfig, save_path: typing.Union[pathlib.Path, str] = None) -> str:
         """截图"""
         return ControlDriver.screenshot(selenium_config, save_path)
 

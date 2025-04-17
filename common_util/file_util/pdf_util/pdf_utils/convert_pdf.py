@@ -1,9 +1,9 @@
 import logging
 import os
+import pathlib
 import re
 import traceback
 import typing
-from pathlib import Path
 
 import cv2
 import fitz
@@ -15,7 +15,7 @@ from reportlab.pdfgen.canvas import Canvas
 class ConvertPdf:
 
     @classmethod
-    def pdf_to_images(cls, pdf_path: str, save_path: typing.Union[Path, str], suffix: str,
+    def pdf_to_images(cls, pdf_path: str, save_path: typing.Union[pathlib.Path, str], suffix: str,
                       dpi: int) -> typing.List[str]:
         """pdf转图片"""
         logging.info(f"开始将pdf文件转换为图片: {pdf_path}")
@@ -26,7 +26,7 @@ class ConvertPdf:
         pdf = fitz.open(pdf_path)
         for index in range(pdf.page_count):
             pdf_page = pdf[index]
-            image_name = f"{Path(pdf_path).stem}_{str(index).zfill(len(str(pdf.page_count)))}"
+            image_name = f"{pathlib.Path(pdf_path).stem}_{str(index).zfill(len(str(pdf.page_count)))}"
             image_path = os.path.join(save_path, f"{image_name}.%s" % re.sub(r"^\.+", "", suffix))
             pil_image = cls.page_to_pil_image(pdf_page, dpi)
             pil_image.save(image_path, dpi=(dpi, dpi), format='PNG')
@@ -36,7 +36,8 @@ class ConvertPdf:
         return image_paths
 
     @classmethod
-    def images_to_pdf(cls, image_paths: typing.List[str], save_path: typing.Union[Path, str], operate_type: str) -> str:
+    def images_to_pdf(cls, image_paths: typing.List[str], save_path: typing.Union[pathlib.Path, str],
+                      operate_type: str) -> str:
         """图片转pdf"""
         if not image_paths:
             raise FileExistsError("图片数量为空，无法生成pdf")

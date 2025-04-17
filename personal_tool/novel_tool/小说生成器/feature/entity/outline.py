@@ -1,6 +1,5 @@
 import abc
 import typing
-from pathlib import Path
 
 from common_util.code_util.import_util.import_util import ImportUtil
 from .event import Event
@@ -9,7 +8,7 @@ from .event import Event
 class Outline(metaclass=abc.ABCMeta):
     """大纲"""
 
-    def __init__(self, outline_path: Path):
+    def __init__(self, outline_path: pathlib.Path):
         self.__outline_path = outline_path  # 大纲路径
         self.outline_name = outline_path.stem  # 大纲名称
         self.outline_synopsis = self.__get_outline_attribute("outline_synopsis", "大纲梗概")

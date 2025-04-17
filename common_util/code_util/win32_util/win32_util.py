@@ -1,5 +1,5 @@
+import pathlib
 import typing
-from pathlib import Path
 
 from .win32_utils.win32_control import Win32Control
 from .win32_utils.win32_visual.win32_visual import Win32Visual
@@ -63,7 +63,7 @@ class Win32Util:
         Win32Visual.show_window(handle, need_admin_right)
 
     @staticmethod
-    def upload(file_path: typing.Union[Path, str], wait_seconds: int):
+    def upload(file_path: typing.Union[pathlib.Path, str], wait_seconds: int):
         """上传文件"""
         Win32Visual.upload(str(file_path), wait_seconds)
 

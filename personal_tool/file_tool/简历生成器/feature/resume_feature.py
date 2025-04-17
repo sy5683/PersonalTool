@@ -1,7 +1,6 @@
 import os
 import tempfile
 import typing
-from pathlib import Path
 
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 
@@ -15,7 +14,7 @@ from .word_feature import WordFeature
 
 
 class ResumeFeature:
-    ImportUtil.import_modules(Path(__file__).parent.joinpath("entity"))  # 使用subclasses之前必须将子类导入
+    ImportUtil.import_modules(pathlib.Path(__file__).parent.joinpath("entity"))  # 使用subclasses之前必须将子类导入
     _resume_path = None
 
     @classmethod

@@ -1,8 +1,8 @@
 import json
 import logging
+import pathlib
 import time
 import typing
-from pathlib import Path
 
 from common_util.code_util.selenium_util.selenium_util import SeleniumUtil
 from common_util.code_util.selenium_util.selenium_utils.entity.selenium_config import SeleniumConfig
@@ -93,7 +93,7 @@ class GoodsTaxFeature:
         return cls._goods_tax_map
 
     @staticmethod
-    def __get_goods_tax_path() -> Path:
+    def __get_goods_tax_path() -> pathlib.Path:
         """获取商品和服务税收分类编码映射表路径"""
         return FileFeature.get_file_path("商品和服务税收分类编码映射表.json")
 

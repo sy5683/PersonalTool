@@ -1,4 +1,4 @@
-from pathlib import Path
+from pathlib import pathlib.Path
 
 from .enum.color_map import ColorMap
 
@@ -6,7 +6,7 @@ from .enum.color_map import ColorMap
 class FormatFeature:
 
     @staticmethod
-    def format_coding(dir_path: Path):
+    def format_coding(dir_path: pathlib.Path):
         """格式化打码内容"""
         for file_path in dir_path.glob("*.*"):
             coding: str = file_path.stem
@@ -23,7 +23,7 @@ class FormatFeature:
             file_path.rename(dir_path.joinpath(f"{coding}{file_path.suffix}"))
 
     @staticmethod
-    def format_color(dir_path: Path):
+    def format_color(dir_path: pathlib.Path):
         """格式化颜色"""
         # 1) 格式化颜色之前需要先检测标识的颜色
         for file_path in dir_path.glob("*.*"):

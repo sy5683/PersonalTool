@@ -2,7 +2,6 @@ import abc
 import logging
 import os
 import typing
-from pathlib import Path
 
 import docx
 import openpyxl
@@ -11,7 +10,7 @@ import openpyxl
 class ConvertWord:
 
     @staticmethod
-    def word_to_excel(word_path: str, save_path: typing.Union[Path, str]) -> str:
+    def word_to_excel(word_path: str, save_path: typing.Union[pathlib.Path, str]) -> str:
         """word转excel"""
         logging.info(f"开始将Word文件转换为Excel: {word_path}")
         save_path = f"{os.path.splitext(word_path)[0]}.xlsx" if save_path is None else str(save_path)
@@ -30,7 +29,7 @@ class ConvertWord:
 
     @classmethod
     @abc.abstractmethod
-    def word_to_pdf(cls, word_path: str, save_path: typing.Union[Path, str]) -> str:
+    def word_to_pdf(cls, word_path: str, save_path: typing.Union[pathlib.Path, str]) -> str:
         """word转pdf"""
         logging.info(f"开始将word文件转换为pdf: {word_path}")
         return cls.__get_subclass().word_to_pdf(word_path, save_path)

@@ -3,7 +3,6 @@ import re
 import shutil
 import typing
 import zipfile
-from pathlib import Path
 
 import magic
 import py7zr
@@ -13,7 +12,7 @@ import rarfile
 class Decompress:
 
     @classmethod
-    def decompress(cls, file_path: Path, password: str) -> typing.Generator[Path, None, None]:
+    def decompress(cls, file_path: pathlib.Path, password: str) -> typing.Generator[pathlib.Path, None, None]:
         """解压文件，可以传入压缩文件或者存放多个压缩文件的文件夹"""
         logging.info(f"解压文件: {file_path}")
         zip_paths = file_path.glob("*.*") if file_path.is_dir() else [file_path]
@@ -25,7 +24,7 @@ class Decompress:
             yield save_path
 
     @classmethod
-    def _decompress_all(cls, zip_path: Path, password: str):
+    def _decompress_all(cls, zip_path: pathlib.Path, password: str):
         """递归解压缩压缩文件中的所有文件"""
         # 1) 解压压缩包
         if zip_path.is_file():
@@ -60,7 +59,7 @@ class Decompress:
                 cls._decompress_all(zip_path, password)
 
     @classmethod
-    def _decompress_7z(cls, zip_path: Path, save_path: Path, password: str):
+    def _decompress_7z(cls, zip_path: pathlib.Path, save_path: pathlib.Path, password: str):
         """解压7z文件"""
         logging.info(f"解压7z文件: {zip_path}")
         # 1) 判断压缩包是否分卷
@@ -76,16 +75,16 @@ class Decompress:
             logging.warning(f"7z文件需要密码: {zip_path}")
 
     @classmethod
-    def _decompress_rar(cls, zip_path: Path, save_path: Path, password: str):
+    def _decompress_rar(cls, zip_path: pathlib.Path, save_path: pathlib.Path, password: str):
         """解压rar文件"""
         logging.info(f"解压rar文件: {zip_path}")
-        rarfile.UNRAR_TOOL = str(Path(__file__).parent.joinpath("UnRAR.exe"))
+        rarfile.UNRAR_TOOL = str(pathlib.Path(__file__).parent.joinpath("UnRAR.exe"))
         with rarfile.RarFile(zip_path) as zip_file:
             zip_file.setpassword(password)
             zip_file.extractall(path=save_path)
 
     @classmethod
-    def _decompress_zip(cls, zip_path: Path, save_path: Path, password: typing.Union[bytes, str]):
+    def _decompress_zip(cls, zip_path: pathlib.Path, save_path: pathlib.Path, password: typing.Union[bytes, str]):
         """解压zip文件"""
         if isinstance(password, str):
             password = password.encode("utf-8")
@@ -98,7 +97,7 @@ class Decompress:
             zip_file.extractall(save_path, pwd=password)
 
     @staticmethod
-    def __format_decompress_file(save_path: Path):
+    def __format_decompress_file(save_path: pathlib.Path):
         """解压完成后的文件可能因为格式原因出现乱码，格式化一下"""
         for file_path in save_path.rglob("*"):
             try:
@@ -108,7 +107,7 @@ class Decompress:
                 pass
 
     @staticmethod
-    def __merge_zip_by_7z(zip_path: Path) -> Path:
+    def __merge_zip_by_7z(zip_path: pathlib.Path) -> pathlib.Path:
         """合并使用7z软件分卷的压缩包"""
         logging.info(f"合并使用7z软件分卷的压缩包: {zip_path.name}")
         contents = b""
@@ -121,6 +120,6 @@ class Decompress:
         return new_zip_path
 
     @staticmethod
-    def __to_save_path(zip_path: Path) -> Path:
+    def __to_save_path(zip_path: pathlib.Path) -> pathlib.Path:
         save_name = zip_path.name[:zip_path.name.find(".")]
         return zip_path.parent.joinpath(save_name)

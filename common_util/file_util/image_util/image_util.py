@@ -1,5 +1,5 @@
+import pathlib
 import typing
-from pathlib import Path
 
 import numpy
 
@@ -17,17 +17,19 @@ class ImageUtil:
         return ProcessOpenCVImage.compare_image(image, judge_image)
 
     @staticmethod
-    def convert_to_jpg_by_opencv(image_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None) -> str:
+    def convert_to_jpg_by_opencv(image_path: typing.Union[pathlib.Path, str],
+                                 save_path: typing.Union[pathlib.Path, str] = None) -> str:
         """通过opencv将图片转换为jpg图片"""
         return ProcessOpenCVImage.convert_to_jpg(str(image_path), save_path)
 
     @staticmethod
-    def convert_to_jpg_by_pil(image_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None) -> str:
+    def convert_to_jpg_by_pil(image_path: typing.Union[pathlib.Path, str],
+                              save_path: typing.Union[pathlib.Path, str] = None) -> str:
         """通过pil将图片转换为jpg图片"""
         return ProcessPILImage.convert_to_jpg(str(image_path), save_path)
 
     @staticmethod
-    def get_image_pos(image: typing.Union[numpy.ndarray, Path, str], **kwargs) -> typing.Tuple[int, int]:
+    def get_image_pos(image: typing.Union[numpy.ndarray, pathlib.Path, str], **kwargs) -> typing.Tuple[int, int]:
         """获取图片坐标"""
         return MatchImage.get_image_pos(image, **kwargs)
 
@@ -37,13 +39,13 @@ class ImageUtil:
         return ProcessOpenCVImage.image_to_transparent(image, mask_image)
 
     @staticmethod
-    def re_scale(image_path: typing.Union[Path, str], new_size: typing.Tuple[int, int],
-                 save_path: typing.Union[Path, str] = None, resize: bool = False) -> str:
+    def re_scale(image_path: typing.Union[pathlib.Path, str], new_size: typing.Tuple[int, int],
+                 save_path: typing.Union[pathlib.Path, str] = None, resize: bool = False) -> str:
         """转换图片比例"""
         return ProcessPILImage.re_scale(str(image_path), new_size, save_path, resize)
 
     @staticmethod
-    def read_opencv_image(image_path: typing.Union[Path, str]) -> numpy.ndarray:
+    def read_opencv_image(image_path: typing.Union[pathlib.Path, str]) -> numpy.ndarray:
         """读取图片"""
         return ProcessOpenCVImage.read_image(str(image_path))
 
@@ -59,11 +61,11 @@ class ImageUtil:
         return ProcessOpenCVImage.rotate_image(image, angle, times)
 
     @staticmethod
-    def save_opencv_image(image: numpy.ndarray, image_path: typing.Union[Path, str]):
+    def save_opencv_image(image: numpy.ndarray, image_path: typing.Union[pathlib.Path, str]):
         """保存opencv图片"""
         ProcessOpenCVImage.save_image(image, str(image_path))
 
     @staticmethod
-    def screenshot(save_path: typing.Union[Path, str] = None) -> typing.List[str]:
+    def screenshot(save_path: typing.Union[pathlib.Path, str] = None) -> typing.List[str]:
         """截图"""
         return Screenshot.screenshot(save_path)

@@ -1,7 +1,7 @@
 import os
+import pathlib
 import re
 import subprocess
-from pathlib import Path
 
 import pywintypes
 import win32con
@@ -51,7 +51,7 @@ class LaunchChromeWindows(LaunchChrome):
                 return chrome_path
         # 3) 某些极个别特殊情况，用户直接解压绿色文件使用谷歌浏览器，这时候注册表没值路径也不确定，因此只能遍历全部文件路径
         for root_path in re.findall(r"(.:/)", GetLogicalDriveStrings()):
-            for chrome_path in Path(root_path).rglob("chrome.exe"):
+            for chrome_path in pathlib.Path(root_path).rglob("chrome.exe"):
                 return str(chrome_path)
         # 4) 几种方式都未找到谷歌浏览器文件路径，抛出异常
         raise FileExistsError("未找到谷歌浏览器")

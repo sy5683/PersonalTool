@@ -1,4 +1,4 @@
-from pathlib import Path
+from pathlib import pathlib.Path
 
 from common_util.code_util.import_util.import_util import ImportUtil
 from .entity.receipt_parser import ReceiptParser
@@ -6,7 +6,7 @@ from ..base.pdf_parse_base import PdfParseBase
 
 
 class ParseReceipt(PdfParseBase):
-    ImportUtil.import_modules(Path(__file__).parent.joinpath("parser"))
+    ImportUtil.import_modules(pathlib.Path(__file__).parent.joinpath("parser"))
 
     @classmethod
     def parse_receipt(cls, receipt_path: str, **kwargs) -> ReceiptParser:

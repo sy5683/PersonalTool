@@ -1,7 +1,6 @@
 import abc
 import random
 import typing
-from pathlib import Path
 
 from common_util.code_util.import_util.import_util import ImportUtil
 from .outline import Outline
@@ -10,7 +9,7 @@ from .outline import Outline
 class Novel(metaclass=abc.ABCMeta):
     """小说"""
 
-    def __init__(self, novel_path: Path):
+    def __init__(self, novel_path: pathlib.Path):
         self.novel_name = novel_path.name  # 小说名称
         self.novel_path = novel_path  # 小说路径
         self.novel_synopsis = self.__get_novel_attribute("novel_synopsis", "小说梗概")

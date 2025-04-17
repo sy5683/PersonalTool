@@ -1,6 +1,6 @@
 import abc
+import pathlib
 import typing
-from pathlib import Path
 
 
 class CryptoBase(metaclass=abc.ABCMeta):
@@ -15,6 +15,6 @@ class CryptoBase(metaclass=abc.ABCMeta):
         return value.decode(cls.encoding_type) if isinstance(value, bytes) else value
 
     @staticmethod
-    def get_key_path(file_name: str) -> Path:
+    def get_key_path(file_name: str) -> pathlib.Path:
         """获取秘钥路径"""
-        return Path(__file__).parent.parent.joinpath("keys", f"{file_name}")
+        return pathlib.Path(__file__).parent.parent.joinpath("keys", f"{file_name}")

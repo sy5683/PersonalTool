@@ -1,15 +1,14 @@
 import sqlite3
 import typing
-from pathlib import Path
 
 from .base.database_connect import DatabaseConnect
 
 
 class SqliteConnect(DatabaseConnect):
 
-    def __init__(self, sqlite_path: typing.Union[Path, str]):
+    def __init__(self, sqlite_path: typing.Union[pathlib.Path, str]):
         self.sqlite_path = str(sqlite_path)
-        super().__init__(f"【SQLite】{Path(sqlite_path).name}")
+        super().__init__(f"【SQLite】{pathlib.Path(sqlite_path).name}")
 
     def _get_connect(self):
         """连接数据库"""

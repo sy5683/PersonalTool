@@ -3,7 +3,6 @@ import re
 import shutil
 import tempfile
 import typing
-from pathlib import Path
 
 from common_util.file_util.file_util.file_util import FileUtil
 
@@ -30,11 +29,11 @@ class PackTool:
             shutil.copytree(util_path, copy_util_path)
         # 4) 删除一些无用文件
         for file_name in ["__pycache__"]:
-            for file_path in Path(self.__to_copy_path()).rglob(file_name):
+            for file_path in pathlib.Path(self.__to_copy_path()).rglob(file_name):
                 FileUtil.delete_file(file_path)
         FileUtil.open_file(self.__to_copy_path())
 
-    def _get_tool_path(self) -> Path:
+    def _get_tool_path(self) -> pathlib.Path:
         """获取工具路径"""
         # 1) 获取工具路径
         tool_dir_path = self.__to_project_path("personal_tool")
@@ -48,7 +47,7 @@ class PackTool:
         return tool_path
 
     @staticmethod
-    def _get_relative_util_paths(tool_path: Path) -> typing.List[str]:
+    def _get_relative_util_paths(tool_path: pathlib.Path) -> typing.List[str]:
         """获取公共组件相对导入路径"""
         relative_util_paths = []
         for tool_py_path in tool_path.rglob("*.py"):
@@ -66,9 +65,9 @@ class PackTool:
         return relative_util_paths
 
     @staticmethod
-    def __to_project_path(file_name: str = '') -> Path:
+    def __to_project_path(file_name: str = '') -> pathlib.Path:
         """获取项目路径"""
-        return Path(__file__).parent.parent.joinpath(file_name)
+        return pathlib.Path(__file__).parent.parent.joinpath(file_name)
 
     def __to_copy_path(self, file_name: str = '') -> str:
         """拷贝文件至临时路径"""

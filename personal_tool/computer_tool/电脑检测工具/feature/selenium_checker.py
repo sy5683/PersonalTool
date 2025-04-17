@@ -1,7 +1,6 @@
 import datetime
 import logging
 import traceback
-from pathlib import Path
 
 from common_util.code_util.selenium_util.selenium_util import SeleniumUtil
 from common_util.data_util.time_util.time_util import TimeUtil
@@ -17,7 +16,7 @@ class SeleniumChecker:
         logging.info("检测谷歌浏览器driver是否为最新版本")
         try:
             # 获取chrome_driver路径
-            chrome_driver_path = Path(SeleniumUtil.get_chrome_driver_path())
+            chrome_driver_path = pathlib.Path(SeleniumUtil.get_chrome_driver_path())
         except Exception as e:
             logging.error(traceback.format_exc())
             DialogUtil.messagebox(f"chrome_driver下载失败:\n{e}")

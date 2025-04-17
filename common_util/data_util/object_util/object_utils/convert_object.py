@@ -1,9 +1,9 @@
 import collections
 import datetime
 import json
+import pathlib
 import typing
 from enum import Enum, EnumMeta
-from pathlib import Path
 
 
 class ConvertObject:
@@ -11,7 +11,7 @@ class ConvertObject:
     @classmethod
     def format_object(cls, obj: object) -> object:
         """格式化对象"""
-        if isinstance(obj, (datetime.datetime, datetime.date, Path)):
+        if isinstance(obj, (datetime.datetime, datetime.date, pathlib.Path)):
             return cls.format_object(str(obj))
         if isinstance(obj, (dict, collections.OrderedDict)):
             # 字典的键必须为不可变对象，因此需要对特殊情况进行处理

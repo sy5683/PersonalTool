@@ -1,10 +1,10 @@
 import json
+import pathlib
 import re
 import tempfile
 import time
 import traceback
 import typing
-from pathlib import Path
 
 from PIL import Image
 from selenium import common
@@ -77,7 +77,7 @@ class ControlDriver:
         ControlBrowser.get_driver(selenium_config).refresh()
 
     @staticmethod
-    def screenshot(selenium_config: SeleniumConfig, save_path: typing.Union[Path, str]) -> str:
+    def screenshot(selenium_config: SeleniumConfig, save_path: typing.Union[pathlib.Path, str]) -> str:
         """截图"""
         # 1) 使用selenium方法进行截图
         save_path = tempfile.mktemp(".png") if save_path is None else str(save_path)

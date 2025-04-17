@@ -1,5 +1,4 @@
 from enum import Enum
-from pathlib import Path
 
 from common_core.base.tool_base import ToolBase
 from common_util.file_util.file_util.file_util import FileUtil
@@ -20,7 +19,7 @@ class FileFormatter(ToolBase):
         assert self.directory_path, "未选择文件夹"
 
     def main(self, function, **kwargs):
-        function(Path(self.directory_path), **kwargs)
+        function(pathlib.Path(self.directory_path), **kwargs)
         FileUtil.open_file(self.directory_path)
 
 

@@ -1,6 +1,5 @@
 import logging
 import re
-from pathlib import Path
 
 from ..file_feature import FileFeature
 
@@ -8,7 +7,7 @@ from ..file_feature import FileFeature
 class AnimeFormatter:
 
     @staticmethod
-    def format_anime_name(directory_path: Path, anime_name: str = None):
+    def format_anime_name(directory_path: pathlib.Path, anime_name: str = None):
         """格式化动漫名称"""
         # 未指定动漫名称则取文件夹名称
         if anime_name is None:

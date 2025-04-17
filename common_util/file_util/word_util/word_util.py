@@ -1,5 +1,4 @@
 import typing
-from pathlib import Path
 
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from docx.table import _Cell
@@ -54,11 +53,11 @@ class WordUtil:
         ProcessWord.set_paragraph_space_before(paragraph, indent_size)
 
     @staticmethod
-    def word_to_excel(word_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None) -> str:
+    def word_to_excel(word_path: typing.Union[pathlib.Path, str], save_path: typing.Union[pathlib.Path, str] = None) -> str:
         """word转excel"""
         return ConvertWord.word_to_excel(str(word_path), save_path)
 
     @staticmethod
-    def word_to_pdf(word_path: typing.Union[Path, str], save_path: typing.Union[Path, str] = None) -> str:
+    def word_to_pdf(word_path: typing.Union[pathlib.Path, str], save_path: typing.Union[pathlib.Path, str] = None) -> str:
         """word转pdf"""
         return ConvertWord.word_to_pdf(str(word_path), save_path)

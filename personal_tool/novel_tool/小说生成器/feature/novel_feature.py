@@ -1,4 +1,4 @@
-from pathlib import Path
+from pathlib import pathlib.Path
 
 import cn2an
 
@@ -43,8 +43,8 @@ class NovelFeature:
                     print(f"{text}\n\n")
 
     @staticmethod
-    def _get_novel_path(novel_name: str) -> Path:
+    def _get_novel_path(novel_name: str) -> pathlib.Path:
         """获取小说路径"""
-        novel_path = Path(__file__).parent.joinpath(f"profile/{novel_name}")
+        novel_path = pathlib.Path(__file__).parent.joinpath(f"profile/{novel_name}")
         assert novel_path.is_dir(), f"小说不存在: {novel_name}"
         return novel_path

@@ -1,7 +1,6 @@
 import os
 import re
 import typing
-from pathlib import Path
 
 import natsort
 
@@ -9,13 +8,13 @@ import natsort
 class FileFeature:
 
     @staticmethod
-    def get_file_paths(directory_path: Path) -> typing.List[Path]:
+    def get_file_paths(directory_path: pathlib.Path) -> typing.List[pathlib.Path]:
         """获取文件路径列表"""
         # 获取文件路径列表，使用os_sorted将其根据windows顺序排序
         return natsort.os_sorted(list(directory_path.glob("*.*")))
 
     @staticmethod
-    def file_rename(path: Path, new_name: str = None) -> Path:
+    def file_rename(path: pathlib.Path, new_name: str = None) -> pathlib.Path:
         """重命名"""
         if new_name is None:
             # 重新生成文件路径，防止其父辈文件夹中名称有temp开头的文件夹被误重命名
