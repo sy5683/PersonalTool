@@ -32,6 +32,11 @@ class ControlElement:
                 try:
                     cls.find(selenium_config).click()
                 except (AttributeError, common.exceptions.ElementNotInteractableException):
+                    time.sleep(1)
+                    continue
+                except Exception as e:
+                    selenium_config.error(f"未捕获的异常: {e}")
+                    time.sleep(1)
                     continue
                 break
             else:
