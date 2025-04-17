@@ -1,5 +1,6 @@
 import abc
 import os
+import subprocess
 import threading
 import time
 import typing
@@ -63,7 +64,9 @@ class LaunchChrome(LaunchBase):
         # 2) 获取谷歌浏览器路径
         chrome_path = cls._get_chrome_path(selenium_config)
         # 3) cmd调用命令行debug启动谷歌浏览器
-        cls.__get_subclass()._launch_browser_debug(chrome_path, debug_port)
+        cmd = [chrome_path, f"--remote-debugging-port={debug_port}"]
+        subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                         encoding='gbk')
         time.sleep(1)  # 等待一秒，确认端口正常启动
 
     @classmethod

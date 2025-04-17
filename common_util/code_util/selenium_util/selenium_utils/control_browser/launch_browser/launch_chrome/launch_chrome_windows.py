@@ -57,11 +57,6 @@ class LaunchChromeWindows(LaunchChrome):
         raise FileExistsError("未找到谷歌浏览器")
 
     @classmethod
-    def _launch_browser_debug(cls, chrome_path: str, debug_port: int):
-        """debug启动谷歌浏览器"""
-        subprocess.Popen(f'"{chrome_path}" "--remote-debugging-port={debug_port}"', shell=True)
-
-    @classmethod
     def _netstat_debug_port_running(cls, debug_port: int) -> bool:
         """判断debug端口是否正在运行"""
         # noinspection PyBroadException
