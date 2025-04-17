@@ -12,3 +12,7 @@ class LaunchChromeTestCase(TestBase):
     def test_get_chrome_path(self):
         chrome_path = LaunchChrome._get_chrome_path(self.selenium_config)
         print(chrome_path)
+
+    def test_get_driver_path(self):
+        driver_path = LaunchChrome._get_driver_path(self.selenium_config)
+        print(driver_path)
