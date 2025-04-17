@@ -46,6 +46,9 @@ class ControlElement:
         except (AssertionError, AttributeError, common.exceptions.ElementNotInteractableException,
                 common.exceptions.StaleElementReferenceException):
             return False
+        except Exception as e:
+            selenium_config.error(f"未捕获报错: {e}")
+            return False
         return True
 
     @classmethod
