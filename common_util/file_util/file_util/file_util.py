@@ -63,6 +63,6 @@ class FileUtil:
         ProcessFile.open_file(str(file_path))
 
     @staticmethod
-    def wait_file_appear(file_path: typing.Union[pathlib.Path, str], wait_seconds: int = 120):
+    def wait_file_appear(file_path: typing.Union[pathlib.Path, str], wait_seconds: int = 120) -> bool:
         """等待文件出现"""
         return ProcessFile.wait_file_appear(pathlib.Path(file_path), wait_seconds)

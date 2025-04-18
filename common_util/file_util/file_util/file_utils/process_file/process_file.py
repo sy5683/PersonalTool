@@ -124,7 +124,7 @@ class ProcessFile:
         cls.__get_subclass().open_file(file_path)
 
     @staticmethod
-    def wait_file_appear(file_path: pathlib.Path, wait_seconds: int):
+    def wait_file_appear(file_path: pathlib.Path, wait_seconds: int) -> bool:
         """等待文件出现"""
         logging.info(f"等待文件出现: {file_path}")
         for index in range(wait_seconds):
