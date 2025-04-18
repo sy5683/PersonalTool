@@ -13,7 +13,7 @@ from ..selenium_cache import SeleniumCache
 class SeleniumConfig:
 
     def __init__(self,
-                 browser_type: BrowserType = BrowserType.chrome,
+                 browser_type: BrowserType = None,
                  check_input: bool = True,
                  chrome_path: typing.Union[str, pathlib.Path] = None,
                  close_task: bool = True,

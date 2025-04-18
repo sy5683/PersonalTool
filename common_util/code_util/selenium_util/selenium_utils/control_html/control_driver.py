@@ -64,7 +64,7 @@ class ControlDriver:
         for _ in range(3):
             try:
                 ControlBrowser.get_driver(selenium_config).get(url)
-                break
+                return
             except OSError:  # selenium驱动升级会导致driver失效，会报错OSError
                 selenium_config.info("selenium启动异常，重新启动")
                 selenium_config.error(traceback.format_exc())
